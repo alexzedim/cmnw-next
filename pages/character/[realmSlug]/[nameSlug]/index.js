@@ -58,7 +58,7 @@ function CharacterPage({character}) {
         } = info.value);
 
         if (media && media.render_url) {
-            /** If media true then return pic*/
+            /** TODO If media true then return pic */
         }
         /** Else - placeholder */
     }
