@@ -91,10 +91,10 @@ function CharacterPage({character}) {
                     </div>
                 </Grid>
             </Grid>
-            { (logs.value) ? (
+            { (logs.value && logs.value.length) ? (
                 <Grid container alignItems="center" justify="center">
                     <Grid item xs={10} className={classes.paper}>
-                        <OSINT_Logs data={logs.value}/>
+                        <OSINT_Logs data={logs.value} pageSize={5}/>
                     </Grid>
                 </Grid>
             ) : ('')}
