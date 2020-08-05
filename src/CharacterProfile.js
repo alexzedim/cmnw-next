@@ -8,6 +8,11 @@ export default function CharacterProfile ({character}) {
         delete character.hash.t
     }
 
+    /**
+     * TODO
+     * + OSINT back-end remove camelCase
+     */
+
     const fieldsToCheck = ["id", "ilvl", "hash", "faction", "gender", "race", "character_class", "level", "spec",  "createdBy", "lastModified"];
 
     if (!character) return <div>No records available</div>
@@ -27,6 +32,9 @@ export default function CharacterProfile ({character}) {
                         )
                     ))
                 } else {
+                    if (field === "lastModified") {
+                        character[field] = new Date(character[field]).toLocaleString('en-GB')
+                    }
                     return (
                         <Typography variant="caption" display="block" gutterBottom>
                             {field}: {character[field]}
