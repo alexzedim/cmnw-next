@@ -3,14 +3,7 @@ import TableIcons from "./TableIcons";
 import MaterialTable from "material-table";
 import { makeStyles } from '@material-ui/core/styles';
 import { List, ListItem, ListItemAvatar, ListItemText, Divider, Avatar } from '@material-ui/core';
-
-/**
- * TODO add  rows
- * @param data
- * @param pageSize
- * @returns {*}
- * @constructor
- */
+import Link from "./Link";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -32,7 +25,17 @@ export default function ItemValuations ({data, pageSize = 5}) {
                 { title: 'Name', field: 'name', cellStyle: { width: '5%', minWidth: "100px" } },
                 { title: 'Flag', field: 'flag', cellStyle: { width: '5%', minWidth: "100px" } },
                 { title: 'Type', field: 'type', cellStyle: { width: '5%', minWidth: "100px" } },
-                { title: 'Value', field: 'value', cellStyle: { width: '80%', minWidth: "175px" }, defaultSort: 'asc' },
+                { title: 'Value', field: 'value', cellStyle: { width: '10%', minWidth: "175px" }, defaultSort: 'asc' },
+                { title: 'Realm', field: 'connected_realm_id', cellStyle: { width: '5%', minWidth: "75x" } },
+                {
+                    title: 'Last Modified',
+                    field: 'last_modified',
+                    cellStyle: {
+                        width: 175,
+                        minWidth: 175
+                    },
+                    render: rowData => new Date(rowData.last_modified*1000).toLocaleString('en-GB')
+                }
             ]}
             data={data}
             style={{
@@ -40,6 +43,7 @@ export default function ItemValuations ({data, pageSize = 5}) {
                 textTransform: "uppercase"
             }}
             options={{
+                isLoading: true,
                 sorting: true,
                 pageSize: pageSize,
                 search: false,
@@ -49,9 +53,7 @@ export default function ItemValuations ({data, pageSize = 5}) {
             }}
             detailPanel={[
                 {
-                    icon: "X",
-                    openIcon: "X",
-                    tooltip: 'Show Both',
+                    tooltip: 'Show Info',
                     render: rowData => {
                         if (rowData.details) {
                            return (
@@ -64,19 +66,19 @@ export default function ItemValuations ({data, pageSize = 5}) {
                                            if (k === "orders") {
                                                return ''
                                            }
-                                           if (Array.isArray(v)) {
+                                           if (k === "reagent_items") {
                                                return (
                                                    <React.Fragment>
                                                        <ListItem>
                                                            <ListItemText primary={`${k.toString().replace(/_/g, ' ')}`}/>
                                                        </ListItem>
-                                                       <List component="div" disablePadding>
+                                                       <List component="div" dense={true} disablePadding>
                                                            {v.map(x => (
                                                                <ListItem className={classes.nested}>
                                                                    <ListItemAvatar>
                                                                        <Avatar alt={x.name.en_GB} src={x.icon} />
                                                                    </ListItemAvatar>
-                                                                   <ListItemText primary={x.name.en_GB} secondary={`Quantity: ${x.quantity}, Value: ${x.value}`} />
+                                                                   <ListItemText primary={<Link href={`/item/${rowData.connected_realm_id}/${x._id}`} color="textPrimary" underline="hover">{x.name.en_GB}</Link>} secondary={`Quantity: ${x.quantity}, Value: ${x.value}`} />
                                                                </ListItem>
                                                            ))}
                                                        </List>
@@ -92,7 +94,6 @@ export default function ItemValuations ({data, pageSize = 5}) {
                                    </List>
                                </div>
                            )
-
                         }
                     },
                 },
