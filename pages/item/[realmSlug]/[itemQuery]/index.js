@@ -1,14 +1,5 @@
 import React from "react";
 import { makeStyles } from '@material-ui/core/styles';
-import Highcharts from 'highcharts'
-import HighchartsExporting from 'highcharts/modules/exporting'
-import HighchartsReact from 'highcharts-react-official'
-import HC_heatmap from "highcharts/modules/heatmap";
-import HC_column from "highcharts/modules/drilldown";
-import HC_treemap from "highcharts/modules/treemap";
-import Link from "../../../../src/Link";
-import Clock from "../../../../src/Clock";
-import PropTypes from "prop-types";
 import {
     Container, Grid,
     Typography, Divider,
@@ -16,17 +7,13 @@ import {
     TableContainer,
     TableHead, TableRow,
     TableCell, TableBody,
-    Paper, Chip, AppBar,
-    Tabs, Tab, Box
+    Paper, Box
 } from '@material-ui/core';
-
-
-if (typeof Highcharts === 'object') {
-    HC_heatmap(Highcharts);
-    HC_column(Highcharts)
-    HC_treemap(Highcharts)
-    HighchartsExporting(Highcharts)
-}
+import ItemContractButtons from "../../../../src/ItemContractButtons";
+import ClusterChart from "../../../../src/ClusterChart";
+import Clock from "../../../../src/Clock";
+import ItemValuations from "../../../../src/ItemValuations";
+import useSWR from 'swr'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -89,252 +76,23 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const TabPanel = props => {
-    const { children, value, index, ...other } = props;
+const Item = ({item_data}) => {
 
-    return (
-        <Typography
-            component="div"
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-        >
-            {value === index && <Box p={3}>{children}</Box>}
-        </Typography>
-    );
-};
+    const [item, eva] = item_data
 
-TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.any.isRequired,
-    value: PropTypes.any.isRequired,
-};
+    let realm, chart, quotes, data, error, _id, icon, name, quality, item_class, item_subclass, ilvl, inventory_type, level, ticker, asset_class, contracts;
 
-const a11yProps = index => ({
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-});
-
-const Item = ({item, realm, valuation, quotes, chart, contracts}) => {
-    let clusterChartOptions, columnsChartOptions, treemapChartOptions;
-
-    if (valuation && valuation.reagent) {
-        let {reagent} = valuation;
-        if (reagent.premium && reagent.premium.length) {
-            treemapChartOptions = {
-                chart: {
-                    type: 'treemap',
-                    backgroundColor: 'transparent'
-                },
-                title: {
-                    text: undefined
-                },
-                colorAxis: {
-                    minColor: '#ebe7ee',
-                    maxColor: '#241c18'
-                },
-                legend: {
-                    align: 'right',
-                    layout: 'vertical',
-                    verticalAlign: 'middle',
-                    symbolHeight: 300,
-                    labelFormat: "{value}"
-                },
-                plotOptions: {
-                    treemap: {
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        dataLabels: {
-                            enabled: true,
-                            format: '<b>{point.name}</b><br><b>{point.colorValue}g</b><br><b>x{point.value}</b>',
-                            distance: -50,
-                        }
-                    }
-                },
-                tooltip: {
-                    formatter: function () {
-                        return `
-                        Method: ${this.point.name}<br>
-                        Value: ${(this.point.colorValue).toLocaleString('ru-RU')}g<br>
-                        Wi: ${this.point.value}<br>`
-                    }
-                },
-                series: [{
-                    type: 'treemap',
-                    layoutAlgorithm: 'squarified',
-                    data: valuation.reagent.premium.filter(({wi, value}) => wi > 25 && value > 0).map(({_id, value, wi}) => ({name: _id, value: wi, colorValue: value})),
-                }]
-            }
-        }
+    if (item.value) {
+        ({ realm, chart, quotes } = item.value);
+        ({_id, name, quality, icon, item_class, item_subclass, ilvl, inventory_type, level, ticker, asset_class, contracts } = item.value.item)
     }
 
-    if (valuation && valuation.derivative && valuation.derivative.length) {
-
-        const compareColumnsData = (valuation) => {
-            let data = []
-            if ("market" in valuation) {
-                let {market} = valuation;
-                if ("price" in market) {
-                    let {price} = market
-                    data.push({
-                        name: "Market",
-                        color: '#241c18',
-                        data: [
-                            {
-                                name: "MARKET",
-                                y: price,
-                                drilldown: false
-                            }
-                        ]
-                    })
-                }
-            }
-            if ("derivative" in valuation) {
-                let {derivative} = valuation;
-                data = [...data, ...derivative.map(({_id, nominal_value}) => ({name: _id, color: '#c1aa82', data: [{name: _id, y: nominal_value, drilldown: true}]}))]
-            }
-            return data
-        }
-
-        const dropdownData = (point) => {
-            const {_id, reagent_items} = valuation.derivative.find(({_id}) => (_id === point));
-            let findData = {}
-            Object.assign(findData, {name: _id, color: '#c1aa82', data: reagent_items.map(item => [item.name.en_GB, item.value]) })
-            return findData
-        }
-
-        columnsChartOptions = {
-            chart: {
-                type: "column",
-                plotBorderWidth: 1,
-                backgroundColor: 'transparent',
-                style: {
-                    letterSpacing: 'unset',
-                },
-                events: {
-                    drilldown: function(e) {
-                        if (!e.seriesOptions) {
-                            let chart = this;
-                            chart.addSingleSeriesAsDrilldown(e.point, dropdownData(e.point.name));
-                            chart.applyDrilldown();
-                        }
-                    }
-                }
-            },
-            title: {
-                text: "Cheapest to Delivery",
-                style: {
-                    fontFamily: 'Roboto',
-                    color: 'contrast',
-                    fontSize: '14px',
-                    fontWeight: 'normal',
-                    textOutline: '0px',
-                }
-            },
-            subtitle: {
-                text: "Click the columns to drilldown every method"
-            },
-            xAxis: {
-                type: "category"
-            },
-            yAxis: {
-                min: 0,
-                title: {
-                    text: "Value"
-                }
-            },
-            legend: {
-                enabled: false
-            },
-            series: compareColumnsData(valuation)
-        }
+    if (eva.value) {
+        ({ data, error } = useSWR(`http://localhost:3030/api/items/eva/${item.value.item._id}@${realm.connected_realm_id}`, fetch, { initialData: eva.value.valuations }))
     }
-    if (typeof chart !== 'undefined') {
-        const { price_range, timestamps, dataset } = chart;
-        clusterChartOptions = {
-            chart: {
-                type: 'heatmap',
-                plotBorderWidth: 1,
-                height: (9 / 16 * 100) + '%',
-                backgroundColor: 'transparent',
-                style: {
-                    letterSpacing: 'unset',
-                }
-            },
-            title: {
-                text: undefined
-            },
-            xAxis: {
-                categories: timestamps
-            },
-            yAxis:{
-                categories: price_range,
-                tickLength: 150,
-                opposite: false ,
-                title: null,
-            },
-            colorAxis: {
-                min: 0,
-                minColor: '#ebe7ee',
-                maxColor: '#241c18'
-            },
-            legend: {
-                align: 'right',
-                layout: 'vertical',
-                margin: 0,
-                verticalAlign: 'middle',
-                y: 25,
-                symbolHeight: 350
-            },
-            tooltip: {
-                formatter: function () {
-                    return `T: ${this.series.xAxis.categories[this.point.x]}<br>
-                        Q: ${(this.point.value).toLocaleString('ru-RU')}<br>
-                        P: ${this.series.yAxis.categories[this.point.y]}+<br>
-                        O: ${this.point.orders}<br>
-                        OI: ${(this.point.oi).toLocaleString('ru-RU')}g`
-                }
-            },
-            series: [{
-                borderWidth: 0,
-                clip: false,
-                data: dataset,
-                dataLabels: {
-                    enabled: true,
-                    crop: true,
-                    shadow: false,
-                    formatter: function(){
-                        if (this.point.value !== 0) {
-                            return this.point.value.toLocaleString('ru-RU');
-                        }
-                    },
-                    style: {
-                        fontFamily: 'Roboto',
-                        color: 'contrast',
-                        fontSize: '14px',
-                        fontWeight: 'normal',
-                        textOutline: '0px',
-                    }
-                }
-            }]
-        };
-    }
-    const {_id, name, quality, item_class, item_subclass, ilvl, inventory_type, level, ticker, v_class, sell_price} = item;
+
     const classes = useStyles();
 
-    let defaultValuationTab = 0
-    if (valuation && valuation.reagent) {
-        if ("index" in valuation.reagent) {
-            defaultValuationTab = valuation.reagent.index;
-        }
-    }
-    const [value, setValue] = React.useState(defaultValuationTab);
-
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
     return (
         <Container maxWidth={false} alignContent="center">
             {/** TITLE BLOCK */}
@@ -342,39 +100,27 @@ const Item = ({item, realm, valuation, quotes, chart, contracts}) => {
                 <Grid container direction="column" justify="space-around" alignItems="center" spacing={2}>
                     <Grid item>
                         <Box alignItems="center" display="flex" justifyContent="center">
-                            <Avatar alt="Item Icon" variant="rounded" src={item.icon} className={classes.large} />
+                            <Avatar alt="Item Icon" variant="rounded" src={icon} className={classes.large} />
                             <Typography component="h1" variant="h2" color="textPrimary" className={classes.title}>
                                 {(ticker) ? (ticker) : (name["en_GB"])}@{(realm.ticker) ? (realm.ticker) : (ticker.name)}
                             </Typography>
                         </Box>
                     </Grid>
                     <Grid item>
-                        {(valuation) ? (
-                            <Clock time={valuation.lastModified}/>
+                        {(realm && realm.auctions) ? (
+                            <Clock time={realm.auctions*1000}/>
                         ) : ('')}
                     </Grid>
-                    {(valuation && valuation.market) ? (
-                        <Grid item>
-                            {(contracts && contracts.length) ? (
-                                <Grid container direction="row" justify="space-evenly" alignItems="center">
-                                {contracts.map(({_id, code, type, connected_realm_id}, i) => (
-                                    <Grid item key={i} xs={2}>
-                                        <Chip clickable color="default" variant="default" className={classes.chip} label={<Link href={`/contract/${connected_realm_id}/${code}`} color="inherit" underline="none">{code}</Link>} avatar={<Avatar>{type}</Avatar>} />
-                                    </Grid>
-                                ))}
-                                </Grid>
-                            ) : ('')}
-                        </Grid>
-                    ) : (
-                        ''
-                    )}
+                    {(contracts) ? (
+                        <ItemContractButtons item={item._id} realm={realm.connected_realm_id}/>
+                    ) : ('')}
                 </Grid>
             </Container>
 
             {/** CARD BLOCK */}
             <Container maxWidth="lg">
                 <Grid container spacing={4}>
-                    <Grid item key={1} xs={12} sm={6} md={3}>
+                    <Grid item xs={12} sm={6} md={4}>
                         <Typography gutterBottom variant="overline" display="block" component="h2" className={classes.cardTitle}>
                             Summary
                         </Typography>
@@ -388,7 +134,7 @@ const Item = ({item, realm, valuation, quotes, chart, contracts}) => {
                             </Typography>
                         ) : ('')}
                     </Grid>
-                    <Grid item key={2} xs={12} sm={6} md={3}>
+                    <Grid item xs={12} sm={6} md={4}>
                         <Typography gutterBottom variant="overline" display="block" component="h2" className={classes.cardTitle}>
                             Class
                         </Typography>
@@ -396,13 +142,13 @@ const Item = ({item, realm, valuation, quotes, chart, contracts}) => {
                         <Typography variant="caption" display="block">
                             {item_class} {item_subclass}
                         </Typography>
-                        {(v_class && v_class.length) ? (
+                        {(asset_class && asset_class.length) ? (
                         <Typography variant="caption" display="block">
-                            {v_class.toString().replace(/,/g, ' ')}
+                            {asset_class.toString().replace(/,/g, ' ')}
                         </Typography>
                         ) : ('')}
                     </Grid>
-                    <Grid item key={3} xs={12} sm={6} md={3}>
+                    <Grid item xs={12} sm={6} md={4}>
                         <Typography gutterBottom variant="overline" display="block" component="h2" className={classes.cardTitle}>
                             Inventory
                         </Typography>
@@ -416,150 +162,15 @@ const Item = ({item, realm, valuation, quotes, chart, contracts}) => {
                             </Typography>
                         ) : ("")}
                     </Grid>
-                    <Grid item key={4} xs={12} sm={6} md={3}>
-                        <Typography gutterBottom variant="overline" display="block" component="h2" className={classes.cardTitle}>
-                            Vendor
-                        </Typography>
-                        <Divider light />
-                        <Typography variant="caption" display="block">
-                            {sell_price}
-                        </Typography>
-                    </Grid>
-                    {(valuation && valuation.market && valuation.market.price) ? (
-                    <React.Fragment>
-                        <Grid item key={5} xs={12} sm={6} md={3}>
-                            <Typography gutterBottom variant="overline" display="block" component="h2" className={classes.cardTitle}>
-                                Market
-                            </Typography>
-                            <Divider light />
-                            <Typography variant="caption" display="block">
-                                Price-5% (OTC): {(valuation.market.price*0.95).toLocaleString('ru-RU')}
-                            </Typography>
-                            <Typography variant="caption" display="block">
-                                Price: {valuation.market.price.toLocaleString('ru-RU')}
-                            </Typography>
-                            <Typography variant="caption" display="block">
-                                Price Size: {valuation.market.price_size.toLocaleString('ru-RU')}
-                            </Typography>
-                        </Grid>
-                        <Grid item key={6} xs={12} sm={6} md={3}>
-                            <Typography gutterBottom variant="overline" display="block" component="h2" className={classes.cardTitle}>
-                                Market Stats
-                            </Typography>
-                            <Divider light />
-                            <Typography variant="caption" display="block">
-                                Q: {valuation.market.quantity.toLocaleString('ru-RU')}
-                            </Typography>
-                            <Typography variant="caption" display="block">
-                                OI: {valuation.market.open_interest.toLocaleString('ru-RU')}
-                            </Typography>
-                            <Typography variant="caption" display="block">
-                                Orders: {valuation.market.orders.length}
-                            </Typography>
-                        </Grid>
-                        <Grid item key={7} xs={12} sm={6} md={3}>
-                            <Typography gutterBottom variant="overline" display="block" component="h2" className={classes.cardTitle}>
-                                Yield
-                            </Typography>
-                            <Divider light />
-                            <Typography variant="caption" display="block">
-                                To vendor: {valuation.market.yieldVendor} %
-                            </Typography>
-                            <Typography variant="caption" display="block">
-                                To derivative: {valuation.market.yieldReagent} %
-                            </Typography>
-                        </Grid>
-                    </React.Fragment>
-                    ) : ('')}
                 </Grid>
             </Container>
-
-            {/** DERIVATIVE BLOCK */}
-            {(valuation.derivative && valuation.derivative.length) ? (
-                <React.Fragment>
-                    <Divider className={classes.divider} />
-                    <Grid container alignItems="center" alignContent="center" spacing={2}>
-                        <Grid item key={1} xs={4}>
-                            <HighchartsReact
-                                highcharts={Highcharts}
-                                constructorType={'chart'}
-                                options={columnsChartOptions}
-                            />
-                        </Grid>
-                        <Grid item key={2} xs={8}>
-                            <AppBar position="static" color="default">
-                                <Tabs value={value} onChange={handleChange} aria-label="Methods">
-                                {valuation.derivative.map(({_id}, i) => (
-                                    <Tab label={_id} {...a11yProps(i)} />
-                                ))}
-                                </Tabs>
-                                {valuation.derivative.map((method, i) => (
-                                    <TabPanel value={value} index={i}>
-                                        <TableContainer>
-                                            <Table stickyHeader className={classes.table} aria-label="Method">
-                                                <TableHead>
-                                                    <TableRow>
-                                                        <TableCell>Item</TableCell>
-                                                        <TableCell align="right">Price</TableCell>
-                                                        <TableCell align="right">Quantity</TableCell>
-                                                        <TableCell align="right">Value</TableCell>
-                                                    </TableRow>
-                                                </TableHead>
-                                                <TableBody>
-                                                    {method.reagent_items.map((row) => (
-                                                        <TableRow key={row._id}>
-                                                            <TableCell><Link href={`/item/${realm.connected_realm_id}/${row._id}`} color="secondary" underline="hover">{row.name.en_GB}</Link></TableCell>
-                                                            <TableCell align="right">{row.price}</TableCell>
-                                                            <TableCell align="right">{row.quantity}</TableCell>
-                                                            <TableCell align="right">{row.value}</TableCell>
-                                                        </TableRow>
-                                                    ))}
-                                                    <TableRow>
-                                                        <TableCell>Method</TableCell>
-                                                        <TableCell align="right">Nominal Value</TableCell>
-                                                        <TableCell align="right">Queue Quantity</TableCell>
-                                                        <TableCell align="right">Queue Cost</TableCell>
-                                                    </TableRow>
-                                                    <TableRow key={method._id} className={classes.totalRow}>
-                                                        <TableCell>{method._id}</TableCell>
-                                                        <TableCell align="right">{method.nominal_value}</TableCell>
-                                                        <TableCell align="right">{method.queue_quantity}</TableCell>
-                                                        <TableCell align="right">{method.queue_cost}</TableCell>
-                                                    </TableRow>
-                                                    {(method.yieldMarket || method.yieldVendor) ? (
-                                                    <TableRow>
-                                                        <TableCell>Yield</TableCell>
-                                                        {(method.yieldMarket) ? (
-                                                            <TableCell align="right">Market: {method.yieldMarket} %</TableCell>
-                                                        ) : ('')}
-                                                        {(method.yieldVendor) ? (
-                                                            <TableCell align="right">Vendor: {method.yieldVendor} %</TableCell>
-                                                        ) : ('')}
-                                                    </TableRow>
-                                                    ) : ('')}
-                                                </TableBody>
-                                            </Table>
-                                        </TableContainer>
-                                    </TabPanel>
-                                ))}
-                            </AppBar>
-                        </Grid>
-                    </Grid>
-                </React.Fragment>
-            ) : (
-                ''
-            )}
             {/** MARKET BLOCK */}
             {(chart && quotes) ? (
                 <React.Fragment>
                 <Divider className={classes.divider} />
                 <Grid container spacing={2}>
                     <Grid item xs={9}>
-                        <HighchartsReact
-                            highcharts={Highcharts}
-                            constructorType={'chart'}
-                            options={clusterChartOptions}
-                        />
+                        <ClusterChart data={chart}/>
                     </Grid>
                     <Grid item xs={3}>
                         <TableContainer component={Paper} className={classes.table}>
@@ -590,23 +201,8 @@ const Item = ({item, realm, valuation, quotes, chart, contracts}) => {
             ) : (
                 ''
             )}
-            {/** PREMIUM BLOCK */}
-            {(valuation && valuation.reagent && valuation.reagent.p_value) ? (
-                <React.Fragment>
-                    <Divider className={classes.divider} />
-                    <Container maxWidth="lg">
-                        <Grid item xs={12}>
-                            <HighchartsReact
-                                highcharts={Highcharts}
-                                constructorType={'chart'}
-                                options={treemapChartOptions}
-                            />
-                        </Grid>
-                    </Container>
-                </React.Fragment>
-            ) : (
-                ''
-            )}
+            <Divider className={classes.divider} />
+            <ItemValuations data={data}/>
             <Divider className={classes.divider} />
         </Container>
     )
@@ -615,9 +211,11 @@ const Item = ({item, realm, valuation, quotes, chart, contracts}) => {
 
 export async function getServerSideProps({query}) {
     const {realmSlug, itemQuery} = query;
-    const res = await fetch(encodeURI(`http://localhost:3030/api/items/${itemQuery}@${realmSlug}`));
-    const json = await res.json();
-    return { props: json}
+    const item_data = await Promise.allSettled([
+        fetch(encodeURI(`http://${process.env.api}/items/item/${itemQuery}@${realmSlug}`)).then(res => res.json()),
+        fetch(encodeURI(`http://${process.env.api}/items/eva/${itemQuery}@${realmSlug}`)).then(res => res.json())
+    ])
+    return { props: { item_data }}
 }
 
 
