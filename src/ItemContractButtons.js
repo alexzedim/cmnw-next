@@ -24,9 +24,9 @@ export default function ItemContractButtons ({item, realm}) {
         },
     ]
     return (
-        <ButtonGroup color="primary" aria-label="outlined primary button group">
+        <ButtonGroup color="secondary" aria-label="outlined primary button group">
             {contracts.map(({name, value}) => (
-                <Button onClick={() => Router.push(`/contracts/${value}/${item}@${realm}`)}>{name}</Button>
+                <Button onClick={() => Router.push(`/contract/${realm}/${item}/${value}`)}>{name}</Button>
             ))}
         </ButtonGroup>
     );

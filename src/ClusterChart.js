@@ -32,7 +32,13 @@ export default function ClusterChart ({data}) {
                     text: undefined
                 },
                 xAxis: {
-                    categories: timestamps.map(t => new Date(t).toLocaleString('en-GB'))
+                    categories: timestamps.map(t => new Date(t)),
+                    type: "datetime",
+                    labels: {
+                        formatter: function () {
+                            return Highcharts.dateFormat("%H:%M:%S %e.%b", this.value);
+                        }
+                    },
                 },
                 yAxis:{
                     categories: price_range,

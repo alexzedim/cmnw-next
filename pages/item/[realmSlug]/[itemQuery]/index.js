@@ -16,28 +16,9 @@ import ItemValuations from "../../../../src/ItemValuations";
 import useSWR from 'swr'
 
 const useStyles = makeStyles(theme => ({
-    root: {
-        width: '100%',
-    },
-    paper: {
-        width: '100%',
-        overflowX: 'auto',
-        margin: `${theme.spacing(1)}px auto`,
-        padding: theme.spacing(2),
-    },
     table: {
         minWidth: 400,
         maxHeight: '760px',
-    },
-    card: {
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-    },
-    bullet: {
-        display: 'inline-block',
-        margin: '0 2px',
-        transform: 'scale(0.8)',
     },
     divider: {
         margin: `${theme.spacing(2)}px auto`,
@@ -48,35 +29,21 @@ const useStyles = makeStyles(theme => ({
         fontDisplay: 'swap',
         fontWeight: 400,
     },
-    cardGrid: {
-        paddingTop: theme.spacing(8),
-        paddingBottom: theme.spacing(8),
-    },
     large: {
         width: theme.spacing(7),
         height: theme.spacing(7),
         marginRight: theme.spacing(2),
     },
-    container: {
-        maxHeight: 'auto',
-        margin: `auto ${theme.spacing(1)}px`,
-    },
     cardTitle: {
         fontSize: '1.1em',
         fontWeight: 600
     },
-    chip: {
-        margin: theme.spacing(1)
-    },
     titleBlock: {
         padding: theme.spacing(10, 0, 10),
     },
-    totalRow: {
-        backgroundColor: '#ebe7ee',
-    }
 }));
 
-const Item = ({item_data}) => {
+const ItemPage = ({item_data}) => {
 
     const [item, eva] = item_data
 
@@ -102,7 +69,7 @@ const Item = ({item_data}) => {
                         <Box alignItems="center" display="flex" justifyContent="center">
                             <Avatar alt="Item Icon" variant="rounded" src={icon} className={classes.large} />
                             <Typography component="h1" variant="h2" color="textPrimary" className={classes.title}>
-                                {(ticker) ? (ticker) : (name["en_GB"])}@{(realm.ticker) ? (realm.ticker) : (ticker.name)}
+                                {(ticker) ? (ticker) : (name["en_GB"])}@{(realm.ticker) ? (realm.ticker) : (realm.name)}
                             </Typography>
                         </Box>
                     </Grid>
@@ -112,7 +79,7 @@ const Item = ({item_data}) => {
                         ) : ('')}
                     </Grid>
                     {(contracts) ? (
-                        <ItemContractButtons item={item._id} realm={realm.connected_realm_id}/>
+                        <ItemContractButtons item={_id} realm={realm.connected_realm_id}/>
                     ) : ('')}
                 </Grid>
             </Container>
@@ -219,4 +186,4 @@ export async function getServerSideProps({query}) {
 }
 
 
-export default Item
+export default ItemPage
