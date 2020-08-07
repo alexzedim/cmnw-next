@@ -47,7 +47,7 @@ export default function ItemValuations ({data, pageSize = 5}) {
                 sorting: true,
                 pageSize: pageSize,
                 search: false,
-                pageSizeOptions: [5,10,15],
+                pageSizeOptions: [5,10,20],
                 showTitle: false,
                 headerStyle: {backgroundColor:'#ebe7ee'}
             }}
@@ -66,7 +66,7 @@ export default function ItemValuations ({data, pageSize = 5}) {
                                            if (k === "orders") {
                                                return ''
                                            }
-                                           if (k === "reagent_items") {
+                                           if (k === "reagent_items" || k === "premium_items" || k === "unsorted_items") {
                                                return (
                                                    <React.Fragment>
                                                        <ListItem>

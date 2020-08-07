@@ -6,6 +6,7 @@ import HighchartsReact from 'highcharts-react-official'
 if (typeof Highcharts === 'object') {
     HighchartsExporting(Highcharts)
 }
+
 export default function LineChart ({data}) {
     if (!data) return <div>No records available</div>
     let priceArray = [], oiArray = [], quantityArray = [], dateArray = [];
