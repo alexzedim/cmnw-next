@@ -17,8 +17,4 @@ Welcome! This is a front-end repository of [conglomerat.group](https://conglomer
 ## TODOs:
 
  - Separate component for form on index title
- - Characters and guilds table components for logs
- - Items valuations table *(properties)*
- - Items contract tables. (***limit?***, SSR)
- - Cross Realm Desk
  - Refactor contracts page, **chart with orders / sellers**
