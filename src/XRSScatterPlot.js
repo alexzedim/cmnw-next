@@ -15,11 +15,23 @@ export default function XRSScatterPlot ({data}) {
 
     /** Define scatter plot data and realmMap for xAxis */
     let ScatterPlotData = data.map(({connected_realm_id, value, name, flag, type}) => {
+        let color;
+        if (flag === 'SELL') {
+            color = '#BA0F30'
+        } else {
+            color = '#18a558'
+        }
+        if (type === 'DERIVATIVE') {
+            color = '#21b6a8'
+        }
+        if (type === 'PREMIUM') {
+            color = '#FC3C80'
+        }
         if (!realmsMap.has(connected_realm_id)) {
             realmsMap.set(connected_realm_id, iterator);
             iterator = iterator + 1;
         }
-        return [realmsMap.get(connected_realm_id), value, connected_realm_id, name, flag, type]
+        return [realmsMap.get(connected_realm_id), value, color, connected_realm_id, name, flag, type]
     })
 
     /** Define xAxis names */
@@ -47,21 +59,8 @@ export default function XRSScatterPlot ({data}) {
                 },
                 yAxis:{
                     title: {
-                        text: 'Test'
+                        text: 'Value'
                     }
-                },
-                colorAxis: {
-                    min: 0,
-                    minColor: '#ebe7ee',
-                    maxColor: '#241c18'
-                },
-                legend: {
-                    align: 'right',
-                    layout: 'vertical',
-                    margin: 0,
-                    verticalAlign: 'middle',
-                    y: 25,
-                    symbolHeight: 350
                 },
                 plotOptions: {
                     scatter: {
@@ -82,14 +81,19 @@ export default function XRSScatterPlot ({data}) {
                             }
                         },
                         tooltip: {
-                            headerFormat: '<b>{series.value}</b><br>',
-                            pointFormat: '{point.type}\n{point.flag}'
+                            pointFormatter: function () {
+                                return `R: ${this.realm}<br>
+                                T: ${this.type} || ${this.flag}<br>
+                                V: ${(this.y).toLocaleString('ru-RU')}<br>
+                                ${this.type === "DERIVATIVE" ? (`N: ${this.name}`) : ("")}`
+                            }
                         }
                     }
                 },
                 series: [{
-                    keys: ['x', 'y', 'realm', 'name', 'flag', 'type'],
+                    keys: ['x', 'y', 'color', 'realm', 'name', 'flag', 'type'],
                     data: ScatterPlotData,
+                    showInLegend: false
                 }]
             }}
         />

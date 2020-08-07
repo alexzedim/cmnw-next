@@ -49,7 +49,9 @@ const ItemPage = ({xrs_data}) => {
     }
 
     if (valuations.value) {
-        data = valuations.value.valuations
+        if (valuations.value.valuations && valuations.value.valuations.length) {
+            data = valuations.value.valuations
+        }
     }
 
     const classes = useStyles();
@@ -130,18 +132,24 @@ const ItemPage = ({xrs_data}) => {
             ) : (
                 ''
             )}
-            <Divider className={classes.divider} />
-            <Grid container spacing={2}>
-                <Grid item xs={12}>
-                    <ItemValuations data={data} pageSize={20}/>
-                </Grid>
-            </Grid>
-            <Divider className={classes.divider} />
-            <Grid container spacing={2}>
-                <Grid item xs={12}>
-                    <XRSScatterPlot data={data}/>
-                </Grid>
-            </Grid>
+            {(data) ? (
+                <React.Fragment>
+                    <Divider className={classes.divider} />
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <ItemValuations data={data} pageSize={20}/>
+                        </Grid>
+                    </Grid>
+                    <Divider className={classes.divider} />
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <XRSScatterPlot data={data}/>
+                        </Grid>
+                    </Grid>
+                </React.Fragment>
+            ) : (
+            ''
+            )}
         </Container>
     )
 };
