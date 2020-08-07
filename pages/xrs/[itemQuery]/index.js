@@ -7,6 +7,7 @@ import {
 } from '@material-ui/core';
 import XRSClusterChart from "../../../src/XRSClusterChart";
 import ItemValuations from "../../../src/ItemValuations";
+import XRSScatterPlot from "../../../src/XRSScatterPlot";
 
 const useStyles = makeStyles(theme => ({
     table: {
@@ -38,11 +39,17 @@ const useStyles = makeStyles(theme => ({
 
 const ItemPage = ({xrs_data}) => {
 
-    let item, chart, quotes, data, _id, icon, name, quality, item_class, item_subclass, ilvl, inventory_type, level, ticker, asset_class;
+    const [item, valuations] = xrs_data;
 
-    if (xrs_data && xrs_data.item) {
-        ({ item, chart } = xrs_data);
-        ({_id, name, quality, icon, item_class, item_subclass, ilvl, inventory_type, level, ticker, asset_class } = item)
+    let data, _id, icon, chart, name, quality, item_class, item_subclass, ilvl, inventory_type, level, ticker, asset_class;
+
+    if (item.value) {
+        ({ _id, icon, name, quality, item_class, item_subclass, ilvl, inventory_type, level, ticker, asset_class } = item.value.item)
+        chart = item.value.chart
+    }
+
+    if (valuations.value) {
+        data = valuations.value.valuations
     }
 
     const classes = useStyles();
@@ -124,8 +131,17 @@ const ItemPage = ({xrs_data}) => {
                 ''
             )}
             <Divider className={classes.divider} />
-                <ItemValuations data={data}/>
+            <Grid container spacing={2}>
+                <Grid item xs={12}>
+                    <ItemValuations data={data} pageSize={20}/>
+                </Grid>
+            </Grid>
             <Divider className={classes.divider} />
+            <Grid container spacing={2}>
+                <Grid item xs={12}>
+                    <XRSScatterPlot data={data}/>
+                </Grid>
+            </Grid>
         </Container>
     )
 };
@@ -133,7 +149,10 @@ const ItemPage = ({xrs_data}) => {
 
 export async function getServerSideProps({query}) {
     const { itemQuery } = query;
-    const xrs_data = await fetch(encodeURI(`http://${process.env.api}/items/xrs/${itemQuery}`)).then(res => res.json())
+    const xrs_data = await Promise.allSettled([
+        fetch(encodeURI(`http://${process.env.api}/items/xrs_item/${itemQuery}`)).then(res => res.json()),
+        fetch(encodeURI(`http://${process.env.api}/items/xrs_eva/${itemQuery}`)).then(res => res.json())
+    ])
     return { props: { xrs_data }}
 }
 
