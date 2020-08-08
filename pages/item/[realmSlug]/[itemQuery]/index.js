@@ -3,17 +3,15 @@ import { makeStyles } from '@material-ui/core/styles';
 import {
     Container, Grid,
     Typography, Divider,
-    Avatar, Table,
-    TableContainer,
-    TableHead, TableRow,
-    TableCell, TableBody,
-    Paper, Box
+    Avatar, Box, ButtonGroup, Button
 } from '@material-ui/core';
-import ItemContractButtons from "../../../../src/ItemContractButtons";
 import ClusterChart from "../../../../src/ClusterChart";
 import Clock from "../../../../src/Clock";
 import ItemValuations from "../../../../src/ItemValuations";
+import QuotesTable from "../../../../src/QuotesTable";
+import WtWiget from "../../../../src/WtWiget";
 import useSWR from 'swr'
+import Router from "next/router";
 
 const useStyles = makeStyles(theme => ({
     table: {
@@ -45,23 +43,47 @@ const useStyles = makeStyles(theme => ({
 
 const ItemPage = ({item_data}) => {
 
+    const contractButtons = [
+        {
+            name: "intraday", value: "tod"
+        },
+        {
+            name: "yesterday", value: "ytd"
+        },
+        {
+            name: "week", value: "week"
+        },
+        {
+            name: "last week", value: "last_week"
+        },
+        {
+            name: "month", value: "month"
+        },
+        {
+            name: "last month", value: "last_month"
+        },
+    ]
+
     const [item, eva] = item_data
 
-    let realm, chart, quotes, data, error, _id, icon, name, quality, item_class, item_subclass, ilvl, inventory_type, level, ticker, asset_class, contracts;
+    let realm, chart, quotes, data, _id, icon, name, quality, item_class, item_subclass, ilvl, inventory_type, level, ticker, asset_class, contracts, connected_realm_id, auctions, gold, wowtoken;
 
     if (item.value) {
-        ({ realm, chart, quotes } = item.value);
-        ({_id, name, quality, icon, item_class, item_subclass, ilvl, inventory_type, level, ticker, asset_class, contracts } = item.value.item)
+        ({ realm, chart, quotes, wowtoken } = item.value);
+        ({ _id, name, quality, icon, item_class, item_subclass, ilvl, inventory_type, level, ticker, asset_class, contracts } = item.value.item);
+        if (_id === 1) {
+            gold = true;
+        }
+        ({ connected_realm_id, auctions } = realm);
     }
-
     if (eva.value) {
-        ({ data, error } = useSWR(`http://localhost:3030/api/items/eva/${item.value.item._id}@${realm.connected_realm_id}`, fetch, { initialData: eva.value.valuations }))
+        ({ data } = useSWR(`http://localhost:3030/api/items/eva/${item.value.item._id}@${connected_realm_id}`, fetch, { initialData: eva.value.valuations }))
     }
 
     const classes = useStyles();
 
     return (
-        <Container maxWidth={false} alignContent="center">
+        <Container maxWidth={false}>
             {/** TITLE BLOCK */}
             <Container maxWidth={false} className={classes.titleBlock}>
                 <Grid container direction="column" justify="space-around" alignItems="center" spacing={2}>
@@ -74,13 +96,28 @@ const ItemPage = ({item_data}) => {
                         </Box>
                     </Grid>
                     <Grid item>
-                        {(realm && realm.auctions) ? (
-                            <Clock time={realm.auctions*1000}/>
+                        {(auctions) ? (
+                            <Clock time={auctions*1000}/>
                         ) : ('')}
                     </Grid>
-                    {(contracts) ? (
-                        <ItemContractButtons item={_id} realm={realm.connected_realm_id}/>
-                    ) : ('')}
+                    <ButtonGroup color="secondary" aria-label="outlined primary button group">
+                        {asset_class.includes('COMMDTY') ? (
+                            <Button onClick={() => Router.push(`/XRS/${_id}`)}>XRS</Button>
+                        ) : ('')}
+                        {(wowtoken) ? (
+                            <Button onClick={() => Router.push(`/gold/${connected_realm_id}`)}>GOLD</Button>
+                        ) : ('')}
+                        {(contracts) ? (
+                            contractButtons.map(({name, value}) => (
+                                <Button onClick={() => Router.push(`/contract/${connected_realm_id}/${_id}/${value}`)}>{name}</Button>
+                            ))
+                        ) : ('')}
+                    </ButtonGroup>
+                    <Grid item>
+                        {(wowtoken) ? (
+                            <WtWiget data={wowtoken}/>
+                        ) : ('')}
+                    </Grid>
                 </Grid>
             </Container>
 
@@ -140,28 +177,7 @@ const ItemPage = ({item_data}) => {
                         <ClusterChart data={chart}/>
                     </Grid>
                     <Grid item xs={3}>
-                        <TableContainer component={Paper} className={classes.table}>
-                            <Table stickyHeader size="small" aria-label="Quotes">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>Price</TableCell>
-                                        <TableCell align="left">Quantity</TableCell>
-                                        <TableCell align="right">Value</TableCell>
-                                        <TableCell align="right">Orders</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {quotes.map(({_id, quantity, open_interest, orders}, i) => (
-                                        <TableRow key={i}>
-                                            <TableCell component="th" scope="row">{_id.toLocaleString('ru-RU')}</TableCell>
-                                            <TableCell align="right">{quantity.toLocaleString('ru-RU')}</TableCell>
-                                            <TableCell align="right">{Math.round(open_interest).toLocaleString('ru-RU')}</TableCell>
-                                            <TableCell align="right">{orders.length}</TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
+                        <QuotesTable data={quotes} gold={gold}/>
                     </Grid>
                 </Grid>
                 </React.Fragment>
