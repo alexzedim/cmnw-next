@@ -122,10 +122,6 @@ function CharacterPage(json) {
     const handleClose = () => {
         setOpen(false);
     };
-    /**
-     * TODO conditional formatting for xs 5 - 12
-     *
-     */
     return (
         <Grid container>
             { (media) ? (

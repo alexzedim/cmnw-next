@@ -39,18 +39,19 @@ const useStyles = makeStyles(theme => ({
 
 const ItemPage = ({xrs_data}) => {
 
-    const [item, valuations] = xrs_data;
+    const [item, valuation] = xrs_data;
 
-    let data, _id, icon, chart, name, quality, item_class, item_subclass, ilvl, inventory_type, level, ticker, asset_class;
+    let data, _id, icon, chart, name, quality, item_class, item_subclass, ilvl, inventory_type, level, ticker, asset_class, valuations;
 
     if (item.value) {
         ({ _id, icon, name, quality, item_class, item_subclass, ilvl, inventory_type, level, ticker, asset_class } = item.value.item)
         chart = item.value.chart
     }
 
-    if (valuations.value) {
-        if (valuations.value.valuations && valuations.value.valuations.length) {
-            data = valuations.value.valuations
+    if (valuation.value) {
+        ({valuations} = valuation.value)
+        if (valuations && valuations.length) {
+            data = valuations
         }
     }
 
