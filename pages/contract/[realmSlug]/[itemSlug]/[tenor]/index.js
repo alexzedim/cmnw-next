@@ -5,7 +5,7 @@ import ContractsTable from "../../../../../src/ContractsTable";
 import LineChart from "../../../../../src/LineChart"
 import {
     Container, Grid, Typography,
-    Divider, ButtonGroup, Button,
+    Divider, ButtonGroup, Button, Avatar, Box,
 } from '@material-ui/core';
 import Router from "next/router";
 
@@ -76,12 +76,15 @@ const ContractPage = ({contracts_data}) => {
             <Container className={classes.titleBlock}>
                 <Grid container direction="column" justify="space-around" alignItems="center" spacing={2}>
                     <Grid item xs>
-                        <Typography variant="h2" className={classes.title} style={{textTransform: 'uppercase'}}>
-                            {(item.ticker) ? (item.ticker) : (item.name["en_GB"])}@{(realm.ticker) ? (realm.ticker) : (realm.name)}
-                        </Typography>
+                        <Box alignItems="center" display="flex" justifyContent="center">
+                            <Avatar alt="Item Icon" variant="rounded" src={item.icon} className={classes.large} />
+                            <Typography variant="h2" className={classes.title} style={{textTransform: 'uppercase'}}>
+                                {(item.ticker) ? (item.ticker) : (item.name["en_GB"])}@{(realm.ticker) ? (realm.ticker) : (realm.name)}
+                            </Typography>
+                        </Box>
                     </Grid>
                     <Grid item xs>
-                        <Clock time={realm.auctions}/>
+                        <Clock time={realm.auctions*1000}/>
                     </Grid>
                     <Grid item xs>
                         <ButtonGroup color="secondary" aria-label="outlined primary button group">
