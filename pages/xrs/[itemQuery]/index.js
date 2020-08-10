@@ -58,7 +58,7 @@ const ItemPage = ({xrs_data}) => {
     const classes = useStyles();
 
     return (
-        <Container maxWidth={false} alignContent="center">
+        <Container maxWidth={false}>
             {/** TITLE BLOCK */}
             <Container maxWidth={false} className={classes.titleBlock}>
                 <Grid container direction="column" justify="space-around" alignItems="center" spacing={2}>
