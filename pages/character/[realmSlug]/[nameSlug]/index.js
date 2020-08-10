@@ -2,6 +2,7 @@ import React from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import OSINT_Logs from '../../../../src/OsintLogs'
 import CharacterProfile from '../../../../src/CharacterProfile'
+import CharacterButtons from '../../../../src/CharacterButtons'
 import Link from '../../../../src/Link'
 import {
     Grid, Divider, Typography,
@@ -85,6 +86,7 @@ function CharacterPage({character}) {
                             <Typography variant="h4" component="h4" color="textPrimary" className={classes.title}>
                                 @{realm.name}
                             </Typography>
+                            <CharacterButtons name={name} realm={realm.slug}/>
                         </Grid>
                         <Divider light className={classes.hr}/>
                         <CharacterProfile character={info.value}/>
