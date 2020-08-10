@@ -45,22 +45,32 @@ function Index ({realms}) {
         {
             value: 'character',
             label: 'CHAR',
+            fields: [ 'realm', 'character' ],
         },
         {
             value: 'guild',
             label: 'GUILD',
+            fields: [ 'realm', 'guild' ],
         },
         {
             value: 'contract',
             label: 'CONTRACT',
+            fields: [ 'realm', 'item', 'contract_tenor' ],
         },
         {
             value: 'find',
             label: 'FIND',
+            fields: [ 'type', 'match' ],
         },
         {
             value: 'item',
             label: 'ITEM',
+            fields: [ 'realm', 'item' ],
+        },
+        {
+            value: 'xrs',
+            label: 'XRS',
+            fields: [ 'item' ],
         },
     ]
     const type = [
@@ -85,6 +95,32 @@ function Index ({realms}) {
             label: 'ALL',
         },
     ]
+    const tenors = [
+        {
+            value: 'tod',
+            label: 'TOD',
+        },
+        {
+            value: 'ytd',
+            label: 'YTD',
+        },
+        {
+            value: 'week',
+            label: 'WEEK',
+        },
+        {
+            value: 'last_week',
+            label: 'WEEK-1',
+        },
+        {
+            value: 'month',
+            label: 'MONTH',
+        },
+        {
+            value: 'last_month',
+            label: 'MONTH-1',
+        },
+    ]
     return (
         <Grid container direction="column" justify="center" alignItems="center" className={classes.root}>
             <Typography variant="h1" align="center" style={{textTransform: 'uppercase'}}>
@@ -92,10 +128,29 @@ function Index ({realms}) {
             </Typography>
             <Container className={classes.searchbar}>
                 <Formik
-                    initialValues={{ command: 'item', argument: 'ZNTD', pointer: 'gordunni' }}
+                    initialValues={{
+                        command: 'item',
+                        item: 'ZNTD',
+                        realm: 'gordunni',
+                        contract_tenor: 'tod',
+                        character: 'Блюрателла',
+                        guild: 'Депортация',
+                        type: 'all',
+                        match: 'Блюрателла@Гордунни'
+                    }}
                     onSubmit={async (values, { setSubmitting }) => {
+                        console.time('Input')
                         await setSubmitting(false);
-                        await Router.push(`/${values.command}/${values.pointer}/${values.argument}`);
+                        let {fields} = commands.find(x => x.value === values.command)
+                        let routingString = '/' + values.command;
+                        for (let key_path of fields) {
+                            console.log(key_path)
+                            console.log(values[key_path])
+                            routingString = routingString.concat('/' + values[key_path])
+                        }
+                        console.log(routingString)
+                        console.timeEnd('Input')
+                        await Router.push(routingString);
                     }}
                 >
                 {({
@@ -120,11 +175,11 @@ function Index ({realms}) {
                                     value={values.command}
                                     variant="outlined"
                                 >
-                                    {commands.map((option) => (
-                                        <MenuItem key={option.value} value={option.value}>
-                                            {option.label}
-                                        </MenuItem>
-                                    ))}
+                                {commands.map((option) => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
+                                    </MenuItem>
+                                ))}
                                 </TextField>
                             </Grid>
                             {values.command === "item" && (
@@ -132,10 +187,10 @@ function Index ({realms}) {
                                     <Grid item xs={3}>
                                         <TextField
                                             type="text"
-                                            name="argument"
+                                            name="item"
                                             onChange={handleChange}
                                             onBlur={handleBlur}
-                                            value={values.argument}
+                                            value={values.item}
                                             fullWidth id="outlined-basic"
                                             label="Item Name"
                                             className={classes.search}
@@ -149,20 +204,20 @@ function Index ({realms}) {
                                     </Grid>
                                     <Grid item xs={3}>
                                         <TextField
-                                            name="pointer"
+                                            name="realm"
                                             select
                                             label="Select realm"
                                             className={classes.dropdown}
                                             onChange={handleChange}
                                             onBlur={handleBlur}
-                                            value={values.pointer}
+                                            value={values.realm}
                                             variant="outlined"
                                         >
-                                            {realms.map((option) => (
-                                                <MenuItem key={option.slug} value={option.slug}>
-                                                    {option.name_locale}
-                                                </MenuItem>
-                                            ))}
+                                        {realms.map(({slug, name_locale, name}) => (
+                                            <MenuItem key={slug} value={slug}>
+                                                { name_locale || name }
+                                            </MenuItem>
+                                        ))}
                                         </TextField>
                                     </Grid>
                                 </React.Fragment>
@@ -172,12 +227,12 @@ function Index ({realms}) {
                                     <Grid item xs={3}>
                                         <TextField
                                             type="text"
-                                            name="argument"
+                                            name="character"
                                             onChange={handleChange}
                                             onBlur={handleBlur}
-                                            value={values.argument}
+                                            value={values.character}
                                             fullWidth id="outlined-basic"
-                                            label="Character's Name"
+                                            label="Character Name"
                                             className={classes.search}
                                             variant="outlined"
                                         />
@@ -189,20 +244,20 @@ function Index ({realms}) {
                                     </Grid>
                                     <Grid item xs={3}>
                                         <TextField
-                                            name="pointer"
+                                            name="realm"
                                             select
                                             label="Select realm"
                                             className={classes.dropdown}
                                             onChange={handleChange}
                                             onBlur={handleBlur}
-                                            value={values.pointer}
+                                            value={values.realm}
                                             variant="outlined"
                                         >
-                                            {realms.map((option) => (
-                                                <MenuItem key={option.slug} value={option.slug}>
-                                                    {option.name_locale}
-                                                </MenuItem>
-                                            ))}
+                                        {realms.map(({slug, name_locale, name}) => (
+                                            <MenuItem key={slug} value={slug}>
+                                                { name_locale || name }
+                                            </MenuItem>
+                                        ))}
                                         </TextField>
                                     </Grid>
                                 </React.Fragment>
@@ -212,12 +267,12 @@ function Index ({realms}) {
                                     <Grid item xs={3}>
                                         <TextField
                                             type="text"
-                                            name="argument"
+                                            name="guild"
                                             onChange={handleChange}
                                             onBlur={handleBlur}
-                                            value={values.argument}
+                                            value={values.guild}
                                             fullWidth id="outlined-basic"
-                                            label="Guild's Name"
+                                            label="Guild Name"
                                             className={classes.search}
                                             variant="outlined"
                                         />
@@ -229,60 +284,79 @@ function Index ({realms}) {
                                     </Grid>
                                     <Grid item xs={3}>
                                         <TextField
-                                            name="pointer"
+                                            name="realm"
                                             select
                                             label="Select realm"
                                             className={classes.dropdown}
                                             onChange={handleChange}
                                             onBlur={handleBlur}
-                                            value={values.pointer}
+                                            value={values.realm}
                                             variant="outlined"
                                         >
-                                            {realms.map((option) => (
-                                                <MenuItem key={option.slug} value={option.slug}>
-                                                    {option.name_locale}
-                                                </MenuItem>
-                                            ))}
+                                        {realms.map(({slug, name_locale, name}) => (
+                                            <MenuItem key={slug} value={slug}>
+                                                { name_locale || name }
+                                            </MenuItem>
+                                        ))}
                                         </TextField>
                                     </Grid>
                                 </React.Fragment>
                             )}
                             {values.command === "contract" && (
                                 <React.Fragment>
-                                    <Grid item xs={3}>
+                                    <Grid item xs={2}>
                                         <TextField
                                             type="text"
-                                            name="argument"
+                                            name="item"
                                             onChange={handleChange}
                                             onBlur={handleBlur}
-                                            value={values.argument}
+                                            value={values.item}
                                             fullWidth id="outlined-basic"
-                                            label="Contract ID"
+                                            label="Item Name"
                                             className={classes.search}
                                             variant="outlined"
                                         />
+                                    </Grid>
+                                    <Grid item xs={2}>
+                                        <TextField
+                                            select
+                                            name="contract_tenor"
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            value={values.contract_tenor}
+                                            fullWidth id="outlined-basic"
+                                            label="Tenor"
+                                            className={classes.search}
+                                            variant="outlined"
+                                        >
+                                        {tenors.map(({value, label}) => (
+                                            <MenuItem key={value} value={value}>
+                                                { label }
+                                            </MenuItem>
+                                        ))}
+                                        </TextField>
                                     </Grid>
                                     <Grid item xs={1}>
                                         <Typography variant="h3" align="center" style={{textTransform: 'uppercase', margin: '0'}}>
                                             @
                                         </Typography>
                                     </Grid>
-                                    <Grid item xs={3}>
+                                    <Grid item xs={2}>
                                         <TextField
-                                            name="pointer"
+                                            name="realm"
                                             select
                                             label="Select realm"
                                             className={classes.dropdown}
                                             onChange={handleChange}
                                             onBlur={handleBlur}
-                                            value={values.pointer}
+                                            value={values.realm}
                                             variant="outlined"
                                         >
-                                            {realms.map((option) => (
-                                                <MenuItem key={option.slug} value={option.slug}>
-                                                    {option.name_locale}
-                                                </MenuItem>
-                                            ))}
+                                        {realms.map(({slug, name_locale, name}) => (
+                                            <MenuItem key={slug} value={slug}>
+                                                { name_locale || name }
+                                            </MenuItem>
+                                        ))}
                                         </TextField>
                                     </Grid>
                                 </React.Fragment>
@@ -291,20 +365,20 @@ function Index ({realms}) {
                                 <React.Fragment>
                                     <Grid item xs={3}>
                                         <TextField
-                                            name="pointer"
+                                            name="type"
                                             select
                                             label="Hash type"
                                             className={classes.dropdown}
                                             onChange={handleChange}
                                             onBlur={handleBlur}
-                                            value={values.pointer}
+                                            value={values.type}
                                             variant="outlined"
                                         >
-                                            {type.map((option) => (
-                                                <MenuItem key={option.value} value={option.value}>
-                                                    {option.label}
-                                                </MenuItem>
-                                            ))}
+                                        {type.map((option) => (
+                                            <MenuItem key={option.value} value={option.value}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
                                         </TextField>
                                     </Grid>
                                     <Grid item xs={1}>
@@ -315,12 +389,29 @@ function Index ({realms}) {
                                     <Grid item xs={3}>
                                         <TextField
                                             type="text"
-                                            name="argument"
+                                            name="match"
                                             onChange={handleChange}
                                             onBlur={handleBlur}
-                                            value={values.argument}
+                                            value={values.match}
                                             fullWidth id="outlined-basic"
-                                            label="Hash"
+                                            label="Hash or Query"
+                                            className={classes.search}
+                                            variant="outlined"
+                                        />
+                                    </Grid>
+                                </React.Fragment>
+                            )}
+                            {values.command === "xrs" && (
+                                <React.Fragment>
+                                    <Grid item xs={7}>
+                                        <TextField
+                                            type="text"
+                                            name="item"
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            value={values.item}
+                                            fullWidth id="outlined-basic"
+                                            label="Item name for Cross Realm Swap Quotes"
                                             className={classes.search}
                                             variant="outlined"
                                         />
