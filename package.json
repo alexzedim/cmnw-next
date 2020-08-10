@@ -4,12 +4,14 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.10.0",
+    "@material-ui/lab": "^4.0.0-alpha.56",
     "@material-ui/styles": "^4.10.0",
     "clsx": "^1.1.0",
     "formik": "^2.1.4",
     "gray-matter": "^4.0.2",
     "highcharts": "^7.2.1",
     "highcharts-react-official": "^2.2.2",
+    "humanize-string": "^2.1.0",
     "material-table": "^1.58.2",
     "next": "^9.4.2",
     "next-compose-plugins": "^2.2.0",
@@ -19,6 +21,8 @@
     "prop-types": "latest",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "slate": "^0.58.4",
+    "slate-react": "^0.58.4",
     "styled-by": "^0.3.0",
     "swr": "^0.1.18",
     "typeface-fira-sans": "0.0.75"
