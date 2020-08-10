@@ -108,8 +108,8 @@ const ItemPage = ({item_data}) => {
                             <Button onClick={() => Router.push(`/gold/${connected_realm_id}`)}>GOLD</Button>
                         ) : ('')}
                         {(contracts) ? (
-                            contractButtons.map(({name, value}) => (
-                                <Button onClick={() => Router.push(`/contract/${connected_realm_id}/${_id}/${value}`)}>{name}</Button>
+                            contractButtons.map(({name, value}, i) => (
+                                <Button key={i} onClick={() => Router.push(`/contract/${connected_realm_id}/${_id}/${value}`)}>{name}</Button>
                             ))
                         ) : ('')}
                     </ButtonGroup>
