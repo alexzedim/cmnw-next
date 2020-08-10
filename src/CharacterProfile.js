@@ -1,21 +1,18 @@
 import React from "react";
 import { Typography } from "@material-ui/core";
 import Link from "./Link";
+import humanizeString from 'humanize-string'
 
 export default function CharacterProfile ({character}) {
+
+    if (!character) return <div>No records available</div>
 
     if (character.hash) {
         delete character.hash.t
     }
 
-    /**
-     * TODO
-     * + OSINT back-end remove camelCase
-     */
+    const fieldsToCheck = ["id", "level", "ilvl", "hash", "faction", "gender", "race", "character_class", "spec",  "createdBy", "lastModified"];
 
-    const fieldsToCheck = ["id", "ilvl", "hash", "faction", "gender", "race", "character_class", "level", "spec",  "createdBy", "lastModified"];
-
-    if (!character) return <div>No records available</div>
     return (
         fieldsToCheck.map(field => {
             if (field in character) {
@@ -27,7 +24,7 @@ export default function CharacterProfile ({character}) {
                             </Typography>
                         ) : (
                             <Typography variant="caption" display="block" gutterBottom>
-                                {field} {k}: {v}
+                                {humanizeString(field)} {humanizeString(k)}: {v}
                             </Typography>
                         )
                     ))
@@ -37,7 +34,7 @@ export default function CharacterProfile ({character}) {
                     }
                     return (
                         <Typography variant="caption" display="block" gutterBottom>
-                            {field}: {character[field]}
+                            {humanizeString(field)}: {character[field]}
                         </Typography>
                     )
                 }
