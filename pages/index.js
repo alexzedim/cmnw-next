@@ -1,12 +1,11 @@
 import React from "react";
 import { Formik } from 'formik';
 import Router from 'next/router'
-import Link from './../src/Link'
 import ArrowForwardOutlinedIcon from '@material-ui/icons/ArrowForwardOutlined';
 import {
     Container, Grid,
     MenuItem, TextField, makeStyles,
-    FormHelperText, Typography, Button
+    Typography, Button
 } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
@@ -53,11 +52,6 @@ function Index ({realms}) {
             fields: [ 'realm', 'guild' ],
         },
         {
-            value: 'contract',
-            label: 'CONTRACT',
-            fields: [ 'realm', 'item', 'contract_tenor' ],
-        },
-        {
             value: 'find',
             label: 'FIND',
             fields: [ 'type', 'match' ],
@@ -66,6 +60,11 @@ function Index ({realms}) {
             value: 'item',
             label: 'ITEM',
             fields: [ 'realm', 'item' ],
+        },
+        {
+            value: 'contract',
+            label: 'CONTRACT',
+            fields: [ 'realm', 'item', 'contract_tenor' ],
         },
         {
             value: 'xrs',
@@ -139,24 +138,19 @@ function Index ({realms}) {
                         match: 'Блюрателла@Гордунни'
                     }}
                     onSubmit={async (values, { setSubmitting }) => {
-                        console.time('Input')
                         await setSubmitting(false);
-                        let {fields} = commands.find(x => x.value === values.command)
+                        let { fields } = commands.find(x => x.value === values.command)
                         let routingString = '/' + values.command;
                         for (let key_path of fields) {
                             console.log(key_path)
                             console.log(values[key_path])
                             routingString = routingString.concat('/' + values[key_path])
                         }
-                        console.log(routingString)
-                        console.timeEnd('Input')
                         await Router.push(routingString);
                     }}
                 >
                 {({
                       values,
-                      errors,
-                      touched,
                       handleChange,
                       handleBlur,
                       handleSubmit,
