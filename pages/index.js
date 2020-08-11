@@ -32,14 +32,6 @@ const useStyles = makeStyles(theme => ({
 
 function Index ({realms}) {
     const classes = useStyles();
-    const greetings = [
-        'Viam supervadet vadens',
-        'Something from nothing',
-        'bb theunderminejournal',
-        'goodbye TUJ',
-        'you did nothing',
-        'RIP wowtoken',
-    ];
     const commands = [
         {
             value: 'character',
@@ -122,9 +114,6 @@ function Index ({realms}) {
     ]
     return (
         <Grid container direction="column" justify="center" alignItems="center" className={classes.root}>
-            <Typography variant="h1" align="center" style={{textTransform: 'uppercase'}}>
-                {greetings[Math.floor(Math.random() * greetings.length)]}
-            </Typography>
             <Container className={classes.searchbar}>
                 <Formik
                     initialValues={{
