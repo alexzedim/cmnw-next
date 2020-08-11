@@ -30,17 +30,17 @@ export default function SignInSide() {
     return (
         <Grid container>
             <Grid item xs={false} sm={5} md={5} className={classes.image} style={{backgroundImage: `url(https://i.imgur.com/poOeOqP.jpg`}}/>
-            <Grid item xs={12} sm={7} md={7} elevation={6} square>
+            <Grid item xs={12} sm={7} md={7} elevation={6}>
                 <div className={classes.paper} style={{alignItems: 'left'}}>
                     <Grid>
                         <Typography variant="h1" component="h2" gutterBottom>
                             AlexZeDim
                         </Typography>
                         <Typography variant="body1" gutterBottom>
-                            I started to play this game since WotLK release (ru_RU). My very first character was a druid on a god-forgotten realm like Ashenvale.
-                            Then I created this rogue, that outlived all inactive periods and deletion. I have been played on EU-Outland during WoD, and pre-LGN.
-                            Some moment after I was invited to russian #2 PvE guild: <Link href={`/guild/soulflayer/фьюжн`} color="secondary" underline="hover">Фьюжн@Свежеватель-Душ</Link> (<Link href="https://www.wowprogress.com/pve/ru/rating.tier19" prefetch={false} color="primary" underline="hover">WoWProgress</Link>) as a treasurer.
-                            Thanks to <Link href={`/character/gordunni/йошх`} color="secondary" underline="hover">Йош</Link> (founder of RU druid-class discord) and <Link href={`/character/gordunni/лапочка`} color="secondary" underline="hover">Лапочка</Link> (<Link href="https://www.twitch.tv/holy_moley" prefetch={false} color="primary" underline="hover">HolyMoley</Link>, co-founder of RU Pala Discord).
+                            I started to play World of Warcraft since WotLK release, right after russian realms were opened. My very first character was a druid on a god-forgotten realm like Ashenvale.
+                            Then I created this rogue, that outlived all inactive periods and deletion. I have been played on EU-Outland during WoD, and Legion expansions.
+                            After that I was invited to russian #2 PvE guild: <Link href={`/guild/soulflayer/фьюжн`} color="secondary" underline="hover">Фьюжн@Свежеватель-Душ</Link> (<Link href="https://www.wowprogress.com/pve/ru/rating.tier19" prefetch={false} color="secondary" underline="hover">WoWProgress</Link>) as a treasurer.
+                            Thanks to <Link href={`/character/gordunni/йошх`} color="secondary" underline="hover">Йош</Link> (founder of russian druid class discord) and <Link href={`/character/gordunni/лапочка`} color="secondary" underline="hover">Лапочка</Link> (<Link href="https://www.twitch.tv/holy_moley" prefetch={false} color="secondary" underline="hover">HolyMoley</Link>, co-founder of russian paladin class discord) who have belived in me.
                             As for now, I represent <Link href={`/guild/gordunni/депортация`} color="secondary" underline="hover">Депортация@Гордунни</Link> as Head of Treasury.
                         </Typography>
                         <Divider />
@@ -61,7 +61,7 @@ export default function SignInSide() {
                     </Grid>
                 </div>
             </Grid>
-            <Grid item xs={12} sm={7} md={7} elevation={6} square>
+            <Grid item xs={12} sm={7} md={7} elevation={6}>
                 <div className={classes.paper} style={{alignItems: 'right'}}>
                     <Grid>
                         <Typography variant="h1" component="h2" gutterBottom>
@@ -70,7 +70,7 @@ export default function SignInSide() {
                         <Typography variant="body1" gutterBottom>
                             «She is just like me, but a woman»<br />
                             <br />
-                            Been here since Cataclysm. Pet lover, long range mount collector. #Casual player. Buying WC3 Reforge Deluxe but not playing a single mission in it. Co-author of various algo-patterns across Conglomerat.
+                            She is playing World of Warcraft since Cataclysm. Pet lover, long range mount collector. #Casual player with [Ahead the Curve] in World Top 100 PvE guild. She is capable to buy WC3 Reforge Deluxe Edition but hasn't played a single mission in it. As a part of Conglomerat, she is a co-author of various algorithmic patterns, for DMA and OSINT modules.
                         </Typography>
                         <Divider />
                         <List component="nav" aria-label="initiative">
