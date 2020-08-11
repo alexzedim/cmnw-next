@@ -1,37 +1,94 @@
+import React from "react";
 import fs from "fs";
 import matter from "gray-matter";
+import Router from "next/router";
+import makeStyles from "@material-ui/core/styles/makeStyles";
+import {
+    Container, Card, Grid,
+    Typography, CardContent,
+    CardActions, Button, Box
+} from "@material-ui/core";
 
-export default function Test ({ posts }) {
+
+const useStyles = makeStyles(theme => ({
+    root: {
+        minWidth: 275,
+    },
+    titleBlock: {
+        padding: theme.spacing(10, 0, 10),
+    },
+    bullet: {
+        display: 'inline-block',
+        margin: '0 2px',
+        transform: 'scale(0.8)',
+    },
+    title: {
+        fontFamily: 'Fira Sans',
+        fontStyle: 'normal',
+        fontDisplay: 'swap',
+        fontWeight: 400,
+    },
+    pos: {
+        marginBottom: 12,
+    },
+}));
+
+export default function Help ({ posts }) {
+
+    const classes = useStyles();
+
     return (
-        <div>
-            {posts.map(({ frontmatter: { title, description, date } }) => (
-                <article key={title}>
-                    <header>
-                        <h3>{title}</h3>
-                        <span>{date}</span>
-                    </header>
-                    <section>
-                        <p>{description}</p>
-                    </section>
-                </article>
+        <Container fixed>
+            <Grid container direction="column" justify="space-around" alignItems="center" spacing={2}>
+                <Box alignItems="center" display="flex" justifyContent="center">
+                    <Container maxWidth={false} className={classes.titleBlock}>
+                        <Typography component="h1" variant="h2" color="textPrimary" className={classes.title}>
+                            HELP
+                        </Typography>
+                    </Container>
+                </Box>
+            </Grid>
+            <Grid
+                container
+                direction="row"
+                justify="flex-start"
+                alignItems="flex-start"
+                spacing={3}
+            >
+            {posts.map(({ slug, frontmatter: { title, description, updatedAt } }) => (
+                <Grid item xs={6} sm={6}>
+                    <Card className={classes.root}>
+                        <CardContent>
+                            <Typography variant="h5" component="h2">
+                                {title}
+                            </Typography>
+                            <Typography color="textSecondary" gutterBottom>
+                                {updatedAt}
+                            </Typography>
+                            <Typography variant="body1" component="p">
+                                {description}
+                            </Typography>
+                        </CardContent>
+                        <CardActions>
+                            <Button onClick={() => Router.push(`/help/${slug}`)} size="small">Learn More</Button>
+                        </CardActions>
+                    </Card>
+                </Grid>
             ))}
-        </div>
+            </Grid>
+        </Container>
     );
 }
 
 export async function getStaticProps() {
+
     const files = fs.readdirSync(`${process.cwd()}/tests`);
 
     const posts = files.map((filename) => {
-        const markdownWithMetadata = fs
-            .readFileSync(`tests/${filename}`)
-            .toString();
-
-        console.log(markdownWithMetadata);
+        const markdownWithMetadata = fs.readFileSync(`tests/${filename}`).toString();
 
         const { data } = matter(markdownWithMetadata);
 
-        // Convert post date to format: Month day, Year
         const formattedDate = data.updatedAt.toLocaleDateString("en-GB");
 
         const frontmatter = {
@@ -40,8 +97,7 @@ export async function getStaticProps() {
         };
 
         return {
-            slug: filename.replace(".md", ""),
-            frontmatter,
+            slug: filename.replace(".md", ""), frontmatter,
         };
     });
 
