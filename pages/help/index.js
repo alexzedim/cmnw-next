@@ -55,8 +55,8 @@ export default function Help ({ posts }) {
                 alignItems="flex-start"
                 spacing={3}
             >
-            {posts.map(({ slug, frontmatter: { title, description, updatedAt } }) => (
-                <Grid item xs={6} sm={6}>
+            {posts.map(({ slug, frontmatter: { title, description, updatedAt } }, i) => (
+                <Grid key={i} item xs={6} sm={6}>
                     <Card className={classes.root}>
                         <CardContent>
                             <Typography variant="h5" component="h2">
@@ -82,10 +82,10 @@ export default function Help ({ posts }) {
 
 export async function getStaticProps() {
 
-    const files = fs.readdirSync(`${process.cwd()}/tests`);
+    const files = fs.readdirSync(`${process.cwd()}/wiki`);
 
     const posts = files.map((filename) => {
-        const markdownWithMetadata = fs.readFileSync(`tests/${filename}`).toString();
+        const markdownWithMetadata = fs.readFileSync(`wiki/${filename}`).toString();
 
         const { data } = matter(markdownWithMetadata);
 
