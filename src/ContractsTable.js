@@ -6,7 +6,7 @@ export default function ContractsTable({data}) {
     if (!data) return <div>No records available</div>
     return (
         <MaterialTable
-            title="Guild Members"
+            title="Contracts Table"
             icons={TableIcons}
             columns={[
                 {
@@ -27,7 +27,7 @@ export default function ContractsTable({data}) {
                 {
                     title: 'Open Interest',
                     field: 'open_interest',
-                    render: ({open_interest}) => open_interest.toLocaleString('ru-RU')
+                    render: ({open_interest}) => parseInt(open_interest).toLocaleString('ru-RU')
                 },
                 {
                     title: 'Sellers',
@@ -57,7 +57,7 @@ export default function ContractsTable({data}) {
                 pageSize: 20,
                 pageSizeOptions: [10,25,50],
                 showTitle: false,
-                headerStyle: {backgroundColor:'#ebe7ee'}
+                headerStyle: { backgroundColor:'#ebe7ee' }
             }}
         />
     )

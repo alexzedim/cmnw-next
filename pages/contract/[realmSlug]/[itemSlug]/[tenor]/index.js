@@ -8,6 +8,8 @@ import {
     Divider, ButtonGroup, Button, Avatar, Box,
 } from '@material-ui/core';
 import Router from "next/router";
+import ItemData from "../../../../../src/ItemData";
+import ContractData from "../../../../../src/ContractData";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -34,7 +36,9 @@ const useStyles = makeStyles(theme => ({
         textTransform: 'uppercase'
     },
     divider: {
-        margin: theme.spacing(2),
+        marginTop: theme.spacing(1),
+        marginRight: theme.spacing(2),
+        marginBottom: theme.spacing(2),
     },
     title: {
         fontFamily: 'Fira Sans',
@@ -45,6 +49,7 @@ const useStyles = makeStyles(theme => ({
     large: {
         width: theme.spacing(7),
         height: theme.spacing(7),
+        marginRight: theme.spacing(2),
     },
     container: {
         maxHeight: 500,
@@ -54,7 +59,7 @@ const useStyles = makeStyles(theme => ({
         fontWeight: 600
     },
     titleBlock: {
-        padding: theme.spacing(10, 0, 10),
+        padding: theme.spacing(10, 0, 5),
     },
 }));
 
@@ -67,12 +72,12 @@ const useStyles = makeStyles(theme => ({
 
 const ContractPage = ({contracts_data}) => {
 
-    let { item, realm, contracts } = contracts_data
+    let { item, realm, snapshot, contracts } = contracts_data
 
     const classes = useStyles();
 
     return (
-        <Container>
+        <Container maxWidth={false}>
             <Container className={classes.titleBlock}>
                 <Grid container direction="column" justify="space-around" alignItems="center" spacing={2}>
                     <Grid item xs>
@@ -88,25 +93,28 @@ const ContractPage = ({contracts_data}) => {
                     </Grid>
                     <Grid item xs>
                         <ButtonGroup color="secondary" aria-label="outlined primary button group">
-                            <Button onClick={() => Router.push(`/item/${realm.connected_realm_id}/${item._id}`)}>Underlying Asset</Button>
+                            <Button onClick={() => Router.push(`/item/${realm.connected_realm_id}/${item._id}`)}>Underlying Item</Button>
                             <Button onClick={() => Router.push(`/xrs/${item._id}`)}>XRS</Button>
                         </ButtonGroup>
                     </Grid>
                 </Grid>
             </Container>
-            <Divider className={classes.divider} />
-            <Grid container>
-                <Grid item xs={12}>
-                    <LineChart data={contracts}/>
+            <Container maxWidth={false}>
+                <Divider className={classes.divider} />
+                <Grid container spacing={4}>
+                    <Grid item xs={12} sm={6} md={6} elevation={6}>
+                        <ContractData data={snapshot}/>
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={6} elevation={6}>
+                        <ItemData data={item}/>
+                    </Grid>
                 </Grid>
-            </Grid>
-            <Grid container spacing={1}>
-                <Grid item xs={12}>
-                    <ContractsTable data={contracts}/>
-                </Grid>
-            </Grid>
-            <Divider className={classes.divider} />
-            <Divider className={classes.divider} />
+                <Divider className={classes.divider} />
+                <LineChart data={contracts}/>
+                <Divider className={classes.divider} />
+                <ContractsTable data={contracts}/>
+                <Divider className={classes.divider} />
+            </Container>
         </Container>
     )
 };
