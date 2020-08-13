@@ -16,19 +16,19 @@ export default function QuotesTable({data, gold = false}) {
             <Table stickyHeader size="small" aria-label="Quotes">
                 <TableHead>
                     <TableRow>
-                        <TableCell>Price</TableCell>
-                        <TableCell align="left">Quantity</TableCell>
-                        <TableCell align="right">Value</TableCell>
-                        <TableCell align="right">{(gold === true) ? ('Sellers') : ('Orders')}</TableCell>
+                        <TableCell align="center">Price</TableCell>
+                        <TableCell align="center">Quantity</TableCell>
+                        <TableCell align="center">Value</TableCell>
+                        <TableCell align="center">{(gold === true) ? ('Sellers') : ('Orders')}</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {data.map(({ price, quantity, open_interest, size }, i) => (
                         <TableRow key={i}>
-                            <TableCell component="th" scope="row">{price.toLocaleString('ru-RU')}</TableCell>
-                            <TableCell align="right">{quantity.toLocaleString('ru-RU')}</TableCell>
-                            <TableCell align="right">{Math.round(open_interest).toLocaleString('ru-RU')}</TableCell>
-                            <TableCell align="right">{size}</TableCell>
+                            <TableCell align="center" component="th" scope="row">{price.toLocaleString('ru-RU')}</TableCell>
+                            <TableCell align="center">{quantity.toLocaleString('ru-RU')}</TableCell>
+                            <TableCell align="center">{Math.round(open_interest).toLocaleString('ru-RU')}</TableCell>
+                            <TableCell align="center">{size}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
