@@ -69,9 +69,9 @@ export default function LineChart ({data}) {
                     categories: dateArray,
                     type: "datetime",
                     labels: {
-                        step: 12,
+                        step: 24,
                         formatter: function () {
-                            return Highcharts.dateFormat("%H:%M:%S %e.%b", this.value);
+                            return Highcharts.dateFormat("%e.%b", this.value);
                         }
                     },
                 },
