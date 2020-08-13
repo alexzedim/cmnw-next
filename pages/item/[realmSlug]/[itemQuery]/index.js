@@ -12,6 +12,7 @@ import QuotesTable from "../../../../src/QuotesTable";
 import WtWiget from "../../../../src/WtWiget";
 import useSWR from 'swr'
 import Router from "next/router";
+import ItemData from '../../../../src/ItemData'
 
 const useStyles = makeStyles(theme => ({
     table: {
@@ -37,7 +38,12 @@ const useStyles = makeStyles(theme => ({
         fontWeight: 600
     },
     titleBlock: {
-        padding: theme.spacing(10, 0, 10),
+        padding: theme.spacing(10, 0, 5),
+    },
+    hr: {
+        marginTop: theme.spacing(1),
+        marginRight: theme.spacing(2),
+        marginBottom: theme.spacing(2),
     },
 }));
 
@@ -96,6 +102,11 @@ const ItemPage = ({item_data}) => {
                         </Box>
                     </Grid>
                     <Grid item>
+                        {(wowtoken) ? (
+                            <WtWiget data={wowtoken}/>
+                        ) : ('')}
+                    </Grid>
+                    <Grid item>
                         {(auctions) ? (
                             <Clock time={auctions*1000}/>
                         ) : ('')}
@@ -113,80 +124,30 @@ const ItemPage = ({item_data}) => {
                             ))
                         ) : ('')}
                     </ButtonGroup>
-                    <Grid item>
-                        {(wowtoken) ? (
-                            <WtWiget data={wowtoken}/>
-                        ) : ('')}
-                    </Grid>
                 </Grid>
             </Container>
-
-            {/** CARD BLOCK */}
-            <Container maxWidth="lg">
-                <Grid container spacing={4}>
-                    <Grid item xs={12} sm={6} md={4}>
-                        <Typography gutterBottom variant="overline" display="block" component="h2" className={classes.cardTitle}>
-                            Summary
-                        </Typography>
-                        <Divider light />
-                        <Typography variant="caption" display="block">
-                            ID: {_id}
-                        </Typography>
-                        {(ticker) ? (
-                            <Typography variant="caption" display="block">
-                                Name: {name["en_GB"]}
-                            </Typography>
-                        ) : ('')}
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={4}>
-                        <Typography gutterBottom variant="overline" display="block" component="h2" className={classes.cardTitle}>
-                            Class
-                        </Typography>
-                        <Divider light />
-                        <Typography variant="caption" display="block">
-                            {item_class} {item_subclass}
-                        </Typography>
-                        {(asset_class && asset_class.length) ? (
-                        <Typography variant="caption" display="block">
-                            {asset_class.toString().replace(/,/g, ' ')}
-                        </Typography>
-                        ) : ('')}
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={4}>
-                        <Typography gutterBottom variant="overline" display="block" component="h2" className={classes.cardTitle}>
-                            Inventory
-                        </Typography>
-                        <Divider light />
-                        <Typography variant="caption" display="block">
-                            {quality} {inventory_type}
-                        </Typography>
-                        {(ilvl && level) ? (
-                            <Typography variant="caption" display="block">
-                                {ilvl} {level}
-                            </Typography>
-                        ) : ("")}
-                    </Grid>
-                </Grid>
-            </Container>
-            {/** MARKET BLOCK */}
-            {(chart && quotes) ? (
-                <React.Fragment>
+            <Container maxWidth={false}>
                 <Divider className={classes.divider} />
-                <Grid container spacing={2}>
-                    <Grid item xs={9}>
-                        <ClusterChart data={chart}/>
-                    </Grid>
-                    <Grid item xs={3}>
+                <Grid container spacing={4}>
+                    <Grid item xs={12} sm={6} md={6} elevation={6}>
                         <QuotesTable data={quotes} gold={gold}/>
                     </Grid>
+                    <Grid item xs={12} sm={6} md={6} elevation={6}>
+                        <ItemData data={item.value.item}/>
+                    </Grid>
                 </Grid>
-                </React.Fragment>
-            ) : (
-                ''
-            )}
-            <Divider className={classes.divider} />
-            <ItemValuations data={data}/>
-            <Divider className={classes.divider} />
+                {(chart) ? (
+                    <React.Fragment>
+                        <Divider className={classes.divider} />
+                        <ClusterChart data={chart}/>
+                    </React.Fragment>
+                ) : (
+                    ''
+                )}
+                <Divider className={classes.divider} />
+                <ItemValuations data={data}/>
+                <Divider className={classes.divider} />
+            </Container>
         </Container>
     )
 };
