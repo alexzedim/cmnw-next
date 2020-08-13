@@ -45,6 +45,12 @@ const useStyles = makeStyles(theme => ({
         marginRight: theme.spacing(2),
         marginBottom: theme.spacing(2),
     },
+    content: {
+        height: '100%',
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center"
+    }
 }));
 
 const ItemPage = ({item_data}) => {
@@ -72,11 +78,12 @@ const ItemPage = ({item_data}) => {
 
     const [item, eva] = item_data
 
-    let realm, chart, quotes, data, _id, icon, name, quality, item_class, item_subclass, ilvl, inventory_type, level, ticker, asset_class, contracts, connected_realm_id, auctions, gold, wowtoken;
+    let realm, chart, quotes, data, _id, icon, name, ticker, asset_class, contracts, connected_realm_id, auctions, gold, wowtoken, item_info;
 
     if (item.value) {
+        item_info = item.value.item;
         ({ realm, chart, quotes, wowtoken } = item.value);
-        ({ _id, name, quality, icon, item_class, item_subclass, ilvl, inventory_type, level, ticker, asset_class, contracts } = item.value.item);
+        ({ _id, name, icon, ticker, asset_class, contracts } = item_info);
         if (_id === 1) {
             gold = true;
         }
@@ -100,11 +107,6 @@ const ItemPage = ({item_data}) => {
                                 {(ticker) ? (ticker) : (name["en_GB"])}@{(realm.ticker) ? (realm.ticker) : (realm.name)}
                             </Typography>
                         </Box>
-                    </Grid>
-                    <Grid item>
-                        {(wowtoken) ? (
-                            <WtWiget data={wowtoken}/>
-                        ) : ('')}
                     </Grid>
                     <Grid item>
                         {(auctions) ? (
@@ -131,9 +133,14 @@ const ItemPage = ({item_data}) => {
                 <Grid container spacing={4}>
                     <Grid item xs={12} sm={6} md={6} elevation={6}>
                         <QuotesTable data={quotes} gold={gold}/>
+                        {(wowtoken) ? (
+                            <Box display="flex" alignItems="center" justifyContent="center" m={1} p={1} className={classes.content}>
+                                <WtWiget data={wowtoken}/>
+                            </Box>
+                        ) : ('')}
                     </Grid>
                     <Grid item xs={12} sm={6} md={6} elevation={6}>
-                        <ItemData data={item.value.item}/>
+                        <ItemData data={item_info}/>
                     </Grid>
                 </Grid>
                 {(chart) ? (
