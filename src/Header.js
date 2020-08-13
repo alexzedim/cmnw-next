@@ -8,6 +8,8 @@ import Link from "./Link";
 const useStyles = makeStyles(theme => ({
     root: {
         flexGrow: 1,
+        padding: 0,
+        width: '100%'
     },
     appBar: {
         backgroundColor: fade(theme.palette.common.black, 0.75),
