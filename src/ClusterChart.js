@@ -65,7 +65,7 @@ export default function ClusterChart ({data}) {
                         Q: ${(this.point.value).toLocaleString('ru-RU')}<br>
                         P: ${this.series.yAxis.categories[this.point.y]}+<br>
                         O: ${this.point.orders}<br>
-                        OI: ${(this.point.oi).toLocaleString('ru-RU')}`
+                        OI: ${parseInt(this.point.oi).toLocaleString('ru-RU')}`
                     }
                 },
                 series: [{
