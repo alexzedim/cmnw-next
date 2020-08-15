@@ -8,6 +8,8 @@ import {
 import XRSClusterChart from "../../../src/XRSClusterChart";
 import ItemValuations from "../../../src/ItemValuations";
 import XRSScatterPlot from "../../../src/XRSScatterPlot";
+import ItemData from "../../../src/ItemData";
+import XRSRates from "../../../src/XRSRates";
 
 const useStyles = makeStyles(theme => ({
     table: {
@@ -33,7 +35,7 @@ const useStyles = makeStyles(theme => ({
         fontWeight: 600
     },
     titleBlock: {
-        padding: theme.spacing(10, 0, 10),
+        padding: theme.spacing(10, 0, 5),
     },
 }));
 
@@ -41,10 +43,11 @@ const ItemPage = ({xrs_data}) => {
 
     const [item, valuation] = xrs_data;
 
-    let data, _id, icon, chart, name, quality, item_class, item_subclass, ilvl, inventory_type, level, ticker, asset_class, valuations;
+    let data, icon, chart, name, ticker, valuations, item_info, stackable;
 
     if (item.value) {
-        ({ _id, icon, name, quality, item_class, item_subclass, ilvl, inventory_type, level, ticker, asset_class } = item.value.item)
+        item_info = item.value.item;
+        ({ icon, name, ticker, stackable } = item_info)
         chart = item.value.chart
     }
 
@@ -59,7 +62,6 @@ const ItemPage = ({xrs_data}) => {
 
     return (
         <Container maxWidth={false}>
-            {/** TITLE BLOCK */}
             <Container maxWidth={false} className={classes.titleBlock}>
                 <Grid container direction="column" justify="space-around" alignItems="center" spacing={2}>
                     <Grid item>
@@ -72,55 +74,17 @@ const ItemPage = ({xrs_data}) => {
                     </Grid>
                 </Grid>
             </Container>
-
-            {/** CARD BLOCK */}
-            <Container maxWidth="lg">
+            <Divider className={classes.divider} />
+            <Container maxWidth={false}>
                 <Grid container spacing={4}>
-                    <Grid item xs={12} sm={6} md={4}>
-                        <Typography gutterBottom variant="overline" display="block" component="h2" className={classes.cardTitle}>
-                            Summary
-                        </Typography>
-                        <Divider light />
-                        <Typography variant="caption" display="block">
-                            ID: {_id}
-                        </Typography>
-                        {(ticker) ? (
-                            <Typography variant="caption" display="block">
-                                Name: {name["en_GB"]}
-                            </Typography>
-                        ) : ('')}
+                    <Grid item xs={12} sm={6} md={6} elevation={6}>
+                        <XRSRates stackSize={stackable}/>
                     </Grid>
-                    <Grid item xs={12} sm={6} md={4}>
-                        <Typography gutterBottom variant="overline" display="block" component="h2" className={classes.cardTitle}>
-                            Class
-                        </Typography>
-                        <Divider light />
-                        <Typography variant="caption" display="block">
-                            {item_class} {item_subclass}
-                        </Typography>
-                        {(asset_class && asset_class.length) ? (
-                            <Typography variant="caption" display="block">
-                                {asset_class.toString().replace(/,/g, ' ')}
-                            </Typography>
-                        ) : ('')}
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={4}>
-                        <Typography gutterBottom variant="overline" display="block" component="h2" className={classes.cardTitle}>
-                            Inventory
-                        </Typography>
-                        <Divider light />
-                        <Typography variant="caption" display="block">
-                            {quality} {inventory_type}
-                        </Typography>
-                        {(ilvl && level) ? (
-                            <Typography variant="caption" display="block">
-                                {ilvl} {level}
-                            </Typography>
-                        ) : ("")}
+                    <Grid item xs={12} sm={6} md={6} elevation={6}>
+                        <ItemData data={item_info}/>
                     </Grid>
                 </Grid>
             </Container>
-            {/** MARKET BLOCK */}
             {(chart) ? (
                 <React.Fragment>
                     <Divider className={classes.divider} />
