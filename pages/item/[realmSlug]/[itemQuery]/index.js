@@ -40,11 +40,6 @@ const useStyles = makeStyles(theme => ({
     titleBlock: {
         padding: theme.spacing(10, 0, 5),
     },
-    hr: {
-        marginTop: theme.spacing(1),
-        marginRight: theme.spacing(2),
-        marginBottom: theme.spacing(2),
-    },
     content: {
         height: '100%',
         display: "flex",
