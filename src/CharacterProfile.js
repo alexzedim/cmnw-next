@@ -30,13 +30,19 @@ export default function CharacterProfile ({character}) {
                     ))
                 } else {
                     if (field === "lastModified") {
-                        character[field] = (new Date(character[field]))
+                        return (
+                            <Typography key={i} variant="caption" display="block" gutterBottom>
+                                {humanizeString(field)}: {new Date(character[field]).toLocaleString('ru-RU')}
+                            </Typography>
+                        )
+                    } else {
+                        return (
+                            <Typography key={i} variant="caption" display="block" gutterBottom>
+                                {humanizeString(field)}: {character[field]}
+                            </Typography>
+                        )
                     }
-                    return (
-                        <Typography key={i} variant="caption" display="block" gutterBottom>
-                            {humanizeString(field)}: {character[field]}
-                        </Typography>
-                    )
+
                 }
             }
         })
