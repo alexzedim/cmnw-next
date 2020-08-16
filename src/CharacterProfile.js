@@ -30,7 +30,7 @@ export default function CharacterProfile ({character}) {
                     ))
                 } else {
                     if (field === "lastModified") {
-                        character[field] = (new Date(character[field])).toLocaleString('ru-RU')
+                        character[field] = (new Date(character[field]))
                     }
                     return (
                         <Typography key={i} variant="caption" display="block" gutterBottom>

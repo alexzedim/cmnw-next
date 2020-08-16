@@ -9,7 +9,7 @@ export default function ContractData ({data}) {
     return (
         Object.entries(data).map(([k, v]) => (
             <Typography variant="caption" display="block" gutterBottom>
-                {humanizeString(k)} : {v}
+                {humanizeString(k)}: {v}
             </Typography>
         ))
     )
