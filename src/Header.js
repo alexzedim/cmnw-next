@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
         width: '100%'
     },
     appBar: {
-        backgroundColor: fade(theme.palette.common.black, 0.75),
+        backgroundColor: theme.palette.secondary.main,
         position: 'relative',
     },
     title: {
