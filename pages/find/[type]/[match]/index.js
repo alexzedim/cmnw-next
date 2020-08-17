@@ -7,7 +7,7 @@ import { Container, Typography } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
     titleBlock: {
-        padding: theme.spacing(10, 0, 10),
+        padding: theme.spacing(10, 0, 5),
     },
     title: {
         fontFamily: 'Fira Sans',
@@ -62,7 +62,7 @@ function CharacterPage({ _id, match }) {
                         pageSize: 10,
                         pageSizeOptions: [5,10,25,50],
                         showTitle: false,
-                        headerStyle: {backgroundColor:'#ebe7ee', padding: '5px'}
+                        headerStyle: { backgroundColor:'#ebe7ee', padding: '5px' }
                     }}
                 />
             </Container>
