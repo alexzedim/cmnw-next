@@ -32,7 +32,7 @@ export default function CharacterProfile ({character}) {
                     if (field === "lastModified") {
                         return (
                             <Typography key={i} variant="caption" display="block" gutterBottom>
-                                {humanizeString(field)}: {new Date(character[field]).toLocaleString('ru-RU')}
+                                {humanizeString(field)}: {new Date(character[field]).toLocaleString('en-GB')}
                             </Typography>
                         )
                     } else {
