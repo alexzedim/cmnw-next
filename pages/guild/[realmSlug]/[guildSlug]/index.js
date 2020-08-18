@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import {
-    Grid, Divider, Typography,
+    Grid, Divider, Typography, Container,
 } from "@material-ui/core";
 import GuildMembers from "../../../../src/GuildMembers";
 import OSINT_Logs from "../../../../src/OsintLogs";
@@ -13,10 +13,8 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         flexDirection: 'column'
     },
-    hr: {
-        marginTop: theme.spacing(1),
-        marginRight: theme.spacing(2),
-        marginBottom: theme.spacing(2),
+    divider: {
+        margin: `${theme.spacing(2)}px auto`,
     },
     left: {
         paddingLeft: theme.spacing(3),
@@ -37,13 +35,17 @@ function GuildPage({guild}) {
     let name,
         realm,
         members,
-        created_timestamp
+        created_timestamp,
+        achievement_points,
+        member_count
 
     if (info.value) {
         ({
             name,
             realm,
             members,
+            achievement_points,
+            member_count,
             created_timestamp
         } = info.value);
     }
@@ -51,7 +53,6 @@ function GuildPage({guild}) {
     /**
      * TODO
      * + add more guild information, faction!
-     * + xs 12 as 6 + 6 for lg
      * + guild crest
      */
 
@@ -59,8 +60,8 @@ function GuildPage({guild}) {
 
     return (
         <main>
-            <Grid container>
-                <Grid item xs={12} sm={12} md={12}>
+            <Container maxWidth={false}>
+                <Container maxWidth={false}>
                     <div className={classes.paper}>
                         <Grid container direction="column" justify="center" alignItems="center">
                             <Typography variant="h3" component="h3" color="textPrimary" className={classes.title}>
@@ -72,19 +73,20 @@ function GuildPage({guild}) {
                             <Typography variant="overline">
                                 Created: {new Date(created_timestamp).toLocaleString('en-GB')}
                             </Typography>
+                            <Typography variant="overline">
+                                Members: {member_count} Achievements: {achievement_points}
+                            </Typography>
                         </Grid>
-                        <Divider light className={classes.hr}/>
                     </div>
-                </Grid>
-                <Grid container className={classes.left} item xs={12} sm={12} md={12} spacing={5}>
-                    <Grid container item xs={12} sm={6} md={6}>
-                        <GuildMembers data={members}/>
-                    </Grid>
-                    <Grid container item xs={12} sm={6} md={6}>
-                        <OSINT_Logs data={logs.value} pageSize={15}/>
-                    </Grid>
-                </Grid>
-            </Grid>
+                </Container>
+                <Divider className={classes.divider} />
+                <Container maxWidth={false}>
+                    <GuildMembers data={members}/>
+                    <Divider className={classes.divider} />
+                    <OSINT_Logs data={logs.value} pageSize={15}/>
+                    <Divider className={classes.divider} />
+                </Container>
+            </Container>
         </main>
     )
 }
