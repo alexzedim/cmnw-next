@@ -56,7 +56,7 @@ const ItemPage = ({item_data}) => {
 
     const contractButtons = [
         {
-            name: "intraday", value: "tod"
+            name: "today", value: "tod"
         },
         {
             name: "yesterday", value: "ytd"
