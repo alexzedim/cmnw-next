@@ -4,6 +4,7 @@ import OSINT_Logs from '../../../../src/OsintLogs'
 import CharacterProfile from '../../../../src/CharacterProfile'
 import CharacterButtons from '../../../../src/CharacterButtons'
 import Link from '../../../../src/Link'
+import Head from 'next/head'
 import {
     Grid, Divider, Typography, Container,
 } from "@material-ui/core";
@@ -69,6 +70,10 @@ function CharacterPage({character}) {
 
     return (
         <main>
+            <Head>
+                <title>{name}@{realm.name}</title>
+                <meta property="og:title" content={"Conglomerat"} key="title" />
+            </Head>
             <Container maxWidth={false} className={classes.root} >
                 <Grid container>
                     { (media && media.render_url) ? (

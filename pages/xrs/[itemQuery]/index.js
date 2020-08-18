@@ -66,8 +66,8 @@ const XRSPage = ({xrs_data}) => {
     return (
         <main>
             <Head>
-                <title>My page title</title>
-                <meta property="og:title" content="My page title" key="title" />
+                <title>XRS:{ticker || name['en_GB']}</title>
+                <meta property="og:title" content={'Conglomerat'} key="title" />
                 <script src="/power.js" type="text/javascript"/>
             </Head>
             <Container maxWidth={false}>

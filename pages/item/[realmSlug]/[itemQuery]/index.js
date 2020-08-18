@@ -97,8 +97,8 @@ const ItemPage = ({item_data}) => {
     return (
         <main>
             <Head>
-                <title>My page title</title>
-                <meta property="og:title" content="My page title" key="title" />
+                <title>{ticker || name['en_GB']}@{realm.ticker || realm.name}</title>
+                <meta property="og:title" content={"Conglomerat"} key="title" />
                 <script src="/power.js" type="text/javascript"/>
             </Head>
             <Container maxWidth={false}>
