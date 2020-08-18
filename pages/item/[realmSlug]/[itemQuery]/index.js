@@ -77,12 +77,12 @@ const ItemPage = ({item_data}) => {
 
     const [item, eva] = item_data
 
-    let realm, chart, quotes, data, _id, icon, name, ticker, asset_class, contracts, connected_realm_id, auctions, gold, wowtoken, item_info, feed, quality;
+    let realm, chart, quotes, data, _id, icon, name, ticker, asset_class, contracts, connected_realm_id, auctions, gold, wowtoken, item_info, feed;
 
     if (item.value) {
         item_info = item.value.item;
         ({ realm, chart, feed, quotes, wowtoken } = item.value);
-        ({ _id, name, icon, ticker, asset_class, contracts, quality } = item_info);
+        ({ _id, name, icon, ticker, asset_class, contracts } = item_info);
         if (_id === 1) {
             gold = true;
         }
@@ -157,7 +157,7 @@ const ItemPage = ({item_data}) => {
                     {(feed) ? (
                         <React.Fragment>
                             <Divider className={classes.divider} />
-                            <ItemChart name={name['en_GB']} quality={quality} data={feed}/>
+                            <ItemChart name={name['en_GB']} data={feed}/>
                         </React.Fragment>
                     ) : ('')}
                     <Divider className={classes.divider} />

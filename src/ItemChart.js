@@ -1,10 +1,10 @@
 import React from "react";
 import TableIcons from "./TableIcons";
 import MaterialTable from "material-table";
+import Link from "./Link";
 
 /**
- * TODO import Link from "./Link"; with props
- * data-wowhead={`item=${item.id}&bonus=${item.bonus_lists.toString().replace(/,/g, ':')}&xml`}
+ *
  * @param name
  * @param quality
  * @param data
@@ -12,21 +12,9 @@ import MaterialTable from "material-table";
  * @constructor
  */
 
-export default function ItemChart ({name, quality = 1, data}) {
+export default function ItemChart ({name, data}) {
 
     if (!data || !data.length) return <div>No records available</div>
-
-    const qualityItem = new Map([
-        ['Poor', 0],
-        ['Common', 1],
-        ['Uncommon', 2],
-        ['Rare', 3],
-        ['Epic', 4],
-        ['Legendary', 5],
-        ['Artifact', 6],
-        ['Heirloom', 7],
-        ['WoW Token', 8],
-    ])
 
     const timeLeft = new Map([
         ['SHORT', '30m'],
@@ -37,12 +25,36 @@ export default function ItemChart ({name, quality = 1, data}) {
 
     return (
         <MaterialTable
-            title="Test"
+            title="Item Feed"
             icons={TableIcons}
             columns={[
                 {
                     title: 'Item', field: 'id',
-                    render: ({item}) => <a href="#" data-disable-wowhead-tooltip="false" data-wh-icon-added="false" class={`q${qualityItem.get(quality)}`} data-wh-rename-link="true" data-wh-icon-size="small" data-wowhead={`item=${item.id}&bonus=${item.bonus_lists.toString().replace(/,/g, ':')}&xml`}>{name}</a>
+                    render: ({item}) => {
+                        let item_query = `item=${item.id}&`
+                        if (item.bonus_lists) {
+                            if (item.bonus_lists.length) {
+                                item_query = item_query.concat(`bonus=${item.bonus_lists.toString().replace(/,/g, ':')}`)
+                            }
+                        }
+                        item_query = item_query.concat('&xml')
+                        return (
+                            <Link
+                                href="#"
+                                prefetch={false}
+                                color="inherit"
+                                variant="inherit"
+                                underline="hover"
+                                data-disable-wowhead-tooltip="false"
+                                data-wh-icon-added="false"
+                                data-wh-rename-link="true"
+                                data-wh-icon-size="small"
+                                data-wowhead={item_query}
+                            >
+                                {name}
+                            </Link>
+                        )
+                    }
                 },
                 { title: 'Realms', field: 'connected_realm_id', render:({connected_realm_id}) => connected_realm_id.toString().replace(/,/g, ', ') },
                 { title: 'Buyout', field: 'buyout', defaultSort: 'asc', align: 'center', render: ({bid, buyout}) => {

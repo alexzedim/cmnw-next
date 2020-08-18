@@ -45,11 +45,11 @@ const XRSPage = ({xrs_data}) => {
 
     const [item, valuation] = xrs_data;
 
-    let data, icon, chart, name, ticker, valuations, item_info, stackable, quality, feed;
+    let data, icon, chart, name, ticker, valuations, item_info, stackable, feed;
 
     if (item.value) {
         item_info = item.value.item;
-        ({ icon, name, ticker, stackable, quality } = item_info)
+        ({ icon, name, ticker, stackable } = item_info)
         chart = item.value.chart
         feed = item.value.feed
     }
@@ -107,7 +107,7 @@ const XRSPage = ({xrs_data}) => {
                 {(feed) ? (
                     <React.Fragment>
                         <Divider className={classes.divider} />
-                        <ItemChart name={name['en_GB']} quality={quality} data={feed}/>
+                        <ItemChart name={name['en_GB']} data={feed}/>
                     </React.Fragment>
                 ) : ('')}
                 {(data) ? (
