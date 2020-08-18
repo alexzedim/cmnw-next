@@ -10,6 +10,8 @@ import ItemValuations from "../../../src/ItemValuations";
 import XRSScatterPlot from "../../../src/XRSScatterPlot";
 import ItemData from "../../../src/ItemData";
 import XRSRates from "../../../src/XRSRates";
+import ItemChart from "../../../src/ItemChart";
+import Head from 'next/head'
 
 const useStyles = makeStyles(theme => ({
     table: {
@@ -39,16 +41,17 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const ItemPage = ({xrs_data}) => {
+const XRSPage = ({xrs_data}) => {
 
     const [item, valuation] = xrs_data;
 
-    let data, icon, chart, name, ticker, valuations, item_info, stackable;
+    let data, icon, chart, name, ticker, valuations, item_info, stackable, quality, feed;
 
     if (item.value) {
         item_info = item.value.item;
-        ({ icon, name, ticker, stackable } = item_info)
+        ({ icon, name, ticker, stackable, quality } = item_info)
         chart = item.value.chart
+        feed = item.value.feed
     }
 
     if (valuation.value) {
@@ -61,61 +64,72 @@ const ItemPage = ({xrs_data}) => {
     const classes = useStyles();
 
     return (
-        <Container maxWidth={false}>
-            <Container maxWidth={false} className={classes.titleBlock}>
-                <Grid container direction="column" justify="space-around" alignItems="center" spacing={2}>
-                    <Grid item>
-                        <Box alignItems="center" display="flex" justifyContent="center">
-                            <Avatar alt="Item Icon" variant="rounded" src={icon} className={classes.large} />
-                            <Typography component="h1" variant="h2" color="textPrimary" className={classes.title}>
-                                {(ticker) ? (ticker) : (name["en_GB"])}
-                            </Typography>
-                        </Box>
-                    </Grid>
-                </Grid>
-            </Container>
-            <Divider className={classes.divider} />
+        <main>
+            <Head>
+                <title>My page title</title>
+                <meta property="og:title" content="My page title" key="title" />
+                <script src="/power.js" type="text/javascript"/>
+            </Head>
             <Container maxWidth={false}>
-                <Grid container spacing={4}>
-                    <Grid item xs={12} sm={6} md={6} elevation={6}>
-                        <XRSRates stackSize={stackable}/>
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={6} elevation={6}>
-                        <ItemData data={item_info}/>
-                    </Grid>
-                </Grid>
-            </Container>
-            {(chart) ? (
-                <React.Fragment>
-                    <Divider className={classes.divider} />
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <XRSClusterChart data={chart}/>
+                <Container maxWidth={false} className={classes.titleBlock}>
+                    <Grid container direction="column" justify="space-around" alignItems="center" spacing={2}>
+                        <Grid item>
+                            <Box alignItems="center" display="flex" justifyContent="center">
+                                <Avatar alt="Item Icon" variant="rounded" src={icon} className={classes.large} />
+                                <Typography component="h1" variant="h2" color="textPrimary" className={classes.title}>
+                                    {(ticker) ? (ticker) : (name["en_GB"])}
+                                </Typography>
+                            </Box>
                         </Grid>
                     </Grid>
-                </React.Fragment>
-            ) : (
+                </Container>
+                <Divider className={classes.divider} />
+                <Container maxWidth={false}>
+                    <Grid container spacing={4}>
+                        <Grid item xs={12} sm={6} md={6} elevation={6}>
+                            <XRSRates stackSize={stackable}/>
+                        </Grid>
+                        <Grid item xs={12} sm={6} md={6} elevation={6}>
+                            <ItemData data={item_info}/>
+                        </Grid>
+                    </Grid>
+                </Container>
+                {(chart) ? (
+                    <React.Fragment>
+                        <Divider className={classes.divider} />
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <XRSClusterChart data={chart}/>
+                            </Grid>
+                        </Grid>
+                    </React.Fragment>
+                ) : ('')}
+                {(feed) ? (
+                    <React.Fragment>
+                        <Divider className={classes.divider} />
+                        <ItemChart name={name['en_GB']} quality={quality} data={feed}/>
+                    </React.Fragment>
+                ) : ('')}
+                {(data) ? (
+                    <React.Fragment>
+                        <Divider className={classes.divider} />
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <ItemValuations data={data} pageSize={5}/>
+                            </Grid>
+                        </Grid>
+                        <Divider className={classes.divider} />
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <XRSScatterPlot data={data}/>
+                            </Grid>
+                        </Grid>
+                    </React.Fragment>
+                ) : (
                 ''
-            )}
-            {(data) ? (
-                <React.Fragment>
-                    <Divider className={classes.divider} />
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <ItemValuations data={data} pageSize={20}/>
-                        </Grid>
-                    </Grid>
-                    <Divider className={classes.divider} />
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <XRSScatterPlot data={data}/>
-                        </Grid>
-                    </Grid>
-                </React.Fragment>
-            ) : (
-            ''
-            )}
-        </Container>
+                )}
+            </Container>
+        </main>
     )
 };
 
@@ -130,4 +144,4 @@ export async function getServerSideProps({query}) {
 }
 
 
-export default ItemPage
+export default XRSPage

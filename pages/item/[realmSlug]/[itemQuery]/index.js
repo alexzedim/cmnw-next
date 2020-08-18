@@ -10,9 +10,12 @@ import Clock from "../../../../src/Clock";
 import ItemValuations from "../../../../src/ItemValuations";
 import QuotesTable from "../../../../src/QuotesTable";
 import WtWiget from "../../../../src/WtWiget";
-import ItemData from '../../../../src/ItemData'
+import ItemData from '../../../../src/ItemData';
+import ItemChart from "../../../../src/ItemChart";
 import useSWR from 'swr'
 import Router from "next/router";
+import Head from 'next/head'
+
 
 
 const useStyles = makeStyles(theme => ({
@@ -74,12 +77,12 @@ const ItemPage = ({item_data}) => {
 
     const [item, eva] = item_data
 
-    let realm, chart, quotes, data, _id, icon, name, ticker, asset_class, contracts, connected_realm_id, auctions, gold, wowtoken, item_info;
+    let realm, chart, quotes, data, _id, icon, name, ticker, asset_class, contracts, connected_realm_id, auctions, gold, wowtoken, item_info, feed, quality;
 
     if (item.value) {
         item_info = item.value.item;
-        ({ realm, chart, quotes, wowtoken } = item.value);
-        ({ _id, name, icon, ticker, asset_class, contracts } = item_info);
+        ({ realm, chart, feed, quotes, wowtoken } = item.value);
+        ({ _id, name, icon, ticker, asset_class, contracts, quality } = item_info);
         if (_id === 1) {
             gold = true;
         }
@@ -92,66 +95,77 @@ const ItemPage = ({item_data}) => {
     const classes = useStyles();
 
     return (
-        <Container maxWidth={false}>
-            {/** TITLE BLOCK */}
-            <Container maxWidth={false} className={classes.titleBlock}>
-                <Grid container direction="column" justify="space-around" alignItems="center" spacing={2}>
-                    <Grid item>
-                        <Box alignItems="center" display="flex" justifyContent="center">
-                            <Avatar alt="Item Icon" variant="rounded" src={icon} className={classes.large} />
-                            <Typography component="h1" variant="h2" color="textPrimary" className={classes.title}>
-                                {(ticker) ? (ticker) : (name["en_GB"])}@{(realm.ticker) ? (realm.ticker) : (realm.name)}
-                            </Typography>
-                        </Box>
-                    </Grid>
-                    <Grid item>
-                        {(auctions) ? (
-                            <Clock time={auctions*1000}/>
-                        ) : ('')}
-                    </Grid>
-                    <ButtonGroup color="secondary" aria-label="outlined primary button group">
-                        {asset_class.includes('COMMDTY') ? (
-                            <Button onClick={() => Router.push(`/XRS/${_id}`)}>XRS</Button>
-                        ) : ('')}
-                        {(wowtoken) ? (
-                            <Button onClick={() => Router.push(`/gold/${connected_realm_id}`)}>GOLD</Button>
-                        ) : ('')}
-                        {(contracts) ? (
-                            contractButtons.map(({name, value}, i) => (
-                                <Button key={i} onClick={() => Router.push(`/contract/${connected_realm_id}/${_id}/${value}`)}>{name}</Button>
-                            ))
-                        ) : ('')}
-                    </ButtonGroup>
-                </Grid>
-            </Container>
+        <main>
+            <Head>
+                <title>My page title</title>
+                <meta property="og:title" content="My page title" key="title" />
+                <script src="/power.js" type="text/javascript"/>
+            </Head>
             <Container maxWidth={false}>
-                <Divider className={classes.divider} />
-                <Grid container spacing={4}>
-                    <Grid item xs={12} sm={6} md={6} elevation={6}>
-                        <QuotesTable data={quotes} gold={gold}/>
-                        {(wowtoken) ? (
-                            <Box display="flex" alignItems="center" justifyContent="center" m={1} p={1} className={classes.content}>
-                                <WtWiget data={wowtoken}/>
+                {/** TITLE BLOCK */}
+                <Container maxWidth={false} className={classes.titleBlock}>
+                    <Grid container direction="column" justify="space-around" alignItems="center" spacing={2}>
+                        <Grid item>
+                            <Box alignItems="center" display="flex" justifyContent="center">
+                                <Avatar alt="Item Icon" variant="rounded" src={icon} className={classes.large} />
+                                <Typography component="h1" variant="h2" color="textPrimary" className={classes.title}>
+                                    {(ticker) ? (ticker) : (name["en_GB"])}@{(realm.ticker) ? (realm.ticker) : (realm.name)}
+                                </Typography>
                             </Box>
-                        ) : ('')}
+                        </Grid>
+                        <Grid item>
+                            {(auctions) ? (
+                                <Clock time={auctions*1000}/>
+                            ) : ('')}
+                        </Grid>
+                        <ButtonGroup color="secondary" aria-label="outlined primary button group">
+                            {asset_class.includes('COMMDTY') ? (
+                                <Button onClick={() => Router.push(`/XRS/${_id}`)}>XRS</Button>
+                            ) : ('')}
+                            {(wowtoken) ? (
+                                <Button onClick={() => Router.push(`/gold/${connected_realm_id}`)}>GOLD</Button>
+                            ) : ('')}
+                            {(contracts) ? (
+                                contractButtons.map(({name, value}, i) => (
+                                    <Button key={i} onClick={() => Router.push(`/contract/${connected_realm_id}/${_id}/${value}`)}>{name}</Button>
+                                ))
+                            ) : ('')}
+                        </ButtonGroup>
                     </Grid>
-                    <Grid item xs={12} sm={6} md={6} elevation={6}>
-                        <ItemData data={item_info}/>
+                </Container>
+                <Container maxWidth={false}>
+                    <Divider className={classes.divider} />
+                    <Grid container spacing={4}>
+                        <Grid item xs={12} sm={6} md={6} elevation={6}>
+                            <QuotesTable data={quotes} gold={gold}/>
+                            {(wowtoken) ? (
+                                <Box display="flex" alignItems="center" justifyContent="center" m={1} p={1} className={classes.content}>
+                                    <WtWiget data={wowtoken}/>
+                                </Box>
+                            ) : ('')}
+                        </Grid>
+                        <Grid item xs={12} sm={6} md={6} elevation={6}>
+                            <ItemData data={item_info}/>
+                        </Grid>
                     </Grid>
-                </Grid>
-                {(chart) ? (
-                    <React.Fragment>
-                        <Divider className={classes.divider} />
-                        <ClusterChart data={chart}/>
-                    </React.Fragment>
-                ) : (
-                    ''
-                )}
-                <Divider className={classes.divider} />
-                <ItemValuations data={data}/>
-                <Divider className={classes.divider} />
+                    {(chart) ? (
+                        <React.Fragment>
+                            <Divider className={classes.divider} />
+                            <ClusterChart data={chart}/>
+                        </React.Fragment>
+                    ) : ('')}
+                    {(feed) ? (
+                        <React.Fragment>
+                            <Divider className={classes.divider} />
+                            <ItemChart name={name['en_GB']} quality={quality} data={feed}/>
+                        </React.Fragment>
+                    ) : ('')}
+                    <Divider className={classes.divider} />
+                    <ItemValuations data={data}/>
+                    <Divider className={classes.divider} />
+                </Container>
             </Container>
-        </Container>
+        </main>
     )
 };
 
