@@ -14,7 +14,7 @@ import Link from "./Link";
 
 export default function ItemChart ({name, data}) {
 
-    if (!data || !data.length) return <div>No records available</div>
+    if (!data || !data.length) return ('')
 
     const timeLeft = new Map([
         ['SHORT', '30m'],
