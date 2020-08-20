@@ -55,7 +55,7 @@ export default function GuildMembers({data}) {
             data={data.map(({_id, name, realm, guild, hash, ilvl, lastModified}) => {
                 let row = {
                     _id: _id,
-                    url_id: `/character/${realm.name}/${name}`,
+                    url_id: `/character/${realm.slug}/${name}`,
                     rank: `${guild.rank}`,
                     item_level: 0,
                     a: 0,
