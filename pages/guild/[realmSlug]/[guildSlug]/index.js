@@ -5,6 +5,7 @@ import {
 } from "@material-ui/core";
 import GuildMembers from "../../../../src/GuildMembers";
 import OSINT_Logs from "../../../../src/OsintLogs";
+import Head from 'next/head'
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -37,7 +38,8 @@ function GuildPage({guild}) {
         members,
         created_timestamp,
         achievement_points,
-        member_count
+        member_count,
+        title
 
     if (info.value) {
         ({
@@ -48,18 +50,29 @@ function GuildPage({guild}) {
             member_count,
             created_timestamp
         } = info.value);
-    }
 
-    /**
-     * TODO
-     * + add more guild information, faction!
-     * + guild crest
-     */
+        title = `${name}@${realm.name}`
+    }
 
     const classes = useStyles();
 
     return (
         <main>
+            <Head>
+                <title>{title}</title>
+
+                <meta name="description" content="GUILD — return all available information about selected guild, like members and OSINT logs."/>
+
+                <meta property="og:type" content="website"/>
+                <meta property="og:url" content="https://conglomerat.group/"/>
+                <meta property="og:title" content={title}/>
+                <meta property="og:description" content="GUILD — return all available information about selected guild, like members and OSINT logs."/>
+
+                <meta property="twitter:card" content="summary_large_image"/>
+                <meta property="og:url" content="https://conglomerat.group/"/>
+                <meta property="twitter:title" content={title}/>
+                <meta property="twitter:description" content="GUILD — return all available information about selected guild, like members and OSINT logs."/>
+            </Head>
             <Container maxWidth={false}>
                 <Container maxWidth={false}>
                     <div className={classes.paper}>
