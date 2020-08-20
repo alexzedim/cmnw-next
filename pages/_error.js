@@ -1,6 +1,6 @@
 import Logo from '../public/logo2.svg';
 import React from "react";
-import {Container, Grid, Typography} from "@material-ui/core";
+import { Container, Grid, Typography } from "@material-ui/core";
 import Link from "../src/Link";
 
 function Error({ statusCode }) {

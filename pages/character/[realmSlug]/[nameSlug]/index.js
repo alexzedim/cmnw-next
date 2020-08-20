@@ -50,7 +50,8 @@ function CharacterPage({character}) {
     let media,
         name,
         realm,
-        guild
+        guild,
+        title = 'Test'
 
     if (info.value) {
         ({
@@ -59,6 +60,8 @@ function CharacterPage({character}) {
             realm,
             guild,
         } = info.value);
+
+        title = `${name}@${realm.name}`
 
         if (media && media.render_url) {
             /** TODO If media true then return pic */
@@ -71,8 +74,22 @@ function CharacterPage({character}) {
     return (
         <main>
             <Head>
-                <title>{name}@{realm.name}</title>
-                <meta property="og:title" content={"Conglomerat"} key="title" />
+                <title>{title}</title>
+
+                <meta name="description" content="Conglomerat — In-game decision-making superiority starts here."/>
+                <!-- Open Graph / Facebook -->
+                <meta property="og:type" content="website"/>
+                <meta property="og:url" content="https://conglomerat.group/"/>
+                <meta property="og:title" content={title}/>
+                <meta property="og:description" content="Conglomerat — In-game decision-making superiority starts here."/>
+                <meta property="og:image" content="https://conglomerat.group/logo.svg"/>
+
+                <!-- Twitter -->
+                <meta property="twitter:card" content="summary_large_image"/>
+                <meta property="og:url" content="https://conglomerat.group/"/>
+                <meta property="twitter:title" content={title}/>
+                <meta property="twitter:description" content="Conglomerat — In-game decision-making superiority starts here."/>
+                <meta property="twitter:image" content="https://conglomerat.group/logo.svg"/>
             </Head>
             <Container maxWidth={false} className={classes.root} >
                 <Grid container>
