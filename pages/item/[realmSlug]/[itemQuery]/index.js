@@ -16,8 +16,6 @@ import useSWR from 'swr'
 import Router from "next/router";
 import Head from 'next/head'
 
-
-
 const useStyles = makeStyles(theme => ({
     table: {
         minWidth: 400,
@@ -77,7 +75,12 @@ const ItemPage = ({item_data}) => {
 
     const [item, eva] = item_data
 
-    let realm, chart, quotes, data, _id, icon, name, ticker, asset_class, contracts, connected_realm_id, auctions, gold, wowtoken, item_info, feed;
+    let realm, chart, quotes,
+        data, _id, icon,
+        name, ticker, asset_class,
+        contracts, connected_realm_id,
+        auctions, gold, wowtoken,
+        item_info, feed, title;
 
     if (item.value) {
         item_info = item.value.item;
@@ -87,6 +90,8 @@ const ItemPage = ({item_data}) => {
             gold = true;
         }
         ({ connected_realm_id, auctions } = realm);
+
+        title = `${ticker || name['en_GB']}@${realm.ticker || realm.name}`
     }
     if (eva.value) {
         ({ data } = useSWR(`http://localhost:3030/api/items/eva/${item.value.item._id}@${connected_realm_id}`, fetch, { initialData: eva.value.valuations }))
@@ -97,9 +102,21 @@ const ItemPage = ({item_data}) => {
     return (
         <main>
             <Head>
-                <title>{ticker || name['en_GB']}@{realm.ticker || realm.name}</title>
-                <meta property="og:title" content={"Conglomerat"} key="title" />
-                <script src="/power.js" type="text/javascript"/>
+                <title>ITEM:{title}</title>
+                <meta name="description" content="ITEM — Provides an up-to-date market data with evaluation methods and its values, for a certain item within a selected realm."/>
+
+                <meta property="og:type" content="website"/>
+                <meta property="og:url" content="https://conglomerat.group/"/>
+                <meta property="og:title" content={title}/>
+                <meta property="og:description" content="ITEM — Provides an up-to-date market data with evaluation methods and its values, for a certain item within a selected realm."/>
+
+                <meta property="twitter:card" content="summary_large_image"/>
+                <meta property="og:url" content="https://conglomerat.group/"/>
+                <meta property="twitter:title" content={title}/>
+                <meta property="twitter:description" content="ITEM — Provides an up-to-date market data with evaluation methods and its values, for a certain item within a selected realm."/>
+                <meta property="og:image" content={icon}/>
+
+                <script src={"/power.js"} type="text/javascript"/>
             </Head>
             <Container maxWidth={false}>
                 {/** TITLE BLOCK */}
@@ -109,7 +126,7 @@ const ItemPage = ({item_data}) => {
                             <Box alignItems="center" display="flex" justifyContent="center">
                                 <Avatar alt="Item Icon" variant="rounded" src={icon} className={classes.large} />
                                 <Typography component="h1" variant="h2" color="textPrimary" className={classes.title}>
-                                    {(ticker) ? (ticker) : (name["en_GB"])}@{(realm.ticker) ? (realm.ticker) : (realm.name)}
+                                    {title}
                                 </Typography>
                             </Box>
                         </Grid>
@@ -148,19 +165,19 @@ const ItemPage = ({item_data}) => {
                             <ItemData data={item_info}/>
                         </Grid>
                     </Grid>
+                    <Divider className={classes.divider} />
                     {(chart) ? (
                         <React.Fragment>
-                            <Divider className={classes.divider} />
                             <ClusterChart data={chart}/>
+                            <Divider className={classes.divider} />
                         </React.Fragment>
                     ) : ('')}
                     {(feed) ? (
                         <React.Fragment>
-                            <Divider className={classes.divider} />
                             <ItemChart name={name['en_GB']} data={feed}/>
+                            <Divider className={classes.divider} />
                         </React.Fragment>
                     ) : ('')}
-                    <Divider className={classes.divider} />
                     <ItemValuations data={data}/>
                     <Divider className={classes.divider} />
                 </Container>
