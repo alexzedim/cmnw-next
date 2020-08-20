@@ -55,7 +55,7 @@ export default function ContractsTable({data}) {
             options={{
                 sorting: true,
                 pageSize: 20,
-                pageSizeOptions: [10,25,50],
+                pageSizeOptions: [10,20,25,50],
                 showTitle: false,
                 headerStyle: { backgroundColor:'#ebe7ee' }
             }}
