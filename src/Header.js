@@ -30,7 +30,7 @@ export default function Header() {
 
     return (
         <div className={classes.root}>
-            <AppBar className={classes.appBar} color="transparent" position="absolute">
+            <AppBar className={classes.appBar} color="transparent" position="sticky">
                 <Toolbar>
                     <Typography className={classes.title} variant="h6" color="primary" noWrap>
                         <Link href="/" color="inherit" underline="none">
@@ -38,12 +38,12 @@ export default function Header() {
                         </Link>
                     </Typography>
                     <Typography className={classes.title} variant="h6" color="primary" noWrap>
-                        <Link href="/help" color="inherit" underline="none">
+                        <Link href={"/help"} color="inherit" underline="none">
                             Help
                         </Link>
                     </Typography>
                     <Typography className={classes.title} variant="h6" color="primary" noWrap>
-                        <Link href="/who-we-are" color="inherit" underline="none">
+                        <Link href={"/who-we-are"} color="inherit" underline="none">
                             Who we are
                         </Link>
                     </Typography>
