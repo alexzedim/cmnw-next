@@ -86,18 +86,18 @@ function CharacterPage({character}) {
             <Head>
                 <title>{title}</title>
 
-                <meta name="description" content="Conglomerat — In-game decision-making superiority starts here."/>
+                <meta name="description" content="CHARACTER — Provides a necessary information about certain game character across OSINT-DB"/>
 
                 <meta property="og:type" content="website"/>
                 <meta property="og:url" content="https://conglomerat.group/"/>
                 <meta property="og:title" content={title}/>
-                <meta property="og:description" content="Conglomerat — In-game decision-making superiority starts here."/>
+                <meta property="og:description" content="CHARACTER — Provides a necessary information about certain game character across OSINT-DB"/>
                 <meta property="og:image" content={render_url}/>
 
                 <meta property="twitter:card" content="summary_large_image"/>
                 <meta property="og:url" content="https://conglomerat.group/"/>
                 <meta property="twitter:title" content={title}/>
-                <meta property="twitter:description" content="Conglomerat — In-game decision-making superiority starts here."/>
+                <meta property="twitter:description" content="CHARACTER — Provides a necessary information about certain game character across OSINT-DB"/>
                 <meta property="twitter:image" content={render_url}/>
             </Head>
             <Container maxWidth={false} className={classes.root} >
