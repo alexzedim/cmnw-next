@@ -14,12 +14,12 @@ export default function ItemData ({data}) {
     ];
 
     return (
-        fieldsToCheck.map(field => {
+        fieldsToCheck.map((field,i) => {
             if (field in data) {
                 if (Array.isArray(data[field])) {
                     if (data[field].length) {
                         return (
-                            <Typography variant="caption" display="block" gutterBottom>
+                            <Typography key={i} variant="caption" display="block" gutterBottom>
                                 {humanizeString(field)}: {data[field].toString().replace(/,/g, ' ')}
                             </Typography>
                         )
@@ -27,20 +27,20 @@ export default function ItemData ({data}) {
                 } else if (typeof data[field] === 'object') {
                     if (field === 'name') {
                         return (
-                            <Typography variant="caption" display="block" gutterBottom>
+                            <Typography key={i} variant="caption" display="block" gutterBottom>
                                 {field}: {data[field].en_GB}
                             </Typography>
                         )
                     } else {
                         return Object.entries(data[field]).map(([k, v]) => (
-                            <Typography variant="caption" display="block" gutterBottom>
+                            <Typography key={i} variant="caption" display="block" gutterBottom>
                                 {humanizeString(field)} {humanizeString(k)}: {v}
                             </Typography>
                         ))
                     }
                 } else {
                     return (
-                        <Typography variant="caption" display="block" gutterBottom>
+                        <Typography key={i} variant="caption" display="block" gutterBottom>
                             {humanizeString(field)}: {data[field]}
                         </Typography>
                     )

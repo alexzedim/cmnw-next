@@ -7,8 +7,8 @@ export default function ContractData ({data}) {
     if (!data) return ('')
 
     return (
-        Object.entries(data).map(([k, v]) => (
-            <Typography variant="caption" display="block" gutterBottom>
+        Object.entries(data).map(([k, v], i) => (
+            <Typography key={i} variant="caption" display="block" gutterBottom>
                 {humanizeString(k)}: {v}
             </Typography>
         ))
