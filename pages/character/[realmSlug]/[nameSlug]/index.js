@@ -16,7 +16,6 @@ const useStyles = makeStyles(theme => ({
         padding: 0,
     },
     image: {
-        backgroundImage: 'url(https://source.unsplash.com/random)',
         backgroundRepeat: 'no-repeat',
         backgroundColor:
             theme.palette.type === 'dark' ? theme.palette.grey[900] : theme.palette.grey[50],
@@ -47,11 +46,15 @@ function CharacterPage({character}) {
 
     const [ info, logs ] = character;
 
+    /** TODO title */
+
     let media,
         name,
         realm,
         guild,
-        title = 'Test'
+        faction,
+        title = 'Test',
+        render_url = 'https://source.unsplash.com/random'
 
     if (info.value) {
         ({
@@ -59,14 +62,21 @@ function CharacterPage({character}) {
             name,
             realm,
             guild,
+            faction,
         } = info.value);
 
         title = `${name}@${realm.name}`
 
-        if (media && media.render_url) {
-            /** TODO If media true then return pic */
+        if (media) {
+            ({render_url} = media);
+        } else {
+            if (faction === 'Horde') {
+                render_url = 'https://conglomerat.group/horde.png'
+            }
+            if (faction === 'Alliance') {
+                render_url = 'https://conglomerat.group/alliance.png'
+            }
         }
-        /** Else - placeholder */
     }
 
     const classes = useStyles();
@@ -82,19 +92,17 @@ function CharacterPage({character}) {
                 <meta property="og:url" content="https://conglomerat.group/"/>
                 <meta property="og:title" content={title}/>
                 <meta property="og:description" content="Conglomerat — In-game decision-making superiority starts here."/>
-                <meta property="og:image" content="https://conglomerat.group/logo.svg"/>
+                <meta property="og:image" content={render_url}/>
 
                 <meta property="twitter:card" content="summary_large_image"/>
                 <meta property="og:url" content="https://conglomerat.group/"/>
                 <meta property="twitter:title" content={title}/>
                 <meta property="twitter:description" content="Conglomerat — In-game decision-making superiority starts here."/>
-                <meta property="twitter:image" content="https://conglomerat.group/logo.svg"/>
+                <meta property="twitter:image" content={render_url}/>
             </Head>
             <Container maxWidth={false} className={classes.root} >
                 <Grid container>
-                    { (media && media.render_url) ? (
-                        <Grid key={0} item xs={12} sm={5} md={5} className={classes.image} style={{backgroundImage: `url(${media.render_url}`}}/>
-                    ) : ('')}
+                    <Grid key={0} item xs={12} sm={5} md={5} className={classes.image} style={{backgroundImage: `url(${render_url}`}}/>
                     <Grid key={1} item xs={12} sm={7} md={7} elevation={6}>
                         <div className={classes.paper} style={{alignItems: 'left'}}>
                             <Grid>
