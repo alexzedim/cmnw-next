@@ -46,15 +46,15 @@ function CharacterPage({character}) {
 
     const [ info, logs ] = character;
 
-    /** TODO title */
+    /** FIXME title */
 
     let media,
         name,
         realm,
         guild,
         faction,
-        title = 'Test',
-        render_url = 'https://source.unsplash.com/random'
+        title,
+        render_url = 'https://source.unsplash.com/logo2.svg'
 
     if (info.value) {
         ({
