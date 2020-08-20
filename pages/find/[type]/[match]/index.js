@@ -31,7 +31,7 @@ function CharacterPage({ _id, match }) {
             </div>
             <Container maxWidth={false}>
                 <MaterialTable
-                    title="Match based in ${_id}"
+                    title="Match table"
                     icons={TableIcons}
                     columns={[
                         { title: 'Avatar', field: 'media', render: ({media}) => ((media) ? (<img src={media.avatar_url} style={{width: 50, borderRadius: '50%'}}/>) : (""))},
