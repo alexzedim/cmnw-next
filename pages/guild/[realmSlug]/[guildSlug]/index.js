@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import {
     Grid, Divider, Typography, Container,
 } from "@material-ui/core";
-import GuildMembers from "../../../../src/GuildMembers";
+import CharactersTable from "../../../../src/CharactersTable";
 import OSINT_Logs from "../../../../src/OsintLogs";
 import Head from 'next/head'
 
@@ -94,7 +94,7 @@ function GuildPage({guild}) {
                 </Container>
                 <Divider className={classes.divider} />
                 <Container maxWidth={false}>
-                    <GuildMembers data={members}/>
+                    <CharactersTable data={members} members={true}/>
                     <Divider className={classes.divider} />
                     <OSINT_Logs data={logs.value} pageSize={15}/>
                     <Divider className={classes.divider} />
