@@ -17,8 +17,6 @@ const useStyles = makeStyles(theme => ({
     },
     image: {
         backgroundRepeat: 'no-repeat',
-        backgroundColor:
-            theme.palette.type === 'dark' ? theme.palette.grey[900] : theme.palette.grey[50],
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         height: '93vh',
@@ -46,15 +44,13 @@ function CharacterPage({character}) {
 
     const [ info, logs ] = character;
 
-    /** FIXME title */
-
     let media,
         name,
         realm,
         guild,
         faction,
         title,
-        render_url = 'https://source.unsplash.com/logo2.svg'
+        render_url = 'https://conglomerat.group/logo2.svg'
 
     if (info.value) {
         ({
