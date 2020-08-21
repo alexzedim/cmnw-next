@@ -10,7 +10,19 @@ export default function CharactersTable({data, members = false}) {
     } else {
         characters = data.map(({_id, name, realm, guild, hash, ilvl, media, faction, race, gender, character_class, spec, level, lastModified}) => {
 
-            let avatar, guild_name, guild_rank, guild_url, item_level = 0;
+            let avatar, guild_name, guild_rank, guild_url, item_level = 0, hash_a = '', hash_b = '', hash_c = '';
+
+            if (hash) {
+                if ("a" in hash) {
+                    hash_a = hash.a;
+                }
+                if ("b" in hash) {
+                    hash_b = hash.b;
+                }
+                if ("c" in hash) {
+                    hash_c = hash.c;
+                }
+            }
 
             if (media) {
                 if ("avatar_url" in media) {
@@ -41,14 +53,14 @@ export default function CharactersTable({data, members = false}) {
                 race: race,
                 gender: gender,
                 avatar: avatar,
-                a: hash.a || '',
-                b: hash.b || '',
-                c: hash.c || '',
+                a: hash_a,
+                b: hash_b,
+                c: hash_c,
                 spec: spec,
                 level: level,
-                url_a: `/find/a/${hash.a}` || '',
-                url_b: `/find/b/${hash.b}` || '',
-                url_c: `/find/c/${hash.c}` || '',
+                url_a: `/find/a/${hash_a}` || '',
+                url_b: `/find/b/${hash_b}` || '',
+                url_c: `/find/c/${hash_c}` || '',
                 faction: faction,
                 class: character_class,
                 rank: guild_rank,
