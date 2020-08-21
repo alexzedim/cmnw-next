@@ -436,7 +436,7 @@ function Index ({realms}) {
 }
 
 export async function getServerSideProps() {
-    const res = await fetch(encodeURI(`http://localhost:3030/api/realms/ru_RU`));
+    const res = await fetch(encodeURI(`http://localhost:3030/api/realms/Europe`));
     const json = await res.json();
     return { props: {realms: json}}
 }
