@@ -1,11 +1,14 @@
 import React from "react";
 import { makeStyles } from '@material-ui/core/styles';
-import Link from "../../../../src/Link";
-import TableIcons from "../../../../src/TableIcons"
-import MaterialTable from 'material-table';
-import { Container, Typography } from "@material-ui/core";
+import {Container, Divider, Typography} from "@material-ui/core";
+import CharactersTable from "../../../../src/CharactersTable";
+import { useRouter } from "next/router";
+import Head from 'next/head'
 
 const useStyles = makeStyles(theme => ({
+    divider: {
+        margin: `${theme.spacing(2)}px auto`,
+    },
     titleBlock: {
         padding: theme.spacing(10, 0, 5),
     },
@@ -18,10 +21,28 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function CharacterPage({ _id, match }) {
+function FindPage ({ _id, match }) {
+    const { query } = useRouter()
+    let title = `${query.type}:${query.match}`.toUpperCase();
+    let description = `FIND ${query.type.toUpperCase()} — return all available hash matches for dynamic hash value. Don't bookmark this page!`
     const classes = useStyles();
     return (
         <main>
+            <Head>
+                <title>{title}</title>
+
+                <meta name="description" content={description}/>
+
+                <meta property="og:type" content="website"/>
+                <meta property="og:url" content="https://conglomerat.group/"/>
+                <meta property="og:title" content={title}/>
+                <meta property="og:description" content={description}/>
+
+                <meta property="twitter:card" content="summary_large_image"/>
+                <meta property="og:url" content="https://conglomerat.group/"/>
+                <meta property="twitter:title" content={title}/>
+                <meta property="twitter:description" content={description}/>
+            </Head>
             <div className={classes.titleBlock}>
                 <Container maxWidth="lg">
                     <Typography component="h1" variant="h2" align="center" color="secondary" className={classes.title} gutterBottom>
@@ -29,42 +50,10 @@ function CharacterPage({ _id, match }) {
                     </Typography>
                 </Container>
             </div>
+            <Divider className={classes.divider} />
             <Container maxWidth={false}>
-                <MaterialTable
-                    title="Match table"
-                    icons={TableIcons}
-                    columns={[
-                        { title: 'Avatar', field: 'media', render: ({media}) => ((media) ? (<img src={media.avatar_url} style={{width: 50, borderRadius: '50%'}}/>) : (""))},
-                        { title: 'Name', field: 'name', render: ({name, realm}) => (<Link href={encodeURI(`/character/${realm.slug}/${name}`)} color="secondary" underline="hover">{name}</Link>) },
-                        {
-                            field: 'realm',
-                            title: 'Realm',
-                            render: ({realm}) => realm.name
-                        },
-                        {
-                            field: 'guild',
-                            title: 'Guild',
-                            render: ({realm, guild}) => ((realm && guild) ? (<Link href={encodeURI(`/guild/${realm.slug}/${guild.slug}`)} color="secondary" underline="hover">{guild.name}</Link>) : (""))
-                        },
-                        { title: 'Class', field: 'character_class' },
-                        { title: 'Level', field: 'level' },
-                        { title: 'Faction', field: 'faction' },
-                        { title: 'Race', field: 'race' },
-                        { title: 'Gender', field: 'gender' },
-                    ]}
-                    data={match}
-                    style={{
-                        backgroundColor: '#ebe7ee',
-                        marginBottom: "32px",
-                    }}
-                    options={{
-                        sorting: true,
-                        pageSize: 10,
-                        pageSizeOptions: [5,10,25,50],
-                        showTitle: false,
-                        headerStyle: { backgroundColor:'#ebe7ee', padding: '5px' }
-                    }}
-                />
+                <CharactersTable data={match} members={false}/>
+                <Divider className={classes.divider} />
             </Container>
         </main>
     )
@@ -77,4 +66,4 @@ export async function getServerSideProps({query}) {
     return { props: json }
 }
 
-export default CharacterPage
+export default FindPage
