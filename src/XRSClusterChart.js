@@ -1,5 +1,5 @@
 import React from "react";
-import Highcharts from 'highcharts'
+import Highcharts from 'highcharts/highstock';
 import HighchartsExporting from 'highcharts/modules/exporting'
 import HighchartsReact from 'highcharts-react-official'
 import HC_heatmap from "highcharts/modules/heatmap";
@@ -10,9 +10,11 @@ if (typeof Highcharts === 'object') {
 }
 
 export default function XRSClusterChart ({data}) {
-    if (!data) return <div>No records available</div>
+    if (!data) return ('')
 
     const { price_range, realms, dataset } = data;
+
+    let connected_realm = realms.map(({connected_realms}) => connected_realms.map(({name_locale}) => name_locale).join(', '));
 
     return (
         <HighchartsReact
@@ -28,14 +30,47 @@ export default function XRSClusterChart ({data}) {
                         letterSpacing: 'unset',
                     }
                 },
+                plotOptions: {
+                    series: {
+                        turboThreshold: 0,
+                        boostThreshold: 100,
+                        dataLabels: {
+                            overflow: 'none',
+                            crop: true,
+                            enabled: true,
+                            shadow: false,
+                            formatter: function(){
+                                if (this.point.value !== 0) {
+                                    return this.point.value.toLocaleString('ru-RU');
+                                }
+                            },
+                            style: {
+                                fontFamily: 'Roboto',
+                                color: 'contrast',
+                                fontSize: '14px',
+                                fontWeight: 'normal',
+                                textOutline: '0px',
+                            }
+                        }
+                    }
+                },
+                boost: {
+                    useGPUTranslations: true,
+                    usePreallocated: true,
+                },
                 title: {
                     text: undefined
                 },
                 xAxis: {
-                    categories: realms.map(({connected_realms}) => `
-                    ${new Date(connected_realms[0].auctions*1000).toLocaleString('ru-RU')}
-                    ${connected_realms.map(r => r.name)}
-                    `),
+                    startOnTick: false,
+                    endOnTick: false,
+                    categories: connected_realm,
+                    title: null,
+                    min: 0,
+                    max: 20,
+                    scrollbar: {
+                        enabled: true
+                    },
                 },
                 yAxis:{
                     categories: price_range,
@@ -58,33 +93,18 @@ export default function XRSClusterChart ({data}) {
                 },
                 tooltip: {
                     formatter: function () {
-                        return `Time & Realms: ${this.series.xAxis.categories[this.point.x]}<br>
-                        Q: ${(this.point.value).toLocaleString('ru-RU')}<br>
-                        P: ${this.series.yAxis.categories[this.point.y]}+<br>
-                        O: ${this.point.orders}<br>
-                        OI: ${parseInt(this.point.oi).toLocaleString('ru-RU')}`
+                        return `Realms: ${this.series.xAxis.categories[this.point.x]}<br>
+                            Q: ${(this.point.value).toLocaleString('ru-RU')}<br>
+                            P: ${this.series.yAxis.categories[this.point.y]}+<br>
+                            O: ${this.point.orders}<br>
+                            OI: ${parseInt(this.point.oi).toLocaleString('ru-RU')}`
                     }
                 },
                 series: [{
                     borderWidth: 0,
-                    clip: false,
                     data: dataset,
                     dataLabels: {
                         enabled: true,
-                        crop: true,
-                        shadow: false,
-                        formatter: function(){
-                            if (this.point.value !== 0) {
-                                return this.point.value.toLocaleString('ru-RU');
-                            }
-                        },
-                        style: {
-                            fontFamily: 'Roboto',
-                            color: 'contrast',
-                            fontSize: '14px',
-                            fontWeight: 'normal',
-                            textOutline: '0px',
-                        }
                     }
                 }]
             }}
