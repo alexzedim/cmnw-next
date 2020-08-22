@@ -89,7 +89,6 @@ export default function XRSClusterChart ({data}) {
                     layout: 'vertical',
                     margin: 0,
                     verticalAlign: 'middle',
-                    y: 25,
                     symbolHeight: 350
                 },
                 tooltip: {
