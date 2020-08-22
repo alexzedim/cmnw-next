@@ -107,12 +107,12 @@ const ItemPage = ({item_data}) => {
 
                 <meta property="og:type" content="website"/>
                 <meta property="og:url" content="https://conglomerat.group/"/>
-                <meta property="og:title" content={title}/>
+                <meta property="og:title" content={`ITEM:${title}`}/>
                 <meta property="og:description" content="ITEM — Provides an up-to-date market data with evaluation methods and its values, for a certain item within a selected realm."/>
 
                 <meta property="twitter:card" content="summary_large_image"/>
                 <meta property="og:url" content="https://conglomerat.group/"/>
-                <meta property="twitter:title" content={title}/>
+                <meta property="twitter:title" content={`ITEM:${title}`}/>
                 <meta property="twitter:description" content="ITEM — Provides an up-to-date market data with evaluation methods and its values, for a certain item within a selected realm."/>
                 <meta property="og:image" content={icon}/>
 
