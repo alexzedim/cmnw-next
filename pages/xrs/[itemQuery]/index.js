@@ -75,14 +75,15 @@ const XRSPage = ({xrs_data}) => {
 
                 <meta property="og:type" content="website"/>
                 <meta property="og:url" content="https://conglomerat.group/"/>
-                <meta property="og:title" content={title}/>
+                <meta property="og:title" content={`XRS:${title}`}/>
                 <meta property="og:description" content="XRS — Returns the latest market prices for a certain item across all available realms, in the moment of time."/>
+                <meta property="og:image" content={icon}/>
 
                 <meta property="twitter:card" content="summary_large_image"/>
                 <meta property="og:url" content="https://conglomerat.group/"/>
-                <meta property="twitter:title" content={title}/>
+                <meta property="twitter:title" content={`XRS:${title}`}/>
                 <meta property="twitter:description" content="XRS — Returns the latest market prices for a certain item across all available realms, in the moment of time."/>
-                <meta property="og:image" content={icon}/>
+                <meta property="twitter:image" content={icon}/>
 
                 <script src={"/power.js"} type="text/javascript"/>
             </Head>
