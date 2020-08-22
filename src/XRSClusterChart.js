@@ -26,6 +26,7 @@ export default function XRSClusterChart ({data}) {
                     plotBorderWidth: 1,
                     height: (9 / 16 * 100) + '%',
                     backgroundColor: 'transparent',
+                    zoomType : 'xy',
                     style: {
                         letterSpacing: 'unset',
                     }
@@ -68,6 +69,12 @@ export default function XRSClusterChart ({data}) {
                     title: null,
                 },
                 yAxis:{
+                    labels: {
+                        align: 'right',
+                        formatter: function () {
+                            return this.value.toFixed(2);
+                        }
+                    },
                     categories: price_range,
                     tickLength: 150,
                     opposite: false ,
