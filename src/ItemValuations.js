@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function ItemValuations ({data, pageSize = 5}) {
-    if (!data) return <div>No valuations available</div>
+    if (!data || !data.length) return <div>No valuations available</div>
     const classes = useStyles();
     return (
         <MaterialTable

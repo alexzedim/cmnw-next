@@ -11,7 +11,7 @@ const useStyles = makeStyles(() => ({
 
 export default function QuotesTable({data, gold = false}) {
     const classes = useStyles();
-    if (!data) return ('')
+    if (!data || !data.length) return ('')
     return (
         <TableContainer component={Paper} className={classes.table}>
             <Table stickyHeader size="small" aria-label="Quotes">
