@@ -1,6 +1,6 @@
 import React from "react";
 import { makeStyles } from '@material-ui/core/styles';
-import {Container, Divider, Typography} from "@material-ui/core";
+import { Container, Divider, Typography } from "@material-ui/core";
 import CharactersTable from "../../../../src/CharactersTable";
 import { useRouter } from "next/router";
 import Head from 'next/head'
@@ -60,9 +60,8 @@ function FindPage ({ _id, match }) {
 }
 
 export async function getServerSideProps({query}) {
-    const {type, match} = query;
-    const res = await fetch(encodeURI(`http://${process.env.api}/find/${type}/${match}`));
-    const json = await res.json();
+    const { type, match } = query;
+    const json = await fetch(encodeURI(`http://${process.env.api}/find/${type}/${match}`)).then(res => res.json());
     return { props: json }
 }
 
