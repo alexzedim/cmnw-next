@@ -70,7 +70,6 @@ export default function XRSClusterChart ({data}) {
                 },
                 yAxis:{
                     labels: {
-                        align: 'right',
                         formatter: function () {
                             return this.value.toFixed(2);
                         }

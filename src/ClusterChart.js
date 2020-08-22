@@ -43,7 +43,6 @@ export default function ClusterChart ({data}) {
                 yAxis:{
                     categories: price_range,
                     labels: {
-                        align: 'right',
                         formatter: function () {
                             return this.value.toFixed(2);
                         }
