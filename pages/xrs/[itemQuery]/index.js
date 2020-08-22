@@ -38,7 +38,7 @@ const useStyles = makeStyles(theme => ({
     },
     titleBlock: {
         padding: theme.spacing(10, 0, 5),
-    },
+    }
 }));
 
 const XRSPage = ({xrs_data}) => {
@@ -131,7 +131,7 @@ const XRSPage = ({xrs_data}) => {
                         <Divider className={classes.divider} />
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
-                                <ItemValuations data={data} pageSize={5}/>
+                                <ItemValuations data={data} pageSize={10}/>
                             </Grid>
                         </Grid>
                         <Divider className={classes.divider} />
