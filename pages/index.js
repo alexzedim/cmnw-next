@@ -1,7 +1,8 @@
 import React from "react";
-import { Formik } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import Router from 'next/router'
 import ArrowForwardOutlinedIcon from '@material-ui/icons/ArrowForwardOutlined';
+import { Autocomplete } from "material-ui-formik-components/Autocomplete";
 import Head from 'next/head'
 import {
     Container, Grid,
@@ -33,6 +34,7 @@ const useStyles = makeStyles(theme => ({
 
 function Index ({realms}) {
     const classes = useStyles();
+    realms = realms.map(({name_locale, name, slug}) => ({label: name_locale || name, value: slug}))
     const commands = [
         {
             value: 'character',
@@ -138,7 +140,7 @@ function Index ({realms}) {
                         initialValues={{
                             command: 'item',
                             item: 'ZNTD',
-                            realm: 'gordunni',
+                            realm: { label: 'Гордунни', value: 'gordunni' },
                             contract_tenor: 'tod',
                             character: 'Блюрателла',
                             guild: 'Депортация',
@@ -150,9 +152,11 @@ function Index ({realms}) {
                             let { fields } = commands.find(x => x.value === values.command)
                             let routingString = '/' + values.command;
                             for (let key_path of fields) {
-                                console.log(key_path)
-                                console.log(values[key_path])
-                                routingString = routingString.concat('/' + values[key_path])
+                                let routing_pointer = values[key_path]
+                                if (key_path === 'realm') {
+                                    routing_pointer = values.realm.value
+                                }
+                                routingString = routingString.concat('/' + routing_pointer)
                             }
                             await Router.push(routingString);
                         }}
@@ -161,10 +165,9 @@ function Index ({realms}) {
                           values,
                           handleChange,
                           handleBlur,
-                          handleSubmit,
                           /* and other goodies */
                       }) => (
-                        <form className={classes.searchField} onSubmit={handleSubmit} noValidate autoComplete="off">
+                        <Form className={classes.searchField}>
                             <Grid container spacing={3} direction="row" justify="center" alignItems="center">
                                 <Grid item xs={3}>
                                     <TextField
@@ -205,22 +208,18 @@ function Index ({realms}) {
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={3}>
-                                            <TextField
+                                            <Field
                                                 name="realm"
-                                                select
-                                                label="Select realm"
+                                                required
+                                                options={realms}
+                                                component={Autocomplete}
                                                 className={classes.dropdown}
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                value={values.realm}
-                                                variant="outlined"
-                                            >
-                                            {realms.map(({slug, name_locale, name}) => (
-                                                <MenuItem key={slug} value={slug}>
-                                                    { name_locale || name }
-                                                </MenuItem>
-                                            ))}
-                                            </TextField>
+                                                textFieldProps={{
+                                                    label: "Realm",
+                                                    variant: "outlined",
+                                                    margin: 'none',
+                                                }}
+                                            />
                                         </Grid>
                                     </React.Fragment>
                                 )}
@@ -245,22 +244,18 @@ function Index ({realms}) {
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={3}>
-                                            <TextField
+                                            <Field
                                                 name="realm"
-                                                select
-                                                label="Select realm"
+                                                required
+                                                options={realms}
+                                                component={Autocomplete}
                                                 className={classes.dropdown}
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                value={values.realm}
-                                                variant="outlined"
-                                            >
-                                            {realms.map(({slug, name_locale, name}) => (
-                                                <MenuItem key={slug} value={slug}>
-                                                    { name_locale || name }
-                                                </MenuItem>
-                                            ))}
-                                            </TextField>
+                                                textFieldProps={{
+                                                    label: "Realm",
+                                                    variant: "outlined",
+                                                    margin: 'none',
+                                                }}
+                                            />
                                         </Grid>
                                     </React.Fragment>
                                 )}
@@ -285,22 +280,18 @@ function Index ({realms}) {
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={3}>
-                                            <TextField
+                                            <Field
                                                 name="realm"
-                                                select
-                                                label="Select realm"
+                                                required
+                                                options={realms}
+                                                component={Autocomplete}
                                                 className={classes.dropdown}
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                value={values.realm}
-                                                variant="outlined"
-                                            >
-                                            {realms.map(({slug, name_locale, name}) => (
-                                                <MenuItem key={slug} value={slug}>
-                                                    { name_locale || name }
-                                                </MenuItem>
-                                            ))}
-                                            </TextField>
+                                                textFieldProps={{
+                                                    label: "Realm",
+                                                    variant: "outlined",
+                                                    margin: 'none',
+                                                }}
+                                            />
                                         </Grid>
                                     </React.Fragment>
                                 )}
@@ -344,22 +335,18 @@ function Index ({realms}) {
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={2}>
-                                            <TextField
+                                            <Field
                                                 name="realm"
-                                                select
-                                                label="Select realm"
+                                                required
+                                                options={realms}
+                                                component={Autocomplete}
                                                 className={classes.dropdown}
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                value={values.realm}
-                                                variant="outlined"
-                                            >
-                                            {realms.map(({slug, name_locale, name}) => (
-                                                <MenuItem key={slug} value={slug}>
-                                                    { name_locale || name }
-                                                </MenuItem>
-                                            ))}
-                                            </TextField>
+                                                textFieldProps={{
+                                                    label: "Realm",
+                                                    variant: "outlined",
+                                                    margin: 'none',
+                                                }}
+                                            />
                                         </Grid>
                                     </React.Fragment>
                                 )}
@@ -426,7 +413,7 @@ function Index ({realms}) {
                                     </Button>
                                 </Grid>
                             </Grid>
-                        </form>
+                        </Form>
                     )}
                     </Formik>
                 </Container>
