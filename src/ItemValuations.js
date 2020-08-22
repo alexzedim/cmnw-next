@@ -46,7 +46,6 @@ export default function ItemValuations ({data, pageSize = 5}) {
                 isLoading: true,
                 sorting: true,
                 pageSize: pageSize,
-                search: false,
                 pageSizeOptions: [5,10,20],
                 showTitle: false,
                 headerStyle: {backgroundColor:'#ebe7ee'}
