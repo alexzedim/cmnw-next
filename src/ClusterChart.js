@@ -10,7 +10,7 @@ if (typeof Highcharts === 'object') {
 }
 
 export default function ClusterChart ({data}) {
-    if (!data) return <div>No records available</div>
+    if (!data || !data.length) return ('')
 
     const { price_range, timestamps, dataset } = data;
 

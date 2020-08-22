@@ -10,7 +10,7 @@ if (typeof Highcharts === 'object') {
 }
 
 export default function XRSClusterChart ({data}) {
-    if (!data) return ('')
+    if (!data || !data.length) return ('')
 
     const { price_range, realms, dataset } = data;
 

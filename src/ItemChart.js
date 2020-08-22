@@ -3,15 +3,6 @@ import TableIcons from "./TableIcons";
 import MaterialTable from "material-table";
 import Link from "./Link";
 
-/**
- *
- * @param name
- * @param quality
- * @param data
- * @returns {JSX.Element}
- * @constructor
- */
-
 export default function ItemChart ({name, data}) {
 
     if (!data || !data.length) return ('')

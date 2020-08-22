@@ -8,7 +8,7 @@ if (typeof Highcharts === 'object') {
 }
 
 export default function LineChart ({data}) {
-    if (!data) return <div>No records available</div>
+    if (!data || !data.length) return ('')
     let priceArray = [], oiArray = [], quantityArray = [], dateArray = [];
     data.map(({price, open_interest, quantity, last_modified}) => {
         priceArray.push(price)
