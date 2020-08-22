@@ -1,5 +1,5 @@
 import React from "react";
-import Highcharts from 'highcharts/highstock';
+import Highcharts from 'highcharts';
 import HighchartsExporting from 'highcharts/modules/exporting'
 import HighchartsReact from 'highcharts-react-official'
 import HC_heatmap from "highcharts/modules/heatmap";
@@ -41,13 +41,13 @@ export default function XRSClusterChart ({data}) {
                             shadow: false,
                             formatter: function(){
                                 if (this.point.value !== 0) {
-                                    return this.point.value.toLocaleString('ru-RU');
+                                    return Math.round(this.point.value / 1000);
                                 }
                             },
                             style: {
                                 fontFamily: 'Roboto',
                                 color: 'contrast',
-                                fontSize: '14px',
+                                fontSize: '10px',
                                 fontWeight: 'normal',
                                 textOutline: '0px',
                             }
@@ -66,11 +66,6 @@ export default function XRSClusterChart ({data}) {
                     endOnTick: false,
                     categories: connected_realm,
                     title: null,
-                    min: 0,
-                    max: 20,
-                    scrollbar: {
-                        enabled: true
-                    },
                 },
                 yAxis:{
                     categories: price_range,
