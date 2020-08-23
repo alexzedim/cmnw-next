@@ -8,7 +8,7 @@ if (typeof Highcharts === 'object') {
 }
 
 export default function XRSScatterPlot ({data}) {
-    if (!data || !data.length) return ('')
+    if (!data) return ('')
 
     const realmsMap = new Map();
     let iterator = 0;
