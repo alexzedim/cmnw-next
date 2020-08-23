@@ -66,6 +66,11 @@ function Index ({realms}) {
             label: 'XRS',
             fields: [ 'item' ],
         },
+        {
+            value: 'realmsinfo',
+            label: 'REALMSINFO',
+            fields: [ 'realmsinfo' ],
+        },
     ]
     const type = [
         {
@@ -87,6 +92,36 @@ function Index ({realms}) {
         {
             value: 'all',
             label: 'ALL',
+        },
+    ]
+    const realmsinfo = [
+        {
+            value: 'Europe',
+            label: 'EU',
+        },
+        {
+            value: 'en_GB',
+            label: 'EN',
+        },
+        {
+            value: 'de_DE',
+            label: 'DE',
+        },
+        {
+            value: 'fr_FR',
+            label: 'FR',
+        },
+        {
+            value: 'ru_RU',
+            label: 'RU',
+        },
+        {
+            value: 'es_ES',
+            label: 'ES',
+        },
+        {
+            value: 'it_IT',
+            label: 'IT',
         },
     ]
     const tenors = [
@@ -145,7 +180,8 @@ function Index ({realms}) {
                             character: 'Блюрателла',
                             guild: 'Депортация',
                             type: 'all',
-                            match: 'Блюрателла@Гордунни'
+                            match: 'Блюрателла@Гордунни',
+                            realmsinfo: 'Europe',
                         }}
                         onSubmit={async (values, { setSubmitting }) => {
                             await setSubmitting(false);
@@ -404,6 +440,28 @@ function Index ({realms}) {
                                                 className={classes.search}
                                                 variant="outlined"
                                             />
+                                        </Grid>
+                                    </React.Fragment>
+                                )}
+                                {values.command === "realmsinfo" && (
+                                    <React.Fragment>
+                                        <Grid item xs={7}>
+                                            <TextField
+                                                name="realmsinfo"
+                                                select
+                                                label="Select locale or region"
+                                                className={classes.dropdown}
+                                                onChange={handleChange}
+                                                onBlur={handleBlur}
+                                                value={values.realmsinfo}
+                                                variant="outlined"
+                                            >
+                                                {realmsinfo.map((option) => (
+                                                    <MenuItem key={option.value} value={option.value}>
+                                                        {option.label}
+                                                    </MenuItem>
+                                                ))}
+                                            </TextField>
                                         </Grid>
                                     </React.Fragment>
                                 )}
