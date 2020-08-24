@@ -7,7 +7,7 @@ import Head from 'next/head'
 import {
     Container, Grid,
     MenuItem, TextField, makeStyles,
-    Typography, Button, Card, CardContent
+    Typography, Button
 } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
@@ -171,7 +171,10 @@ function Index ({realms}) {
             </Head>
             <Grid container direction="column" justify="center" alignItems="center" className={classes.root}>
                 <Typography variant="overline" align="center" style={{textTransform: 'uppercase'}}>
-                    Thank you for participating in conglomerat OBT. If you have any idea or proposal contact me via twitter (@alexzedim2812) or discord (AlexZeDim#2645)
+                    Thank you for participating in conglomerat Open Beta Test. You all truly wonderful!
+                </Typography>
+                <Typography variant="overline" align="center" style={{textTransform: 'uppercase'}}>
+                    If you have any idea or proposal don't be shy and contact me via twitter (@alexzedim2812) or discord (AlexZeDim#2645)
                 </Typography>
                 <Container className={classes.searchbar}>
                     <Formik
@@ -478,6 +481,9 @@ function Index ({realms}) {
                     )}
                     </Formik>
                 </Container>
+                <Typography variant="overline" align="center" style={{textTransform: 'uppercase'}}>
+                    Oh, and we don't have // use cookies, collect your information or track you queries.
+                </Typography>
             </Grid>
         </main>
     )
