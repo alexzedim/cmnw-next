@@ -34,7 +34,7 @@ export default function Header() {
                 <Toolbar>
                     <Typography className={classes.title} variant="h6" color="primary" noWrap>
                         <Link href="/" color="inherit" underline="none">
-                            Terminal
+                            Console
                         </Link>
                     </Typography>
                     <Typography className={classes.title} variant="h6" color="primary" noWrap>
