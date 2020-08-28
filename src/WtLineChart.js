@@ -53,7 +53,7 @@ export default function WtLineChart ({data}) {
                     labels: {
                         step: 10,
                         formatter: function () {
-                            return Highcharts.dateFormat("%e.%b", this.value);
+                            return Highcharts.dateFormat("%e.%b %H:%M", this.value);
                         }
                     },
                 },
