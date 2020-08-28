@@ -57,6 +57,11 @@ function Index ({realms}) {
             fields: [ 'realm', 'item' ],
         },
         {
+            value: 'wowtoken',
+            label: 'WOWTOKEN',
+            fields: [ 'realm' ],
+        },
+        {
             value: 'contract',
             label: 'CONTRACT',
             fields: [ 'realm', 'item', 'contract_tenor' ],
@@ -193,12 +198,20 @@ function Index ({realms}) {
                             await setSubmitting(false);
                             let { fields } = commands.find(x => x.value === values.command)
                             let routingString = '/' + values.command;
+                            let wt = false;
+                            if (routingString === '/wowtoken') {
+                                wt = true;
+                                routingString = '/item'
+                            }
                             for (let key_path of fields) {
                                 let routing_pointer = values[key_path]
                                 if (key_path === 'realm') {
                                     routing_pointer = values.realm.value
                                 }
                                 routingString = routingString.concat('/' + routing_pointer)
+                            }
+                            if (wt) {
+                                routingString = routingString.concat('/122284')
                             }
                             await Router.push(routingString);
                         }}
@@ -250,6 +263,24 @@ function Index ({realms}) {
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={3}>
+                                            <Field
+                                                name="realm"
+                                                required
+                                                options={realms}
+                                                component={Autocomplete}
+                                                className={classes.dropdown}
+                                                textFieldProps={{
+                                                    label: "Realm",
+                                                    variant: "outlined",
+                                                    margin: 'none',
+                                                }}
+                                            />
+                                        </Grid>
+                                    </React.Fragment>
+                                )}
+                                {values.command === "wowtoken" && (
+                                    <React.Fragment>
+                                        <Grid item xs={7}>
                                             <Field
                                                 name="realm"
                                                 required
