@@ -12,9 +12,11 @@ import QuotesTable from "../../../../src/QuotesTable";
 import WtWiget from "../../../../src/WtWiget";
 import ItemData from '../../../../src/ItemData';
 import ItemChart from "../../../../src/ItemChart";
+import WtLineChart from "../../../../src/WtLineChart";
 import useSWR from 'swr'
 import Router from "next/router";
 import Head from 'next/head'
+
 
 const useStyles = makeStyles(theme => ({
     table: {
@@ -80,11 +82,11 @@ const ItemPage = ({item_data}) => {
         name, ticker, asset_class,
         contracts, connected_realm_id,
         auctions, gold, wowtoken,
-        item_info, feed, title;
+        item_info, feed, title, wt;
 
     if (item.value) {
         item_info = item.value.item;
-        ({ realm, chart, feed, quotes, wowtoken } = item.value);
+        ({ realm, chart, feed, quotes, wowtoken, wt } = item.value);
         ({ _id, name, icon, ticker, asset_class, contracts } = item_info);
         if (_id === 1) {
             gold = true;
@@ -140,7 +142,7 @@ const ItemPage = ({item_data}) => {
                                 <Button onClick={() => Router.push(`/XRS/${_id}`)}>XRS</Button>
                             ) : ('')}
                             {(wowtoken) ? (
-                                <Button onClick={() => Router.push(`/gold/${connected_realm_id}`)}>GOLD</Button>
+                                <Button onClick={() => Router.push(`/item/${connected_realm_id}/gold`)}>GOLD</Button>
                             ) : ('')}
                             {(contracts) ? (
                                 contractButtons.map(({name, value}, i) => (
@@ -175,6 +177,12 @@ const ItemPage = ({item_data}) => {
                     {(feed) ? (
                         <React.Fragment>
                             <ItemChart name={name['en_GB']} data={feed}/>
+                            <Divider className={classes.divider} />
+                        </React.Fragment>
+                    ) : ('')}
+                    {(wt) ? (
+                        <React.Fragment>
+                            <WtLineChart data={wt}/>
                             <Divider className={classes.divider} />
                         </React.Fragment>
                     ) : ('')}
