@@ -8,7 +8,7 @@ if (typeof Highcharts === 'object') {
 }
 
 export default function WtLineChart ({data}) {
-    if (!data || !data.length) return ('')
+    if (!data) return ('')
     let dateArray = [], priceArray = [];
 
     data.sort((a, b) => a._id - b._id).map(({price, _id}) => {
