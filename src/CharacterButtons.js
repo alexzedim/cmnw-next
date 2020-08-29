@@ -37,7 +37,7 @@ export default function CharacterButtons ({name, realm}) {
                 <Link href={`https://www.warcraftlogs.com/character/eu/${realm}/${name}`} prefetch={false}><Avatar variant="square" alt="WarcraftLogs" src="https://assets.rpglogs.com/img/warcraft/favicon.png?v=2" className={classes.large} /></Link>
                 <Link href={`https://raider.io/characters/eu/${realm}/${name}`} prefetch={false}><Avatar variant="square" alt="RaiderIO" src="https://cdnassets.raider.io/images/brand/Icon_FullColor.png" className={classes.large} /></Link>
                 <Link href={`https://www.wowprogress.com/character/eu/${realm}/${name}`} prefetch={false}><Avatar alt="WoWProgress" className={classes.wp}>WP</Avatar></Link>
-                <Link href={`https://worldofwarcraft.com/en-gb/character/eu/${realm}/${name}`} prefetch={false}><Avatar alt="BattleNet" src="//bnetshopeu.akamaized.net/static/4.30.4/images/family-icons/world-of-warcraft.svg" className={classes.v_large}/></Link>
+                <Link href={`https://worldofwarcraft.com/en-gb/character/eu/${realm}/${name}`} prefetch={false}><Avatar alt="BattleNet" src="https://conglomerat.group/wow.svg" className={classes.v_large}/></Link>
             </Grid>
         </React.Fragment>
     )
