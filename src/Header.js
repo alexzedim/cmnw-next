@@ -32,17 +32,17 @@ export default function Header() {
         <div className={classes.root}>
             <AppBar className={classes.appBar} color="transparent" position="sticky">
                 <Toolbar>
-                    <Typography className={classes.title} variant="h6" color="primary" noWrap>
+                    <Typography className={classes.title} variant="h6" color="primary" align="center" noWrap>
                         <Link href="/" color="inherit" underline="none">
                             Console
                         </Link>
                     </Typography>
-                    <Typography className={classes.title} variant="h6" color="primary" noWrap>
+                    <Typography className={classes.title} variant="h6" color="primary" align="center" noWrap>
                         <Link href={"/help"} color="inherit" underline="none">
                             Help
                         </Link>
                     </Typography>
-                    <Typography className={classes.title} variant="h6" color="primary" noWrap>
+                    <Typography className={classes.title} variant="h6" color="primary" align="center" noWrap>
                         <Link href={"/who-we-are"} color="inherit" underline="none">
                             Who we are
                         </Link>
