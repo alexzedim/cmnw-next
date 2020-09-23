@@ -507,7 +507,7 @@ function Index ({realms}) {
                     </Formik>
                 </Container>
                 <Typography variant="overline" align="center" style={{textTransform: 'uppercase'}}>
-                    Oh, and we don't use cookies or track your queries.
+                    Feel free to use, we don't use cookies or track your queries.
                 </Typography>
             </Grid>
         </main>
