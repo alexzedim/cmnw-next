@@ -51,7 +51,7 @@ export default function ItemChart ({name, data}) {
                 { title: 'Buyout', field: 'buyout', defaultSort: 'asc', align: 'center', render: ({bid, buyout}) => {
                         if (buyout) {
                             return buyout.toLocaleString('ru-RU')
-                        } else {
+                        } else if (bid) {
                             return `BID: ${bid.toLocaleString('ru-RU')}`
                         }
                     }

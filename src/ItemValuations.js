@@ -34,7 +34,11 @@ export default function ItemValuations ({data, pageSize = 5}) {
                         width: 175,
                         minWidth: 175
                     },
-                    render: rowData => new Date(rowData.last_modified*1000).toLocaleString('en-GB')
+                    render: rowData => {
+                        if (rowData && 'last_modified' in rowData) {
+                            new Date(rowData.last_modified*1000).toLocaleString('en-GB')
+                        }
+                    }
                 }
             ]}
             data={data}
