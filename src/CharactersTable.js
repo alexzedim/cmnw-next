@@ -5,7 +5,7 @@ import Link from "./Link";
 
 export default function CharactersTable({data, members = false}) {
     let characters, columns;
-    if (!data && !data.length) {
+    if (!data || !data.length) {
         return ('')
     } else {
         characters = data.map(({_id, name, realm, guild, hash, ilvl, media, faction, race, gender, character_class, spec, level, lastModified}) => {
