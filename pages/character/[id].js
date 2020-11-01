@@ -1,10 +1,10 @@
 import React from "react";
 import { makeStyles } from '@material-ui/core/styles';
-import OSINT_Logs from '../../../../src/OsintLogs'
-import CharacterProfile from '../../../../src/CharacterProfile'
-import CharacterButtons from '../../../../src/CharacterButtons'
-import Link from '../../../../src/Link'
-import Head from 'next/head'
+import OSINT_Logs from '../../src/OsintLogs'
+import CharacterProfile from '../../src/CharacterProfile'
+import CharacterButtons from '../../src/CharacterButtons'
+import Link from '../../src/Link'
+import MetaHead from '../../src/MetaHead'
 import {
     Grid, Divider, Typography, Container,
 } from "@material-ui/core";
@@ -40,38 +40,29 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function CharacterPage({character}) {
+function CharacterPage({ character }) {
 
-    const [ info, logs ] = character;
+    let render_url = 'https://conglomerat.group/logo2.svg'
 
-    let media,
+    const {
+        media,
         name,
         realm,
         guild,
         faction,
-        title,
-        render_url = 'https://conglomerat.group/logo2.svg'
+        logs
+    } = character;
 
-    if (info.value) {
-        ({
-            media,
-            name,
-            realm,
-            guild,
-            faction,
-        } = info.value);
+    const title = `${name}@${realm.name}`
 
-        title = `${name}@${realm.name}`
-
-        if (media) {
-            ({render_url} = media);
-        } else {
-            if (faction === 'Horde') {
-                render_url = 'https://conglomerat.group/horde.png'
-            }
-            if (faction === 'Alliance') {
-                render_url = 'https://conglomerat.group/alliance.png'
-            }
+    if (media) {
+        ({render_url} = media);
+    } else {
+        if (faction === 'Horde') {
+            render_url = 'https://conglomerat.group/horde.png'
+        }
+        if (faction === 'Alliance') {
+            render_url = 'https://conglomerat.group/alliance.png'
         }
     }
 
@@ -79,23 +70,11 @@ function CharacterPage({character}) {
 
     return (
         <main>
-            <Head>
-                <title>{title}</title>
-
-                <meta name="description" content="CHARACTER — Provides a necessary information about certain game character across OSINT-DB"/>
-
-                <meta property="og:type" content="website"/>
-                <meta property="og:url" content="https://conglomerat.group/"/>
-                <meta property="og:title" content={title}/>
-                <meta property="og:description" content="CHARACTER — Provides a necessary information about certain game character across OSINT-DB"/>
-                <meta property="og:image" content={render_url}/>
-
-                <meta property="twitter:card" content="summary_large_image"/>
-                <meta property="og:url" content="https://conglomerat.group/"/>
-                <meta property="twitter:title" content={title}/>
-                <meta property="twitter:description" content="CHARACTER — Provides a necessary information about certain game character across OSINT-DB"/>
-                <meta property="twitter:image" content={render_url}/>
-            </Head>
+            <MetaHead
+                title={title}
+                description={"CHARACTER — Provides a necessary information about certain game character across OSINT-DB"}
+                image={render_url}
+            />
             <Container maxWidth={false} className={classes.root} >
                 <Grid container>
                     <Grid key={0} item xs={12} sm={5} md={5} className={classes.image} style={{backgroundImage: `url(${render_url}`}}/>
@@ -116,14 +95,14 @@ function CharacterPage({character}) {
                                 <CharacterButtons name={name} realm={realm.slug}/>
                             </Grid>
                             <Divider light className={classes.hr}/>
-                            <CharacterProfile character={info.value}/>
+                            <CharacterProfile character={character}/>
                         </div>
                     </Grid>
                 </Grid>
-                { (logs.value && logs.value.length) ? (
+                { (logs && logs.length) ? (
                     <Grid container alignItems="center" justify="center">
                         <Grid item xs={12} className={classes.paper}>
-                            <OSINT_Logs data={logs.value} pageSize={5}/>
+                            <OSINT_Logs data={logs} pageSize={5}/>
                         </Grid>
                     </Grid>
                 ) : ('')}
@@ -132,13 +111,73 @@ function CharacterPage({character}) {
     )
 }
 
-export async function getServerSideProps({query}) {
-    const { realmSlug, nameSlug } = query;
-
-    const character = await Promise.allSettled([
-        fetch(encodeURI(`http://${process.env.api}/characters/character/${(nameSlug)}@${realmSlug}`)).then(res => res.json()),
-        fetch(encodeURI(`http://${process.env.api}/characters/character_logs/${(nameSlug)}@${realmSlug}`)).then(res => res.json())
-    ])
+export async function getServerSideProps ({ query }) {
+    const { id } = query;
+    const gql = `query Character($id: ID!) {
+        character(id: $id) {
+            _id
+            id
+            name
+            realm {
+              _id
+              name
+              slug
+            }
+            guild {
+              _id
+              name
+              slug
+              rank
+            }
+            ilvl {
+              eq
+              avg
+            }
+            hash {
+              a
+              b
+              c
+              ex
+              t
+            }
+            race
+            character_class
+            spec
+            gender
+            faction
+            level
+            lastModified
+            media {
+              avatar_url
+              bust_url
+              render_url
+            }
+            createdBy
+            createdAt
+            updatedBy
+            updatedAt
+            logs {
+              type
+              original_value
+              new_value
+              message
+              action
+              before
+              after
+            }
+        }      
+    }`
+    const { data: { character } } = await fetch(`http://${process.env.api}`,{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+            query: gql,
+            variables: { id },
+        })
+    }).then(res => res.json())
     return { props: { character } }
 }
 
