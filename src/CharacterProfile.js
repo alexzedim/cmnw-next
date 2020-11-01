@@ -15,8 +15,8 @@ export default function CharacterProfile ({character}) {
 
     return (
         fieldsToCheck.map((field, i) => {
-            if (field in character) {
-                if (typeof character[field] === 'object') {
+            if (field in character && character[field] !== null) {
+                if (typeof character[field] === 'object' && !Array.isArray(character[field])) {
                     return Object.entries(character[field]).map(([k, v], y) => (
                         (field === 'hash') ? (
                             <Typography key={i+y} variant="caption" display="block" gutterBottom>
