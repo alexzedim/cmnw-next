@@ -34,7 +34,6 @@ const useStyles = makeStyles(theme => ({
 
 function Index ({realms}) {
     const classes = useStyles();
-    realms = realms.map(({name_locale, name, slug}) => ({label: name_locale || name, value: slug}))
     const commands = [
         {
             value: 'character',
@@ -515,15 +514,17 @@ function Index ({realms}) {
 }
 
 export async function getServerSideProps() {
-    const name = 'Europe'
-    const query = `query Realms($name: String) {
-        realms(name: $name) {
+    //TODO refactor this part with gql handler
+    const region = 'Europe'
+    const query = `query Realms($region: String) {
+        realms(name: $region) {
             _id
             name
             slug
+            name_locale
         }
     }`
-    const realms = await fetch(`http://${process.env.api}`,{
+    let { data: { realms} } = await fetch(`http://${process.env.api}`,{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -531,11 +532,11 @@ export async function getServerSideProps() {
         },
         body: JSON.stringify({
             query,
-            variables: { name },
+            variables: { region },
         })
     }).then(res => res.json())
-    console.log(realms.data.realms)
-    return { props: { realms: realms.data.realms }}
+    realms = realms.map(({name_locale, name, slug}) => ({ label: name_locale || name, value: slug }))
+    return { props: { realms: realms }}
 }
 
 export default Index
