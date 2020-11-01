@@ -515,8 +515,27 @@ function Index ({realms}) {
 }
 
 export async function getServerSideProps() {
-    const json = await fetch(encodeURI(`http://localhost:3030/api/realms/Europe`)).then(res => res.json());
-    return { props: { realms: json }}
+    const name = 'Europe'
+    const query = `query Realms($name: String) {
+        realms(name: $name) {
+            _id
+            name
+            slug
+        }
+    }`
+    const realms = await fetch(`http://${process.env.api}`,{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+            query,
+            variables: { name },
+        })
+    }).then(res => res.json())
+    console.log(realms.data.realms)
+    return { props: { realms: realms.data.realms }}
 }
 
 export default Index
