@@ -3,7 +3,7 @@ import { Typography } from "@material-ui/core";
 import Link from "./Link";
 import humanizeString from 'humanize-string'
 
-export default function CharacterProfile ({character}) {
+export default function CharacterProfile ({ character }) {
 
     if (!character) return <div>No records available</div>
 
@@ -20,7 +20,7 @@ export default function CharacterProfile ({character}) {
                     return Object.entries(character[field]).map(([k, v], y) => (
                         (field === 'hash') ? (
                             <Typography key={i+y} variant="caption" display="block" gutterBottom>
-                                {field} {k}: <Link href={`/find/${k}/${v}`} color="textPrimary" underline="hover">{v}</Link>
+                                {field} {k}: <Link href={`/hash/${k}@${v}`} color="textPrimary" underline="hover">{v}</Link>
                             </Typography>
                         ) : (
                             <Typography key={i+y} variant="caption" display="block" gutterBottom>
