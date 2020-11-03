@@ -24,14 +24,13 @@ const useStyles = makeStyles(theme => ({
 
 function RealmsInfo ({ realms }) {
     const { query } = useRouter()
-    let title = `REALMSINFO:${query.region}`.toUpperCase();
-    let description = `${title} — return information about realms and it's population`
+    const title = `REALMSINFO:${query.region}`.toUpperCase();
     const classes = useStyles();
     return (
         <main>
             <MetaHead
                 title={title}
-                description={description}
+                description={`${title} — return information about realms and it's population`}
             />
             <div className={classes.titleBlock}>
                 <Container maxWidth="lg">
