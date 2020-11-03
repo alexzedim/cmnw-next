@@ -3,6 +3,7 @@ import React from "react";
 
 export default function MetaHead ({ title, description, image }) {
     return (
+        //FIXME if/else image?
         <Head>
             <title>{title}</title>
 
