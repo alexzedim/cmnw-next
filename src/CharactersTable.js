@@ -3,12 +3,12 @@ import TableIcons from "./TableIcons";
 import MaterialTable from "material-table";
 import Link from "./Link";
 
-export default function CharactersTable({data, members = false}) {
+export default function CharactersTable({ data, members = false }) {
     let characters, columns;
     if (!data || !data.length) {
         return ('')
     } else {
-        characters = data.map(({_id, name, realm, guild, hash, ilvl, media, faction, race, gender, character_class, spec, level, lastModified}) => {
+        characters = data.map(({ _id, name, realm, guild, hash, ilvl, media, faction, race, gender, character_class, spec, level, lastModified }) => {
 
             let avatar, guild_name, guild_rank, guild_url, item_level = 0, hash_a = '', hash_b = '', hash_c = '';
 
@@ -58,9 +58,9 @@ export default function CharactersTable({data, members = false}) {
                 c: hash_c,
                 spec: spec,
                 level: level,
-                url_a: `/find/a/${hash_a}` || '',
-                url_b: `/find/b/${hash_b}` || '',
-                url_c: `/find/c/${hash_c}` || '',
+                url_a: `/hash/a@${hash_a}` || '',
+                url_b: `/hash/b@${hash_b}` || '',
+                url_c: `/hash/c@${hash_c}` || '',
                 faction: faction,
                 class: character_class,
                 rank: guild_rank,
@@ -143,7 +143,7 @@ export default function CharactersTable({data, members = false}) {
                 pageSize: 20,
                 pageSizeOptions: [10,25,50],
                 showTitle: false,
-                headerStyle: {backgroundColor:'#ebe7ee'}
+                headerStyle: { backgroundColor:'#ebe7ee' }
             }}
         />
     )
