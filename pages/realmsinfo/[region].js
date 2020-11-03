@@ -1,9 +1,10 @@
 import React from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import { Container, Divider, Typography } from "@material-ui/core";
-import RealmsTable from "../../../src/RealmsTable";
+import RealmsTable from "../../src/RealmsTable";
 import { useRouter } from "next/router";
-import Head from 'next/head'
+import MetaHead from '../../src/MetaHead'
+
 
 const useStyles = makeStyles(theme => ({
     divider: {
@@ -23,26 +24,15 @@ const useStyles = makeStyles(theme => ({
 
 function RealmsInfo ({ realms }) {
     const { query } = useRouter()
-    let title = `REALMSINFO:${query.locale}`.toUpperCase();
+    let title = `REALMSINFO:${query.region}`.toUpperCase();
     let description = `${title} — return information about realms and it's population`
     const classes = useStyles();
     return (
         <main>
-            <Head>
-                <title>{title}</title>
-
-                <meta name="description" content={description}/>
-
-                <meta property="og:type" content="website"/>
-                <meta property="og:url" content="https://conglomerat.group/"/>
-                <meta property="og:title" content={title}/>
-                <meta property="og:description" content={description}/>
-
-                <meta property="twitter:card" content="summary_large_image"/>
-                <meta property="og:url" content="https://conglomerat.group/"/>
-                <meta property="twitter:title" content={title}/>
-                <meta property="twitter:description" content={description}/>
-            </Head>
+            <MetaHead
+                title={title}
+                description={description}
+            />
             <div className={classes.titleBlock}>
                 <Container maxWidth="lg">
                     <Typography component="h1" variant="h2" align="center" color="secondary" className={classes.title} gutterBottom>
@@ -59,9 +49,44 @@ function RealmsInfo ({ realms }) {
     )
 }
 
-export async function getServerSideProps({query}) {
-    const { locale } = query;
-    const realms = await fetch(encodeURI(`http://${process.env.api}/realms/${locale}`)).then(res => res.json());
+export async function getServerSideProps ({query}) {
+    const { region } = query;
+    const gql = `query Realms($region: String) {
+        realms(name: $region) {
+            _id
+            name
+            slug
+            name_locale
+            locale
+            connected_realm_id
+            players {
+                total
+                alliance
+                horde
+                max_level
+                unique
+            }
+            guilds {
+                total
+                alliance
+                horde
+            }
+            golds
+            valuations
+            auctions
+        }
+    }`
+    let { data: { realms} } = await fetch(`http://${process.env.api}`,{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+            query: gql,
+            variables: { region },
+        })
+    }).then(res => res.json())
     return { props: { realms: realms }}
 }
 
