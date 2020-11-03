@@ -14,6 +14,9 @@ export default function ClusterChart ({data}) {
 
     const { price_range, timestamps, dataset } = data;
 
+    const ts = timestamps.map(t => new Date(t).toLocaleString('ru-RU'))
+    console.log(ts)
+
     return (
         <HighchartsReact
             highcharts={Highcharts}
@@ -32,13 +35,7 @@ export default function ClusterChart ({data}) {
                     text: undefined
                 },
                 xAxis: {
-                    categories: timestamps.map(t => new Date(t)),
-                    type: "datetime",
-                    labels: {
-                        formatter: function () {
-                            return Highcharts.dateFormat("%H:%M:%S %e.%b", this.value);
-                        }
-                    },
+                    categories: ts,
                 },
                 yAxis:{
                     categories: price_range,

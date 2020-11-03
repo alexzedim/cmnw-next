@@ -2,7 +2,7 @@ import React from "react";
 import { Typography } from "@material-ui/core";
 import humanizeString from 'humanize-string'
 
-export default function ItemData ({data}) {
+export default function ItemData ({ data }) {
 
     if (!data) return ('')
 
@@ -24,7 +24,7 @@ export default function ItemData ({data}) {
                             </Typography>
                         )
                     }
-                } else if (typeof data[field] === 'object') {
+                } else if (typeof data[field] === 'object' && data[field] !== null) {
                     if (field === 'name') {
                         return (
                             <Typography key={i} variant="caption" display="block" gutterBottom>

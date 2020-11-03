@@ -5,17 +5,16 @@ import {
     Typography, Divider,
     Avatar, Box, ButtonGroup, Button
 } from '@material-ui/core';
-import ClusterChart from "../../../../src/ClusterChart";
-import Clock from "../../../../src/Clock";
-import ItemValuations from "../../../../src/ItemValuations";
-import QuotesTable from "../../../../src/QuotesTable";
-import WtWiget from "../../../../src/WtWiget";
-import ItemData from '../../../../src/ItemData';
-import ItemChart from "../../../../src/ItemChart";
-import WtLineChart from "../../../../src/WtLineChart";
-import useSWR from 'swr'
+import ClusterChart from "../../src/ClusterChart";
+import Clock from "../../src/Clock";
+import ItemValuations from "../../src/ItemValuations";
+import QuotesTable from "../../src/QuotesTable";
+import WtWiget from "../../src/WtWiget";
+import ItemData from '../../src/ItemData';
+import ItemChart from "../../src/ItemChart";
+import WtLineChart from "../../src/WtLineChart";
 import Router from "next/router";
-import Head from 'next/head'
+import MetaHead from '../../src/MetaHead'
 
 
 const useStyles = makeStyles(theme => ({
@@ -52,7 +51,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const ItemPage = ({item_data}) => {
+const ItemPage = ({ item }) => {
 
     const contractButtons = [
         {
@@ -75,51 +74,33 @@ const ItemPage = ({item_data}) => {
         },
     ]
 
-    const [item, eva] = item_data
-
-    let realm, chart, quotes,
+    const {
+        realm, chart, quotes,
         data, _id, icon,
         name, ticker, asset_class,
-        contracts, connected_realm_id,
-        auctions, gold, wowtoken,
-        item_info, feed, title, wt;
+        contracts, wowtoken, feed,
+        valuations
+    } = item
 
-    if (item.value) {
-        item_info = item.value.item;
-        ({ realm, chart, feed, quotes, wowtoken, wt } = item.value);
-        ({ _id, name, icon, ticker, asset_class, contracts } = item_info);
-        if (_id === 1) {
-            gold = true;
-        }
-        ({ connected_realm_id, auctions } = realm);
+    const { connected_realm_id, auctions } = realm
 
-        title = `${ticker || name['en_GB']}@${realm.ticker || realm.name}`
-    }
-    if (eva.value) {
-        ({ data } = useSWR(`http://localhost:3030/api/items/eva/${item.value.item._id}@${connected_realm_id}`, fetch, { initialData: eva.value.valuations }))
+    const title = `${ticker || name['en_GB']}@${realm.ticker || realm.name}`
+
+    let gold = false
+
+    if (_id === 1) {
+        gold = true;
     }
 
     const classes = useStyles();
 
     return (
         <main>
-            <Head>
-                <title>ITEM:{title}</title>
-                <meta name="description" content="ITEM — Provides an up-to-date market data with evaluation methods and its values, for a certain item within a selected realm."/>
-
-                <meta property="og:type" content="website"/>
-                <meta property="og:url" content="https://conglomerat.group/"/>
-                <meta property="og:title" content={`ITEM:${title}`}/>
-                <meta property="og:description" content="ITEM — Provides an up-to-date market data with evaluation methods and its values, for a certain item within a selected realm."/>
-
-                <meta property="twitter:card" content="summary_large_image"/>
-                <meta property="og:url" content="https://conglomerat.group/"/>
-                <meta property="twitter:title" content={`ITEM:${title}`}/>
-                <meta property="twitter:description" content="ITEM — Provides an up-to-date market data with evaluation methods and its values, for a certain item within a selected realm."/>
-                <meta property="og:image" content={icon}/>
-
-                <script src={"/power.js"} type="text/javascript"/>
-            </Head>
+            <MetaHead
+                title={`ITEM:${title}`}
+                description={"ITEM — Provides an up-to-date market data with evaluation methods and its values, for a certain item within a selected realm.\""}
+                image={icon}
+            />
             <Container maxWidth={false}>
                 {/** TITLE BLOCK */}
                 <Container maxWidth={false} className={classes.titleBlock}>
@@ -142,7 +123,7 @@ const ItemPage = ({item_data}) => {
                                 <Button onClick={() => Router.push(`/XRS/${_id}`)}>XRS</Button>
                             ) : ('')}
                             {(wowtoken) ? (
-                                <Button onClick={() => Router.push(`/item/${connected_realm_id}/gold`)}>GOLD</Button>
+                                <Button onClick={() => Router.push(`/item/GOLD@${connected_realm_id}`)}>GOLD</Button>
                             ) : ('')}
                             {(contracts) ? (
                                 contractButtons.map(({name, value}, i) => (
@@ -159,12 +140,12 @@ const ItemPage = ({item_data}) => {
                             <QuotesTable data={quotes} gold={gold}/>
                             {(wowtoken) ? (
                                 <Box display="flex" alignItems="center" justifyContent="center" m={1} p={1} className={classes.content}>
-                                    <WtWiget data={wowtoken}/>
+                                    <WtWiget data={wowtoken[0]}/>
                                 </Box>
                             ) : ('')}
                         </Grid>
                         <Grid item xs={12} sm={6} md={6} elevation={6}>
-                            <ItemData data={item_info}/>
+                            <ItemData data={item}/>
                         </Grid>
                     </Grid>
                     <Divider className={classes.divider} />
@@ -180,13 +161,13 @@ const ItemPage = ({item_data}) => {
                             <Divider className={classes.divider} />
                         </React.Fragment>
                     ) : ('')}
-                    {(wt) ? (
+                    {(wowtoken) ? (
                         <React.Fragment>
-                            <WtLineChart data={wt}/>
+                            <WtLineChart data={wowtoken}/>
                             <Divider className={classes.divider} />
                         </React.Fragment>
                     ) : ('')}
-                    <ItemValuations data={data}/>
+                    <ItemValuations data={valuations}/>
                     <Divider className={classes.divider} />
                 </Container>
             </Container>
@@ -195,13 +176,98 @@ const ItemPage = ({item_data}) => {
 };
 
 
-export async function getServerSideProps({query}) {
-    const {realmSlug, itemQuery} = query;
-    const item_data = await Promise.allSettled([
-        fetch(encodeURI(`http://${process.env.api}/items/item/${itemQuery}@${realmSlug}`)).then(res => res.json()),
-        fetch(encodeURI(`http://${process.env.api}/items/eva/${itemQuery}@${realmSlug}`)).then(res => res.json())
-    ])
-    return { props: { item_data }}
+export async function getServerSideProps ({ query }) {
+    const { id } = query;
+    const gql = `query Item($id: ID!) {
+        item(id: $id, valuations: true, webpage: true) {
+            _id
+            name {
+              en_GB
+            }
+            realm {
+              _id
+              name
+              slug
+              auctions
+              ticker
+            }
+            quality
+            level
+            icon
+            item_class
+            item_subclass
+            purchase_price
+            sell_price
+            is_equippable
+            is_stackable
+            inventory_type
+            purchase_quantity
+            loot_type
+            contracts
+            asset_class
+            expansion
+            stackable
+            profession_class
+            ticker
+            tags
+            createdAt
+            updatedAt
+            valuations {
+              name
+              item_id
+              connected_realm_id
+              type
+              last_modified
+              value
+              flag
+              details {
+                quotation
+                swap_type
+                description
+                price_size
+                quantity
+                open_interest
+                last_modified
+              }
+            }
+            chart {
+              price_range
+              timestamps
+              dataset {
+                x
+                y
+                value
+                oi
+                orders
+              }
+            }
+            quotes {
+              price
+              quantity
+              open_interest
+              size
+            }
+            wowtoken {
+              region
+              price
+              lastModified
+              createdAt
+              updatedAt
+            }
+        }      
+    }`
+    const { data: { item } } = await fetch(`http://${process.env.api}`,{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+            query: gql,
+            variables: { id },
+        })
+    }).then(res => res.json())
+    return { props: { item }}
 }
 
 

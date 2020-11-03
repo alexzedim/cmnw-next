@@ -22,23 +22,15 @@ export default function ItemValuations ({data, pageSize = 5}) {
             title="Valuations"
             icons={TableIcons}
             columns={[
-                { title: 'Name', field: 'name', cellStyle: { width: '5%', minWidth: "100px" } },
-                { title: 'Flag', field: 'flag', cellStyle: { width: '5%', minWidth: "100px" } },
-                { title: 'Type', field: 'type', cellStyle: { width: '5%', minWidth: "100px" } },
-                { title: 'Value', field: 'value', cellStyle: { width: '10%', minWidth: "175px" }, defaultSort: 'asc' },
-                { title: 'Realm', field: 'connected_realm_id', cellStyle: { width: '5%', minWidth: "75x" } },
+                { title: 'Name', field: 'name' },
+                { title: 'Flag', field: 'flag' },
+                { title: 'Type', field: 'type' },
+                { title: 'Value', field: 'value', defaultSort: 'asc' },
+                { title: 'Realm', field: 'connected_realm_id' },
                 {
                     title: 'Last Modified',
                     field: 'last_modified',
-                    cellStyle: {
-                        width: 175,
-                        minWidth: 175
-                    },
-                    render: rowData => {
-                        if (rowData && 'last_modified' in rowData) {
-                            new Date(rowData.last_modified*1000).toLocaleString('en-GB')
-                        }
-                    }
+                    render: rowData => (rowData && 'last_modified' in rowData) ? (new Date(rowData.last_modified*1000).toLocaleString('ru-RU')) : ('')
                 }
             ]}
             data={data}
@@ -66,33 +58,35 @@ export default function ItemValuations ({data, pageSize = 5}) {
                                    <Divider/>
                                    <List component="nav" aria-label="secondary" dense={true}>
                                        {Object.entries(rowData.details).map(([k, v]) => {
-                                           if (k === "orders") {
-                                               return ''
-                                           }
-                                           if (k === "reagent_items" || k === "premium_items" || k === "unsorted_items") {
+                                           if (v) {
+                                               if (k === "orders") {
+                                                   return ''
+                                               }
+                                               if (k === "reagent_items" || k === "premium_items" || k === "unsorted_items") {
+                                                   return (
+                                                       <React.Fragment>
+                                                           <ListItem>
+                                                               <ListItemText primary={`${k.toString().replace(/_/g, ' ')}`}/>
+                                                           </ListItem>
+                                                           <List component="div" dense={true} disablePadding>
+                                                               {v.map(x => (
+                                                                   <ListItem className={classes.nested}>
+                                                                       <ListItemAvatar>
+                                                                           <Avatar alt={x.name.en_GB} src={x.icon} />
+                                                                       </ListItemAvatar>
+                                                                       <ListItemText primary={<Link href={`/item/${rowData.connected_realm_id}/${x._id}`} color="textPrimary" underline="hover">{x.name.en_GB}</Link>} secondary={`Quantity: ${x.quantity}, Value: ${x.value}`} />
+                                                                   </ListItem>
+                                                               ))}
+                                                           </List>
+                                                       </React.Fragment>
+                                                   )
+                                               }
                                                return (
-                                                   <React.Fragment>
-                                                       <ListItem>
-                                                           <ListItemText primary={`${k.toString().replace(/_/g, ' ')}`}/>
-                                                       </ListItem>
-                                                       <List component="div" dense={true} disablePadding>
-                                                           {v.map(x => (
-                                                               <ListItem className={classes.nested}>
-                                                                   <ListItemAvatar>
-                                                                       <Avatar alt={x.name.en_GB} src={x.icon} />
-                                                                   </ListItemAvatar>
-                                                                   <ListItemText primary={<Link href={`/item/${rowData.connected_realm_id}/${x._id}`} color="textPrimary" underline="hover">{x.name.en_GB}</Link>} secondary={`Quantity: ${x.quantity}, Value: ${x.value}`} />
-                                                               </ListItem>
-                                                           ))}
-                                                       </List>
-                                                   </React.Fragment>
+                                                   <ListItem>
+                                                       <ListItemText primary={`${k.toString().replace(/_/g, ' ')} : ${v}`}/>
+                                                   </ListItem>
                                                )
                                            }
-                                           return (
-                                               <ListItem>
-                                                   <ListItemText primary={`${k.toString().replace(/_/g, ' ')} : ${v}`}/>
-                                               </ListItem>
-                                           )
                                        })}
                                    </List>
                                </div>
