@@ -15,7 +15,6 @@ export default function ClusterChart ({data}) {
     const { price_range, timestamps, dataset } = data;
 
     const ts = timestamps.map(t => new Date(t).toLocaleString('ru-RU'))
-    console.log(ts)
 
     return (
         <HighchartsReact
