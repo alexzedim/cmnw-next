@@ -3,7 +3,7 @@ import { Formik, Form, Field } from 'formik';
 import Router from 'next/router'
 import ArrowForwardOutlinedIcon from '@material-ui/icons/ArrowForwardOutlined';
 import { Autocomplete } from "material-ui-formik-components/Autocomplete";
-import Head from 'next/head'
+import MetaHead from '../src/MetaHead'
 import { commands, tenors, realmsinfo, type } from "../src/Interfaces";
 import {
     Container, Grid,
@@ -37,23 +37,11 @@ function Index ({realms}) {
     const classes = useStyles();
     return (
         <main>
-            <Head>
-                <title>Conglomerat</title>
-
-                <meta name="description" content="World of Warcraft: In-game decision-making superiority starts here"/>
-
-                <meta property="og:type" content="website"/>
-                <meta property="og:url" content="https://conglomerat.group/"/>
-                <meta property="og:title" content="Conglomerat"/>
-                <meta property="og:description" content="World of Warcraft: In-game decision-making superiority starts here"/>
-                <meta property="og:image" content="https://conglomerat.group/logo.png"/>
-
-                <meta property="twitter:card" content="summary_large_image"/>
-                <meta property="og:url" content="https://conglomerat.group/"/>
-                <meta property="twitter:title" content="Conglomerat"/>
-                <meta property="twitter:description" content="World of Warcraft: In-game decision-making superiority starts here"/>
-                <meta property="og:image" content="https://conglomerat.group/logo.png"/>
-            </Head>
+            <MetaHead
+                title={"Conglomerat"}
+                description={"World of Warcraft: In-game decision-making superiority starts here"}
+                image={"https://conglomerat.group/logo.png"}
+            />
             <Grid container direction="column" justify="center" alignItems="center" className={classes.root}>
                 <Container className={classes.searchbar}>
                     <Formik
