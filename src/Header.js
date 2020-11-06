@@ -33,8 +33,18 @@ export default function Header() {
             <AppBar className={classes.appBar} color="transparent" position="sticky">
                 <Toolbar>
                     <Typography className={classes.title} variant="h6" color="primary" align="center" noWrap>
-                        <Link href="/" color="inherit" underline="none">
-                            Console
+                        <Link href={"/osint"} color="inherit" underline="none">
+                            Characters & Guilds
+                        </Link>
+                    </Typography>
+                    <Typography className={classes.title} variant="h6" color="primary" align="center" noWrap>
+                        <Link href={"/dma"} color="inherit" underline="none">
+                            Items & Auctions
+                        </Link>
+                    </Typography>
+                    <Typography className={classes.title} variant="h6" color="primary" align="center" noWrap>
+                        <Link href={"/discord"} color="inherit" underline="none">
+                            Discord Bot
                         </Link>
                     </Typography>
                     <Typography className={classes.title} variant="h6" color="primary" align="center" noWrap>
