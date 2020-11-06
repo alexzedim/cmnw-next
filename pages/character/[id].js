@@ -40,7 +40,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function CharacterPage({ character }) {
+function CharacterPage ({ character }) {
 
     let render_url = 'https://conglomerat.group/logo2.svg'
 
