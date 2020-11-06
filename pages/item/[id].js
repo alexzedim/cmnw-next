@@ -53,31 +53,9 @@ const useStyles = makeStyles(theme => ({
 
 const ItemPage = ({ item }) => {
 
-    const contractButtons = [
-        {
-            name: "today", value: "tod"
-        },
-        {
-            name: "yesterday", value: "ytd"
-        },
-        {
-            name: "week", value: "week"
-        },
-        {
-            name: "last week", value: "last_week"
-        },
-        {
-            name: "month", value: "month"
-        },
-        {
-            name: "last month", value: "last_month"
-        },
-    ]
-
     const {
         realm, chart, quotes, _id, icon,
-        name, ticker, asset_class,
-        contracts, wowtoken, feed,
+        name, ticker, wowtoken, feed,
         valuations
     } = item
 
@@ -118,16 +96,8 @@ const ItemPage = ({ item }) => {
                             ) : ('')}
                         </Grid>
                         <ButtonGroup color="secondary" aria-label="outlined primary button group">
-                            {asset_class.includes('COMMDTY') ? (
-                                <Button onClick={() => Router.push(`/XRS/${_id}`)}>XRS</Button>
-                            ) : ('')}
                             {(wowtoken) ? (
                                 <Button onClick={() => Router.push(`/item/GOLD@${connected_realm_id}`)}>GOLD</Button>
-                            ) : ('')}
-                            {(contracts) ? (
-                                contractButtons.map(({name, value}, i) => (
-                                    <Button key={i} onClick={() => Router.push(`/contract/${connected_realm_id}/${_id}/${value}`)}>{name}</Button>
-                                ))
                             ) : ('')}
                         </ButtonGroup>
                     </Grid>
