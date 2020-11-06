@@ -124,7 +124,6 @@ export async function getServerSideProps ({ query }) {
               slug
             }
             guild {
-              _id
               name
               slug
               rank
