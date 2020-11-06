@@ -3,9 +3,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import {
     Grid, Divider, Typography, Container,
 } from "@material-ui/core";
-import CharactersTable from "../../../../src/CharactersTable";
-import OSINT_Logs from "../../../../src/OsintLogs";
-import Head from 'next/head'
+import CharactersTable from "../../src/CharactersTable";
+import OSINT_Logs from "../../src/OsintLogs";
+import MetaHead from '../../src/MetaHead'
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -31,48 +31,26 @@ const useStyles = makeStyles(theme => ({
 
 function GuildPage({guild}) {
 
-    const [ info, logs ] = guild;
-
-    let name,
+    const {
+        name,
         realm,
         members,
         created_timestamp,
         achievement_points,
         member_count,
-        title
+        logs
+    } = guild
 
-    if (info.value) {
-        ({
-            name,
-            realm,
-            members,
-            achievement_points,
-            member_count,
-            created_timestamp
-        } = info.value);
-
-        title = `${name}@${realm.name}`
-    }
+    const title = `${name}@${realm.name}`
 
     const classes = useStyles();
 
     return (
         <main>
-            <Head>
-                <title>{title}</title>
-
-                <meta name="description" content="GUILD — return all available information about selected guild, like members and OSINT logs."/>
-
-                <meta property="og:type" content="website"/>
-                <meta property="og:url" content="https://conglomerat.group/"/>
-                <meta property="og:title" content={title}/>
-                <meta property="og:description" content="GUILD — return all available information about selected guild, like members and OSINT logs."/>
-
-                <meta property="twitter:card" content="summary_large_image"/>
-                <meta property="og:url" content="https://conglomerat.group/"/>
-                <meta property="twitter:title" content={title}/>
-                <meta property="twitter:description" content="GUILD — return all available information about selected guild, like members and OSINT logs."/>
-            </Head>
+            <MetaHead
+                title={title}
+                description={"GUILD — return all available information about selected guild, like members and OSINT logs."}
+            />
             <Container maxWidth={false}>
                 <Container maxWidth={false}>
                     <div className={classes.paper}>
@@ -96,7 +74,7 @@ function GuildPage({guild}) {
                 <Container maxWidth={false}>
                     <CharactersTable data={members} members={true}/>
                     <Divider className={classes.divider} />
-                    <OSINT_Logs data={logs.value} pageSize={15}/>
+                    <OSINT_Logs data={logs} pageSize={15}/>
                     <Divider className={classes.divider} />
                 </Container>
             </Container>
@@ -104,13 +82,84 @@ function GuildPage({guild}) {
     )
 }
 
-export async function getServerSideProps({query}) {
-    const { realmSlug, guildSlug } = query;
-
-    const guild = await Promise.allSettled([
-        fetch(encodeURI(`http://${process.env.api}/guilds/guild/${(guildSlug)}@${realmSlug}`)).then(res => res.json()),
-        fetch(encodeURI(`http://${process.env.api}/guilds/guild_logs/${(guildSlug)}@${realmSlug}`)).then(res => res.json())
-    ])
+export async function getServerSideProps ({ query }) {
+    const { id } = query;
+    const gql = `query Guild($id: ID!) {
+        guild(id: $id) {
+            _id
+            id
+            name
+            realm {
+              _id
+              slug
+              name
+            }
+            faction
+            members {
+              _id
+              id
+              name
+              realm {
+                _id
+                name
+                slug
+              }
+              guild {
+                name
+                slug
+                rank
+              }
+              ilvl {
+                eq
+              }
+              hash {
+                a
+                b
+                c
+              }
+              race
+              character_class
+              spec
+              gender
+              faction
+              level
+              lastModified
+              media {
+                avatar_url
+                bust_url
+                render_url
+              }
+            }
+            achievement_points
+            created_timestamp
+            lastModified
+            createdBy
+            updatedBy
+            isWatched
+            logs {
+              type
+              original_value
+              new_value
+              message
+              action
+              before
+              after
+            }
+            createdAt
+            updatedAt
+        }   
+    }`
+    const { data: { guild } } = await fetch(`http://${process.env.api}`,{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+            query: gql,
+            variables: { id },
+        })
+    }).then(res => res.json())
     return { props: { guild } }
 }
 
