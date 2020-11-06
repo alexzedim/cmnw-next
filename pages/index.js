@@ -4,7 +4,7 @@ import Router from 'next/router'
 import ArrowForwardOutlinedIcon from '@material-ui/icons/ArrowForwardOutlined';
 import { Autocomplete } from "material-ui-formik-components/Autocomplete";
 import MetaHead from '../src/MetaHead'
-import { commands, tenors, realmsinfo, type } from "../src/Interfaces";
+import { commands, type, realms } from "../src/Interfaces";
 import {
     Container, Grid,
     MenuItem, TextField, makeStyles,
@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-function Index ({realms}) {
+function Index () {
     const classes = useStyles();
     return (
         <main>
@@ -49,33 +49,24 @@ function Index ({realms}) {
                             command: 'item',
                             item: 'ZNTD',
                             realm: { label: 'Гордунни', value: 'gordunni' },
-                            contract_tenor: 'tod',
                             character: 'Блюрателла',
                             guild: 'Депортация',
-                            type: 'all',
-                            match: 'Блюрателла@Гордунни',
-                            realmsinfo: 'Europe',
+                            type: 'a',
+                            hash: '0',
                         }}
                         onSubmit={async (values, { setSubmitting }) => {
                             await setSubmitting(false);
-                            let { fields } = commands.find(x => x.value === values.command)
-                            let routingString = '/' + values.command;
-                            let wt = false;
-                            if (routingString === '/wowtoken') {
-                                wt = true;
-                                routingString = '/item'
+                            let query = '';
+                            if (values.command === 'character') {
+                                query += `${values.character}@${values.realm.value}`
+                            } else if (values.command === 'guild') {
+                                query += `${values.guild}@${values.realm.value}`
+                            } else if (values.command === 'hash') {
+                                query += `${values.type}@${values.hash}`
+                            } else if (values.command === 'item') {
+                                query += `${values.item}@${values.realm.value}`
                             }
-                            for (let key_path of fields) {
-                                let routing_pointer = values[key_path]
-                                if (key_path === 'realm') {
-                                    routing_pointer = values.realm.value
-                                }
-                                routingString = routingString.concat('/' + routing_pointer)
-                            }
-                            if (wt) {
-                                routingString = routingString.concat('/122284')
-                            }
-                            await Router.push(routingString);
+                            await Router.push('/' + values.command + '/' + query);
                         }}
                     >
                     {({
@@ -114,7 +105,7 @@ function Index ({realms}) {
                                                 onBlur={handleBlur}
                                                 value={values.item}
                                                 fullWidth id="outlined-basic"
-                                                label="Item Name"
+                                                label="Item"
                                                 className={classes.search}
                                                 variant="outlined"
                                             />
@@ -168,7 +159,7 @@ function Index ({realms}) {
                                                 onBlur={handleBlur}
                                                 value={values.character}
                                                 fullWidth id="outlined-basic"
-                                                label="Character Name"
+                                                label="Character"
                                                 className={classes.search}
                                                 variant="outlined"
                                             />
@@ -204,7 +195,7 @@ function Index ({realms}) {
                                                 onBlur={handleBlur}
                                                 value={values.guild}
                                                 fullWidth id="outlined-basic"
-                                                label="Guild Name"
+                                                label="Guild"
                                                 className={classes.search}
                                                 variant="outlined"
                                             />
@@ -230,68 +221,13 @@ function Index ({realms}) {
                                         </Grid>
                                     </React.Fragment>
                                 )}
-                                {values.command === "contract" && (
-                                    <React.Fragment>
-                                        <Grid item xs={2}>
-                                            <TextField
-                                                type="text"
-                                                name="item"
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                value={values.item}
-                                                fullWidth id="outlined-basic"
-                                                label="Item Name"
-                                                className={classes.search}
-                                                variant="outlined"
-                                            />
-                                        </Grid>
-                                        <Grid item xs={2}>
-                                            <TextField
-                                                select
-                                                name="contract_tenor"
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                value={values.contract_tenor}
-                                                fullWidth id="outlined-basic"
-                                                label="Tenor"
-                                                className={classes.search}
-                                                variant="outlined"
-                                            >
-                                            {tenors.map(({value, label}) => (
-                                                <MenuItem key={value} value={value}>
-                                                    { label }
-                                                </MenuItem>
-                                            ))}
-                                            </TextField>
-                                        </Grid>
-                                        <Grid item xs={1}>
-                                            <Typography variant="h3" align="center" style={{textTransform: 'uppercase', margin: '0'}}>
-                                                @
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item xs={2}>
-                                            <Field
-                                                name="realm"
-                                                required
-                                                options={realms}
-                                                component={Autocomplete}
-                                                className={classes.dropdown}
-                                                textFieldProps={{
-                                                    label: "Realm",
-                                                    variant: "outlined",
-                                                    margin: 'none',
-                                                }}
-                                            />
-                                        </Grid>
-                                    </React.Fragment>
-                                )}
-                                {values.command === "find" && (
+                                {values.command === "hash" && (
                                     <React.Fragment>
                                         <Grid item xs={3}>
                                             <TextField
                                                 name="type"
                                                 select
-                                                label="Hash type"
+                                                label="Type"
                                                 className={classes.dropdown}
                                                 onChange={handleChange}
                                                 onBlur={handleBlur}
@@ -313,54 +249,15 @@ function Index ({realms}) {
                                         <Grid item xs={3}>
                                             <TextField
                                                 type="text"
-                                                name="match"
+                                                name="hash"
                                                 onChange={handleChange}
                                                 onBlur={handleBlur}
                                                 value={values.match}
                                                 fullWidth id="outlined-basic"
-                                                label="Hash or Query"
+                                                label="Hash"
                                                 className={classes.search}
                                                 variant="outlined"
                                             />
-                                        </Grid>
-                                    </React.Fragment>
-                                )}
-                                {values.command === "xrs" && (
-                                    <React.Fragment>
-                                        <Grid item xs={7}>
-                                            <TextField
-                                                type="text"
-                                                name="item"
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                value={values.item}
-                                                fullWidth id="outlined-basic"
-                                                label="Item name for Cross Realm Swap Quotes"
-                                                className={classes.search}
-                                                variant="outlined"
-                                            />
-                                        </Grid>
-                                    </React.Fragment>
-                                )}
-                                {values.command === "realmsinfo" && (
-                                    <React.Fragment>
-                                        <Grid item xs={7}>
-                                            <TextField
-                                                name="realmsinfo"
-                                                select
-                                                label="Select locale or region"
-                                                className={classes.dropdown}
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                value={values.realmsinfo}
-                                                variant="outlined"
-                                            >
-                                                {realmsinfo.map((option) => (
-                                                    <MenuItem key={option.value} value={option.value}>
-                                                        {option.label}
-                                                    </MenuItem>
-                                                ))}
-                                            </TextField>
                                         </Grid>
                                     </React.Fragment>
                                 )}
@@ -380,32 +277,6 @@ function Index ({realms}) {
             </Grid>
         </main>
     )
-}
-
-export async function getServerSideProps() {
-    //TODO refactor this part with gql handler
-    const region = 'Europe'
-    const query = `query Realms($region: String) {
-        realms(name: $region) {
-            _id
-            name
-            slug
-            name_locale
-        }
-    }`
-    let { data: { realms} } = await fetch(`http://${process.env.api}`,{
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        },
-        body: JSON.stringify({
-            query,
-            variables: { region },
-        })
-    }).then(res => res.json())
-    realms = realms.map(({name_locale, name, slug}) => ({ label: name_locale || name, value: slug }))
-    return { props: { realms: realms }}
 }
 
 export default Index
