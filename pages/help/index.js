@@ -8,8 +8,7 @@ import {
     Typography, CardContent,
     CardActions, Button, Box
 } from "@material-ui/core";
-import Head from "next/head";
-
+import MetaHead from '../../src/MetaHead'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -40,23 +39,11 @@ export default function Help ({ posts }) {
 
     return (
         <main>
-            <Head>
-                <title>Conglomerat Help</title>
-
-                <meta name="description" content="Want to report anything? Submit a bug? Grab some bounty? Feel free to go"/>
-
-                <meta property="og:type" content="website"/>
-                <meta property="og:url" content="https://conglomerat.group/"/>
-                <meta property="og:title" content="Conglomerat Help"/>
-                <meta property="og:description" content="Want to report anything? Submit a bug? Grab some bounty? Feel free to go"/>
-                <meta property="og:image" content="https://conglomerat.group/logo.png"/>
-
-                <meta property="twitter:card" content="summary_large_image"/>
-                <meta property="og:url" content="https://conglomerat.group/"/>
-                <meta property="twitter:title" content="Conglomerat Help"/>
-                <meta property="twitter:description" content="Want to report anything? Submit a bug? Grab some bounty? Feel free to go"/>
-                <meta property="og:image" content="https://conglomerat.group/logo.png"/>
-            </Head>
+            <MetaHead
+                title={"Conglomerat: Help"}
+                description={"Want to report anything? Submit a bug? Grab some bounty? Feel free to go"}
+                image={"https://conglomerat.group/logo.png"}
+            />
             <Container fixed>
                 <Grid container direction="column" justify="space-around" alignItems="center" spacing={2}>
                     <Box alignItems="center" display="flex" justifyContent="center">

@@ -1,6 +1,6 @@
 import React from "react";
 import MetaHead from "../src/MetaHead";
-import { Grid, makeStyles, Typography } from "@material-ui/core";
+import { Grid, makeStyles, Typography, Button } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -19,8 +19,11 @@ export default function Discord () {
             />
             <Grid container direction="column" justify="center" alignItems="center" className={classes.root}>
                 <Typography variant="h1" component="h2" gutterBottom>
-                    h1. Heading
+                    >be ahead the curve
                 </Typography>
+                <Button href="https://discord.com/oauth2/authorize?client_id=318324033940750337&scope=bot" variant="outlined" color="secondary">
+                    Invite Link
+                </Button>
             </Grid>
         </main>
     )

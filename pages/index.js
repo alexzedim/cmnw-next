@@ -272,7 +272,7 @@ function Index () {
                     </Formik>
                 </Container>
                 <Typography variant="overline" align="center" style={{textTransform: 'uppercase'}}>
-                    Feel free to use, we don't use cookies or track your queries.
+                    GraphQL is here. Get ready for something new!
                 </Typography>
             </Grid>
         </main>
