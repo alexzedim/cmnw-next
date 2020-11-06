@@ -5,7 +5,7 @@ import {
     Divider, Typography, Grid,
     makeStyles
 } from '@material-ui/core';
-import Head from "next/head";
+import MetaHead from '../src/MetaHead'
 
 const useStyles = makeStyles(theme => ({
     image: {
@@ -30,23 +30,11 @@ export default function SignInSide() {
     const classes = useStyles();
     return (
         <main>
-            <Head>
-                <title>Conglomerat: Who we are</title>
-
-                <meta name="description" content="World of Warcraft: In-game decision-making superiority starts here"/>
-
-                <meta property="og:type" content="website"/>
-                <meta property="og:url" content="https://conglomerat.group/"/>
-                <meta property="og:title" content="Conglomerat: Who we are"/>
-                <meta property="og:description" content="World of Warcraft: In-game decision-making superiority starts here"/>
-                <meta property="og:image" content="https://conglomerat.group/logo.png"/>
-
-                <meta property="twitter:card" content="summary_large_image"/>
-                <meta property="og:url" content="https://conglomerat.group/"/>
-                <meta property="twitter:title" content="Conglomerat: Who we are"/>
-                <meta property="twitter:description" content="World of Warcraft: In-game decision-making superiority starts here"/>
-                <meta property="og:image" content="https://conglomerat.group/logo.png"/>
-            </Head>
+            <MetaHead
+                title={"Conglomerat: Who we are"}
+                description={"World of Warcraft: In-game decision-making superiority starts here."}
+                image={"https://conglomerat.group/logo.png"}
+            />
             <Grid container>
                 <Grid item xs={false} sm={5} md={5} className={classes.image} style={{backgroundImage: `url(https://i.imgur.com/poOeOqP.jpg`}}/>
                 <Grid item xs={12} sm={7} md={7} elevation={6}>
