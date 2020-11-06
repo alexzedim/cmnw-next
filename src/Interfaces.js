@@ -60,6 +60,13 @@ const osint_commands = [
     },
 ]
 
+const dma_commands = [
+    {
+        value: 'item',
+        label: 'ITEM',
+    },
+]
+
 const type = [
     {
         value: 'a',
@@ -1210,5 +1217,6 @@ export {
     realmsinfo,
     tenors,
     realms,
-    osint_commands
+    osint_commands,
+    dma_commands
 }
