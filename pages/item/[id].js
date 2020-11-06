@@ -226,7 +226,6 @@ export async function getServerSideProps ({ query }) {
                 price_size
                 quantity
                 open_interest
-                last_modified
               }
             }
             chart {
