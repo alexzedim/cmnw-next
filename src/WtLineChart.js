@@ -10,9 +10,8 @@ if (typeof Highcharts === 'object') {
 export default function WtLineChart ({data}) {
     if (!data) return ('')
     let dateArray = [], priceArray = [];
-
-    data.sort((a, b) => a._id - b._id).map(({price, _id}) => {
-        dateArray.push(_id);
+    data.sort((a, b) => a.lastModified - b.lastModified).map(({ price, lastModified }) => {
+        dateArray.push(lastModified);
         priceArray.push(price)
     })
 
@@ -49,7 +48,6 @@ export default function WtLineChart ({data}) {
                 },
                 xAxis: {
                     categories: dateArray,
-                    type: "datetime",
                     labels: {
                         step: 10,
                         formatter: function () {
