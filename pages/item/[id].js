@@ -75,8 +75,7 @@ const ItemPage = ({ item }) => {
     ]
 
     const {
-        realm, chart, quotes,
-        data, _id, icon,
+        realm, chart, quotes, _id, icon,
         name, ticker, asset_class,
         contracts, wowtoken, feed,
         valuations
@@ -98,7 +97,7 @@ const ItemPage = ({ item }) => {
         <main>
             <MetaHead
                 title={`ITEM:${title}`}
-                description={"ITEM — Provides an up-to-date market data with evaluation methods and its values, for a certain item within a selected realm.\""}
+                description={"ITEM — Provides an up-to-date market data with evaluation methods and its values, for a certain item within a selected realm."}
                 image={icon}
             />
             <Container maxWidth={false}>
