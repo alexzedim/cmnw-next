@@ -3,27 +3,16 @@ import React from "react";
 import Head from 'next/head'
 import { Container, Grid, Typography } from "@material-ui/core";
 import Link from "../src/Link";
+import MetaHead from '../src/MetaHead'
 
 function Error({ statusCode }) {
     return (
         <main>
-            <Head>
-                <title>Conglomerat: Error</title>
-
-                <meta name="description" content="Oopsie, an error happens!"/>
-
-                <meta property="og:type" content="website"/>
-                <meta property="og:url" content="https://conglomerat.group/"/>
-                <meta property="og:title" content="Conglomerat: Error"/>
-                <meta property="og:description" content="Oopsie, an error happens!"/>
-                <meta property="og:image" content="https://conglomerat.group/logo.png"/>
-
-                <meta property="twitter:card" content="summary_large_image"/>
-                <meta property="og:url" content="https://conglomerat.group/"/>
-                <meta property="twitter:title" content="Conglomerat: Error"/>
-                <meta property="twitter:description" content="Oopsie, an error happens!"/>
-                <meta property="og:image" content="https://conglomerat.group/logo.png"/>
-            </Head>
+            <MetaHead
+                title={"Conglomerat: Error"}
+                description={"Oopsie, an error happens!"}
+                image={"https://conglomerat.group/logo.png"}
+            />
             <Container maxWidth={false}>
                 <Grid container
                       direction="row"
