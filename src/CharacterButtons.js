@@ -19,6 +19,14 @@ const useStyles = makeStyles((theme) => ({
     v_large: {
         width: theme.spacing(8),
         height: theme.spacing(8),
+        marginRight: theme.spacing(1),
+    },
+    pvp: {
+        width: theme.spacing(6),
+        height: theme.spacing(6),
+        marginRight: theme.spacing(1),
+        color: '#80c7f6',
+        backgroundColor: '#8a0d0d',
     },
 }));
 
@@ -38,8 +46,7 @@ export default function CharacterButtons ({name, realm}) {
                 <Link href={`https://raider.io/characters/eu/${realm}/${name}`} prefetch={false}><Avatar variant="square" alt="RaiderIO" src="https://cdnassets.raider.io/images/brand/Icon_FullColor.png" className={classes.large} /></Link>
                 <Link href={`https://www.wowprogress.com/character/eu/${realm}/${name}`} prefetch={false}><Avatar alt="WoWProgress" className={classes.wp}>WP</Avatar></Link>
                 <Link href={`https://worldofwarcraft.com/en-gb/character/eu/${realm}/${name}`} prefetch={false}><Avatar alt="BattleNet" src="https://conglomerat.group/wow.svg" className={classes.v_large}/></Link>
-                <Link href={`https://check-pvp.fr/eu/${realm}/${name}`} prefetch={false}><Avatar alt="Check PvP" src="https://check-pvp.fr/assets/images/logo.png" className={classes.large}/></Link>            
-            
+                <Link href={`https://check-pvp.fr/eu/${realm}/${name}`} prefetch={false}><Avatar alt="Check PvP" className={classes.pvp}>PvP</Avatar></Link>
             </Grid>
         </React.Fragment>
     )
