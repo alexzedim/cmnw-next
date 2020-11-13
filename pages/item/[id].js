@@ -190,6 +190,13 @@ export async function getServerSideProps ({ query }) {
               value
               flag
               details {
+                queue_cost
+                queue_quantity
+                rank
+                reagent_items
+                premium_items
+                unsorted_items
+                wi
                 quotation
                 swap_type
                 description
