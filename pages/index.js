@@ -252,7 +252,7 @@ function Index () {
                                                 name="hash"
                                                 onChange={handleChange}
                                                 onBlur={handleBlur}
-                                                value={values.match}
+                                                value={values.hash}
                                                 fullWidth id="outlined-basic"
                                                 label="Hash"
                                                 className={classes.search}

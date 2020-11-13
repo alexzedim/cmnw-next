@@ -191,7 +191,7 @@ export default function Osint () {
                                             <Grid item xs={3}>
                                                 <TextField
                                                     type="text"
-                                                    name="match"
+                                                    name="hash"
                                                     onChange={handleChange}
                                                     onBlur={handleBlur}
                                                     value={values.hash}
@@ -208,7 +208,7 @@ export default function Osint () {
                                             <Grid item xs={7}>
                                                 <TextField
                                                     type="text"
-                                                    name="ID"
+                                                    name="id"
                                                     onChange={handleChange}
                                                     onBlur={handleBlur}
                                                     value={values.id}
