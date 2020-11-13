@@ -193,9 +193,84 @@ export async function getServerSideProps ({ query }) {
                 queue_cost
                 queue_quantity
                 rank
-                reagent_items
-                premium_items
-                unsorted_items
+                reagent_items {
+                  quality
+                  level
+                  name {
+                    en_GB
+                  }
+                  icon
+                  item_class
+                  item_subclass
+                  purchase_price
+                  sell_price
+                  is_equippable
+                  is_stackable
+                  inventory_type
+                  purchase_quantity
+                  loot_type
+                  contracts
+                  expansion
+                  stackable
+                  profession_class
+                  ticker
+                  createdAt
+                  updatedAt
+                  value
+                  quantity
+                }
+                premium_items {
+                  quality
+                  name {
+                    en_GB
+                  }
+                  level
+                  icon
+                  item_class
+                  item_subclass
+                  purchase_price
+                  sell_price
+                  is_equippable
+                  is_stackable
+                  inventory_type
+                  purchase_quantity
+                  loot_type
+                  contracts
+                  expansion
+                  stackable
+                  profession_class
+                  ticker
+                  createdAt
+                  updatedAt
+                  value
+                  quantity
+                }
+                unsorted_items {
+                  name {
+                    en_GB
+                  }
+                  quality
+                  level
+                  icon
+                  item_class
+                  item_subclass
+                  purchase_price
+                  sell_price
+                  is_equippable
+                  is_stackable
+                  inventory_type
+                  purchase_quantity
+                  loot_type
+                  contracts
+                  expansion
+                  stackable
+                  profession_class
+                  ticker
+                  createdAt
+                  updatedAt
+                  value
+                  quantity
+                }
                 wi
                 quotation
                 swap_type
