@@ -5,12 +5,12 @@ import {
     Typography, Divider,
     Avatar, Box
 } from '@material-ui/core';
-import XRSClusterChart from "../../../src/XRSClusterChart";
-import ItemValuations from "../../../src/ItemValuations";
-import XRSScatterPlot from "../../../src/XRSScatterPlot";
-import ItemData from "../../../src/ItemData";
-import XRSRates from "../../../src/XRSRates";
-import ItemChart from "../../../src/ItemChart";
+import XRSClusterChart from "../../src/XRSClusterChart";
+import ItemValuations from "../../src/ItemValuations";
+import XRSScatterPlot from "../../src/XRSScatterPlot";
+import ItemData from "../../src/ItemData";
+import XRSRates from "../../src/XRSRates";
+import ItemChart from "../../src/ItemChart";
 import MetaHead from '../../src/MetaHead'
 
 const useStyles = makeStyles(theme => ({
