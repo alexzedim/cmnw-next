@@ -37,5 +37,8 @@
     "@material-ui/icons": "^4.9.1",
     "babel-plugin-inline-react-svg": "^1.1.1",
     "react-markdown": "^5.0.2"
+  },
+  "resolutions": {
+    "js-yaml": "3.13.1"
   }
 }
