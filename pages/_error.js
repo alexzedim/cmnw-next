@@ -1,6 +1,5 @@
 import Logo from '../public/logo2.svg';
 import React from "react";
-import Head from 'next/head'
 import { Container, Grid, Typography } from "@material-ui/core";
 import Link from "../src/Link";
 import MetaHead from '../src/MetaHead'

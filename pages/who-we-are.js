@@ -46,13 +46,13 @@ export default function SignInSide() {
                             <Typography variant="body1" gutterBottom>
                                 I started to play World of Warcraft since WotLK release, right after russian realms were opened. My very first character was a druid on a god-forgotten realm like Ashenvale.
                                 Then I created this rogue, that outlived all inactive periods and deletion. I have played on EU-Outland during WoD, and Legion expansions.
-                                After that I was invited to russian #2 PvE guild: <Link href={`/guild/soulflayer/фьюжн`} color="secondary" underline="hover">Фьюжн@Свежеватель-Душ</Link> (<Link href="https://www.wowprogress.com/pve/ru/rating.tier19" prefetch={false} color="secondary" underline="hover">WoWProgress</Link>) as a treasurer.
-                                Thanks to <Link href={`/character/gordunni/йошх`} color="secondary" underline="hover">Йош</Link> (founder of russian druid class discord) and <Link href={`/character/gordunni/лапочка`} color="secondary" underline="hover">Лапочка</Link> (<Link href="https://www.twitch.tv/holy_moley" prefetch={false} color="secondary" underline="hover">HolyMoley</Link>, co-founder of russian paladin class discord) who have belived in me.
-                                As for now, I am representing <Link href={`/guild/gordunni/депортация`} color="secondary" underline="hover">Депортация@Гордунни</Link> as Head of Treasury.
+                                After that I was invited to russian #2 PvE guild: <Link href={`/guild//фьюжн@soulflayer`} color="secondary" underline="hover">Фьюжн@Свежеватель-Душ</Link> (<Link href="https://www.wowprogress.com/pve/ru/rating.tier19" prefetch={false} color="secondary" underline="hover">WoWProgress</Link>) as a treasurer.
+                                Thanks to <Link href={`/character/йошх@gordunni`} color="secondary" underline="hover">Йош</Link> (founder of russian druid class discord) and <Link href={`/character/лапочка@gordunni`} color="secondary" underline="hover">Лапочка</Link> (<Link href="https://www.twitch.tv/holy_moley" prefetch={false} color="secondary" underline="hover">HolyMoley</Link>, co-founder of russian paladin class discord) who have believed in me.
+                                As for now, I am representing <Link href={`/guild/депортация@gordunni`} color="secondary" underline="hover">Депортация@Гордунни</Link> as Head of Treasury.
                             </Typography>
                             <Divider />
                             <List component="nav" aria-label="initiative">
-                                <ListItemLink href="/character/gordunni/инициатива">
+                                <ListItemLink href="/character/инициатива@gordunni">
                                     <ListItemText primary="Main Character: инициатива@гордунни" />
                                 </ListItemLink>
                                 <ListItemLink href="https://twitter.com/alexzedim2812">
@@ -81,7 +81,7 @@ export default function SignInSide() {
                             </Typography>
                             <Divider />
                             <List component="nav" aria-label="initiative">
-                                <ListItemLink href="/character/gordunni/блюрателла">
+                                <ListItemLink href="/character/блюрателла@gordunni">
                                     <ListItemText primary="Main Character: блюрателла@гордунни" />
                                 </ListItemLink>
                             </List>
