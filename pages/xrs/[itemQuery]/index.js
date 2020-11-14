@@ -11,7 +11,7 @@ import XRSScatterPlot from "../../../src/XRSScatterPlot";
 import ItemData from "../../../src/ItemData";
 import XRSRates from "../../../src/XRSRates";
 import ItemChart from "../../../src/ItemChart";
-import Head from 'next/head'
+import MetaHead from '../../src/MetaHead'
 
 const useStyles = makeStyles(theme => ({
     table: {
@@ -69,24 +69,11 @@ const XRSPage = ({xrs_data}) => {
 
     return (
         <main>
-            <Head>
-                <title>XRS:{title}</title>
-                <meta name="description" content="XRS — Returns the latest market prices for a certain item across all available realms, in the moment of time."/>
-
-                <meta property="og:type" content="website"/>
-                <meta property="og:url" content="https://conglomerat.group/"/>
-                <meta property="og:title" content={`XRS:${title}`}/>
-                <meta property="og:description" content="XRS — Returns the latest market prices for a certain item across all available realms, in the moment of time."/>
-                <meta property="og:image" content={icon}/>
-
-                <meta property="twitter:card" content="summary_large_image"/>
-                <meta property="og:url" content="https://conglomerat.group/"/>
-                <meta property="twitter:title" content={`XRS:${title}`}/>
-                <meta property="twitter:description" content="XRS — Returns the latest market prices for a certain item across all available realms, in the moment of time."/>
-                <meta property="twitter:image" content={icon}/>
-
-                <script src={"/power.js"} type="text/javascript"/>
-            </Head>
+            <MetaHead
+                title={`Conglomerat: XRS ${title}`}
+                description={"XRS — Returns the latest market prices for a certain item across all available realms, in the moment of time."}
+                image={icon}
+            />
             <Container maxWidth={false}>
                 <Container maxWidth={false} className={classes.titleBlock}>
                     <Grid container direction="column" justify="space-around" alignItems="center" spacing={2}>
@@ -151,7 +138,7 @@ const XRSPage = ({xrs_data}) => {
 };
 
 
-export async function getServerSideProps({query}) {
+export async function getServerSideProps ({ query }) {
     const { itemQuery } = query;
     const xrs_data = await Promise.allSettled([
         fetch(encodeURI(`http://${process.env.api}/items/xrs_item/${itemQuery}`)).then(res => res.json()),
