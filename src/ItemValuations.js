@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function ItemValuations ({data, pageSize = 5}) {
+export default function ItemValuations ({ data, pageSize = 5 }) {
     if (!data) return <div>No valuations available</div>
     const classes = useStyles();
     return (
@@ -74,7 +74,7 @@ export default function ItemValuations ({data, pageSize = 5}) {
                                                                        <ListItemAvatar>
                                                                            <Avatar alt={x.name.en_GB} src={x.icon} />
                                                                        </ListItemAvatar>
-                                                                       <ListItemText primary={<Link href={`/item/${rowData.connected_realm_id}/${x._id}`} color="textPrimary" underline="hover">{x.name.en_GB}</Link>} secondary={`Quantity: ${x.quantity}, Value: ${x.value}`} />
+                                                                       <ListItemText primary={<Link href={`/item/${x._id}@${rowData.connected_realm_id}`} color="textPrimary" underline="hover">{x.name.en_GB}</Link>} secondary={`Quantity: ${x.quantity}, Value: ${x.value}`} />
                                                                    </ListItem>
                                                                ))}
                                                            </List>
