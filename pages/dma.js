@@ -31,6 +31,22 @@ const useStyles = makeStyles(theme => ({
 
 export default function Dma () {
     const classes = useStyles();
+    const [formState, setFormState] = React.useState({
+        userRoles: []
+    });
+
+    const handleFieldChange = event => {
+        console.log(event);
+        event.persist();
+        setFormState(formState => ({
+            ...formState,
+            [event.target.name]:
+                event.target.type === "checkbox"
+                    ? event.target.checked
+                    : event.target.value
+        }));
+    };
+
     return (
         <main>
             <MetaHead
@@ -44,7 +60,7 @@ export default function Dma () {
                         initialValues={{
                             command: 'item',
                             item: 'WOWTOKEN',
-                            realm: { label: 'Гордунни', value: 'gordunni' },
+                            realm: [{ label: 'Гордунни', value: 'gordunni' }],
                         }}
                         onSubmit={async (values, { setSubmitting }) => {
                             await setSubmitting(false);
@@ -52,7 +68,7 @@ export default function Dma () {
                             if (values.command === 'item') {
                                 query += `${values.item}@${values.realm.value}`
                             }
-                            await Router.push('/' + values.command + '/' + query);
+                            //await Router.push('/' + values.command + '/' + query);
                         }}
                     >
                         {({
@@ -102,17 +118,42 @@ export default function Dma () {
                                                 </Typography>
                                             </Grid>
                                             <Grid item xs={3}>
-                                                <Field
-                                                    name="realm"
-                                                    required
-                                                    options={realms}
-                                                    component={Autocomplete}
-                                                    className={classes.dropdown}
-                                                    textFieldProps={{
-                                                        label: "Realm",
-                                                        variant: "outlined",
-                                                        margin: 'none',
+                                                <TextField
+                                                    classes={{ root: classes.dropdown }}
+                                                    requiered="true"
+                                                    select
+                                                    name="userRoles"
+                                                    id="userRoles"
+                                                    variant="outlined"
+                                                    label="Realms"
+                                                    SelectProps={{
+                                                        multiple: true,
+                                                        value: formState.userRoles,
+                                                        onChange: handleFieldChange
                                                     }}
+                                                >
+                                                    {realms.map((option) => (
+                                                        <MenuItem key={option.label} value={option.label}>
+                                                            {option.label}
+                                                        </MenuItem>
+                                                    ))}
+                                                </TextField>
+                                            </Grid>
+                                        </React.Fragment>
+                                    )}
+                                    {values.command === "xrs" && (
+                                        <React.Fragment>
+                                            <Grid item xs={7}>
+                                                <TextField
+                                                    type="text"
+                                                    name="item"
+                                                    onChange={handleChange}
+                                                    onBlur={handleBlur}
+                                                    value={values.item}
+                                                    fullWidth id="outlined-basic"
+                                                    label="Item Name"
+                                                    className={classes.search}
+                                                    variant="outlined"
                                                 />
                                             </Grid>
                                         </React.Fragment>
