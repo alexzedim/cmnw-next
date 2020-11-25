@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { useRouter } from 'next/router';
+import {useRouter} from 'next/router';
 import NextLink from 'next/link';
 import MuiLink from '@material-ui/core/Link';
 
 const NextComposed = React.forwardRef(function NextComposed(props, ref) {
-  const { as, href, prefetch, ...other } = props;
+  const {as, href, prefetch, ...other} = props;
 
   return (
     <NextLink href={href} prefetch={prefetch} as={as}>
@@ -57,4 +57,4 @@ Link.propTypes = {
   prefetch: PropTypes.bool,
 };
 
-export default React.forwardRef((props, ref) => <Link {...props} innerRef={ref} />);
+export default React.forwardRef((props, ref) => <Link {...props} innerRef={ref}/>);
