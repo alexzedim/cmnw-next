@@ -1,13 +1,13 @@
 import React from "react";
+import Router from 'next/router'
+import MetaHead from '../src/MetaHead'
 import {Field, Form, Formik} from 'formik';
 import ArrowForwardOutlinedIcon from '@material-ui/icons/ArrowForwardOutlined';
-import MetaHead from '../src/MetaHead'
 import {Button, Container, Grid, makeStyles, MenuItem, Typography} from "@material-ui/core";
 import MuiTextField from '@material-ui/core/TextField';
 import {fieldToTextField, TextField} from 'formik-material-ui';
 import {dma_commands, realms} from "../src/Interfaces";
 import {Autocomplete} from 'formik-material-ui-lab';
-import Router from 'next/router'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -23,11 +23,6 @@ const useStyles = makeStyles(theme => ({
   search: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-  },
-  dropdown: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: '100%',
   },
 }));
 
@@ -76,13 +71,9 @@ export default function DMA() {
             }}
           >
             {({
-                submitForm,
-                isSubmitting,
                 touched,
                 errors,
                 values,
-                handleChange,
-                handleBlur,
               }) => (
               <Form className={classes.searchField}>
                 <Grid container spacing={3} direction="row" justify="center" alignItems="center">

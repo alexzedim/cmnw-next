@@ -83,69 +83,69 @@ function GuildPage({guild}) {
 export async function getServerSideProps({query}) {
   const {id} = query;
   const gql = `query Guild($id: ID!) {
-        guild(id: $id) {
+      guild(id: $id) {
+        _id
+        id
+        name
+        realm {
+          _id
+          slug
+          name
+        }
+        faction
+        members {
+          _id
+          id
+          name
+          realm {
             _id
-            id
             name
-            realm {
-              _id
-              slug
-              name
-            }
-            faction
-            members {
-              _id
-              id
-              name
-              realm {
-                _id
-                name
-                slug
-              }
-              guild {
-                name
-                slug
-                rank
-              }
-              ilvl {
-                eq
-              }
-              hash {
-                a
-                b
-                c
-              }
-              race
-              character_class
-              spec
-              gender
-              faction
-              level
-              lastModified
-              media {
-                avatar_url
-                bust_url
-                render_url
-              }
-            }
-            achievement_points
-            created_timestamp
-            lastModified
-            createdBy
-            updatedBy
-            isWatched
-            logs {
-              type
-              original_value
-              new_value
-              message
-              action
-              before
-              after
-            }
-            createdAt
-            updatedAt
-        }   
+            slug
+          }
+          guild {
+            name
+            slug
+            rank
+          }
+          ilvl {
+            eq
+          }
+          hash {
+            a
+            b
+            c
+          }
+          race
+          character_class
+          spec
+          gender
+          faction
+          level
+          lastModified
+          media {
+            avatar_url
+            bust_url
+            render_url
+          }
+        }
+        achievement_points
+        created_timestamp
+        lastModified
+        createdBy
+        updatedBy
+        isWatched
+        logs {
+          type
+          original_value
+          new_value
+          message
+          action
+          before
+          after
+        }
+        createdAt
+        updatedAt
+      }   
     }`
   const {data: {guild}} = await fetch(`http://${process.env.api}`, {
     method: 'POST',

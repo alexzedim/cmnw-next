@@ -1,11 +1,13 @@
 import React from "react";
-import {Field, Form, Formik} from 'formik';
 import Router from 'next/router'
-import ArrowForwardOutlinedIcon from '@material-ui/icons/ArrowForwardOutlined';
-import {Autocomplete} from "material-ui-formik-components/Autocomplete";
 import MetaHead from '../src/MetaHead'
-import {Button, Container, Grid, makeStyles, MenuItem, TextField, Typography} from "@material-ui/core";
+import {Field, Form, Formik} from 'formik';
+import ArrowForwardOutlinedIcon from '@material-ui/icons/ArrowForwardOutlined';
+import {Button, Container, Grid, makeStyles, MenuItem, Typography} from "@material-ui/core";
+import MuiTextField from '@material-ui/core/TextField';
+import {TextField} from 'formik-material-ui';
 import {osint_commands, realms, type} from "../src/Interfaces";
+import {Autocomplete} from 'formik-material-ui-lab';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,11 +24,6 @@ const useStyles = makeStyles(theme => ({
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
   },
-  dropdown: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: '100%',
-  },
 }));
 
 export default function Osint() {
@@ -35,7 +32,7 @@ export default function Osint() {
     <main>
       <MetaHead
         title={"Conglomerat: OSINT"}
-        description={"Intel"}
+        description={"Open Source Intelligence"}
         image={"https://conglomerat.group/logo.png"}
       />
       <Grid container direction="column" justify="center" alignItems="center" className={classes.root}>
@@ -67,43 +64,42 @@ export default function Osint() {
           >
             {({
                 values,
-                handleChange,
-                handleBlur,
-                /* and other goodies */
+                touched,
+                errors
               }) => (
               <Form className={classes.searchField}>
                 <Grid container spacing={3} direction="row" justify="center" alignItems="center">
                   <Grid item xs={3}>
-                    <TextField
+                    <Field
+                      component={TextField}
+                      type="text"
                       name="command"
-                      select
                       label="Select command"
-                      className={classes.dropdown}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.command}
+                      select
                       variant="outlined"
+                      style={{width: 300}}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
                     >
                       {osint_commands.map((option) => (
                         <MenuItem key={option.value} value={option.value}>
                           {option.label}
                         </MenuItem>
                       ))}
-                    </TextField>
+                    </Field>
                   </Grid>
                   {values.command === "character" && (
                     <React.Fragment>
                       <Grid item xs={3}>
-                        <TextField
-                          type="text"
+                        <Field
+                          component={TextField}
                           name="character"
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.character}
-                          fullWidth id="outlined-basic"
+                          type="text"
                           label="Character"
-                          className={classes.search}
                           variant="outlined"
+                          style={{width: 300}}
+                          fullWidth
                         />
                       </Grid>
                       <Grid item xs={1}>
@@ -114,15 +110,18 @@ export default function Osint() {
                       <Grid item xs={3}>
                         <Field
                           name="realm"
-                          required
-                          options={realms}
                           component={Autocomplete}
-                          className={classes.dropdown}
-                          textFieldProps={{
-                            label: "Realm",
-                            variant: "outlined",
-                            margin: 'none',
-                          }}
+                          options={realms}
+                          getOptionLabel={(option) => option.label}
+                          style={{width: 300}}
+                          renderInput={(params) => (
+                            <MuiTextField
+                              {...params}
+                              error={touched['realm'] && !!errors['realm']}
+                              label="Realms"
+                              variant="outlined"
+                            />
+                          )}
                         />
                       </Grid>
                     </React.Fragment>
@@ -130,16 +129,14 @@ export default function Osint() {
                   {values.command === "guild" && (
                     <React.Fragment>
                       <Grid item xs={3}>
-                        <TextField
-                          type="text"
+                        <Field
+                          component={TextField}
                           name="guild"
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.guild}
-                          fullWidth id="outlined-basic"
+                          type="text"
                           label="Guild"
-                          className={classes.search}
                           variant="outlined"
+                          style={{width: 300}}
+                          fullWidth
                         />
                       </Grid>
                       <Grid item xs={1}>
@@ -150,15 +147,18 @@ export default function Osint() {
                       <Grid item xs={3}>
                         <Field
                           name="realm"
-                          required
-                          options={realms}
                           component={Autocomplete}
-                          className={classes.dropdown}
-                          textFieldProps={{
-                            label: "Realm",
-                            variant: "outlined",
-                            margin: 'none',
-                          }}
+                          options={realms}
+                          getOptionLabel={(option) => option.label}
+                          style={{width: 300}}
+                          renderInput={(params) => (
+                            <MuiTextField
+                              {...params}
+                              error={touched['realm'] && !!errors['realm']}
+                              label="Realms"
+                              variant="outlined"
+                            />
+                          )}
                         />
                       </Grid>
                     </React.Fragment>
@@ -166,22 +166,24 @@ export default function Osint() {
                   {values.command === "hash" && (
                     <React.Fragment>
                       <Grid item xs={3}>
-                        <TextField
+                        <Field
+                          component={TextField}
+                          type="text"
                           name="type"
-                          select
                           label="Type"
-                          className={classes.dropdown}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.type}
+                          select
                           variant="outlined"
+                          style={{width: 300}}
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
                         >
                           {type.map((option) => (
                             <MenuItem key={option.value} value={option.value}>
                               {option.label}
                             </MenuItem>
                           ))}
-                        </TextField>
+                        </Field>
                       </Grid>
                       <Grid item xs={1}>
                         <Typography variant="h3" align="center" style={{textTransform: 'uppercase', margin: '0'}}>
@@ -189,16 +191,14 @@ export default function Osint() {
                         </Typography>
                       </Grid>
                       <Grid item xs={3}>
-                        <TextField
-                          type="text"
+                        <Field
+                          component={TextField}
                           name="hash"
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.hash}
-                          fullWidth id="outlined-basic"
+                          type="text"
                           label="Hash"
-                          className={classes.search}
                           variant="outlined"
+                          style={{width: 300}}
+                          fullWidth
                         />
                       </Grid>
                     </React.Fragment>
@@ -206,16 +206,14 @@ export default function Osint() {
                   {values.command === "file" && (
                     <React.Fragment>
                       <Grid item xs={7}>
-                        <TextField
-                          type="text"
+                        <Field
+                          component={TextField}
                           name="id"
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.id}
-                          fullWidth id="outlined-basic"
+                          type="text"
                           label="File ID"
-                          className={classes.search}
                           variant="outlined"
+                          style={{width: 300}}
+                          fullWidth
                         />
                       </Grid>
                     </React.Fragment>

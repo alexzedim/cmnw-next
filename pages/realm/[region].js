@@ -59,18 +59,6 @@ export async function getServerSideProps({query}) {
             name_locale
             locale
             connected_realm_id
-            players {
-                total
-                alliance
-                horde
-                max_level
-                unique
-            }
-            guilds {
-                total
-                alliance
-                horde
-            }
             golds
             valuations
             auctions
