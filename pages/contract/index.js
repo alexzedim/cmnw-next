@@ -1,12 +1,12 @@
 import React from "react";
 import {makeStyles} from '@material-ui/core/styles';
-import Clock from "../../../../../src/Clock";
-import ContractsTable from "../../../../../src/ContractsTable";
-import LineChart from "../../../../../src/LineChart"
+import Clock from "../../src/Clock";
+import ContractsTable from "../../src/ContractsTable";
+import LineChart from "../../src/LineChart"
 import {Avatar, Box, Button, ButtonGroup, Container, Divider, Grid, Typography,} from '@material-ui/core';
 import Router, {useRouter} from "next/router";
-import ItemData from "../../../../../src/ItemData";
-import ContractData from "../../../../../src/ContractData";
+import ItemData from "../../src/ItemData";
+import ContractData from "../../src/ContractData";
 import Head from 'next/head'
 
 const useStyles = makeStyles(theme => ({
@@ -146,7 +146,7 @@ const ContractPage = ({contracts_data}) => {
 
 export async function getServerSideProps({query}) {
   const {realmSlug, itemSlug, tenor} = query;
-  const contracts_data = await fetch(encodeURI(`http://${process.env.api}/contracts/${tenor}/${itemSlug}@${realmSlug}`)).then(res => res.json());
+  //const contracts_data = await fetch(encodeURI(`http://${process.env.api}/contracts/${tenor}/${itemSlug}@${realmSlug}`)).then(res => res.json());
   return {props: {contracts_data}}
 }
 
