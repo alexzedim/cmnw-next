@@ -181,7 +181,7 @@ export default function DMA() {
           </Formik>
         </Container>
         <Typography variant="overline" align="center" style={{textTransform: 'uppercase'}}>
-          Any language, every item, many realms,much evaluation, very wow!
+          Any language, every item, many realms, much evaluation, very wow!
         </Typography>
       </Grid>
     </main>
