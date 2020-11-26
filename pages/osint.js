@@ -228,6 +228,9 @@ export default function Osint() {
             )}
           </Formik>
         </Container>
+        <Typography variant="overline" align="center" style={{textTransform: 'uppercase'}}>
+          Conglomerat keeps a watchful eye over every inch of it's empire
+        </Typography>
       </Grid>
     </main>
   )

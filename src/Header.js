@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
     width: '100%'
   },
   appBar: {
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: 'transparent',
     position: 'relative',
   },
   title: {
@@ -32,27 +32,27 @@ export default function Header() {
     <div className={classes.root}>
       <AppBar className={classes.appBar} color="transparent" position="sticky">
         <Toolbar>
-          <Typography className={classes.title} variant="h6" color="primary" align="center" noWrap>
+          <Typography className={classes.title} variant="h6" color="secondary" align="center" noWrap>
             <Link href={"/osint"} color="inherit" underline="none">
               Characters & Guilds
             </Link>
           </Typography>
-          <Typography className={classes.title} variant="h6" color="primary" align="center" noWrap>
+          <Typography className={classes.title} variant="h6" color="secondary" align="center" noWrap>
             <Link href={"/dma"} color="inherit" underline="none">
               Items & Auctions
             </Link>
           </Typography>
-          <Typography className={classes.title} variant="h6" color="primary" align="center" noWrap>
+          <Typography className={classes.title} variant="h6" color="secondary" align="center" noWrap>
             <Link href={"/discord"} color="inherit" underline="none">
               Discord Bot
             </Link>
           </Typography>
-          <Typography className={classes.title} variant="h6" color="primary" align="center" noWrap>
+          <Typography className={classes.title} variant="h6" color="secondary" align="center" noWrap>
             <Link href={"/help"} color="inherit" underline="none">
               Help
             </Link>
           </Typography>
-          <Typography className={classes.title} variant="h6" color="primary" align="center" noWrap>
+          <Typography className={classes.title} variant="h6" color="secondary" align="center" noWrap>
             <Link href={"/who-we-are"} color="inherit" underline="none">
               Who we are
             </Link>

@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
   card: {
     backgroundColor: 'transparent',
     position: 'relative',
-    minHeight: 200,
+    height: 250,
     border: "none",
     boxShadow: "none"
   },

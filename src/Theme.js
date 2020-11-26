@@ -1,6 +1,10 @@
 import {createMuiTheme} from '@material-ui/core/styles';
 import {red} from '@material-ui/core/colors';
 
+function getRandomInt(max) {
+  return Math.floor(Math.random() * Math.floor(max));
+}
+
 // Create a theme instance.
 const theme = createMuiTheme({
   palette: {
@@ -34,11 +38,24 @@ const theme = createMuiTheme({
     }
   },
   overrides: {
+    MuiTableRoot: {
+      background: 'transparent'
+    },
     MuiTableHead: {
       root: {
         textTransform: 'uppercase'
       },
     },
+    MuiCssBaseline: {
+      "@global": {
+        body: {
+          width: 'auto',
+          height: 'auto',
+          background: `url(bg${getRandomInt(4)}.png)`,
+          backgroundSize: 'cover'
+        }
+      }
+    }
   },
 });
 

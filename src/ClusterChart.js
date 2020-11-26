@@ -19,8 +19,6 @@ export default function ClusterChart({data, xrs}) {
   if (!xrs) xAxis = x_axis.map(t => (new Date(parseFloat(t) * 1000)).toLocaleString('ru-RU'));
   if (xrs) xAxis = x_axis
 
-
-
   return (
     <HighchartsReact
       highcharts={Highcharts}
@@ -54,8 +52,8 @@ export default function ClusterChart({data, xrs}) {
         },
         colorAxis: {
           min: 0,
-          minColor: '#ebe7ee',
-          maxColor: '#241c18'
+          minColor: 'rgba(167,167,167,0.1)',
+          maxColor: 'rgba(167,167,167,1)'
         },
         legend: {
           align: 'right',
@@ -66,7 +64,7 @@ export default function ClusterChart({data, xrs}) {
           symbolHeight: 350
         },
         tooltip: {
-          formatter: function (e) {
+          formatter: function () {
             return `T: ${this.series.xAxis.categories[this.point.x]}<br>
                         Q: ${(this.point.value).toLocaleString('ru-RU')}<br>
                         P: ${this.series.yAxis.categories[this.point.y]}+<br>
@@ -81,7 +79,7 @@ export default function ClusterChart({data, xrs}) {
           dataLabels: {
             enabled: true,
             crop: true,
-            shadow: false,
+            shadow: true,
             formatter: function () {
               if (this.point.value !== 0) {
                 return this.point.value.toLocaleString('ru-RU');
@@ -89,7 +87,7 @@ export default function ClusterChart({data, xrs}) {
             },
             style: {
               fontFamily: 'Roboto',
-              color: 'contrast',
+              color: '#242424',
               fontSize: '14px',
               fontWeight: 'normal',
               textOutline: '0px',

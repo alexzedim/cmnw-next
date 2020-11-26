@@ -6,6 +6,7 @@ const useStyles = makeStyles(() => ({
   table: {
     minWidth: 400,
     maxHeight: '760px',
+    backgroundColor: 'transparent'
   }
 }));
 
