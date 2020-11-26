@@ -162,6 +162,7 @@ const ItemPage = ({item}) => {
 
 
 export async function getServerSideProps({query}) {
+  console.log(query)
   const {id} = query;
   const gql = `query Item($id: ID!) {
       item(id: $id, extended: true) {
