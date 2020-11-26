@@ -5,7 +5,7 @@ import {Field, Form, Formik} from 'formik';
 import ArrowForwardOutlinedIcon from '@material-ui/icons/ArrowForwardOutlined';
 import {Button, Container, Grid, makeStyles, MenuItem, Typography} from "@material-ui/core";
 import MuiTextField from '@material-ui/core/TextField';
-import {fieldToTextField, TextField} from 'formik-material-ui';
+import {TextField} from 'formik-material-ui';
 import {dma_commands, realms} from "../src/Interfaces";
 import {Autocomplete} from 'formik-material-ui-lab';
 
@@ -25,21 +25,6 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(1),
   },
 }));
-
-function UpperCasingTextField(props) {
-  const {
-    form: {setFieldValue},
-    field: {name},
-  } = props;
-  const onChange = React.useCallback(
-    (event) => {
-      const {value} = event.target;
-      setFieldValue(name, value ? value.toUpperCase() : '');
-    },
-    [setFieldValue, name]
-  );
-  return <MuiTextField {...fieldToTextField(props)} onChange={onChange} />;
-}
 
 export default function DMA() {
   const classes = useStyles();
@@ -102,7 +87,7 @@ export default function DMA() {
                     <React.Fragment>
                       <Grid item xs={3}>
                         <Field
-                          component={UpperCasingTextField}
+                          component={TextField}
                           name="item"
                           type="text"
                           label="Item Name"
@@ -138,7 +123,7 @@ export default function DMA() {
                     <React.Fragment>
                       <Grid item xs={3}>
                         <Field
-                          component={UpperCasingTextField}
+                          component={TextField}
                           name="item"
                           type="text"
                           label="Item Name"
