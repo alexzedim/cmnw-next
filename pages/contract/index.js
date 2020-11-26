@@ -147,7 +147,7 @@ const ContractPage = ({contracts_data}) => {
 export async function getServerSideProps({query}) {
   const {realmSlug, itemSlug, tenor} = query;
   //const contracts_data = await fetch(encodeURI(`http://${process.env.api}/contracts/${tenor}/${itemSlug}@${realmSlug}`)).then(res => res.json());
-  return {props: {contracts_data}}
+  return {props: {}}
 }
 
 export default ContractPage
