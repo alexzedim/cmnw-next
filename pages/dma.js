@@ -58,16 +58,14 @@ export default function DMA() {
               command: 'item',
               item: 'WOWTOKEN',
               realm: { value: "gordunni", label: "Гордунни" },
-              hubs: [{ value: "gordunni", label: "Гордунни" }],
+              hubs: [{ value: "gordunni", label: "Гордунни" }]
             }}
             onSubmit={async (values, {setSubmitting}) => {
               await setSubmitting(false);
-              if (values.item === 'item') {
-                await Router.push('/item/' + values.item + '@' + values.realm.value);
-              } else {
-                console.log(values.hubs.map(({value}) => value))
-                await Router.push('/item/' + values.item + '@' + values.hubs.map(({value}) => value).join(';'));
-              }
+              let realm_query = '1602';
+              if (values.item === 'item') realm_query = values.realm.value
+              if (values.item === 'xrs') realm_query = values.hubs.map(({value}) => value).join(';');
+              await Router.push('/item/' + values.item + '@' + realm_query);
             }}
           >
             {({
