@@ -1,14 +1,13 @@
 import React from 'react';
 import Document, {Head, Html, Main, NextScript} from 'next/document';
 import {ServerStyleSheets} from '@material-ui/core/styles';
-import theme from '../src/Theme';
 
 export default class MyDocument extends Document {
   render() {
     return (
       <Html lang="en">
         <Head>
-          <meta name="theme-color" content={theme.palette.primary.main}/>
+          <meta name="theme-color" content={'#b9b5bc'}/>
           <link rel="apple-touch-icon" sizes="180x180" href={"/apple-touch-icon.png"}/>
           <link rel="icon" type="image/png" sizes="32x32" href={"/favicon-32x32.png"}/>
           <link rel="icon" type="image/png" sizes="16x16" href={"/favicon-16x16.png"}/>
