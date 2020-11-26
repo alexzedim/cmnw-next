@@ -1,282 +1,91 @@
 import React from "react";
-import { Formik, Form, Field } from 'formik';
-import Router from 'next/router'
-import ArrowForwardOutlinedIcon from '@material-ui/icons/ArrowForwardOutlined';
-import { Autocomplete } from "material-ui-formik-components/Autocomplete";
 import MetaHead from '../src/MetaHead'
-import { commands, type, realms } from "../src/Interfaces";
-import {
-    Container, Grid,
-    MenuItem, TextField, makeStyles,
-    Typography, Button
-} from "@material-ui/core";
+import {Card, CardMedia, CardContent, Grid, makeStyles, Typography} from "@material-ui/core";
+import Link from "../src/Link";
 
 const useStyles = makeStyles(theme => ({
-    root: {
-        height: '93vh',
+  root: {
+    height: '93vh',
+    width: '100%'
+  },
+  index: {
+    marginRight: "auto",
+    marginLeft: "auto",
+  },
+  card: {
+    paddingTop: theme.spacing(5),
+    padding: theme.spacing(5),
+    backgroundColor: 'transparent',
+    border: "none",
+    boxShadow: "none"
+  },
+  media: {
+    borderRadius: 10,
+    height: 600,
+    filter: 'grayscale(75%) opacity(30%)',
+    '&:hover': {
+      filter: 'none',
     },
-    searchField: {
-        margin: theme.spacing(2, 0, 2),
-    },
-    searchbar: {
-        marginRight: "auto",
-        marginLeft: "auto",
-    },
-    search: {
-        marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(1),
-    },
-    dropdown: {
-        marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(1),
-        width: '100%',
-    },
+  },
 }));
 
-function Index () {
-    const classes = useStyles();
-    return (
-        <main>
-            <MetaHead
-                title={"Conglomerat"}
-                description={"World of Warcraft: In-game decision-making superiority starts here"}
-                image={"https://conglomerat.group/logo.png"}
-            />
-            <Grid container direction="column" justify="center" alignItems="center" className={classes.root}>
-                <Container className={classes.searchbar}>
-                    <Formik
-                        initialValues={{
-                            command: 'item',
-                            item: 'ZNTD',
-                            realm: { label: 'Гордунни', value: 'gordunni' },
-                            character: 'Блюрателла',
-                            guild: 'Депортация',
-                            type: 'a',
-                            hash: '0',
-                        }}
-                        onSubmit={async (values, { setSubmitting }) => {
-                            await setSubmitting(false);
-                            let query = '';
-                            if (values.command === 'character') {
-                                query += `${values.character}@${values.realm.value}`
-                            } else if (values.command === 'guild') {
-                                query += `${values.guild}@${values.realm.value}`
-                            } else if (values.command === 'hash') {
-                                query += `${values.type}@${values.hash}`
-                            } else if (values.command === 'item') {
-                                query += `${values.item}@${values.realm.value}`
-                            }
-                            await Router.push('/' + values.command + '/' + query);
-                        }}
-                    >
-                    {({
-                          values,
-                          handleChange,
-                          handleBlur,
-                          /* and other goodies */
-                      }) => (
-                        <Form className={classes.searchField}>
-                            <Grid container spacing={3} direction="row" justify="center" alignItems="center">
-                                <Grid item xs={3}>
-                                    <TextField
-                                        name="command"
-                                        select
-                                        label="Select command"
-                                        className={classes.dropdown}
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                        value={values.command}
-                                        variant="outlined"
-                                    >
-                                    {commands.map((option) => (
-                                        <MenuItem key={option.value} value={option.value}>
-                                            {option.label}
-                                        </MenuItem>
-                                    ))}
-                                    </TextField>
-                                </Grid>
-                                {values.command === "item" && (
-                                    <React.Fragment>
-                                        <Grid item xs={3}>
-                                            <TextField
-                                                type="text"
-                                                name="item"
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                value={values.item}
-                                                fullWidth id="outlined-basic"
-                                                label="Item"
-                                                className={classes.search}
-                                                variant="outlined"
-                                            />
-                                        </Grid>
-                                        <Grid item xs={1}>
-                                            <Typography variant="h3" align="center" style={{textTransform: 'uppercase', margin: '0'}}>
-                                                @
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item xs={3}>
-                                            <Field
-                                                name="realm"
-                                                required
-                                                options={realms}
-                                                component={Autocomplete}
-                                                className={classes.dropdown}
-                                                textFieldProps={{
-                                                    label: "Realm",
-                                                    variant: "outlined",
-                                                    margin: 'none',
-                                                }}
-                                            />
-                                        </Grid>
-                                    </React.Fragment>
-                                )}
-                                {values.command === "wowtoken" && (
-                                    <React.Fragment>
-                                        <Grid item xs={7}>
-                                            <Field
-                                                name="realm"
-                                                required
-                                                options={realms}
-                                                component={Autocomplete}
-                                                className={classes.dropdown}
-                                                textFieldProps={{
-                                                    label: "Realm",
-                                                    variant: "outlined",
-                                                    margin: 'none',
-                                                }}
-                                            />
-                                        </Grid>
-                                    </React.Fragment>
-                                )}
-                                {values.command === "character" && (
-                                    <React.Fragment>
-                                        <Grid item xs={3}>
-                                            <TextField
-                                                type="text"
-                                                name="character"
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                value={values.character}
-                                                fullWidth id="outlined-basic"
-                                                label="Character"
-                                                className={classes.search}
-                                                variant="outlined"
-                                            />
-                                        </Grid>
-                                        <Grid item xs={1}>
-                                            <Typography variant="h3" align="center" style={{textTransform: 'uppercase', margin: '0'}}>
-                                                @
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item xs={3}>
-                                            <Field
-                                                name="realm"
-                                                required
-                                                options={realms}
-                                                component={Autocomplete}
-                                                className={classes.dropdown}
-                                                textFieldProps={{
-                                                    label: "Realm",
-                                                    variant: "outlined",
-                                                    margin: 'none',
-                                                }}
-                                            />
-                                        </Grid>
-                                    </React.Fragment>
-                                )}
-                                {values.command === "guild" && (
-                                    <React.Fragment>
-                                        <Grid item xs={3}>
-                                            <TextField
-                                                type="text"
-                                                name="guild"
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                value={values.guild}
-                                                fullWidth id="outlined-basic"
-                                                label="Guild"
-                                                className={classes.search}
-                                                variant="outlined"
-                                            />
-                                        </Grid>
-                                        <Grid item xs={1}>
-                                            <Typography variant="h3" align="center" style={{textTransform: 'uppercase', margin: '0'}}>
-                                                @
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item xs={3}>
-                                            <Field
-                                                name="realm"
-                                                required
-                                                options={realms}
-                                                component={Autocomplete}
-                                                className={classes.dropdown}
-                                                textFieldProps={{
-                                                    label: "Realm",
-                                                    variant: "outlined",
-                                                    margin: 'none',
-                                                }}
-                                            />
-                                        </Grid>
-                                    </React.Fragment>
-                                )}
-                                {values.command === "hash" && (
-                                    <React.Fragment>
-                                        <Grid item xs={3}>
-                                            <TextField
-                                                name="type"
-                                                select
-                                                label="Type"
-                                                className={classes.dropdown}
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                value={values.type}
-                                                variant="outlined"
-                                            >
-                                            {type.map((option) => (
-                                                <MenuItem key={option.value} value={option.value}>
-                                                    {option.label}
-                                                </MenuItem>
-                                            ))}
-                                            </TextField>
-                                        </Grid>
-                                        <Grid item xs={1}>
-                                            <Typography variant="h3" align="center" style={{textTransform: 'uppercase', margin: '0'}}>
-                                                @
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item xs={3}>
-                                            <TextField
-                                                type="text"
-                                                name="hash"
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                value={values.hash}
-                                                fullWidth id="outlined-basic"
-                                                label="Hash"
-                                                className={classes.search}
-                                                variant="outlined"
-                                            />
-                                        </Grid>
-                                    </React.Fragment>
-                                )}
-                                <Grid item xs={1}>
-                                    <Button type="submit" variant="outlined" color="secondary" size="large">
-                                        <ArrowForwardOutlinedIcon />
-                                    </Button>
-                                </Grid>
-                            </Grid>
-                        </Form>
-                    )}
-                    </Formik>
-                </Container>
-                <Typography variant="overline" align="center" style={{textTransform: 'uppercase'}}>
-                    GraphQL is here. Get ready for something new!
+function Index() {
+  const classes = useStyles();
+  return (
+    <main>
+      <MetaHead
+        title={"Conglomerat"}
+        description={"World of Warcraft: In-game decision-making superiority starts here"}
+        image={"https://conglomerat.group/logo.png"}
+      />
+      <Grid container direction="row" justify="center" alignItems="baseline" className={classes.root}>
+        <Grid item xs={12} sm={6} md={6}>
+          <Link href={"/osint"} underline="none">
+            <Card className={classes.card} align="center">
+              <CardMedia
+                className={classes.media}
+                component="img"
+                alt="OSINT"
+                image="https://i.imgur.com/BnWGWJA.jpg"
+                title="OSINT"
+                src={'/osint.jpg'}
+              />
+              <CardContent>
+                <Typography variant="overline" color="textSecondary" component="p">
+                  Use OSINT module for requesting an extended information about characters and guilds. <br/>
+                  Track similarities between them and certain events with realm statistics.
                 </Typography>
-            </Grid>
-        </main>
-    )
+              </CardContent>
+            </Card>
+          </Link>
+        </Grid>
+        <Grid item xs={12} sm={6} md={6}>
+          <Link href={"/dma"} underline="none">
+            <Card className={classes.card} align="center">
+              <CardMedia
+                className={classes.media}
+                component="img"
+                alt="Direct Market Access"
+                image="https://i.imgur.com/GWYaAgz.jpg"
+                title="Direct Market Access"
+                src={'/dma.jpg'}
+              />
+              <CardContent>
+                <Typography variant="overline" color="textSecondary" component="p">
+                  The Direct Market Access provides you  transparent picture of the auction houses with capability to evaluate any item and find difference between their market and derivative prices not just only on one realm, but within the whole region.
+                </Typography>
+              </CardContent>
+            </Card>
+          </Link>
+        </Grid>
+        <Grid item xs={12} sm={12} md={12} align="center">
+          <Typography variant="overline" align="center" style={{textTransform: 'uppercase'}}>
+            More things to come, stay tuned!
+          </Typography>
+        </Grid>
+      </Grid>
+    </main>
+  )
 }
 
 export default Index

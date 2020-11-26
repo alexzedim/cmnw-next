@@ -1,16 +1,16 @@
 import React from "react";
-import { Typography } from "@material-ui/core";
+import {Typography} from "@material-ui/core";
 import humanizeString from 'humanize-string'
 
-export default function ContractData ({data}) {
+export default function ContractData({data}) {
 
-    if (!data) return ('')
+  if (!data) return ('')
 
-    return (
-        Object.entries(data).map(([k, v], i) => (
-            <Typography key={i} variant="caption" display="block" gutterBottom>
-                {humanizeString(k)}: {v}
-            </Typography>
-        ))
-    )
+  return (
+    Object.entries(data).map(([k, v], i) => (
+      <Typography key={i} variant="caption" display="block" gutterBottom>
+        {humanizeString(k)}: {v}
+      </Typography>
+    ))
+  )
 }

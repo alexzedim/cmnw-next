@@ -1,9 +1,10 @@
 import React from "react";
 import {makeStyles} from '@material-ui/core/styles';
 import {Container, Divider, Typography} from "@material-ui/core";
-import CharactersTable from "../../src/CharactersTable";
+import RealmsTable from "../../src/RealmsTable";
 import {useRouter} from "next/router";
 import MetaHead from '../../src/MetaHead'
+
 
 const useStyles = makeStyles(theme => ({
   divider: {
@@ -21,26 +22,27 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function FindPage({hash}) {
-  const {query: {query_hash}} = useRouter()
+function RealmsInfo({realms}) {
+  const {query} = useRouter()
+  const title = `REALMSINFO:${query.region}`.toUpperCase();
   const classes = useStyles();
   return (
     <main>
       <MetaHead
-        title={query_hash.toUpperCase()}
-        description={`FIND ${query_hash.split('@')[0].toUpperCase()} — return all available hash matches for dynamic hash value. Don't bookmark this page!`}
+        title={title}
+        description={`${title} — return information about realms and it's population`}
       />
       <div className={classes.titleBlock}>
         <Container maxWidth="lg">
           <Typography component="h1" variant="h2" align="center" color="secondary" className={classes.title}
                       gutterBottom>
-            {query_hash.toUpperCase()}
+            {title}
           </Typography>
         </Container>
       </div>
       <Divider className={classes.divider}/>
       <Container maxWidth={false}>
-        <CharactersTable data={hash} members={false}/>
+        <RealmsTable data={realms}/>
         <Divider className={classes.divider}/>
       </Container>
     </main>
@@ -48,42 +50,21 @@ function FindPage({hash}) {
 }
 
 export async function getServerSideProps({query}) {
-  const {query_hash} = query;
-  const gql = `query Hash($query_hash: String!) {
-        hash(query: $query_hash) {
+  const {region} = query;
+  const gql = `query Realms($region: String) {
+        realms(name: $region) {
             _id
             name
-            realm {
-              name
-              slug
-            }
-            guild {
-              name
-              slug
-            }
-            hash {
-              a
-              b
-              c
-              t
-            }
-            ilvl {
-              eq
-            }
-            level
-            media {
-              avatar_url
-            }
-            faction
-            race
-            gender
-            character_class
-            spec
-            level
-            lastModified
-        } 
+            slug
+            name_locale
+            locale
+            connected_realm_id
+            golds
+            valuations
+            auctions
+        }
     }`
-  const {data: {hash}} = await fetch(`http://${process.env.api}`, {
+  let {data: {realms}} = await fetch(`http://${process.env.api}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -91,10 +72,10 @@ export async function getServerSideProps({query}) {
     },
     body: JSON.stringify({
       query: gql,
-      variables: {query_hash},
+      variables: {region},
     })
   }).then(res => res.json())
-  return {props: {hash}}
+  return {props: {realms: realms}}
 }
 
-export default FindPage
+export default RealmsInfo

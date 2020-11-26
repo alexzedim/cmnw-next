@@ -1,13 +1,14 @@
 {
   "name": "conglomerat-front",
-  "version": "4.1.0",
+  "version": "4.1.5",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "^4.10.0",
+    "@material-ui/core": "^4.11.1",
     "@material-ui/lab": "^4.0.0-alpha.56",
     "@material-ui/styles": "^4.10.0",
     "clsx": "^1.1.0",
-    "formik": "^2.1.4",
+    "formik": "^2.2.5",
+    "formik-material-ui": "^3.0.0",
     "gray-matter": "^4.0.2",
     "highcharts": "^8.2.2",
     "highcharts-react-official": "^3.0.0",
@@ -36,6 +37,7 @@
   "devDependencies": {
     "@material-ui/icons": "^4.9.1",
     "babel-plugin-inline-react-svg": "^1.1.1",
+    "formik-material-ui-lab": "^0.0.7",
     "react-markdown": "^5.0.2"
   },
   "resolutions": {
