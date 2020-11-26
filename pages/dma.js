@@ -62,9 +62,12 @@ export default function DMA() {
             }}
             onSubmit={async (values, {setSubmitting}) => {
               await setSubmitting(false);
-              let realm_query = '1602';
-              if (values.item === 'item') realm_query = values.realm.value
-              if (values.item === 'xrs') realm_query = values.hubs.map(({value}) => value).join(';');
+              let realm_query;
+              if (values.command === 'item') {
+                realm_query = values.realm.value
+              } else {
+                realm_query = values.hubs.map(({value}) => value).join(';');
+              }
               await Router.push('/item/' + values.item + '@' + realm_query);
             }}
           >
