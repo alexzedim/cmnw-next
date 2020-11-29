@@ -58,7 +58,7 @@ const ItemPage = ({item}) => {
   } = item
 
 
-  const title = `${ticker || name['en_GB']}${(realms.length === 1) ? (('ticker' in realms[0]) ? (`@${realms[0].ticker}`) : (`@${realms[0].name}`)) : ("")}`
+  const title = `${ticker || name['en_GB']}${(realms.length === 1) ? ((realms[0].ticker) ? (`@${realms[0].ticker}`) : (`@${realms[0].name}`)) : ("")}`
 
   const realm_query = realms.map(({slug}) => slug).join(';')
   const timestamp = Math.min(...realms.map(({auctions}) => auctions));
