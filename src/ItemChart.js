@@ -13,7 +13,7 @@ export default function ItemChart({name, data}) {
     ['LONG', '2h - 12h'],
     ['VERY_LONG', '1D - 2D'],
   ])
-  console.log(name, data[0].item)
+
   return (
     <MaterialTable
       title="Item Feed"

@@ -32,8 +32,7 @@ function FindPage({hash}) {
       />
       <div className={classes.titleBlock}>
         <Container maxWidth="lg">
-          <Typography component="h1" variant="h2" align="center" color="secondary" className={classes.title}
-                      gutterBottom>
+          <Typography component="h1" variant="h2" align="center" color="secondary" className={classes.title} gutterBottom>
             {query_hash.toUpperCase()}
           </Typography>
         </Container>
@@ -50,39 +49,39 @@ function FindPage({hash}) {
 export async function getServerSideProps({query}) {
   const {query_hash} = query;
   const gql = `query Hash($query_hash: String!) {
-        hash(query: $query_hash) {
-            _id
-            name
-            realm {
-              name
-              slug
-            }
-            guild {
-              name
-              slug
-            }
-            hash {
-              a
-              b
-              c
-              t
-            }
-            ilvl {
-              eq
-            }
-            level
-            media {
-              avatar_url
-            }
-            faction
-            race
-            gender
-            character_class
-            spec
-            level
-            lastModified
-        } 
-    }`
+    hash(query: $query_hash) {
+      _id
+      name
+      realm {
+        name
+        slug
+      }
+      guild {
+        name
+        slug
+      }
+      hash {
+        a
+        b
+        c
+        t
+      }
+      ilvl {
+        eq
+      }
+      level
+      media {
+        avatar_url
+      }
+      faction
+      race
+      gender
+      character_class
+      spec
+      level
+      lastModified
+    } 
+  }`
   const {data: {hash}} = await fetch(`http://${process.env.api}`, {
     method: 'POST',
     headers: {

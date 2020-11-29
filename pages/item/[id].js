@@ -207,9 +207,19 @@ export async function getServerSideProps({query}) {
           value
           flag
           details {
+            min_price
+            quantity
             queue_cost
             queue_quantity
+            orders
             rank
+            wi
+            quotation
+            swap_type
+            description
+            price_size
+            quantity
+            open_interest
             reagent_items {
               _id
               quality
@@ -291,13 +301,6 @@ export async function getServerSideProps({query}) {
               value
               quantity
             }
-            wi
-            quotation
-            swap_type
-            description
-            price_size
-            quantity
-            open_interest
           }
         }
         chart {
