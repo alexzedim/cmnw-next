@@ -72,7 +72,7 @@ export default function ItemChart({name, data}) {
       ]}
       data={data}
       style={{
-        backgroundColor: '#ebe7ee',
+        backgroundColor: 'inherit',
         textTransform: "uppercase"
       }}
       options={{
@@ -81,7 +81,7 @@ export default function ItemChart({name, data}) {
         search: false,
         pageSizeOptions: [5, 10, 15],
         showTitle: false,
-        headerStyle: {backgroundColor: '#ebe7ee'}
+        headerStyle: {backgroundColor: 'inherit'}
       }}
     />
   )
