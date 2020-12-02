@@ -14,19 +14,22 @@ export default function XRSRates({stackSize = 200}) {
         Guild Bank 6 Tabs (x{stackSize}) Capacity: {98 * 6 * stackSize}
       </Typography>
       <Typography variant="caption" display="block" gutterBottom>
-        Guild Transfer Price (RUB): 2000
+        Character Transfer Price: 25 EUR / 1350 RUB
       </Typography>
       <Typography variant="caption" display="block" gutterBottom>
-        Character Inventory Slots (30 Slot Bags & 16 Slot Backpack): {30 * 4 + 16}
+        Guild Transfer Price: 35 EUR / 2000 RUB
       </Typography>
       <Typography variant="caption" display="block" gutterBottom>
-        Character Inventory Capacity (30 Slot Bags & 16 Slot Backpack): {136 * stackSize}
+        Character Inventory Slots (32 Slot Bags & 16 Slot Backpack): {32 * 4 + 16}
       </Typography>
       <Typography variant="caption" display="block" gutterBottom>
-        Character Bank Slots (30 Slot Bags): {7 * 30 + 28}
+        Character Inventory Capacity (32 Slot Bags & 16 Slot Backpack): {142 * stackSize}
       </Typography>
       <Typography variant="caption" display="block" gutterBottom>
-        Character Bank Capacity (30 Slot Bags): {(7 * 30 + 28) * stackSize}
+        Character Bank Slots (32 Slot Bags): {7 * 32 + 28}
+      </Typography>
+      <Typography variant="caption" display="block" gutterBottom>
+        Character Bank Capacity (32 Slot Bags): {(7 * 32 + 28) * stackSize}
       </Typography>
       <Typography variant="caption" display="block" gutterBottom>
         Character Reagent Bank Slots: 98
@@ -41,10 +44,10 @@ export default function XRSRates({stackSize = 200}) {
         Gold Cap Limit: 9999999
       </Typography>
       <Typography variant="caption" display="block" gutterBottom>
-        Gold Cap XRS (per x1000) / Character Transfer RUB: {1350 / 10000}
+        Gold Cap XRS (per x1000) / Character Transfer: {35 / 10000} EUR / {1350 / 10000} RUB
       </Typography>
       <Typography variant="caption" display="block" gutterBottom>
-        Gold Cap XRS (per x1000) / Guild Transfer RUB: {2000 / 10000}
+        Gold Cap XRS (per x1000) / Guild Transfer: {35 / 10000} EUR / {2000 / 10000} RUB
       </Typography>
     </React.Fragment>
   )
