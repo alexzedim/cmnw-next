@@ -50,10 +50,14 @@ export default function DMA() {
               let realm_query;
               if (values.command === 'item') {
                 realm_query = values.realm.value
-              } else {
+                await Router.push('/item/' + values.item + '@' + realm_query);
+              } else if (values.command === 'xrs') {
                 realm_query = values.hubs.map(({value}) => value).join(';');
+                await Router.push('/item/' + values.item + '@' + realm_query);
+              } else if (values.command === 'group') {
+                realm_query = values.hubs.map(({value}) => value).join(';');
+                await Router.push('/group_items/' + values.item + '@' + realm_query);
               }
-              await Router.push('/item/' + values.item + '@' + realm_query);
             }}
           >
             {({
@@ -120,6 +124,43 @@ export default function DMA() {
                     </React.Fragment>
                   )}
                   {values.command === "xrs" && (
+                    <React.Fragment>
+                      <Grid item xs={3}>
+                        <Field
+                          component={TextField}
+                          name="item"
+                          type="text"
+                          label="Item Name"
+                          variant="outlined"
+                          style={{width: 300}}
+                        />
+                      </Grid>
+                      <Grid item xs={1}>
+                        <Typography variant="h3" align="center" style={{textTransform: 'uppercase', margin: '0'}}>
+                          @
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={3}>
+                        <Field
+                          name="hubs"
+                          multiple
+                          component={Autocomplete}
+                          options={realms}
+                          getOptionLabel={(option) => option.label}
+                          style={{width: 300}}
+                          renderInput={(params) => (
+                            <MuiTextField
+                              {...params}
+                              error={touched['hubs'] && !!errors['hubs']}
+                              label="Realms"
+                              variant="outlined"
+                            />
+                          )}
+                        />
+                      </Grid>
+                    </React.Fragment>
+                  )}
+                  {values.command === "group" && (
                     <React.Fragment>
                       <Grid item xs={3}>
                         <Field

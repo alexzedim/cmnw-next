@@ -1,23 +1,3 @@
-const commands = [
-  {
-    value: 'character',
-    label: 'CHAR',
-  },
-  {
-    value: 'guild',
-    label: 'GUILD',
-  },
-  {
-    value: 'hash',
-    label: 'HASH',
-    fields: ['type', 'match'],
-  },
-  {
-    value: 'item',
-    label: 'ITEM',
-  },
-]
-
 const osint_commands = [
   {
     value: 'character',
@@ -45,6 +25,10 @@ const dma_commands = [
   {
     value: 'xrs',
     label: 'CROSS REALM',
+  },
+  {
+    value: 'group',
+    label: 'GROUP ITEMS',
   }
 ]
 
@@ -1185,7 +1169,6 @@ const contributors = [
 ];
 
 export {
-  commands,
   type,
   realms,
   osint_commands,
