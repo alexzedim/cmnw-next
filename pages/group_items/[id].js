@@ -24,24 +24,31 @@ const useStyles = makeStyles(theme => ({
 
 function ItemGroup({items}) {
   const {query: {id}} = useRouter()
-  console.log(id)
+
+  const [query, realms_string] = id.split('@');
+
+  let title = query;
+  if (items && items.length && items[0] && items[0].realms.length === 1) title += `@${items[0].realms[0].name}`
+
+  title = title.toUpperCase();
+
   const classes = useStyles();
   return (
     <main>
       <MetaHead
-        title={id.toUpperCase()}
-        description={`ttt`}
+        title={title}
+        description={`ITEMS GROUP: `}
       />
       <div className={classes.titleBlock}>
         <Container maxWidth="lg">
           <Typography component="h1" variant="h2" align="center" color="secondary" className={classes.title} gutterBottom>
-            {id.toUpperCase()}
+            {title}
           </Typography>
         </Container>
       </div>
       <Divider className={classes.divider}/>
       <Container maxWidth={false}>
-        <ItemTable data={items} />
+        <ItemTable data={items} direction={realms_string} />
         <Divider className={classes.divider}/>
       </Container>
     </main>

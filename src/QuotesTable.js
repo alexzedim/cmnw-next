@@ -5,7 +5,7 @@ import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow}
 const useStyles = makeStyles(() => ({
   table: {
     minWidth: 400,
-    maxHeight: '760px',
+    maxHeight: 570,
     backgroundColor: 'transparent'
   }
 }));

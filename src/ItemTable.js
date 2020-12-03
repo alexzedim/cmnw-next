@@ -2,16 +2,13 @@ import React from "react";
 import TableIcons from "./TableIcons";
 import MaterialTable from "material-table";
 import {makeStyles} from '@material-ui/core/styles';
+import CheckIcon from '@material-ui/icons/Check';
+import ShowChartIcon from '@material-ui/icons/ShowChart';
 import {
-  Avatar,
   Card,
   CardContent,
   Divider,
   Grid,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText
 } from '@material-ui/core';
 import Link from "./Link";
 
@@ -29,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function ItemTable({data, pageSize = 15}) {
+export default function ItemTable({data, direction}) {
   if (!data) return <div>No valuations available</div>
   const classes = useStyles();
   return (
@@ -37,20 +34,33 @@ export default function ItemTable({data, pageSize = 15}) {
       title="Group Items"
       icons={TableIcons}
       columns={[
-        {title: 'ID', field: '_id'},
+        {title: 'ID', field: '_id', align: 'left', cellStyle: { minWidth: 65, width: 65, maxWidth: 65 }},
         {
-          title: 'Icon',
+          title: '',
           field: 'icon',
+          align: 'right',
+          cellStyle: { whiteSpace: "nowrap", minWidth: 65, width: 65, maxWidth: 65 },
           render: ({icon}) => ((icon) ? (<img src={icon} alt="I" style={{width: 50, borderRadius: '50%'}}/>) : (''))
         },
-        {title: 'Item', field: 'name', render: ({ticker, name}) => (<React.Fragment><p>{ticker}<br/>{name['en_GB']}<br/>{name['ru_RU']}</p></React.Fragment>)},
+        {
+          title: 'Item',
+          field: 'name',
+          align: 'left',
+          cellStyle: { whiteSpace: "nowrap", minWidth: 500, width: 500 },
+          render: ({ticker, name}) => (<React.Fragment><p>{ticker}<br/>{name['en_GB']}<br/>{name['ru_RU']}</p></React.Fragment>)},
         {title: 'Expansion', field: 'expansion'},
         {title: 'Profession', field: 'profession_class'},
         {title: 'Stack Size', field: 'stackable'},
-        {title: 'Item Class',  render: ({item_class, item_subclass}) => (item_class + ' / ' + item_subclass)},
-        {title: 'Min Buy (CTD) / Max Sell ', field: 'valuations', render: ({valuations}) => Math.min(...valuations.filter(v => v.flag === 'BUY').map(v => v.value)) + ' / ' +  Math.max(...valuations.filter(v => v.flag === 'SELL').map(v => v.value))},
-        //TODO valuations item
-        {title: 'Score', field: 'score'},
+        {
+          title: 'Item Class',
+          align: 'left',
+          cellStyle: { whiteSpace: "nowrap", minWidth: 250, width: 250 },
+          render: ({item_class, item_subclass, inventory_type}) => (<React.Fragment><p>{item_class}<br/>{item_subclass}<br/>{inventory_type}</p></React.Fragment>)},
+        {title: 'Min Buy (CTD)', field: 'valuations', render: ({valuations}) => Math.min(...valuations.filter(v => v.flag === 'BUY').map(v => v.value))},
+        {title: 'Max Sell', field: 'valuations', render: ({valuations}) => Math.max(...valuations.filter(v => v.flag === 'SELL').map(v => v.value))},
+        {title: 'Item',  align: 'center', render: ({_id}) => (_id && direction) ? (<Link href={`/item/${_id}@${direction}`} color="secondary" underline="hover"><ShowChartIcon/></Link>) : (<ShowChartIcon/>)},
+        {title: 'Contracts', field: 'contracts',  align: 'center', render: ({contracts}) => (contracts) ? (<CheckIcon/>) : ('')},
+        {title: 'Score', field: 'score', type: 'numeric', defaultSort: 'desc'},
       ]}
       data={data}
       style={{
