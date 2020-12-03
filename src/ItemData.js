@@ -28,17 +28,17 @@ export default function ItemData({data}) {
           if (field === 'name') {
             return (
               <Typography key={i} variant="caption" display="block" gutterBottom>
-                {field}: {data[field].en_GB}
+                {field}: {data[field]['en_GB']}
               </Typography>
             )
-          } else {
+          } else if (data[field] !== null) {
             return Object.entries(data[field]).map(([k, v]) => (
               <Typography key={i} variant="caption" display="block" gutterBottom>
                 {humanizeString(field)} {humanizeString(k)}: {v}
               </Typography>
             ))
           }
-        } else {
+        } else if (data[field] !== null) {
           return (
             <Typography key={i} variant="caption" display="block" gutterBottom>
               {humanizeString(field)}: {data[field]}
