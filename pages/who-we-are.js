@@ -61,7 +61,7 @@ export default function SignInSide() {
                 first character was a druid on a god-forgotten realm like Ashenvale.
                 Then I created this rogue, that outlived all inactive periods and deletion. I have played on EU-Outland
                 during WoD, and Legion expansions.
-                After that I was invited to russian #2 PvE guild: <Link href={`/guild//фьюжн@soulflayer`}
+                After that I was invited to russian #2 PvE guild: <Link href={`/guild/фьюжн@soulflayer`}
                                                                         color="secondary"
                                                                         underline="hover">Фьюжн@Свежеватель-Душ</Link> (<Link
                 href="https://www.wowprogress.com/pve/ru/rating.tier19" prefetch={false} color="secondary"
