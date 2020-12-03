@@ -4,7 +4,7 @@ description: Manual of DMA.
 updatedAt: 2020-12-01
 ---
 
-#DIRECT MARKET ACCESS
+# DIRECT MARKET ACCESS
 
 Welcome! It seems like you are first time using this website, and don't understand how it works.
 Don't worry, you are not the first one here, just follow this simple steps bellow and receive what you want.
@@ -23,9 +23,11 @@ First things first: **ITEM**. You could point it by item ID, name or short-name 
 As you may already understand **REALM** argument always represent realms. Their names are locale based, so if you are playing on French realm, look for a familiar francais realm name in dropdown menu.
 Some commands, also support multiple realms as arguments.
 
-## ITEM
+# ITEM
 
  *Full intraday market data for the item, on the selected realm.* 
+
+ Example query: [`>ITEM FLASK@GORDUNNI`](https://conglomerat.group/item/FLASK@gordunni)
  
  ___
  **Level 2 Listing** shows exactly the same picture of auction house listing at the very moment of last update. Standard view.
@@ -51,32 +53,34 @@ Some commands, also support multiple realms as arguments.
  - PREMIUM: weight coefficient (wi) which shows, how much quantity of this item is currently represented as a reagent by this pricing method on the market.
  - DERIVATIVE: queue cost, and resulting quantity for crafting queue. Reagent items, it's quantity and value.
   
-  > *We use smart evaluation method, which always shows us the cheapest way to the item from all available* 
+  > *We use smart evaluation method, which always shows us the cheapest way to the item from all available sources* 
   
   > For example: if it will be cheaper, to replace ingots by ore and melt it, the original reagent ingot will be replaced by this ore in 
   requested amount. So don't be scare, if you are checking inscription methods, and saw herbs or pigments, instead of an ink.
   It seems that it's cheaper to buy it and craft inks by yourself.
 
-**If you saw an item without proper valuation of have an idea to propose, please contact Conglomerat via this page.**
+**If you saw an item without proper valuation of have an idea to propose, please contact Conglomerat via [this page](https://conglomerat.group/help/eu-contact-us).**
 
  ![Valuations](https://i.imgur.com/AXNmJzN.png)
- ___
 
-##CROSS REALM (XRS)
+
+# CROSS REALM (XRS)
 
 *An ultimate tool to compare prices and quantity between different realms*
+
+Example query: [`>XRS: NGHTSHD@GORDUNNI;HOWLING-FJORD;KAZZAK:DRAENOR;OUTLAND;RAVENCREST;SILVERMOON;TARREN-MILL;TWISTING-NETHER`](https://conglomerat.group/item/FLASK@gordunni;howling-fjord;outland;kazzak;draenor;silvermoon;tarren-mill;twisting-nether)
  ___
-  **Cross Realm (XRS) constants** provides rates and decision-making information, necessary for evaluating realm's transfer future P/L and inventory capacity. 
+ **Cross Realm (XRS) constants** provides rates and decision-making information, necessary for evaluating realm's transfer future P/L and inventory capacity. 
   
   > Numbers are always scaled from current item stack size. If you are looking for item with stack size x200, it wil count all parameters for x200 stacking.
-  > If item is not stackable, then it will be x1 for every slot.
+  If item is not stackable, then it will be x1 for every slot.
   
   ![XRS Rates](https://i.imgur.com/mkOSIFg.png)
  ___
 
  **Cluster Chart**
  
- In XRS mode, cluster chart X axis is replaced by realms instead of timestamps, and shows difference in quantity between then for the latest available timestamps.
+ In XRS mode, cluster chart X axis is replaced by realms instead of timestamps, and shows difference in quantity between them for the latest available timestamps.
  Everything else is still the same.
  
  ![Cluster Chart XRS](https://i.imgur.com/MrP7Y4w.png)

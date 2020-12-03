@@ -1,5 +1,5 @@
 ---
-title: (RU) Characters & Guilds
+title: (RU) Персонажи и Гильдии
 description: Описание модуля OSINT.
 updatedAt: 2020-12-01
 ---
@@ -26,10 +26,13 @@ updatedAt: 2020-12-01
 
 Ходит слух, что у каждого персонажа есть неуникальное хэш значение, которое помогает находить сходства между персонажами. Иногда можно увидеть даже альтов! (А иногда и нет)
 
-Но запросы не всегда бывают реле ванты и мы тут вообще не уверены в том, что оно работает корректно. Так что используйте на свой страх и риск!
+Но запросы не всегда бывают релеванты и мы тут вообще не уверены в том, что оно работает корректно. Так что используйте на свой страх и риск!
 
 Тем не менее, если вам все же интересно, попробуйте поискать по готовому хэшу или через команды `GUILD` или `CHARACTER` по клику на соответствующие значения.
 
 ## FILE
 
-SXQgYSBiaXQgc2VjcmV0IHNvLCBpZiB5b3UnZCBsaWtlIHRvIGtub3cgbW9yZSwgcGxlYXNlIGJlIHdlbGNvbWUgYXQ6CgovdyDQmNC90LjRhtC40LDRgtC40LLQsC1nb3JkdW5uaSBXZSBMaXZlIEluIEEgVHdpbGlnaHQgV29ybGQ=
+```
+SXQgYSBiaXQgc2VjcmV0IHNvLCBpZiB5b3UnZCBsaWtlIHRvIGtub3cgbW9yZSwgcGxlYXNlIGJlIHdlbGNvbWUg
+YXQ6CgovdyDQmNC90LjRhtC40LDRgtC40LLQsC1nb3JkdW5uaSBXZSBMaXZlIEluIEEgVHdpbGlnaHQgV29ybGQ=
+```
