@@ -47,7 +47,39 @@ export default function ItemTable({data, direction}) {
           field: 'name',
           align: 'left',
           cellStyle: { whiteSpace: "nowrap", minWidth: 500, width: 500 },
-          render: ({ticker, name}) => (<React.Fragment><p>{ticker}<br/>{name['en_GB']}<br/>{name['ru_RU']}</p></React.Fragment>)},
+          render: ({_id, ticker, name}) => (
+            <React.Fragment>
+              <p>
+                {ticker}<br/>
+                <Link
+                  href={`/item/${_id}@${direction}`}
+                  color="inherit"
+                  variant="inherit"
+                  underline="hover"
+                  data-disable-wowhead-tooltip="false"
+                  data-wh-icon-added="false"
+                  data-wh-rename-link="true"
+                  data-wh-icon-size="small"
+                  data-wowhead={`item=${_id}&xml`}
+                >
+                  {name['en_GB']}<br/>
+                </Link>
+                <Link
+                  href={`/item/${_id}@${direction}`}
+                  color="inherit"
+                  variant="inherit"
+                  underline="hover"
+                  data-disable-wowhead-tooltip="false"
+                  data-wh-icon-added="false"
+                  data-wh-rename-link="true"
+                  data-wh-icon-size="small"
+                  data-wowhead={`domain=ru&item=${_id}&xml`}
+                >
+                  {name['ru_RU']}<br/>
+                </Link>
+              </p>
+            </React.Fragment>
+          )},
         {title: 'Expansion', field: 'expansion'},
         {title: 'Profession', field: 'profession_class'},
         {title: 'Stack Size', field: 'stackable'},
@@ -56,8 +88,14 @@ export default function ItemTable({data, direction}) {
           align: 'left',
           cellStyle: { whiteSpace: "nowrap", minWidth: 250, width: 250 },
           render: ({item_class, item_subclass, inventory_type}) => (<React.Fragment><p>{item_class}<br/>{item_subclass}<br/>{inventory_type}</p></React.Fragment>)},
-        {title: 'Min Buy (CTD)', field: 'valuations', render: ({valuations}) => Math.min(...valuations.filter(v => v.flag === 'BUY').map(v => v.value))},
-        {title: 'Max Sell', field: 'valuations', render: ({valuations}) => Math.max(...valuations.filter(v => v.flag === 'SELL').map(v => v.value))},
+        {title: 'Min Buy (CTD)', field: 'valuations', render: ({_id, valuations}) => (valuations.length) ? (Math.min(...valuations.filter(v => v.flag === 'BUY').map(v => v.value))) : (
+            (direction) ? (<Link href={`/item/${_id}@${direction}`} color="secondary" underline="hover"><ShowChartIcon/></Link>) : (<ShowChartIcon/>)
+          )
+        },
+        {title: 'Max Sell', field: 'valuations', render: ({_id, valuations}) => (valuations.length) ? (Math.max(...valuations.filter(v => v.flag === 'SELL').map(v => v.value))): (
+            (direction) ? (<Link href={`/item/${_id}@${direction}`} color="secondary" underline="hover"><ShowChartIcon/></Link>) : (<ShowChartIcon/>)
+          )
+        },
         {title: 'Item',  align: 'center', render: ({_id}) => (_id && direction) ? (<Link href={`/item/${_id}@${direction}`} color="secondary" underline="hover"><ShowChartIcon/></Link>) : (<ShowChartIcon/>)},
         {title: 'Contracts', field: 'contracts',  align: 'center', render: ({contracts}) => (contracts) ? (<CheckIcon/>) : ('')},
         {title: 'Score', field: 'score', type: 'numeric', defaultSort: 'desc'},
