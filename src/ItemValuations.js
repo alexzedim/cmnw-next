@@ -35,7 +35,7 @@ export default function ItemValuations({data, pageSize = 5}) {
       ]}
       data={data}
       style={{
-        backgroundColor: '#ebe7ee',
+        backgroundColor: 'inherit',
         textTransform: "uppercase"
       }}
       options={{
@@ -44,7 +44,7 @@ export default function ItemValuations({data, pageSize = 5}) {
         pageSize: pageSize,
         pageSizeOptions: [5, 10, 20],
         showTitle: false,
-        headerStyle: {backgroundColor: '#ebe7ee'}
+        headerStyle: {backgroundColor: 'inherit'}
       }}
       detailPanel={[
         {

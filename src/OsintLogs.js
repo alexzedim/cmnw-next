@@ -23,7 +23,7 @@ export default function OSINT_Logs({data, pageSize = 15}) {
       ]}
       data={data}
       style={{
-        backgroundColor: '#ebe7ee',
+        backgroundColor: 'inherit',
         textTransform: "uppercase"
       }}
       options={{
@@ -32,7 +32,7 @@ export default function OSINT_Logs({data, pageSize = 15}) {
         search: false,
         pageSizeOptions: [5, 10, 15],
         showTitle: false,
-        headerStyle: {backgroundColor: '#ebe7ee'}
+        headerStyle: {backgroundColor: 'inherit'}
       }}
     />
   )
