@@ -1,6 +1,6 @@
 ---
-title: (EN) DMA Manual
-description: Description of DMA.
+title: (EN) Items & Auctions
+description: Manual of DMA.
 updatedAt: 2020-12-01
 ---
 

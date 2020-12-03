@@ -1,6 +1,6 @@
 ---
-title: (RU) Инструкция к DMA
-description: Описание возможностей раздела ITEMS & AUCTIONS.
+title: (RU) Items & Auctions
+description: Описание возможностей DMA.
 updatedAt: 2020-12-01
 ---
 
