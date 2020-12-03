@@ -92,3 +92,93 @@ Example query: [`>XRS: NGHTSHD@GORDUNNI;HOWLING-FJORD;KAZZAK:DRAENOR;OUTLAND;RAV
   
   ![Valuations Scatter Plot](https://i.imgur.com/iq6vqBn.png)
  ___
+
+# GROUP ITEMS
+
+If you need to find multiple items by various criteria, or you just want to know, every ticker for every item, then you definitely should use it!
+
+It allows you to find **first 250** items by:
+ - expansions
+ - profession
+ - tickers
+ - tags (*hidden*)
+
+Valuations PRO TIP!
+
+> By default, DMA evaluate every item from the latest expansion, and doesn't look at oldest one. But every item in-game, even BOP
+> like ALCH.CAULDRON or Vial of Sands from CATA can be evaluated, just by requesting it. So if you need somewhere, INFINITY
+> values, don't be shy to request valuations, just by clicks on the icon, in the ITEM column.
+
+___
+
+> You probably didn't know that, but `>ITEM` command always return the highest match score item from `>TEM GROUP` results. 
+> So if your `>ITEM` query goes wrong, or return non-relevant results, just check your query via `>ITEM GROUP` and take a look at the score.
+
+Profession tickers:
+
+ - ENCH
+ - ALCH
+ - COOK
+ - INSC
+ - LTHR 
+ - CLTH 
+ - BSMT
+ - ENGR
+ - JWLC
+ - COOK
+ - HRBS (Herbalism & herbs)
+ - FISH
+ - ORE (Mining & ores)
+
+Example query, returning all fish from Shadowlands and a bit more: 
+[`>GROUPITEMS SHDW.FISH@GORDUNNI`](https://conglomerat.group/group_items/SHDW.FISH.COOK@gordunni)
+
+Or, let's return all the herbs
+[`>GROUPITEMS SHDW.HRBS.HERB@GORDUNNI`](https://conglomerat.group/group_items/SHDW.HRBS.HERB@gordunni)
+
+And group tags:
+
+ - ITEM (x1, mostly gear)
+ - COMMDTY (x20 and x200 stack_size)
+
+Example query, returning all BoE gear from Castle Nathria Raid:
+[`>GROUPITEMS SHDW BOE CASTLE@GORDUNNI`](https://conglomerat.group/group_items/SHDW.BOE.CASTLE@gordunni)
+
+Armor types:
+
+ - CLTH
+ - LTHR
+ - MAIL
+ - PLATE
+
+This query will return all the legendary precursors from tailoring:
+[`>GROUPITEMS CLTH.LEGENDARY@GORDUNNI`](https://conglomerat.group/group_items/CLTH.LEGENDARY@gordunni)
+
+Stats and effects: 
+ 
+ - STR
+ - STM
+ - AGI
+ - INT
+ - VERS
+ - CRIT
+ - HASTE
+ - ...etc
+
+Let's query for ALCH pre-potions:
+[`>GROUPITEMS SHDW.ALCH.POTION@GORDUNNI`](https://conglomerat.group/group_items/SHDW.ALCH.POTION@gordunni)
+
+> You may also see, that most of main stat potion, have tickers like: POTION.$STAT. The same things is for every item,
+> like missive, (MISSIVE.$STAT) or food from cooking (COOK.$STAT)
+
+Expansion tickers: 
+
+ - CLSC
+ - TBC
+ - WOTLK
+ - CATA
+ - MOP
+ - WOD
+ - LGN
+ - BFA
+ - SHDW
