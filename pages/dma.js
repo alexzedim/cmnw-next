@@ -41,7 +41,7 @@ export default function DMA() {
           <Formik
             initialValues={{
               command: 'item',
-              item: 'WOWTOKEN',
+              item: 'FLASK.POWER',
               realm: { value: "gordunni", label: "Гордунни" },
               hubs: [{ value: "gordunni", label: "Гордунни" }]
             }}
