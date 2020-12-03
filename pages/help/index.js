@@ -9,6 +9,8 @@ import MetaHead from '../../src/MetaHead'
 const useStyles = makeStyles(theme => ({
   root: {
     minWidth: 275,
+    backgroundColor: 'transparent',
+    position: 'relative',
   },
   titleBlock: {
     padding: theme.spacing(10, 0, 10),
@@ -55,7 +57,7 @@ export default function Help({posts}) {
           direction="row"
           justify="flex-start"
           alignItems="flex-start"
-          spacing={3}
+          spacing={5}
         >
           {posts.map(({slug, frontmatter: {title, description, updatedAt}}, i) => (
             <Grid key={i} item xs={6} sm={6}>
@@ -72,11 +74,18 @@ export default function Help({posts}) {
                   </Typography>
                 </CardContent>
                 <CardActions>
-                  <Button onClick={() => Router.push(`/help/${slug}`)} size="small">Learn More</Button>
+                  <Button onClick={() => Router.push(`/help/${slug}`)} size="small">Read</Button>
                 </CardActions>
               </Card>
             </Grid>
           ))}
+        </Grid>
+        <Grid container spacing={10}>
+          <Grid item xs={12} sm={12} md={12} align="center">
+            <Typography variant="overline" align="center" style={{textTransform: 'uppercase'}}>
+              Yes, we know :)
+            </Typography>
+          </Grid>
         </Grid>
       </Container>
     </main>
