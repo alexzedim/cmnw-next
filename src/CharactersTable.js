@@ -4,9 +4,7 @@ import MaterialTable from "material-table";
 import Link from "./Link";
 
 export default function CharactersTable({data, members = false}) {
-  if (!data || !data.length) {
-    return ('')
-  }
+  if (!data || !data.length) return ('')
 
   const characters = data.map(({_id, name, realm, guild, hash, ilvl, media, faction, race, gender, character_class, spec, level, lastModified}) => {
 
@@ -142,13 +140,13 @@ export default function CharactersTable({data, members = false}) {
       icons={TableIcons}
       columns={columns}
       data={characters}
-      style={{backgroundColor: '#ebe7ee', textTransform: "uppercase"}}
+      style={{backgroundColor: 'inherit', textTransform: "uppercase"}}
       options={{
         sorting: true,
         pageSize: 20,
         pageSizeOptions: [10, 25, 50],
         showTitle: false,
-        headerStyle: {backgroundColor: '#ebe7ee'}
+        headerStyle: {backgroundColor: 'inherit'}
       }}
     />
   )
