@@ -1,40 +1,38 @@
 ---
-title: Discord Bot
-description: Руководство по подключению и использованию.
-updatedAt: 2020-08-11
+title: (EN) Discord Bot
+description: Manual for Conglomerat Discord bot.
+updatedAt: 2020-04-12
 ---
 
-## Как подключить?
+## How to invite?
 
-Для того, что бы добавить бота на свой Discord сервер, вам всего-то надо, нажать на эту расчудесную-подозрительную кнопку, пройти авторизацию на сайте Discord.com *(вам не потребуется это делать, у вас уже есть активная сессия)* и добавить бота.
+If you want to invite our bot to your Discord server, just press this glorious button right below and auth at Discord.com *(you won't do it, if you have an active session)*.
 
 <a href="https://discord.com/oauth2/authorize?client_id=318324033940750337&scope=bot" role="button"><button style="background:#7289DA;width:130px;border-radius:4px;padding:7px 14px;font:600 18px 'Roboto';color:#fff">Invite</button></a>
 
-На тот случай, если вдруг вы не доверяете нашей кнопке, можете лично сгенерировать ссылку:
+In case, if you prefer to generate an invitation link by yourself:
 
 ```
 https://discord.com/oauth2/authorize?client_id=318324033940750337&scope=bot
 ```
 
-Боту потребуется отдельный текстовый канал для принятия команд. Конечно, можно и без него, но с ним, — лучше. Иначе он будет реагировать на каждое слово, что совпадает с его пулом команд.
+For both of us, it will be better, if Discord bot will have its own, separate channel for input commands, otherwise he will react for every word, from the command pool.
 
-### Доступ
+### Access rights
 
-Минимально необходимые права:
+Bot will require:
 
-- Отправка текстовых сообщений / Send Messages
-- Выделенные ссылки / Embed Links
-- Прикрепление файлов / Attach Files
-- Просмотр каналов / View Channels
+- Send Messages
+- Embed Links
+- Attach Files
+- View Channels
 
-Думаю видно, что никаких особых административных разрешений боту не нужно. Для опытных пользователей, желающих передать параметр **`permissions`** в сгенерированной ссылке: **`Permission integer value: 52224`**.
+Conglomerat bot **doesn't** require for any server management options or administrator permissions. The permissions' integer is: **`52224`**.
 
-## Команды, функционал и ограничения
+## Commands & restrictions.
 
-Для того, что бы получить полный список доступных команд, после добавления бота на свой сервер, воспользуйтесь командой: **`help`**. Она очень подробно описывает весь интуитивно понятный функционал. *(только на английском)*
+To see the full list of commands, use **`help`**.
 
-Большинство команд так или иначе перекликаются с возможностями сайта. Тем не менее, существуют ограничения, из-за которых не вся доступная информация может быть отображена в Discord. Некоторая информация может быть разделена на два различных запроса.
-Например, если вы хотите узнать информацию о персонаже, воспользуйтесь командой **`char`**, но если вам нужны логи по этому персонажу, вам понадобится эксклюзивная команда **`clogs`**. Так-же, команды внутри бота, не имеют строгой привязки к словам.
-Вы можете использоваться слово **`character`** вместо **`char`** и бот все равно интерпретирует ваш запрос верно.
+Most of these commands are relevant with the site, unless `subscription`. Bot is having an alias trigger words, so no matter would you type `char` or `character` for request, anyway it will be queried correctly.
 
-Более подробная информация о каждой команде, доступна по запросу: **`help имя_команды`**
+Every command is having its own description with examples, so you could use **`help command_name`**  for full description.

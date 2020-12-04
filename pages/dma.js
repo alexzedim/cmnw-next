@@ -8,6 +8,7 @@ import MuiTextField from '@material-ui/core/TextField';
 import {TextField} from 'formik-material-ui';
 import {dma_commands, realms} from "../src/Interfaces";
 import {Autocomplete} from 'formik-material-ui-lab';
+import Link from "../src/Link";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -208,7 +209,8 @@ export default function DMA() {
           </Formik>
         </Container>
         <Typography variant="overline" align="center" style={{textTransform: 'uppercase'}}>
-          Any language, every item, many realms, much evaluation, very wow!
+          Any language, every item, many realms, much evaluation, very wow!<br/>
+          Dont know how to start? Feels a bit confused? <Link href={`/help/en-dma-manual`} color="secondary" underline="hover">Take a look at our guideline</Link> или же <Link href={`/help/ru-dma-manual`} color="secondary" underline="hover">прочтите инструкцию на русском</Link>
         </Typography>
       </Grid>
     </main>

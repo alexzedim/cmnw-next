@@ -1,5 +1,5 @@
 ---
-title: Discord Bot
+title: (RU) Discord Bot
 description: Руководство по подключению и использованию.
 updatedAt: 2020-08-11
 ---

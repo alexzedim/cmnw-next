@@ -1,6 +1,6 @@
 import React from "react";
 import MetaHead from '../src/MetaHead'
-import {Card, CardMedia, CardContent, Grid, makeStyles, Typography} from "@material-ui/core";
+import {Card, CardMedia, CardHeader, CardContent, Grid, makeStyles, Typography} from "@material-ui/core";
 import Link from "../src/Link";
 
 const useStyles = makeStyles(theme => ({
@@ -42,6 +42,9 @@ function Index() {
         <Grid item xs={12} sm={6} md={6}>
           <Link href={"/osint"} underline="none">
             <Card className={classes.card} align="center">
+              <CardHeader
+                title="Find Characters & Guilds"
+              />
               <CardMedia
                 className={classes.media}
                 component="img"
@@ -62,6 +65,9 @@ function Index() {
         <Grid item xs={12} sm={6} md={6}>
           <Link href={"/dma"} underline="none">
             <Card className={classes.card} align="center">
+              <CardHeader
+                title="Find Items & Auctions"
+              />
               <CardMedia
                 className={classes.media}
                 component="img"
@@ -80,7 +86,7 @@ function Index() {
         </Grid>
         <Grid item xs={12} sm={12} md={12} align="center">
           <Typography variant="overline" align="center" style={{textTransform: 'uppercase'}}>
-            More things to come, stay tuned!
+            More things to come, stay tuned! And we don't use cookies at all. Eat this!
           </Typography>
         </Grid>
       </Grid>
