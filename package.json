@@ -32,7 +32,8 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "pm2": "pm2 start next.yaml --env production"
   },
   "devDependencies": {
     "@material-ui/icons": "^4.9.1",
