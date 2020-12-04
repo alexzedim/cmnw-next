@@ -3,9 +3,9 @@ import MetaHead from "../src/MetaHead";
 import {Button, Grid, makeStyles, Typography} from "@material-ui/core";
 import Image from 'next/image'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   root: {
-    height: '250vh',
+    height: '300vh',
   },
   media: {
     borderRadius: 10,
@@ -25,88 +25,128 @@ export default function Discord() {
       />
       <Grid container justify="center" alignItems="center" className={classes.root}>
         <Grid item xs={12} sm={12} md={12}>
-          <Typography variant="h1" component="h2" align="center" gutterBottom>
+          <Typography variant="h1" component="h5" align="center" gutterBottom>
             REVEAL SHADOWS IN SHADOWLANDS
           </Typography>
-          <Button href="https://discord.com/oauth2/authorize?client_id=318324033940750337&scope=bot" variant="outlined" color="secondary">
-            Invite Link
-          </Button>
         </Grid>
-        <Grid item xs={12} sm={4} md={4}>
+        <Grid item xs={12} sm={4} md={4} align="center">
           <Image
             src="https://i.imgur.com/o9jDD9S.png"
             alt="item flask.power@gordunni"
             width={610}
             height={458}
-            layout='fixed'
+            layout='intrinsic'
             className={classes.media}
           />
         </Grid>
-        <Grid item xs={12} sm={5} md={5}>
+        <Grid item xs={12} sm={4} md={4}>
           <Typography variant="h2" component="h2">
             > DON'T BE FOOLED
           </Typography>
           <Typography variant="h2" component="h2" gutterBottom>
             BY DERIVATIVE SALES
           </Typography>
-          <Typography variant="h5" style={{textTransform: 'uppercase'}} gutterBottom>
-            We are ready to supply auction house data<br/>
-            and decision making information right to you<br/>
+          <Typography variant="subtitle1" style={{textTransform: 'uppercase'}} gutterBottom>
+            We are ready to supply auction house data
+            and decision making information right to you
             by request or via event subscription
           </Typography>
           <Typography variant="overline" align="center" style={{textTransform: 'uppercase'}}>
             {"sub {\"type\":\"orders\", \"id\": 171276, \"realm\":\"gordunni\"}"}
           </Typography>
         </Grid>
-        <Grid item xs={12} sm={3} md={3}>
+        <Grid item xs={12} sm={4} md={4}>
           <Image
             src="https://i.imgur.com/ikhoclG.png?2"
             alt="sub orders"
             width={338}
             height={467}
-            layout='fixed'
+            layout='intrinsic'
             className={classes.media}
           />
         </Grid>
-        <Grid item xs={4} sm={4} md={4}>
+        <Grid item xs={12} sm={4} md={4} align="center">
           <Image
             src="https://i.imgur.com/DTXW8H8.png"
-            alt="Picture of the author"
+            alt="sub wowprogress"
             width={547}
             height={764}
-            layout='fixed'
+            layout='intrinsic'
             className={classes.media}
           />
         </Grid>
-        <Grid item xs={4} sm={4} md={4}>
-          <Typography variant="h1" component="h2">
+        <Grid item xs={12} sm={4} md={4}>
+          <Typography variant="h1" component="h3">
             > NOTHING
           </Typography>
-          <Typography variant="h3" component="h2" gutterBottom>
+          <Typography variant="h2" component="h5" gutterBottom>
             WILL REMAIN HIDDEN
           </Typography>
           <Typography variant="subtitle1" style={{textTransform: 'uppercase'}} gutterBottom>
-            We always knew and receive notifications without delay<br/>
-            when a new candidate appears in wowprogress LFG queue<br/>
-            or a new sell order with BoE item has been created, expired or filled <br/>
-            at the auction house
+            We always knew and receive notifications without delay
+            when a new candidate appears in wowprogress LFG queue
+            or a new sell order with BoE item has been created or removed
+            on the auction house
           </Typography>
           <Typography variant="overline" align="center" style={{textTransform: 'uppercase'}}>
-            {"sub {\"type\":\"recruiting\", \"realm\":\"Europe\"}"}
+            {"sub {\"type\":\"recruiting\", \"realm\":\"Europe\", \"faction\":\"horde\"}"}
           </Typography>
         </Grid>
-        <Grid item xs={4} sm={4} md={4}>
+        <Grid item xs={12} sm={4} md={4}>
           <Image
             src="https://i.imgur.com/fV12ic0.png"
             alt="Picture of the author"
             width={616}
             height={635}
-            layout='fixed'
+            layout='intrinsic'
             className={classes.media}
           />
         </Grid>
+        <Grid item xs={12} sm={4} md={4} align="center">
+          <Image
+            src="https://i.imgur.com/QlTG1MH.png"
+            alt="character инициатива@gordunni"
+            width={429}
+            height={404}
+            layout='intrinsic'
+            className={classes.media}
+          />
+        </Grid>
+        <Grid item xs={12} sm={4} md={4}>
+          <Typography variant="h5" component="h3">
+            >[BEYOND: THE CUTTING EDGE]
+          </Typography>
+          <Typography variant="subtitle1" component="h5" gutterBottom>
+            ALL THIS AND A BIT MORE, SO WHAT ARE YOU WAITING FOR?
+          </Typography>
+        </Grid>
+        <Grid item xs={12} sm={4} md={4}>
+          <Image
+            src="https://i.imgur.com/ty1RnYD.png"
+            alt="guild pieces@draenor"
+            width={565}
+            height={448}
+            layout='intrinsic'
+            className={classes.media}
+          />
+        </Grid>
+        <Grid item xs={12} sm={12} md={12} align="center">
+          <Button
+            href="https://discord.com/oauth2/authorize?client_id=318324033940750337&scope=bot"
+            size="large"
+            variant="outlined"
+            color="secondary"
+            align="center"
+            style={{
+              maxWidth: '300px',
+              maxHeight: '70px',
+              minWidth: '300px',
+              minHeight: '70px'
+            }}>
+            > Invite Link
+          </Button>
+        </Grid>
       </Grid>
-
     </main>
   )
 }
