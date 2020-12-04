@@ -1,7 +1,7 @@
 apps:
-  - script: "yarn"
+  - script: "npm"
     name: 'CORE-NEXT'
-    args: "--interpreter bash -- start"
+    args: "start"
     instances: "max"
     exec_mode: "cluster"
     autorestart: true
