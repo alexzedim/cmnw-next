@@ -1,0 +1,6 @@
+apps:
+  - script: "next start"
+    name: 'CORE-NEXT'
+    instances: "max"
+    autorestart: true
+    log_date_format: 'DD/MM HH:mm:ss.SSS'
