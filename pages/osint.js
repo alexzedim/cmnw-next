@@ -230,7 +230,7 @@ export default function Osint() {
           </Formik>
         </Container>
         <Typography variant="overline" align="center" style={{textTransform: 'uppercase'}}>
-          He-hey, welcome! Be out guest. Check out <Link href={`/help/eu-osint-manual`} color="secondary" underline="hover">full manual here</Link> или же <Link href={`/help/ru-osint-manual`} color="secondary" underline="hover">прочтите инструкцию на русском.</Link>
+          He-hey, welcome! Be out guest. Check out <Link href={`/help/en-osint-manual`} color="secondary" underline="hover">full manual here</Link> или же <Link href={`/help/ru-osint-manual`} color="secondary" underline="hover">прочтите инструкцию на русском.</Link>
         </Typography>
       </Grid>
     </main>
