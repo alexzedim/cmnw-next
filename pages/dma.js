@@ -68,7 +68,7 @@ export default function DMA() {
               }) => (
               <Form className={classes.searchField}>
                 <Grid container spacing={3} direction="row" justify="center" alignItems="center">
-                  <Grid item xs={3}>
+                  <Grid item xs={6} md={3}>
                     <Field
                       component={TextField}
                       type="text"
@@ -90,7 +90,7 @@ export default function DMA() {
                   </Grid>
                   {values.command === "item" && (
                     <React.Fragment>
-                      <Grid item xs={3}>
+                      <Grid item xs={6} md={3}>
                         <Field
                           component={TextField}
                           name="item"
@@ -100,12 +100,12 @@ export default function DMA() {
                           style={{width: 300}}
                         />
                       </Grid>
-                      <Grid item xs={1}>
+                      <Grid item xs={12} md={1}>
                         <Typography variant="h3" align="center" style={{textTransform: 'uppercase', margin: '0'}}>
                           @
                         </Typography>
                       </Grid>
-                      <Grid item xs={3}>
+                      <Grid item xs={6} md={3}>
                         <Field
                           name="realm"
                           component={Autocomplete}
@@ -126,7 +126,7 @@ export default function DMA() {
                   )}
                   {values.command === "xrs" && (
                     <React.Fragment>
-                      <Grid item xs={3}>
+                      <Grid item xs={6} md={3}>
                         <Field
                           component={TextField}
                           name="item"
@@ -136,12 +136,12 @@ export default function DMA() {
                           style={{width: 300}}
                         />
                       </Grid>
-                      <Grid item xs={1}>
+                      <Grid item xs={12} md={1}>
                         <Typography variant="h3" align="center" style={{textTransform: 'uppercase', margin: '0'}}>
                           @
                         </Typography>
                       </Grid>
-                      <Grid item xs={3}>
+                      <Grid item xs={6} md={3}>
                         <Field
                           name="hubs"
                           multiple
@@ -163,7 +163,7 @@ export default function DMA() {
                   )}
                   {values.command === "group" && (
                     <React.Fragment>
-                      <Grid item xs={3}>
+                      <Grid item xs={6} md={3}>
                         <Field
                           component={TextField}
                           name="item"
@@ -173,12 +173,12 @@ export default function DMA() {
                           style={{width: 300}}
                         />
                       </Grid>
-                      <Grid item xs={1}>
+                      <Grid item xs={12} md={1}>
                         <Typography variant="h3" align="center" style={{textTransform: 'uppercase', margin: '0'}}>
                           @
                         </Typography>
                       </Grid>
-                      <Grid item xs={3}>
+                      <Grid item xs={6} md={3}>
                         <Field
                           name="hubs"
                           multiple
@@ -198,7 +198,7 @@ export default function DMA() {
                       </Grid>
                     </React.Fragment>
                   )}
-                  <Grid item xs={1}>
+                  <Grid item xs={6} md={1}>
                     <Button type="submit" variant="outlined" color="secondary" size="large">
                       <ArrowForwardOutlinedIcon/>
                     </Button>

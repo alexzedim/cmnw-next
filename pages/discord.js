@@ -10,7 +10,7 @@ const useStyles = makeStyles(() => ({
   media: {
     borderRadius: 10,
     mixBlendMode: 'multiply',
-    filter: 'blur(0.2px) opacity(91%) drop-shadow(0 0 0.1rem grey)',
+    filter: 'blur(0.4px) opacity(91%) drop-shadow(0 0 0.1rem grey)',
   },
 }));
 

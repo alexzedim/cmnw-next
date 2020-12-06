@@ -51,6 +51,7 @@ const theme = createMuiTheme({
     MuiCssBaseline: {
       "@global": {
         body: {
+          minWidth: '1000px',
           width: 'auto',
           height: 'auto',
           backgroundImage: `url(/bg${i}.png)`,

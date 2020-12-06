@@ -70,7 +70,7 @@ export default function Osint() {
               }) => (
               <Form className={classes.searchField}>
                 <Grid container spacing={3} direction="row" justify="center" alignItems="center">
-                  <Grid item xs={3}>
+                  <Grid item xs={6} md={3}>
                     <Field
                       component={TextField}
                       type="text"
@@ -92,7 +92,7 @@ export default function Osint() {
                   </Grid>
                   {values.command === "character" && (
                     <React.Fragment>
-                      <Grid item xs={3}>
+                      <Grid item xs={6} md={3}>
                         <Field
                           component={TextField}
                           name="character"
@@ -103,12 +103,12 @@ export default function Osint() {
                           fullWidth
                         />
                       </Grid>
-                      <Grid item xs={1}>
+                      <Grid item xs={12} md={1}>
                         <Typography variant="h3" align="center" style={{textTransform: 'uppercase', margin: '0'}}>
                           @
                         </Typography>
                       </Grid>
-                      <Grid item xs={3}>
+                      <Grid item xs={6} md={3}>
                         <Field
                           name="realm"
                           component={Autocomplete}
@@ -129,7 +129,7 @@ export default function Osint() {
                   )}
                   {values.command === "guild" && (
                     <React.Fragment>
-                      <Grid item xs={3}>
+                      <Grid item xs={6} md={3}>
                         <Field
                           component={TextField}
                           name="guild"
@@ -140,12 +140,12 @@ export default function Osint() {
                           fullWidth
                         />
                       </Grid>
-                      <Grid item xs={1}>
+                      <Grid item xs={12} md={1}>
                         <Typography variant="h3" align="center" style={{textTransform: 'uppercase', margin: '0'}}>
                           @
                         </Typography>
                       </Grid>
-                      <Grid item xs={3}>
+                      <Grid item xs={6} md={3}>
                         <Field
                           name="realm"
                           component={Autocomplete}
@@ -166,7 +166,7 @@ export default function Osint() {
                   )}
                   {values.command === "hash" && (
                     <React.Fragment>
-                      <Grid item xs={3}>
+                      <Grid item xs={6} md={3}>
                         <Field
                           component={TextField}
                           type="text"
@@ -186,12 +186,12 @@ export default function Osint() {
                           ))}
                         </Field>
                       </Grid>
-                      <Grid item xs={1}>
+                      <Grid item xs={12} md={1}>
                         <Typography variant="h3" align="center" style={{textTransform: 'uppercase', margin: '0'}}>
                           @
                         </Typography>
                       </Grid>
-                      <Grid item xs={3}>
+                      <Grid item xs={6} md={3}>
                         <Field
                           component={TextField}
                           name="hash"
@@ -206,7 +206,7 @@ export default function Osint() {
                   )}
                   {values.command === "file" && (
                     <React.Fragment>
-                      <Grid item xs={7}>
+                      <Grid item xs={6} md={7}>
                         <Field
                           component={TextField}
                           name="id"
@@ -219,7 +219,7 @@ export default function Osint() {
                       </Grid>
                     </React.Fragment>
                   )}
-                  <Grid item xs={1}>
+                  <Grid item xs={6} md={1}>
                     <Button type="submit" variant="outlined" color="secondary" size="large">
                       <ArrowForwardOutlinedIcon/>
                     </Button>
