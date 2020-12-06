@@ -11,16 +11,13 @@ User-agent: *
 Disallow: /contract/*
 
 User-agent: *
-Disallow: /find/*
+Disallow: /hash/*
 
 User-agent: *
 Disallow: /guild/*
 
 User-agent: *
-Disallow: /itemsinfo/*
+Disallow: /items/*
 
 User-agent: *
-Disallow: /realmsinfo/*
-
-User-agent: *
-Disallow: /xrs/*
+Disallow: /group_items/*
