@@ -135,9 +135,6 @@ export async function getServerSideProps({query}) {
             hash {
               a
               b
-              c
-              ex
-              t
             }
             race
             character_class
