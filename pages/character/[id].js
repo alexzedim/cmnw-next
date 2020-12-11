@@ -5,7 +5,7 @@ import CharacterProfile from '../../src/CharacterProfile'
 import CharacterButtons from '../../src/CharacterButtons'
 import Link from '../../src/Link'
 import MetaHead from '../../src/MetaHead'
-import {Container, Divider, Grid, Typography,} from "@material-ui/core";
+import {Container, Divider, Grid, Typography} from "@material-ui/core";
 
 
 const useStyles = makeStyles(theme => ({
@@ -163,6 +163,10 @@ export async function getServerSideProps({query}) {
               action
               before
               after
+            }
+            covenant: {
+              chosen_covenant
+              renown_level
             }
         }      
     }`

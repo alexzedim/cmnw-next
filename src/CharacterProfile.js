@@ -11,33 +11,41 @@ export default function CharacterProfile({character}) {
     delete character.hash.t
   }
 
-  const fieldsToCheck = ["id", "level", "ilvl", "hash", "faction", "gender", "race", "character_class", "spec", "createdBy", "lastModified"];
+  const fieldsToCheck = ["id", "level", "ilvl", "hash", "faction", "gender", "race", "character_class", "spec", "createdBy", "lastModified", 'covenant'];
 
   return (
-    fieldsToCheck.map((field, i) => {
+    fieldsToCheck.map((field, field_index) => {
       if (field in character && character[field] !== null) {
         if (typeof character[field] === 'object' && !Array.isArray(character[field])) {
-          return Object.entries(character[field]).map(([k, v], y) => (
-            (field === 'hash') ? (
-              <Typography key={i + y} variant="caption" display="block" gutterBottom>
-                {field} {k}: <Link href={`/hash/${k}@${v}`} color="textPrimary" underline="hover">{v}</Link>
-              </Typography>
-            ) : (
-              <Typography key={i + y} variant="caption" display="block" gutterBottom>
-                {humanizeString(field)} {humanizeString(k)}: {v}
-              </Typography>
-            )
-          ))
+          /**
+           * Iterate over objects key and value
+           */
+          return Object.entries(character[field]).map(([key, value], index) => {
+            if (field === 'hash' && value !== null) {
+              return (
+                <Typography key={field_index * 10 + index} variant="caption" display="block" gutterBottom>
+                  {field} {key}: <Link href={`/hash/${key}@${value}`} color="textPrimary" underline="hover">{value}</Link>
+                </Typography>
+              )
+            }
+            if (field !== 'hash' && value !== null) {
+              return (
+                <Typography key={field_index * 10 + index} variant="caption" display="block" gutterBottom>
+                  {humanizeString(field)} {humanizeString(key)}: {value}
+                </Typography>
+              )
+            }
+          })
         } else {
           if (field === "lastModified") {
             return (
-              <Typography key={i} variant="caption" display="block" gutterBottom>
+              <Typography key={field_index} variant="caption" display="block" gutterBottom>
                 {humanizeString(field)}: {new Date(character[field]).toLocaleString('en-GB')}
               </Typography>
             )
           } else {
             return (
-              <Typography key={i} variant="caption" display="block" gutterBottom>
+              <Typography key={field_index} variant="caption" display="block" gutterBottom>
                 {humanizeString(field)}: {character[field]}
               </Typography>
             )
