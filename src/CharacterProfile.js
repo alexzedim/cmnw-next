@@ -7,10 +7,6 @@ export default function CharacterProfile({character}) {
 
   if (!character) return <div>No records available</div>
 
-  if (character.hash) {
-    delete character.hash.t
-  }
-
   const fieldsToCheck = ["id", "level", "ilvl", "hash", "faction", "gender", "race", "character_class", "spec", "createdBy", "lastModified", 'covenant'];
 
   return (
