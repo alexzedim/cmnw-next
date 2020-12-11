@@ -318,6 +318,11 @@ export async function getServerSideProps({query}) {
           id
           item {
             id
+            bonus_lists
+            modifiers {
+              type
+              value
+            }
           }
           quantity
           unit_price
