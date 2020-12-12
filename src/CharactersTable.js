@@ -6,108 +6,52 @@ import Link from "./Link";
 export default function CharactersTable({data, members = false}) {
   if (!data || !data.length) return ('')
 
-  const characters = data.map(({_id, name, realm, guild, hash, ilvl, media, faction, race, gender, character_class, spec, level, lastModified}) => {
-
-    let avatar, guild_name, guild_rank, guild_url, item_level = 0, hash_a = '', hash_b = '', hash_c = '';
-
-    if (hash) {
-      if ("a" in hash) {
-        hash_a = hash.a;
-      }
-      if ("b" in hash) {
-        hash_b = hash.b;
-      }
-      if ("c" in hash) {
-        hash_c = hash.c;
-      }
-    }
-
-    if (media) {
-      if ("avatar_url" in media) {
-        avatar = media.avatar_url;
-      }
-    }
-
-    if (!members && guild) {
-      guild_url = `/guild/${guild.slug}@${realm.slug}`;
-      guild_name = guild.name;
-    }
-
-    if (guild) {
-      guild_rank = guild.rank
-    }
-
-    if (ilvl) {
-      if ("eq" in ilvl) {
-        item_level = ilvl.eq;
-      }
-    }
-
-    return {
-      _id: _id,
-      url_id: `/character/${name}@${realm.slug}`,
-      guild_url: guild_url || '',
-      guild_name: guild_name || '',
-      race: race,
-      gender: gender,
-      avatar: avatar,
-      a: hash_a,
-      b: hash_b,
-      c: hash_c,
-      spec: spec,
-      level: level,
-      url_a: `/hash/a@${hash_a}` || '',
-      url_b: `/hash/b@${hash_b}` || '',
-      url_c: `/hash/c@${hash_c}` || '',
-      faction: faction,
-      class: character_class,
-      rank: guild_rank,
-      item_level: item_level,
-      lastModified: lastModified
-    }
-  })
-
   const columns = [
     {
       title: 'Avatar',
-      field: 'avatar',
-      render: ({avatar}) => ((avatar) ? (<img src={avatar} alt="A" style={{width: 50, borderRadius: '50%'}}/>) : (''))
+      field: 'media',
+      render: ({media}) => ((media && 'avatar_url' in media) ? (<img src={media.avatar_url} alt="A" style={{width: 50, borderRadius: '50%'}}/>) : (''))
     },
     {
       field: '_id',
       title: 'Name',
-      render: rowData => <Link href={rowData.url_id} color="secondary" underline="hover">{rowData._id}</Link>
+      render: ({_id}) => <Link href={`/character/${_id}`} color="secondary" underline="hover">{_id}</Link>
     },
     {
       title: 'Rank',
-      field: 'rank',
+      field: 'guild',
       type: 'numeric',
-      render: rowData => (parseInt(rowData.rank) === 0) ? ('GM') : (rowData.rank)
+      customSort: (a, b) => (a.guild && 'rank' in a.guild && b.guild && 'rank' in b.guild) ? (a.guild.rank - b.guild.rank) : (''),
+      render: ({guild}) => {
+        if (guild && 'rank' in guild) {
+          if (parseInt(guild.rank) === 0) {
+            return ('GM')
+          } else {
+            return guild.rank
+          }
+        }
+      }
     },
     {
       field: 'item_level',
       title: 'ilvl',
-      render: rowData => parseInt(rowData.item_level)
+      type: 'numeric',
+      render: ({ilvl}) => ((ilvl && ilvl.eq) ? (ilvl.eq) : (''))
     },
-    {title: 'Class', field: 'class'},
+    {title: 'Class', field: 'character_class'},
     {title: 'Level', field: 'level'},
     {title: 'Faction', field: 'faction'},
     {title: 'Race', field: 'race'},
     {title: 'Gender', field: 'gender'},
     {
-      field: 'url_a',
+      field: 'hash',
       title: 'Hash.A',
-      render: rowData => <Link href={rowData.url_a} color="secondary" underline="hover">{rowData.a}</Link>
+      render: ({hash}) => (hash && hash.a) ? (<Link href={`/hash/a@${hash.a}`} color="secondary" underline="hover">{hash.a}</Link>) : ('')
     },
     {
-      field: 'url_b',
+      field: 'hash',
       title: 'Hash.B',
-      render: rowData => <Link href={rowData.url_b} color="secondary" underline="hover">{rowData.b}</Link>
-    },
-    {
-      field: 'url_c',
-      title: 'Hash.C',
-      render: rowData => <Link href={rowData.url_c} color="secondary" underline="hover">{rowData.c}</Link>
+      render: ({hash}) => (hash && hash.b) ? (<Link href={`/hash/b@${hash.b}`} color="secondary" underline="hover">{hash.b}</Link>) : ('')
     },
     {
       title: 'Last Modified',
@@ -116,22 +60,28 @@ export default function CharactersTable({data, members = false}) {
         width: 175,
         minWidth: 175
       },
-      render: rowData => new Date(rowData.lastModified).toLocaleString('en-GB')
+      render: ({lastModified}) => new Date(lastModified).toLocaleString('en-GB')
     },
   ]
 
   if (!members) {
     columns.splice(2, 0, {
-      field: 'guild_name',
+      field: 'guild',
       title: 'Guild',
-      render: rowData => (rowData.guild_url && rowData.guild_name) ? (
-        <Link href={rowData.guild_url} color="secondary" underline="hover">{rowData.guild_name}</Link>) : ('')
+      render: ({guild, realm}) => {
+        if (guild && guild.slug && guild.name) return (<Link href={`/guild/${guild.slug}@${realm.slug}`} color="secondary" underline="hover">{guild.name}</Link>)
+      }
     })
-    let column_index = columns.findIndex(({field}) => field === '_id')
-    columns[column_index] = Object.assign(columns[column_index], {defaultSort: 'asc'})
+    const column_index = columns.findIndex(({field}) => field === '_id')
+    if (column_index !== -1) Object.assign(columns[column_index], {defaultSort: 'asc'})
   } else {
-    let column_index = columns.findIndex(({field}) => field === 'rank')
-    columns[column_index] = Object.assign(columns[column_index], {defaultSort: 'asc'})
+    const column_index = columns.findIndex(({field}) => field === 'guild')
+    if (column_index !== -1) Object.assign(columns[column_index], {defaultSort: 'asc'})
+    columns.splice(6, 0, {
+      field: 'covenant',
+      title: 'Covenant',
+      render: ({covenant}) => ((covenant && 'chosen_covenant' in covenant && 'renown_level' in covenant)) ? (`${covenant.chosen_covenant} ${covenant.renown_level}`) : ('')
+    })
   }
 
   return (
@@ -139,7 +89,7 @@ export default function CharactersTable({data, members = false}) {
       title="Characters"
       icons={TableIcons}
       columns={columns}
-      data={characters}
+      data={data}
       style={{backgroundColor: 'inherit', textTransform: "uppercase"}}
       options={{
         sorting: true,

@@ -98,7 +98,6 @@ export async function getServerSideProps({query}) {
           id
           name
           realm {
-            _id
             name
             slug
           }
@@ -113,7 +112,6 @@ export async function getServerSideProps({query}) {
           hash {
             a
             b
-            c
           }
           race
           character_class
@@ -127,6 +125,10 @@ export async function getServerSideProps({query}) {
             bust_url
             render_url
           }
+           covenant {
+             chosen_covenant
+             renown_level
+           }
         }
         achievement_points
         created_timestamp
