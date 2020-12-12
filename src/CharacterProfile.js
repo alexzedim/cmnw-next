@@ -7,7 +7,7 @@ export default function CharacterProfile({character}) {
 
   if (!character) return <div>No records available</div>
 
-  const fieldsToCheck = ["id", "level", "ilvl", "hash", "faction", "gender", "race", "character_class", "spec", "createdBy", "lastModified", 'covenant'];
+  const fieldsToCheck = ["id", "level", "ilvl", "hash", "covenant", "faction", "gender", "race", "character_class", "spec", "createdBy", "lastModified"];
 
   return (
     fieldsToCheck.map((field, field_index) => {
@@ -24,7 +24,14 @@ export default function CharacterProfile({character}) {
                 </Typography>
               )
             }
-            if (field !== 'hash' && value !== null) {
+            if (field === 'covenant' && value !== null) {
+              return (
+                <Typography key={field_index * 10 + index} variant="caption" display="block" gutterBottom>
+                  {humanizeString(key)}: {value}
+                </Typography>
+              )
+            }
+            if ((field !== 'hash' || field !== 'covenant') && value !== null) {
               return (
                 <Typography key={field_index * 10 + index} variant="caption" display="block" gutterBottom>
                   {humanizeString(field)} {humanizeString(key)}: {value}
@@ -46,7 +53,6 @@ export default function CharacterProfile({character}) {
               </Typography>
             )
           }
-
         }
       }
     })

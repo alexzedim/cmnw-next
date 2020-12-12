@@ -161,7 +161,7 @@ export async function getServerSideProps({query}) {
               before
               after
             }
-            covenant: {
+            covenant {
               chosen_covenant
               renown_level
             }
