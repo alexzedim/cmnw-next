@@ -59,12 +59,11 @@ export async function getServerSideProps({query}) {
       guild {
         name
         slug
+        rank
       }
       hash {
         a
         b
-        c
-        t
       }
       ilvl {
         eq

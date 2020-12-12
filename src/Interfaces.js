@@ -40,10 +40,6 @@ const type = [
   {
     value: 'b',
     label: 'B',
-  },
-  {
-    value: 'c',
-    label: 'C',
   }
 ]
 
