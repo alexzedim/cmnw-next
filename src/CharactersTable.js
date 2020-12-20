@@ -24,11 +24,8 @@ export default function CharactersTable({data, members = false}) {
       customSort: (a, b) => (a.guild && 'rank' in a.guild && b.guild && 'rank' in b.guild) ? (a.guild.rank - b.guild.rank) : (''),
       render: ({guild}) => {
         if (guild && 'rank' in guild) {
-          if (parseInt(guild.rank) === 0) {
-            return ('GM')
-          } else {
-            return guild.rank
-          }
+          if (parseInt(guild.rank) === 0) return ('GM')
+          if (parseInt(guild.rank) > 0 && parseInt(guild.rank) < 12) parseInt(guild.rank)
         }
       }
     },
