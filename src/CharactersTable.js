@@ -25,7 +25,7 @@ export default function CharactersTable({data, members = false}) {
       render: ({guild}) => {
         if (guild && 'rank' in guild) {
           if (parseInt(guild.rank) === 0) return ('GM')
-          if (parseInt(guild.rank) > 0 && parseInt(guild.rank) < 12) return parseInt(guild.rank)
+          if (parseInt(guild.rank) > 0 && parseInt(guild.rank) < 13) return parseInt(guild.rank)
         }
       }
     },

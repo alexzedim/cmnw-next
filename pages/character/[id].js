@@ -85,8 +85,15 @@ function CharacterPage({character}) {
                 </Typography>
                 {(guild && realm.slug && guild.slug) ? (
                   <Typography variant="h4" component="h4" color="textPrimary" className={classes.title}>
-                    #<Link href={`/guild/${guild.slug}@${realm.slug}`} color="textPrimary"
-                           underline="hover">{guild.name}</Link>{('rank' in guild) ? ((parseInt(guild.rank) === 0) ? (`// GM`) : (`// R${guild.rank}`)) : ('')}
+                    #<Link href={`/guild/${guild.slug}@${realm.slug}`} color="textPrimary" underline="hover">{guild.name}</Link>
+                    <React.Fragment>
+                      {() => {
+                        if ('rank' in guild) {
+                          if (parseInt(guild.rank) === 0) return (` // GM`)
+                          if (parseInt(guild.rank) > 0 && parseInt(guild.rank) < 13) return (` // R${guild.rank}`)
+                        }
+                      }}
+                    </React.Fragment>
                   </Typography>
                 ) : ('')}
                 <Typography variant="h4" component="h4" color="textPrimary" className={classes.title}>
