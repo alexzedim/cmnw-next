@@ -86,7 +86,7 @@ function CharacterPage({character}) {
                 {(guild && realm.slug && guild.slug) ? (
                   <Typography variant="h4" component="h4" color="textPrimary" className={classes.title}>
                     #<Link href={`/guild/${guild.slug}@${realm.slug}`} color="textPrimary" underline="hover">{guild.name}</Link>
-                    {(guild.rank || guild.rank !== null) ? ((parseInt(guild.rank) === 0) ? (` // GM`) : (` // R${guild.rank}`)) : ('')}
+                    {(guild.rank && guild.rank !== null) ? ((parseInt(guild.rank) === 0) ? (` // GM`) : (` // R${guild.rank}`)) : ('')}
                   </Typography>
                 ) : ('')}
                 <Typography variant="h4" component="h4" color="textPrimary" className={classes.title}>
