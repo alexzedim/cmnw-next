@@ -12,21 +12,21 @@ export default function CharacterProfile({character}) {
 
   return (
     Object.entries(character).map(([key, value], index) => {
-      if (hash.includes(key)) {
+      if (hash.includes(key) && value !== null) {
         return (
           <Typography key={index} variant="caption" display="block" gutterBottom>
             {humanizeString(key)}: <Link href={`/${key.replace('_', '/')}@${value}`} color="textPrimary" underline="hover">{value}</Link>
           </Typography>
         )
       }
-      if (field.includes(key)) {
+      if (field.includes(key) && value !== null) {
         return (
           <Typography key={index} variant="caption" display="block" gutterBottom>
             {humanizeString(key)}: {value}
           </Typography>
         )
       }
-      if (key === "lastModified") {
+      if (key === "lastModified" && value !== null) {
         return (
           <Typography key={index} variant="caption" display="block" gutterBottom>
             {humanizeString(key)}: {new Date(character[value]).toLocaleString()}
