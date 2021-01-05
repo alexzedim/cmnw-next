@@ -53,7 +53,7 @@ export default function CharactersTable({data, members = false}) {
     {
       field: 'hash_f',
       title: 'Hash F',
-      render: ({hash_b}) => (hash_b) ? (<Link href={`/hash/f@${hash_f}`} color="secondary" underline="hover">{hash_f}</Link>) : ('')
+      render: ({hash_f}) => (hash_f) ? (<Link href={`/hash/f@${hash_f}`} color="secondary" underline="hover">{hash_f}</Link>) : ('')
     },
     {
       title: 'Last Modified',
