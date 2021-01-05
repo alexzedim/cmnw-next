@@ -102,33 +102,29 @@ export async function getServerSideProps({query}) {
             slug
           }
           guild {
+            _id
             name
-            slug
             rank
           }
-          ilvl {
-            eq
-          }
-          hash {
-            a
-            b
-          }
+          average_item_level
+          equipped_item_level
+          hash_a
+          hash_b
+          hash_f
           race
           character_class
-          spec
+          active_spec
           gender
           faction
           level
           lastModified
+          chosen_covenant
+          renown_level
           media {
             avatar_url
             bust_url
             render_url
           }
-           covenant {
-             chosen_covenant
-             renown_level
-           }
         }
         achievement_points
         created_timestamp

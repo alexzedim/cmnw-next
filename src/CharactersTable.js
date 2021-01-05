@@ -33,7 +33,7 @@ export default function CharactersTable({data, members = false}) {
       field: 'item_level',
       title: 'ilvl',
       type: 'numeric',
-      render: ({ilvl}) => ((ilvl && ilvl.eq) ? (ilvl.eq) : (''))
+      render: ({average_item_level}) => ((average_item_level) ? (average_item_level) : (''))
     },
     {title: 'Class', field: 'character_class'},
     {title: 'Level', field: 'level'},
@@ -41,14 +41,19 @@ export default function CharactersTable({data, members = false}) {
     {title: 'Race', field: 'race'},
     {title: 'Gender', field: 'gender'},
     {
-      field: 'hash',
-      title: 'Hash.A',
-      render: ({hash}) => (hash && hash.a) ? (<Link href={`/hash/a@${hash.a}`} color="secondary" underline="hover">{hash.a}</Link>) : ('')
+      field: 'hash_a',
+      title: 'Hash A',
+      render: ({hash_a}) => (hash_a) ? (<Link href={`/hash/a@${hash_a}`} color="secondary" underline="hover">{hash_a}</Link>) : ('')
     },
     {
-      field: 'hash',
-      title: 'Hash.B',
-      render: ({hash}) => (hash && hash.b) ? (<Link href={`/hash/b@${hash.b}`} color="secondary" underline="hover">{hash.b}</Link>) : ('')
+      field: 'hash_b',
+      title: 'Hash B',
+      render: ({hash_b}) => (hash_b) ? (<Link href={`/hash/b@${hash_b}`} color="secondary" underline="hover">{hash_b}</Link>) : ('')
+    },
+    {
+      field: 'hash_f',
+      title: 'Hash F',
+      render: ({hash_b}) => (hash_b) ? (<Link href={`/hash/f@${hash_f}`} color="secondary" underline="hover">{hash_f}</Link>) : ('')
     },
     {
       title: 'Last Modified',
@@ -65,8 +70,8 @@ export default function CharactersTable({data, members = false}) {
     columns.splice(2, 0, {
       field: 'guild',
       title: 'Guild',
-      render: ({guild, realm}) => {
-        if (guild && guild.slug && guild.name) return (<Link href={`/guild/${guild.slug}@${realm.slug}`} color="secondary" underline="hover">{guild.name}</Link>)
+      render: ({guild}) => {
+        if (guild && '_id' in guild && guild.name) return (<Link href={`/guild/${guild._id}`} color="secondary" underline="hover">{guild.name}</Link>)
       }
     })
     const column_index = columns.findIndex(({field}) => field === '_id')
@@ -75,9 +80,9 @@ export default function CharactersTable({data, members = false}) {
     const column_index = columns.findIndex(({field}) => field === 'guild')
     if (column_index !== -1) Object.assign(columns[column_index], {defaultSort: 'asc'})
     columns.splice(6, 0, {
-      field: 'covenant',
+      field: 'chosen_covenant',
       title: 'Covenant',
-      render: ({covenant}) => ((covenant && 'chosen_covenant' in covenant && 'renown_level' in covenant)) ? (`${covenant.chosen_covenant} ${covenant.renown_level}`) : ('')
+      render: ({chosen_covenant, renown_level}) => ((chosen_covenant && renown_level)) ? (`${chosen_covenant} // ${renown_level}`) : ('')
     })
   }
 

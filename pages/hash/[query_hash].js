@@ -57,17 +57,14 @@ export async function getServerSideProps({query}) {
         slug
       }
       guild {
+        _id
         name
-        slug
         rank
       }
-      hash {
-        a
-        b
-      }
-      ilvl {
-        eq
-      }
+      hash_a
+      hash_b
+      hash_f
+      equipped_item_level
       level
       media {
         avatar_url

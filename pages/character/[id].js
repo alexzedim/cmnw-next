@@ -83,9 +83,9 @@ function CharacterPage({character}) {
                 <Typography variant="h3" component="h3" color="textPrimary" className={classes.title}>
                   {name}
                 </Typography>
-                {(guild && realm.slug && guild.slug) ? (
+                {(guild && '_id' in guild) ? (
                   <Typography variant="h4" component="h4" color="textPrimary" className={classes.title}>
-                    #<Link href={`/guild/${guild.slug}@${realm.slug}`} color="textPrimary" underline="hover">{guild.name}</Link>
+                    #<Link href={`/guild/${guild._id}`} color="textPrimary" underline="hover">{guild.name}</Link>
                     {('rank' in guild && true) ? ((parseInt(guild.rank) === 0) ? (` // GM`) : (` // R${guild.rank}`)) : ('')}
                   </Typography>
                 ) : ('')}
@@ -124,21 +124,20 @@ export async function getServerSideProps({query}) {
               slug
             }
             guild {
+              _id
               name
-              slug
               rank
             }
-            ilvl {
-              eq
-              avg
-            }
-            hash {
-              a
-              b
-            }
+            average_item_level
+            equipped_item_level
+            hash_a
+            hash_b
+            hash_f
             race
+            chosen_covenant
+            renown_level
             character_class
-            spec
+            active_spec
             gender
             faction
             level
@@ -160,10 +159,6 @@ export async function getServerSideProps({query}) {
               action
               before
               after
-            }
-            covenant {
-              chosen_covenant
-              renown_level
             }
         }      
     }`
