@@ -29,7 +29,7 @@ export default function CharacterProfile({character}) {
       if (key === "lastModified" && value !== null) {
         return (
           <Typography key={index} variant="caption" display="block" gutterBottom>
-            {humanizeString(key)}: {new Date(character[value]).toLocaleString()}
+            {humanizeString(key)}: {new Date(character[value]).toLocaleString('ru-RU')}
           </Typography>
         )
       }
