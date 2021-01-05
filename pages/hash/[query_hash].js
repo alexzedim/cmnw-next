@@ -73,7 +73,7 @@ export async function getServerSideProps({query}) {
       race
       gender
       character_class
-      spec
+      active_spec
       level
       lastModified
     } 
