@@ -131,7 +131,6 @@ export async function getServerSideProps({query}) {
         lastModified
         createdBy
         updatedBy
-        isWatched
         logs {
           type
           original_value
