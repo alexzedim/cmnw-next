@@ -27,9 +27,99 @@ const dma_commands = [
     label: 'CROSS REALM',
   },
   {
-    value: 'group',
-    label: 'GROUP ITEMS',
+    value: 'profession',
+    label: 'PROFESSION',
   }
+]
+
+const professions = [
+  {
+    value: 'insc',
+    label: 'Inscription',
+  },
+  {
+    value: 'alch',
+    label: 'Alchemy',
+  },
+  {
+    value: 'lthr',
+    label: 'Letherworking',
+  },
+  {
+    value: 'clth',
+    label: 'Tailoring',
+  },
+  {
+    value: 'ench',
+    label: 'Enchanting',
+  },
+  {
+    value: 'bsmt',
+    label: 'Blacksmithing',
+  },
+  {
+    value: 'engr',
+    label: 'Engineering',
+  },
+  {
+    value: 'jwlc',
+    label: 'Jewelcraft',
+  },
+  {
+    value: 'cook',
+    label: 'Cooking',
+  },
+  {
+    value: 'ore',
+    label: 'Mining',
+  },
+  {
+    value: 'hrbs',
+    label: 'Herbalism',
+  },
+  {
+    value: 'vendor',
+    label: 'Vendor',
+  },
+]
+
+const expansions = [
+  {
+    value: 'clsc',
+    label: 'VANILLA',
+  },
+  {
+    value: 'tbc',
+    label: 'TBC',
+  },
+  {
+    value: 'wotlk',
+    label: 'WOTLK',
+  },
+  {
+    value: 'cata',
+    label: 'CATA',
+  },
+  {
+    value: 'mop',
+    label: 'MOP',
+  },
+  {
+    value: 'wod',
+    label: 'WOD',
+  },
+  {
+    value: 'legion',
+    label: 'LGN',
+  },
+  {
+    value: 'bfa',
+    label: 'BFA',
+  },
+  {
+    value: 'shdw',
+    label: 'SHDW',
+  },
 ]
 
 const type = [
@@ -40,6 +130,10 @@ const type = [
   {
     value: 'b',
     label: 'B',
+  },
+  {
+    value: 'f',
+    label: 'F',
   }
 ]
 
@@ -1169,5 +1263,7 @@ export {
   realms,
   osint_commands,
   dma_commands,
-  contributors
+  contributors,
+  professions,
+  expansions
 }

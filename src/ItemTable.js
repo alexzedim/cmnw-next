@@ -34,7 +34,13 @@ export default function ItemTable({data, direction}) {
       title="Group Items"
       icons={TableIcons}
       columns={[
-        {title: 'ID', field: '_id', align: 'left', cellStyle: { minWidth: 65, width: 65, maxWidth: 65 }},
+        {
+          title: 'ID',
+          field: '_id',
+          align: 'left',
+          sort: 'asc',
+          cellStyle: { minWidth: 65, width: 65, maxWidth: 65 }
+        },
         {
           title: '',
           field: 'icon',
@@ -98,7 +104,6 @@ export default function ItemTable({data, direction}) {
         },
         {title: 'Item',  align: 'center', render: ({_id}) => (_id && direction) ? (<Link href={`/item/${_id}@${direction}`} color="secondary" underline="hover"><ShowChartIcon/></Link>) : (<ShowChartIcon/>)},
         {title: 'Contracts', field: 'contracts',  align: 'center', render: ({contracts}) => (contracts) ? (<CheckIcon/>) : ('')},
-        {title: 'Score', field: 'score', type: 'numeric', defaultSort: 'desc'},
       ]}
       data={data}
       style={{

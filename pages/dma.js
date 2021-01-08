@@ -6,7 +6,7 @@ import ArrowForwardOutlinedIcon from '@material-ui/icons/ArrowForwardOutlined';
 import {Button, Container, Grid, makeStyles, MenuItem, Typography} from "@material-ui/core";
 import MuiTextField from '@material-ui/core/TextField';
 import {TextField} from 'formik-material-ui';
-import {dma_commands, realms} from "../src/Interfaces";
+import {dma_commands, realms, professions, expansions} from "../src/Interfaces";
 import {Autocomplete} from 'formik-material-ui-lab';
 import Link from "../src/Link";
 
@@ -41,10 +41,12 @@ export default function DMA() {
         <Container className={classes.searchbar}>
           <Formik
             initialValues={{
-              command: 'item',
+              command: 'xrs',
               item: 'FLASK.POWER',
               realm: { value: "gordunni", label: "Гордунни" },
-              hubs: [{ value: "gordunni", label: "Гордунни" }]
+              hubs: [{ value: "gordunni", label: "Гордунни" }],
+              profession: "alch",
+              expansion: "shdw",
             }}
             onSubmit={async (values, {setSubmitting}) => {
               await setSubmitting(false);
@@ -55,9 +57,9 @@ export default function DMA() {
               } else if (values.command === 'xrs') {
                 realm_query = values.hubs.map(({value}) => value).join(';');
                 await Router.push('/item/' + values.item + '@' + realm_query);
-              } else if (values.command === 'group') {
+              } else if (values.command === 'profession') {
                 realm_query = values.hubs.map(({value}) => value).join(';');
-                await Router.push('/group_items/' + values.item + '@' + realm_query);
+                await Router.push('/profession/' + values.expansion + ':' + values.profession + '@' + realm_query);
               }
             }}
           >
@@ -161,17 +163,47 @@ export default function DMA() {
                       </Grid>
                     </React.Fragment>
                   )}
-                  {values.command === "group" && (
+                  {values.command === "profession" && (
                     <React.Fragment>
-                      <Grid item xs={3}>
+                      <Grid item xs={2}>
                         <Field
                           component={TextField}
-                          name="item"
                           type="text"
-                          label="Item Name"
+                          name="expansion"
+                          label="Expansion"
+                          select
                           variant="outlined"
-                          style={{width: 300}}
-                        />
+                          style={{width: 200}}
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                        >
+                          {expansions.map((option) => (
+                            <MenuItem key={option.value} value={option.value}>
+                              {option.label}
+                            </MenuItem>
+                          ))}
+                        </Field>
+                      </Grid>
+                      <Grid item xs={2}>
+                        <Field
+                          component={TextField}
+                          type="text"
+                          name="profession"
+                          label="Profession Group"
+                          select
+                          variant="outlined"
+                          style={{width: 200}}
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                        >
+                          {professions.map((option) => (
+                            <MenuItem key={option.value} value={option.value}>
+                              {option.label}
+                            </MenuItem>
+                          ))}
+                        </Field>
                       </Grid>
                       <Grid item xs={1}>
                         <Typography variant="h3" align="center" style={{textTransform: 'uppercase', margin: '0'}}>
