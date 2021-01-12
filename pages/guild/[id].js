@@ -93,6 +93,7 @@ export async function getServerSideProps({query}) {
           name
         }
         faction
+        member_count
         members {
           _id
           id
