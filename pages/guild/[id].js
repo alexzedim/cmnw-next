@@ -83,68 +83,68 @@ function GuildPage({guild}) {
 export async function getServerSideProps({query}) {
   const {id} = query;
   const gql = `query Guild($id: ID!) {
-      guild(id: $id) {
+    guild(id: $id) {
+      _id
+      id
+      name
+      realm {
+        _id
+        slug
+        name
+      }
+      faction
+      member_count
+      members {
         _id
         id
         name
         realm {
-          _id
+          name
           slug
-          name
         }
-        faction
-        member_count
-        members {
+        guild {
           _id
-          id
           name
-          realm {
-            name
-            slug
-          }
-          guild {
-            _id
-            name
-            rank
-          }
-          average_item_level
-          equipped_item_level
-          hash_a
-          hash_b
-          hash_f
-          race
-          character_class
-          active_spec
-          gender
-          faction
-          level
-          lastModified
-          chosen_covenant
-          renown_level
-          media {
-            avatar_url
-            bust_url
-            render_url
-          }
+          rank
         }
-        achievement_points
-        created_timestamp
+        average_item_level
+        equipped_item_level
+        hash_a
+        hash_b
+        hash_f
+        race
+        character_class
+        active_spec
+        gender
+        faction
+        level
         lastModified
-        createdBy
-        updatedBy
-        logs {
-          type
-          original_value
-          new_value
-          message
-          action
-          before
-          after
+        chosen_covenant
+        renown_level
+        media {
+          avatar_url
+          bust_url
+          render_url
         }
-        createdAt
-        updatedAt
-      }   
-    }`
+      }
+      achievement_points
+      created_timestamp
+      lastModified
+      createdBy
+      updatedBy
+      logs {
+        type
+        original_value
+        new_value
+        message
+        action
+        before
+        after
+      }
+      createdAt
+      updatedAt
+    }   
+  }`
   const {data: {guild}} = await fetch(`http://${process.env.api}`, {
     method: 'POST',
     headers: {
