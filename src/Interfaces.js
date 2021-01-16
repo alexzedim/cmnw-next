@@ -1258,6 +1258,37 @@ const contributors = [
   }
 ];
 
+const class_colors = new Map([
+  ['Death Knight', '#C41E3A'],
+  ['Demon Hunter', '#A330C9'],
+  ['Druid', '#FF7C0A'],
+  ['Hunter', '#AAD372'],
+  ['Mage', '#3FC7EB'],
+  ['Monk', '#00FF98'],
+  ['Paladin', '#F48CBA'],
+  ['Priest', '#ffffff'],
+  ['Rogue', '#FFF468'],
+  ['Shaman', '#0070DD'],
+  ['Warlock', '#8788EE'],
+  ['Warrior', '#C69B6D'],
+]);
+
+const professions_colors = new Map([
+  ['Herbalism', '#5f8a1e'],
+  ['Mining', '#73573d'],
+  ['Skinning', '#ff7c0a'],
+  ['Alchemy', '#31b3bf'],
+  ['Blacksmithing', '#353535'],
+  ['Enchanting', '#c389d2'],
+  ['Engineering', '#b19933'],
+  ['Inscription', '#cb7d7d'],
+  ['Cooking', '#fa4728'],
+  ['Tailoring', '#4d95bf'],
+  ['Fishing', '#2b5cf5'],
+  ['Jewelcrafting', '#f575e6'],
+  ['Archaeology', '#C69B6D'],
+])
+
 export {
   type,
   realms,
@@ -1265,5 +1296,7 @@ export {
   dma_commands,
   contributors,
   professions,
-  expansions
+  expansions,
+  class_colors,
+  professions_colors
 }
