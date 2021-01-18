@@ -39,7 +39,6 @@ const useStyles = makeStyles(() => ({
     paddingRight: '50px'
   },
   appBar: {
-    backgroundColor: 'transparent',
     alignItems: 'center',
   }
 }));
@@ -134,7 +133,7 @@ export default function Header() {
 
   return (
     <header>
-      <AppBar className={classes.appBar}>
+      <AppBar className={classes.appBar} color={'transparent'} position={'relative'}>
         {mobileView ? displayMobile() : displayDesktop()}
       </AppBar>
     </header>
