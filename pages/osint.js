@@ -3,7 +3,7 @@ import Router from 'next/router'
 import MetaHead from '../src/MetaHead'
 import {Field, Form, Formik} from 'formik';
 import ArrowForwardOutlinedIcon from '@material-ui/icons/ArrowForwardOutlined';
-import {Button, Container, Grid, makeStyles, MenuItem, Typography} from "@material-ui/core";
+import {Button, Grid, makeStyles, MenuItem, Typography, Container, Hidden} from "@material-ui/core";
 import MuiTextField from '@material-ui/core/TextField';
 import {TextField} from 'formik-material-ui';
 import {osint_commands, realms, type} from "../src/Interfaces";
@@ -12,65 +12,63 @@ import Link from "../src/Link";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    height: '93vh',
+    display: 'flex',
+    overflow: 'hidden',
   },
-  searchField: {
-    margin: theme.spacing(2, 0, 2),
+  container: {
+    marginTop: theme.spacing(15),
+    marginBottom: theme.spacing(30),
+    display: 'flex',
+    position: 'relative',
   },
-  searchbar: {
-    marginRight: "auto",
-    marginLeft: "auto",
-  },
-  search: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-  },
+  item: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: theme.spacing(0, 1),
+  }
 }));
 
 export default function Osint() {
   const classes = useStyles();
   return (
-    <main>
+    <section className={classes.root}>
       <MetaHead
         title={"Conglomerat: OSINT"}
         description={"Open Source Intelligence"}
         image={"https://conglomerat.group/logo.png"}
       />
-      <Grid container direction="column" justify="center" alignItems="center" className={classes.root}>
-        <Container className={classes.searchbar}>
-          <Formik
-            initialValues={{
-              command: 'character',
-              realm: {label: 'Гордунни', value: 'gordunni'},
-              character: 'Блюрателла',
-              guild: 'Депортация',
-              type: 'a',
-              hash: '0',
-              id: '0'
-            }}
-            onSubmit={async (values, {setSubmitting}) => {
-              await setSubmitting(false);
-              let query = '';
-              if (values.command === 'character') {
+      <Container className={classes.container}>
+        <Formik
+          initialValues={{
+            command: 'character',
+            realm: {label: 'Гордунни', value: 'gordunni'},
+            character: 'Блюрателла',
+            guild: 'Депортация',
+            type: 'a',
+            hash: '0',
+            id: '0'
+          }}
+          onSubmit={async (values, {setSubmitting}) => {
+            await setSubmitting(false);
+            let query = '';
+            if (values.command === 'character') {
                 query += `${values.character}@${values.realm.value}`
-              } else if (values.command === 'guild') {
+            } else if (values.command === 'guild') {
                 query += `${values.guild}@${values.realm.value}`
-              } else if (values.command === 'hash') {
+            } else if (values.command === 'hash') {
                 query += `${values.type}@${values.hash}`
-              } else if (values.command === 'file') {
+            } else if (values.command === 'file') {
                 query += `${values.id}`
-              }
-              await Router.push('/' + values.command + '/' + query);
-            }}
-          >
-            {({
-                values,
-                touched,
-                errors
-              }) => (
-              <Form className={classes.searchField}>
-                <Grid container spacing={3} direction="row" justify="center" alignItems="center">
-                  <Grid item xs={3}>
+            }
+            await Router.push('/' + values.command + '/' + query);
+          }}
+        >
+          {({values, touched, errors}) => (
+            <Form>
+              <Grid container spacing={5} alignItems={'center'} justify={"center"}>
+                <Grid item xs={12} md={3}>
+                  <div className={classes.item}>
                     <Field
                       component={TextField}
                       type="text"
@@ -78,7 +76,7 @@ export default function Osint() {
                       label="Select command"
                       select
                       variant="outlined"
-                      style={{width: 300}}
+                      style={{width: '100%'}}
                       InputLabelProps={{
                         shrink: true,
                       }}
@@ -89,32 +87,40 @@ export default function Osint() {
                         </MenuItem>
                       ))}
                     </Field>
-                  </Grid>
-                  {values.command === "character" && (
-                    <React.Fragment>
-                      <Grid item xs={3}>
+                  </div>
+                </Grid>
+                {values.command === "character" && (
+                  <React.Fragment>
+                    <Grid item xs={12} md={3}>
+                      <div className={classes.item}>
                         <Field
                           component={TextField}
                           name="character"
                           type="text"
                           label="Character"
                           variant="outlined"
-                          style={{width: 300}}
+                          style={{width: '100%'}}
                           fullWidth
                         />
-                      </Grid>
-                      <Grid item xs={1}>
+                      </div>
+                    </Grid>
+                    <Hidden only="xs">
+                    <Grid item xs={12} md={1}>
+                      <div className={classes.item}>
                         <Typography variant="h3" align="center" style={{textTransform: 'uppercase', margin: '0'}}>
                           @
                         </Typography>
-                      </Grid>
-                      <Grid item xs={3}>
+                      </div>
+                    </Grid>
+                    </Hidden>
+                    <Grid item xs={12} md={3}>
+                      <div className={classes.item}>
                         <Field
                           name="realm"
+                          style={{width: '100%'}}
                           component={Autocomplete}
                           options={realms}
                           getOptionLabel={(option) => option.label}
-                          style={{width: 300}}
                           renderInput={(params) => (
                             <MuiTextField
                               {...params}
@@ -124,34 +130,40 @@ export default function Osint() {
                             />
                           )}
                         />
-                      </Grid>
-                    </React.Fragment>
-                  )}
-                  {values.command === "guild" && (
-                    <React.Fragment>
-                      <Grid item xs={3}>
+                      </div>
+                    </Grid>
+                  </React.Fragment>
+                )}
+                {values.command === "guild" && (
+                  <React.Fragment>
+                    <Grid item xs={12} md={3}>
+                      <div className={classes.item}>
                         <Field
                           component={TextField}
+                          style={{width: '100%'}}
                           name="guild"
                           type="text"
                           label="Guild"
                           variant="outlined"
-                          style={{width: 300}}
                           fullWidth
                         />
-                      </Grid>
-                      <Grid item xs={1}>
+                      </div>
+                    </Grid>
+                    <Grid item xs={12} md={1}>
+                      <div className={classes.item}>
                         <Typography variant="h3" align="center" style={{textTransform: 'uppercase', margin: '0'}}>
                           @
                         </Typography>
-                      </Grid>
-                      <Grid item xs={3}>
+                      </div>
+                    </Grid>
+                    <Grid item xs={12} md={3}>
+                      <div className={classes.item}>
                         <Field
                           name="realm"
                           component={Autocomplete}
+                          style={{width: '100%'}}
                           options={realms}
                           getOptionLabel={(option) => option.label}
-                          style={{width: 300}}
                           renderInput={(params) => (
                             <MuiTextField
                               {...params}
@@ -161,20 +173,22 @@ export default function Osint() {
                             />
                           )}
                         />
-                      </Grid>
-                    </React.Fragment>
-                  )}
-                  {values.command === "hash" && (
-                    <React.Fragment>
-                      <Grid item xs={3}>
+                      </div>
+                    </Grid>
+                  </React.Fragment>
+                )}
+                {values.command === "hash" && (
+                  <React.Fragment>
+                    <Grid item xs={12} md={3}>
+                      <div className={classes.item}>
                         <Field
                           component={TextField}
+                          style={{width: '100%'}}
                           type="text"
                           name="type"
                           label="Type"
                           select
                           variant="outlined"
-                          style={{width: 300}}
                           InputLabelProps={{
                             shrink: true,
                           }}
@@ -185,54 +199,59 @@ export default function Osint() {
                             </MenuItem>
                           ))}
                         </Field>
-                      </Grid>
-                      <Grid item xs={1}>
+                      </div>
+                    </Grid>
+                    <Grid item xs={12} md={1}>
+                      <div className={classes.item}>
                         <Typography variant="h3" align="center" style={{textTransform: 'uppercase', margin: '0'}}>
                           @
                         </Typography>
-                      </Grid>
-                      <Grid item xs={3}>
+                      </div>
+                    </Grid>
+                    <Grid item xs={12} md={3}>
+                      <div className={classes.item}>
                         <Field
                           component={TextField}
+                          style={{width: '100%'}}
                           name="hash"
                           type="text"
                           label="Hash"
                           variant="outlined"
-                          style={{width: 300}}
                           fullWidth
                         />
-                      </Grid>
-                    </React.Fragment>
-                  )}
-                  {values.command === "file" && (
-                    <React.Fragment>
-                      <Grid item xs={8}>
+                      </div>
+                    </Grid>
+                  </React.Fragment>
+                )}
+                {values.command === "file" && (
+                  <React.Fragment>
+                    <Grid item xs={12} md={9}>
+                      <div className={classes.item}>
                         <Field
                           component={TextField}
+                          style={{width: '100%'}}
                           name="id"
                           type="text"
                           label="File ID"
                           variant="outlined"
-                          style={{width: 300}}
                           fullWidth
                         />
-                      </Grid>
-                    </React.Fragment>
-                  )}
-                  <Grid item xs={1}>
+                      </div>
+                    </Grid>
+                  </React.Fragment>
+                )}
+                <Grid item xs={12} md={1}>
+                  <div className={classes.item}>
                     <Button type="submit" variant="outlined" color="secondary" size="large">
                       <ArrowForwardOutlinedIcon/>
                     </Button>
-                  </Grid>
+                  </div>
                 </Grid>
-              </Form>
-            )}
-          </Formik>
-        </Container>
-        <Typography variant="overline" align="center" style={{textTransform: 'uppercase'}}>
-          He-hey, welcome! Be out guest. Check out <Link href={`/help/en-osint-manual`} color="secondary" underline="hover">full manual here</Link> или же <Link href={`/help/ru-osint-manual`} color="secondary" underline="hover">прочтите инструкцию на русском.</Link>
-        </Typography>
-      </Grid>
-    </main>
+              </Grid>
+            </Form>
+          )}
+        </Formik>
+      </Container>
+    </section>
   )
 }
