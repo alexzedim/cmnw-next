@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
-import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
+import {createMuiTheme, makeStyles, MuiThemeProvider} from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Header from '../src/Header'
 import {red} from "@material-ui/core/colors";
@@ -11,7 +11,7 @@ const i = Math.floor(Math.random() * 5)
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: '#b9b5bc',
+      main: '#242424',
       light: '#ebe7ee',
       dark: '#89858c',
     },
@@ -25,10 +25,6 @@ const theme = createMuiTheme({
     },
     warning: {
       main: '#c1aa82',
-    },
-    background: {
-      default: '#ebe7ee',
-      dark: '#89858c',
     },
   },
   contrastThreshold: 3,
@@ -51,8 +47,6 @@ const theme = createMuiTheme({
     MuiCssBaseline: {
       "@global": {
         body: {
-          minWidth: '1280px',
-          height: 'auto',
           backgroundImage: `url(/bg${i}.png)`,
           backgroundSize: 'cover'
         }
@@ -61,7 +55,19 @@ const theme = createMuiTheme({
   },
 });
 
+const useStyles = makeStyles(() => ({
+  root: {
+    display: 'flex',
+    minHeight: '100vh',
+  },
+  main: {
+    flex: 1,
+  },
+}));
+
 export default function MyApp(props) {
+  const classes = useStyles();
+
   const {Component, pageProps} = props;
 
   React.useEffect(() => {
@@ -72,17 +78,19 @@ export default function MyApp(props) {
   }, []);
 
   return (
-    <React.Fragment>
-      <Head>
-        <title>Conglomerat</title>
-        <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width"/>
-      </Head>
-      <MuiThemeProvider theme={theme}>
+    <MuiThemeProvider theme={theme}>
+      <div className={classes.root}>
+        <Head>
+          <title>Conglomerat</title>
+          <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width"/>
+        </Head>
         <Header/>
         <CssBaseline/>
-        <Component {...pageProps} />
-      </MuiThemeProvider>
-    </React.Fragment>
+        <main className={classes.main}>
+          <Component {...pageProps} />
+        </main>
+      </div>
+    </MuiThemeProvider>
   );
 }
 
