@@ -1,64 +1,142 @@
-import React from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
+import React, { useState, useEffect } from "react";
+import {AppBar, Toolbar, Typography, IconButton, Drawer, MenuItem} from '@material-ui/core';
+import MenuIcon from "@material-ui/icons/Menu";
 import {makeStyles} from '@material-ui/core/styles';
 import Link from "./Link";
 
-const useStyles = makeStyles(theme => ({
+
+const headersData = [
+  {
+    label: "Characters & Guilds",
+    href: "/osint",
+  },
+  {
+    label: "Items & Auctions",
+    href: "/dma",
+  },
+  {
+    label: "Discord Bot",
+    href: "/discord",
+  },
+  {
+    label: "Help",
+    href: "/help",
+  },
+  {
+    label: "Who we are",
+    href: "/who-we-are",
+  },
+];
+
+const useStyles = makeStyles(() => ({
   root: {
+    display: "flex",
     flexGrow: 1,
-    padding: 0,
-    width: 'auto'
+    justifyContent: "space-between",
+  },
+  element: {
+    paddingLeft: '50px',
+    paddingRight: '50px'
   },
   appBar: {
     backgroundColor: 'transparent',
-    position: 'relative',
-  },
-  title: {
-    flexGrow: 1,
-    display: 'none',
-    textTransform: 'uppercase',
-    [theme.breakpoints.up('sm')]: {
-      display: 'block',
-    },
+    alignItems: 'center',
   }
 }));
 
 export default function Header() {
   const classes = useStyles();
 
+  const [state, setState] = useState({
+    mobileView: false,
+    drawerOpen: false,
+  });
+
+  const { mobileView, drawerOpen } = state;
+
+  useEffect(() => {
+    const setResponsiveness = () => {
+      return window.innerWidth < 900
+          ? setState((prevState) => ({ ...prevState, mobileView: true }))
+          : setState((prevState) => ({ ...prevState, mobileView: false }));
+    };
+
+    setResponsiveness();
+
+    window.addEventListener("resize", () => setResponsiveness());
+  }, []);
+
+  const getMenuButtons = () => {
+    return headersData.map(({ label, href }, i) => {
+      return (
+          <Typography className={classes.element} key={i} variant="overline" color="primary" align="center" noWrap>
+            <Link href={href} color="inherit" underline="none">
+              {label}
+            </Link>
+          </Typography>
+      );
+    });
+  };
+
+  const getDrawerChoices = () => {
+    return headersData.map(({ label, href }, i) => {
+      return (
+        <MenuItem key={i}>
+          <Typography variant="overline" color="primary" align="center" noWrap>
+            <Link href={href} color="inherit" underline="none">
+              {label}
+            </Link>
+          </Typography>
+        </MenuItem>
+      );
+    });
+  };
+
+  const displayDesktop = () => {
+    return (
+      <Toolbar className={classes.root}>
+        <div>{getMenuButtons()}</div>
+      </Toolbar>
+    );
+  };
+
+  const displayMobile = () => {
+    const handleDrawerOpen = () => setState((prevState) => ({ ...prevState, drawerOpen: true }));
+    const handleDrawerClose = () => setState((prevState) => ({ ...prevState, drawerOpen: false }));
+
+    return (
+      <Toolbar>
+        <IconButton
+            {...{
+              edge: "start",
+              color: "inherit",
+              "aria-label": "menu",
+              "aria-haspopup": "true",
+              onClick: handleDrawerOpen,
+            }}
+        >
+          <MenuIcon />
+        </IconButton>
+
+        <Drawer
+            {...{
+              anchor: "left",
+              open: drawerOpen,
+              onClose: handleDrawerClose,
+            }}
+        >
+          <div>{getDrawerChoices()}</div>
+        </Drawer>
+
+      </Toolbar>
+    );
+  };
+
   return (
-    <div className={classes.root}>
-      <AppBar className={classes.appBar} color="transparent" position="sticky">
-        <Toolbar>
-          <Typography className={classes.title} variant="h6" color="secondary" align="center" noWrap>
-            <Link href={"/osint"} color="inherit" underline="none">
-              Characters & Guilds
-            </Link>
-          </Typography>
-          <Typography className={classes.title} variant="h6" color="secondary" align="center" noWrap>
-            <Link href={"/dma"} color="inherit" underline="none">
-              Items & Auctions
-            </Link>
-          </Typography>
-          <Typography className={classes.title} variant="h6" color="secondary" align="center" noWrap>
-            <Link href={"/discord"} color="inherit" underline="none">
-              Discord Bot
-            </Link>
-          </Typography>
-          <Typography className={classes.title} variant="h6" color="secondary" align="center" noWrap>
-            <Link href={"/help"} color="inherit" underline="none">
-              Help
-            </Link>
-          </Typography>
-          <Typography className={classes.title} variant="h6" color="secondary" align="center" noWrap>
-            <Link href={"/who-we-are"} color="inherit" underline="none">
-              Who we are
-            </Link>
-          </Typography>
-        </Toolbar>
+    <header>
+      <AppBar className={classes.appBar}>
+        {mobileView ? displayMobile() : displayDesktop()}
       </AppBar>
-    </div>
+    </header>
   );
 }
