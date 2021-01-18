@@ -8,18 +8,16 @@ import MuiTextField from '@material-ui/core/TextField';
 import {TextField} from 'formik-material-ui';
 import {osint_commands, realms, type} from "../src/Interfaces";
 import {Autocomplete} from 'formik-material-ui-lab';
+import * as Yup from 'yup';
 import Link from "../src/Link";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    display: 'flex',
     overflow: 'hidden',
-  },
-  container: {
-    marginTop: theme.spacing(15),
-    marginBottom: theme.spacing(30),
+    height: '100vh',
     display: 'flex',
-    position: 'relative',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   item: {
     display: 'flex',
@@ -28,6 +26,22 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(0, 1),
   }
 }));
+
+const validation = Yup.object().shape({
+  character: Yup.string()
+    .min(3, 'Between 3 and 13 symbols!')
+    .max(13, 'Between 3 and 13 symbols!')
+    .required('Required'),
+  guild: Yup.string()
+    .min(3, 'Between 3 and 25 symbols!')
+    .max(25, 'Between 3 and 25 symbols!')
+    .required('Required'),
+  hash: Yup.string()
+    .min(5, 'Between 5 and 8 symbols!')
+    .max(8, 'Between 5 and 8 symbols!')
+    .required('Required'),
+  realm: Yup.mixed().required('Required')
+});
 
 export default function Osint() {
   const classes = useStyles();
@@ -38,7 +52,7 @@ export default function Osint() {
         description={"Open Source Intelligence"}
         image={"https://conglomerat.group/logo.png"}
       />
-      <Container className={classes.container}>
+      <Container>
         <Formik
           initialValues={{
             command: 'character',
@@ -49,6 +63,7 @@ export default function Osint() {
             hash: '0',
             id: '0'
           }}
+          validationSchema={validation}
           onSubmit={async (values, {setSubmitting}) => {
             await setSubmitting(false);
             let query = '';
@@ -76,7 +91,7 @@ export default function Osint() {
                       label="Select command"
                       select
                       variant="outlined"
-                      style={{width: '100%'}}
+                      fullWidth
                       InputLabelProps={{
                         shrink: true,
                       }}
@@ -99,7 +114,6 @@ export default function Osint() {
                           type="text"
                           label="Character"
                           variant="outlined"
-                          style={{width: '100%'}}
                           fullWidth
                         />
                       </div>
@@ -117,7 +131,7 @@ export default function Osint() {
                       <div className={classes.item}>
                         <Field
                           name="realm"
-                          style={{width: '100%'}}
+                          fullWidth
                           component={Autocomplete}
                           options={realms}
                           getOptionLabel={(option) => option.label}
@@ -125,7 +139,7 @@ export default function Osint() {
                             <MuiTextField
                               {...params}
                               error={touched['realm'] && !!errors['realm']}
-                              label="Realms"
+                              label="Realm"
                               variant="outlined"
                             />
                           )}
@@ -140,7 +154,6 @@ export default function Osint() {
                       <div className={classes.item}>
                         <Field
                           component={TextField}
-                          style={{width: '100%'}}
                           name="guild"
                           type="text"
                           label="Guild"
@@ -161,14 +174,14 @@ export default function Osint() {
                         <Field
                           name="realm"
                           component={Autocomplete}
-                          style={{width: '100%'}}
+                          fullWidth
                           options={realms}
                           getOptionLabel={(option) => option.label}
                           renderInput={(params) => (
                             <MuiTextField
                               {...params}
                               error={touched['realm'] && !!errors['realm']}
-                              label="Realms"
+                              label="Realm"
                               variant="outlined"
                             />
                           )}
@@ -183,7 +196,7 @@ export default function Osint() {
                       <div className={classes.item}>
                         <Field
                           component={TextField}
-                          style={{width: '100%'}}
+                          fullWidth
                           type="text"
                           name="type"
                           label="Type"
@@ -212,7 +225,6 @@ export default function Osint() {
                       <div className={classes.item}>
                         <Field
                           component={TextField}
-                          style={{width: '100%'}}
                           name="hash"
                           type="text"
                           label="Hash"
