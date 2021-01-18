@@ -9,7 +9,6 @@ import {TextField} from 'formik-material-ui';
 import {osint_commands, realms, type} from "../src/Interfaces";
 import {Autocomplete} from 'formik-material-ui-lab';
 import * as Yup from 'yup';
-import Link from "../src/Link";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -88,7 +87,7 @@ export default function Osint() {
                       component={TextField}
                       type="text"
                       name="command"
-                      label="Select command"
+                      label="Command"
                       select
                       variant="outlined"
                       fullWidth
