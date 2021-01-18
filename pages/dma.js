@@ -1,84 +1,81 @@
 import React from "react";
 import Router from 'next/router'
-import MetaHead from '../src/MetaHead'
 import {Field, Form, Formik} from 'formik';
+import * as Yup from 'yup';
+
 import ArrowForwardOutlinedIcon from '@material-ui/icons/ArrowForwardOutlined';
 import {Button, Container, Grid, makeStyles, MenuItem, Typography} from "@material-ui/core";
 import MuiTextField from '@material-ui/core/TextField';
 import {TextField} from 'formik-material-ui';
-import {dma_commands, realms, professions, expansions} from "../src/Interfaces";
 import {Autocomplete} from 'formik-material-ui-lab';
-import Link from "../src/Link";
 
-const useStyles = makeStyles(theme => ({
+import Link from "../src/Link";
+import AtSign from "../src/AtSign";
+import MetaHead from '../src/MetaHead'
+import {dma_commands, expansions, professions, realms} from "../src/Interfaces";
+
+const useStyles = makeStyles(() => ({
   root: {
-    height: '93vh',
+    overflow: 'hidden',
+    height: '100vh',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
-  searchField: {
-    margin: theme.spacing(2, 0, 2),
-  },
-  searchbar: {
-    marginRight: "auto",
-    marginLeft: "auto",
-  },
-  search: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-  },
+  item: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  }
 }));
 
-export default function DMA() {
-  const classes = useStyles();
+const validation = Yup.object().shape({
+  item: Yup.mixed().required('Required'),
+  hubs: Yup.mixed().required('Required'),
+});
 
+export default function Dma() {
+  const classes = useStyles();
   return (
-    <main>
+    <section className={classes.root}>
       <MetaHead
         title={"Conglomerat: DMA"}
         description={"Direct Market Access"}
         image={"https://conglomerat.group/logo.png"}
       />
-      <Grid container direction="column" justify="center" alignItems="center" className={classes.root}>
-        <Container className={classes.searchbar}>
-          <Formik
-            initialValues={{
-              command: 'xrs',
-              item: 'FLASK.POWER',
-              realm: { value: "gordunni", label: "Гордунни" },
-              hubs: [{ value: "gordunni", label: "Гордунни" }],
-              profession: "alch",
-              expansion: "shdw",
-            }}
-            onSubmit={async (values, {setSubmitting}) => {
-              await setSubmitting(false);
-              let realm_query;
-              if (values.command === 'item') {
-                realm_query = values.realm.value
-                await Router.push('/item/' + values.item + '@' + realm_query);
-              } else if (values.command === 'xrs') {
-                realm_query = values.hubs.map(({value}) => value).join(';');
-                await Router.push('/item/' + values.item + '@' + realm_query);
-              } else if (values.command === 'profession') {
-                realm_query = values.hubs.map(({value}) => value).join(';');
-                await Router.push('/profession/' + values.expansion + ':' + values.profession + '@' + realm_query);
-              }
-            }}
-          >
-            {({
-                touched,
-                errors,
-                values,
-              }) => (
-              <Form className={classes.searchField}>
-                <Grid container spacing={3} direction="row" justify="center" alignItems="center">
-                  <Grid item xs={3}>
+      <Container>
+        <Formik
+          initialValues={{
+            command: 'item',
+            item: 'FLASK.POWER',
+            hubs: [{ value: "gordunni", label: "Гордунни" }],
+            profession: "alch",
+            expansion: "shdw",
+          }}
+          validationSchema={validation}
+          onSubmit={async (values, {setSubmitting}) => {
+            await setSubmitting(false);
+            const realm_query = values.hubs.map(({value}) => value).join(';');
+            if (values.command === 'item') {
+              await Router.push('/item/' + values.item + '@' + realm_query);
+            } else if (values.command === 'profession') {
+              await Router.push('/profession/' + values.expansion + ':' + values.profession + '@' + realm_query);
+            }
+          }}
+        >
+          {({touched, errors, values,}) => (
+            <Form>
+              <Grid container spacing={2} alignItems={'center'} justify={"center"}>
+                <Grid item xs={12} md={3}>
+                  <div className={classes.item}>
                     <Field
                       component={TextField}
                       type="text"
                       name="command"
-                      label="Select command"
+                      label="Command"
                       select
                       variant="outlined"
-                      style={{width: 300}}
+                      fullWidth
                       InputLabelProps={{
                         shrink: true,
                       }}
@@ -89,68 +86,32 @@ export default function DMA() {
                         </MenuItem>
                       ))}
                     </Field>
-                  </Grid>
-                  {values.command === "item" && (
-                    <React.Fragment>
-                      <Grid item xs={3}>
+                  </div>
+                </Grid>
+                {values.command === "item" && (
+                  <React.Fragment>
+                    <Grid item xs={12} md={3}>
+                      <div className={classes.item}>
                         <Field
                           component={TextField}
                           name="item"
                           type="text"
                           label="Item Name"
                           variant="outlined"
-                          style={{width: 300}}
+                          fullWidth
                         />
-                      </Grid>
-                      <Grid item xs={1}>
-                        <Typography variant="h3" align="center" style={{textTransform: 'uppercase', margin: '0'}}>
-                          @
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={3}>
-                        <Field
-                          name="realm"
-                          component={Autocomplete}
-                          options={realms}
-                          getOptionLabel={(option) => option.label}
-                          style={{width: 300}}
-                          renderInput={(params) => (
-                            <MuiTextField
-                              {...params}
-                              error={touched['realm'] && !!errors['realm']}
-                              label="Realms"
-                              variant="outlined"
-                            />
-                          )}
-                        />
-                      </Grid>
-                    </React.Fragment>
-                  )}
-                  {values.command === "xrs" && (
-                    <React.Fragment>
-                      <Grid item xs={3}>
-                        <Field
-                          component={TextField}
-                          name="item"
-                          type="text"
-                          label="Item Name"
-                          variant="outlined"
-                          style={{width: 300}}
-                        />
-                      </Grid>
-                      <Grid item xs={1}>
-                        <Typography variant="h3" align="center" style={{textTransform: 'uppercase', margin: '0'}}>
-                          @
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={3}>
+                      </div>
+                    </Grid>
+                    <AtSign/>
+                    <Grid item xs={12} md={3}>
+                      <div className={classes.item}>
                         <Field
                           name="hubs"
                           multiple
                           component={Autocomplete}
                           options={realms}
                           getOptionLabel={(option) => option.label}
-                          style={{width: 300}}
+                          fullWidth
                           renderInput={(params) => (
                             <MuiTextField
                               {...params}
@@ -160,12 +121,14 @@ export default function DMA() {
                             />
                           )}
                         />
-                      </Grid>
-                    </React.Fragment>
-                  )}
-                  {values.command === "profession" && (
-                    <React.Fragment>
-                      <Grid item xs={2}>
+                      </div>
+                    </Grid>
+                  </React.Fragment>
+                )}
+                {values.command === "profession" && (
+                  <React.Fragment>
+                    <Grid item xs={12} md={2}>
+                      <div className={classes.item}>
                         <Field
                           component={TextField}
                           type="text"
@@ -173,7 +136,7 @@ export default function DMA() {
                           label="Expansion"
                           select
                           variant="outlined"
-                          style={{width: 200}}
+                          fullWidth
                           InputLabelProps={{
                             shrink: true,
                           }}
@@ -184,16 +147,18 @@ export default function DMA() {
                             </MenuItem>
                           ))}
                         </Field>
-                      </Grid>
-                      <Grid item xs={2}>
+                      </div>
+                    </Grid>
+                    <Grid item xs={12} md={2}>
+                      <div className={classes.item}>
                         <Field
                           component={TextField}
                           type="text"
                           name="profession"
-                          label="Profession Group"
+                          label="Profession"
                           select
                           variant="outlined"
-                          style={{width: 200}}
+                          fullWidth
                           InputLabelProps={{
                             shrink: true,
                           }}
@@ -204,20 +169,17 @@ export default function DMA() {
                             </MenuItem>
                           ))}
                         </Field>
-                      </Grid>
-                      <Grid item xs={1}>
-                        <Typography variant="h3" align="center" style={{textTransform: 'uppercase', margin: '0'}}>
-                          @
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={3}>
+                      </div>
+                    </Grid>
+                    <Grid item xs={12} md={3}>
+                      <div className={classes.item}>
                         <Field
                           name="hubs"
                           multiple
                           component={Autocomplete}
                           options={realms}
                           getOptionLabel={(option) => option.label}
-                          style={{width: 300}}
+                          fullWidth
                           renderInput={(params) => (
                             <MuiTextField
                               {...params}
@@ -227,24 +189,28 @@ export default function DMA() {
                             />
                           )}
                         />
-                      </Grid>
-                    </React.Fragment>
-                  )}
-                  <Grid item xs={1}>
+                      </div>
+                    </Grid>
+                  </React.Fragment>
+                )}
+                <Grid item xs={12} md={1}>
+                  <div className={classes.item}>
                     <Button type="submit" variant="outlined" color="secondary" size="large">
                       <ArrowForwardOutlinedIcon/>
                     </Button>
-                  </Grid>
+                  </div>
                 </Grid>
-              </Form>
-            )}
-          </Formik>
-        </Container>
-        <Typography variant="overline" align="center" style={{textTransform: 'uppercase'}}>
-          Any language, every item, many realms, much evaluation, very wow!<br/>
-          Dont know how to start? Feels a bit confused? <Link href={`/help/en-dma-manual`} color="secondary" underline="hover">Take a look at our guideline</Link> или же <Link href={`/help/ru-dma-manual`} color="secondary" underline="hover">прочтите инструкцию на русском</Link>
-        </Typography>
-      </Grid>
-    </main>
+              </Grid>
+            </Form>
+          )}
+        </Formik>
+        <Grid container spacing={5} alignItems={'center'} justify={"center"}>
+          <Typography variant="overline" align="center" style={{textTransform: 'uppercase', paddingTop: '25px'}}>
+            Any language, every item, many realms, much evaluation, very wow!<br/>
+            Dont know how to start? Feels a bit confused? <Link href={`/help/en-dma-manual`} color="secondary" underline="true">Take a look at our guideline</Link> или же <Link href={`/help/ru-dma-manual`} color="secondary" underline="true">прочтите инструкцию на русском</Link>
+          </Typography>
+        </Grid>
+      </Container>
+    </section>
   )
 }
