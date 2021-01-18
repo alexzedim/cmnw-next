@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import {AppBar, Toolbar, Typography, IconButton, Drawer, MenuItem} from '@material-ui/core';
+import React, {useEffect, useState} from "react";
+import {AppBar, Drawer, IconButton, MenuItem, Toolbar, Typography} from '@material-ui/core';
 import MenuIcon from "@material-ui/icons/Menu";
 import {makeStyles} from '@material-ui/core/styles';
 import Link from "./Link";
@@ -11,7 +11,7 @@ const headersData = [
     href: "/osint",
   },
   {
-    label: "Items & Auctions",
+    label: "Auctions & Valuations",
     href: "/dma",
   },
   {
@@ -56,8 +56,8 @@ export default function Header() {
   useEffect(() => {
     const setResponsiveness = () => {
       return window.innerWidth < 900
-          ? setState((prevState) => ({ ...prevState, mobileView: true }))
-          : setState((prevState) => ({ ...prevState, mobileView: false }));
+        ? setState((prevState) => ({ ...prevState, mobileView: true }))
+        : setState((prevState) => ({ ...prevState, mobileView: false }));
     };
 
     setResponsiveness();
@@ -68,11 +68,11 @@ export default function Header() {
   const getMenuButtons = () => {
     return headersData.map(({ label, href }, i) => {
       return (
-          <Typography className={classes.element} key={i} variant="overline" color="primary" align="center" noWrap>
-            <Link href={href} color="inherit" underline="none">
-              {label}
-            </Link>
-          </Typography>
+        <Typography className={classes.element} key={i} variant="overline" color="primary" align="center" noWrap>
+          <Link href={href} color="inherit" underline="none">
+            {label}
+          </Link>
+        </Typography>
       );
     });
   };
@@ -133,7 +133,7 @@ export default function Header() {
 
   return (
     <header>
-      <AppBar className={classes.appBar} color={'transparent'} position={'relative'}>
+      <AppBar className={classes.appBar} color={'transparent'}>
         {mobileView ? displayMobile() : displayDesktop()}
       </AppBar>
     </header>
