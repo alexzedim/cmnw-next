@@ -1,18 +1,20 @@
 import React from "react";
 import Router from 'next/router'
-import MetaHead from '../src/MetaHead'
 import {Field, Form, Formik} from 'formik';
+import * as Yup from 'yup';
+
 import ArrowForwardOutlinedIcon from '@material-ui/icons/ArrowForwardOutlined';
 import {Button, Grid, makeStyles, MenuItem, Typography, Container} from "@material-ui/core";
 import MuiTextField from '@material-ui/core/TextField';
 import {TextField} from 'formik-material-ui';
-import {osint_commands, realms, type} from "../src/Interfaces";
 import {Autocomplete} from 'formik-material-ui-lab';
-import * as Yup from 'yup';
+
 import Link from "../src/Link";
 import AtSign from "../src/AtSign";
+import MetaHead from '../src/MetaHead'
+import {osint_commands, realms, type} from "../src/Interfaces";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   root: {
     overflow: 'hidden',
     height: '100vh',
@@ -24,7 +26,6 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    padding: theme.spacing(0, 1),
   }
 }));
 
@@ -50,7 +51,7 @@ export default function Osint() {
     <section className={classes.root}>
       <MetaHead
         title={"Conglomerat: OSINT"}
-        description={"Open Source Intelligence"}
+        description={"Open Source Character Database"}
         image={"https://conglomerat.group/logo.png"}
       />
       <Container>
@@ -209,23 +210,6 @@ export default function Osint() {
                           name="hash"
                           type="text"
                           label="Hash"
-                          variant="outlined"
-                          fullWidth
-                        />
-                      </div>
-                    </Grid>
-                  </React.Fragment>
-                )}
-                {values.command === "file" && (
-                  <React.Fragment>
-                    <Grid item xs={12} md={9}>
-                      <div className={classes.item}>
-                        <Field
-                          component={TextField}
-                          style={{width: '100%'}}
-                          name="id"
-                          type="text"
-                          label="File ID"
                           variant="outlined"
                           fullWidth
                         />
