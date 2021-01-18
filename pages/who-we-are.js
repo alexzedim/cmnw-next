@@ -1,6 +1,16 @@
 import React from 'react';
 import Link from "../src/Link";
-import {Card, CardContent, Divider, Grid, List, ListItem, ListItemText, makeStyles, Typography} from '@material-ui/core';
+import {
+  Card,
+  CardContent,
+  Divider,
+  Grid,
+  List,
+  ListItem,
+  ListItemText,
+  makeStyles,
+  Typography
+} from '@material-ui/core';
 import MetaHead from '../src/MetaHead'
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import {contributors} from "../src/Interfaces";
