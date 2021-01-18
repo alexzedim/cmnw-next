@@ -3,12 +3,14 @@ import Router from 'next/router'
 import MetaHead from '../src/MetaHead'
 import {Field, Form, Formik} from 'formik';
 import ArrowForwardOutlinedIcon from '@material-ui/icons/ArrowForwardOutlined';
-import {Button, Grid, makeStyles, MenuItem, Typography, Container, Hidden} from "@material-ui/core";
+import {Button, Grid, makeStyles, MenuItem, Typography, Container} from "@material-ui/core";
 import MuiTextField from '@material-ui/core/TextField';
 import {TextField} from 'formik-material-ui';
 import {osint_commands, realms, type} from "../src/Interfaces";
 import {Autocomplete} from 'formik-material-ui-lab';
 import * as Yup from 'yup';
+import Link from "../src/Link";
+import AtSign from "../src/AtSign";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -117,15 +119,7 @@ export default function Osint() {
                         />
                       </div>
                     </Grid>
-                    <Hidden only="xs">
-                    <Grid item xs={12} md={1}>
-                      <div className={classes.item}>
-                        <Typography variant="h3" align="center" style={{textTransform: 'uppercase', margin: '0'}}>
-                          @
-                        </Typography>
-                      </div>
-                    </Grid>
-                    </Hidden>
+                    <AtSign/>
                     <Grid item xs={12} md={3}>
                       <div className={classes.item}>
                         <Field
@@ -161,13 +155,7 @@ export default function Osint() {
                         />
                       </div>
                     </Grid>
-                    <Grid item xs={12} md={1}>
-                      <div className={classes.item}>
-                        <Typography variant="h3" align="center" style={{textTransform: 'uppercase', margin: '0'}}>
-                          @
-                        </Typography>
-                      </div>
-                    </Grid>
+                    <AtSign/>
                     <Grid item xs={12} md={3}>
                       <div className={classes.item}>
                         <Field
@@ -213,13 +201,7 @@ export default function Osint() {
                         </Field>
                       </div>
                     </Grid>
-                    <Grid item xs={12} md={1}>
-                      <div className={classes.item}>
-                        <Typography variant="h3" align="center" style={{textTransform: 'uppercase', margin: '0'}}>
-                          @
-                        </Typography>
-                      </div>
-                    </Grid>
+                    <AtSign/>
                     <Grid item xs={12} md={3}>
                       <div className={classes.item}>
                         <Field
@@ -262,6 +244,11 @@ export default function Osint() {
             </Form>
           )}
         </Formik>
+        <Grid container spacing={5} alignItems={'center'} justify={"center"}>
+          <Typography variant="overline" align="center" style={{textTransform: 'uppercase', paddingTop: '25px'}}>
+            He-hey, welcome! Be out guest. Check out <Link href={`/help/en-osint-manual`} color="secondary" underline="true">full manual here</Link> или же <Link href={`/help/ru-osint-manual`} color="secondary" underline="true">прочтите инструкцию на русском.</Link>
+          </Typography>
+        </Grid>
       </Container>
     </section>
   )
