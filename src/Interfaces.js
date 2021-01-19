@@ -10,21 +10,13 @@ const osint_commands = [
   {
     value: 'hash',
     label: 'HASH',
-  },
-  {
-    value: 'file',
-    label: 'FILE',
-  },
+  }
 ]
 
 const dma_commands = [
   {
     value: 'item',
-    label: 'ITEM',
-  },
-  {
-    value: 'xrs',
-    label: 'CROSS REALM',
+    label: 'ITEM / CROSS REALM',
   },
   {
     value: 'profession',

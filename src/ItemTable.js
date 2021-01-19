@@ -4,12 +4,7 @@ import MaterialTable from "material-table";
 import {makeStyles} from '@material-ui/core/styles';
 import CheckIcon from '@material-ui/icons/Check';
 import ShowChartIcon from '@material-ui/icons/ShowChart';
-import {
-  Card,
-  CardContent,
-  Divider,
-  Grid,
-} from '@material-ui/core';
+import {Card, CardContent, Divider, Grid,} from '@material-ui/core';
 import Link from "./Link";
 
 const useStyles = makeStyles((theme) => ({

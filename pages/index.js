@@ -1,11 +1,10 @@
 import React from "react";
 import MetaHead from '../src/MetaHead'
-import {Card, CardMedia, CardHeader, CardContent, Grid, makeStyles, Typography} from "@material-ui/core";
+import {Card, CardContent, CardHeader, CardMedia, Grid, makeStyles, Typography} from "@material-ui/core";
 import Link from "../src/Link";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    height: '93vh',
     width: '100%'
   },
   index: {
@@ -32,7 +31,7 @@ const useStyles = makeStyles(theme => ({
 function Index() {
   const classes = useStyles();
   return (
-    <main>
+    <>
       <MetaHead
         title={"Conglomerat"}
         description={"World of Warcraft: In-game decision-making superiority starts here"}
@@ -84,13 +83,8 @@ function Index() {
             </Card>
           </Link>
         </Grid>
-        <Grid item xs={12} sm={12} md={12} align="center">
-          <Typography variant="overline" align="center" style={{textTransform: 'uppercase'}}>
-            More things to come, stay tuned! And we don't use cookies at all. Eat this!
-          </Typography>
-        </Grid>
       </Grid>
-    </main>
+    </>
   )
 }
 
