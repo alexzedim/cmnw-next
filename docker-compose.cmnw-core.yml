@@ -15,7 +15,6 @@ services:
     image: ghcr.io/alexzedim/cmnw:latest
     container_name: cmnw
     restart: always
-    command: [ 'yarn','start' ]
     ports:
       - '3000:3000'
     environment:
