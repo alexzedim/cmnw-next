@@ -8,7 +8,7 @@ Home repo based on [GitHub](https://github.com/AlexZeDim/cmnw). And all back-end
 
 ## Contribution
 
-We will be glad to receive any amount of contribution or feedback. Code reviewing, component design ideas, issues & pull requests opened. But for the best purpose you should have , for example, for providing a code-review, you should have experience in the relative field and so on.
+We will be glad to receive any amount of contribution or feedback if yoy are experienced in the relative field. Code reviewing, component design ideas, issues & pull requests opened.
 
 ## Deploy
 
@@ -18,6 +18,6 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 ___
 
-Therefore, we use local deployment with `npm run docker:build` (`docker build -t cmnw .`) & `npm run docker:run` (`docker run -d -p 3000:3000 cmnw`). 
+Therefore, it can be deployed locally via `npm run docker:build` (`docker build -t cmnw .`) & `npm run docker:run` (`docker run -d -p 3000:3000 cmnw`). 
 
 All the relevant information could be found in `Dockerfile`.
