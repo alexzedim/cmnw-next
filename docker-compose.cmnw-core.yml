@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   commonwealth:
-    image: ghcr.io/alexzedim/commonwealth:latest
+    image: ghcr.io/alexzedim/cmnw:latest
     container_name: commonwealth
     restart: always
     command: [ 'node','dist/apps/conglomerat/main.js' ]
@@ -12,7 +12,7 @@ services:
       - NODE_ENV=${NODE_ENV}
 
   cmnw:
-    image: ghcr.io/alexzedim/cmnw:latest
+    image: ghcr.io/alexzedim/cmnw-next:latest
     container_name: cmnw
     restart: always
     ports:

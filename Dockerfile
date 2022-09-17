@@ -12,6 +12,11 @@ RUN yarn install --frozen-lockfile
 
 FROM node:16.14-alpine AS builder
 
+LABEL org.opencontainers.image.title = "CMNW-NEXT"
+LABEL org.opencontainers.image.vendor = "AlexZeDim"
+LABEL org.opencontainers.image.url = "https://i.imgur.com/CY0Kqy3.png"
+LABEL org.opencontainers.image.source = "https://github.com/AlexZeDim/cmnw-next"
+
 ENV NODE_ENV=production
 WORKDIR /opt/app
 COPY . .
