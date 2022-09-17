@@ -1,13 +1,13 @@
 {
-  "name": "cmnw",
-  "version": "1.1.0",
+  "name": "cmnw-next",
+  "version": "1.2.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "docker:build": "docker build -t cmnw .",
-    "docker:run": "docker run -d -p 3000:3000 cmnw"
+    "docker:build": "docker build -t cmnw-next:%npm_package_version% .",
+    "docker:run": "docker run -d -p 3000:3000 cmnw-next"
   },
   "dependencies": {
     "@emotion/react": "11.10.4",
@@ -37,6 +37,7 @@
   "devDependencies": {
     "@material-ui/icons": "4.11.2",
     "@types/lodash": "4.14.168",
+    "@types/node": "18.7.16",
     "@types/react": "17.0.2",
     "eslint": "8.13.0",
     "eslint-config-next": "12.1.5",
