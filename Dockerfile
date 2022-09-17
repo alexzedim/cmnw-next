@@ -1,8 +1,15 @@
 # Install dependencies only when needed
 FROM node:16.14-alpine AS deps
 
+LABEL org.opencontainers.image.title = "CMNW-NEXT"
+LABEL org.opencontainers.image.vendor = "AlexZeDim"
+LABEL org.opencontainers.image.url = "https://i.imgur.com/CY0Kqy3.png"
+LABEL org.opencontainers.image.source = "https://github.com/AlexZeDim/cmnw-next"
+
 WORKDIR /opt/app
+
 COPY package.json ./
+
 RUN yarn install --frozen-lockfile
 
 # Rebuild the source code only when needed
@@ -11,11 +18,6 @@ RUN yarn install --frozen-lockfile
 # but the code hasn't changed.
 
 FROM node:16.14-alpine AS builder
-
-LABEL org.opencontainers.image.title = "CMNW-NEXT"
-LABEL org.opencontainers.image.vendor = "AlexZeDim"
-LABEL org.opencontainers.image.url = "https://i.imgur.com/CY0Kqy3.png"
-LABEL org.opencontainers.image.source = "https://github.com/AlexZeDim/cmnw-next"
 
 ENV NODE_ENV=production
 WORKDIR /opt/app
