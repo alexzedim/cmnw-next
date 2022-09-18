@@ -56,7 +56,8 @@ const initialValues = (command?: string): initialValuesSearch => ({
   hash: 'A99BECEC48B29FF',
   item: 'FLASK.POWER',
   hubs: [{ value: "gordunni", label: "Гордунни" }],
-  id: '0'
+  id: '0',
+  commdty: 'FLASK.POWER',
 })
 
 export const SearchForm: FC = () => {
@@ -67,10 +68,10 @@ export const SearchForm: FC = () => {
     <Formik
       initialValues={initialValues(router.query.command as string)}
       validationSchema={validation}
-      onSubmit={(values, { setSubmitting }) => {
-        setSubmitting(false);
+      onSubmit={async (values, { setSubmitting }) => {
+        setSubmitting(true);
         const route = submitSearchForm(values);
-        Router.push(route);
+        await Router.push(route);
       }}
     >
       {({ values, touched, errors}) => (
@@ -98,38 +99,17 @@ export const SearchForm: FC = () => {
                 </Field>
               </div>
             </Grid>
-            {values.command === Commands.item && (
+            {values.command === Commands.commdty && (
               <React.Fragment>
-                <Grid item xs={12} md={3}>
+                <Grid item xs={12} md={7}>
                   <div className={classes.item}>
                     <Field
                       component={TextField}
-                      name="item"
+                      name="commdty"
                       type="text"
-                      label="Item"
+                      label="Commdty"
                       variant="outlined"
                       fullWidth
-                    />
-                  </div>
-                </Grid>
-                <AtSign/>
-                <Grid item xs={12} md={3}>
-                  <div className={classes.item}>
-                    <Field
-                      name="hubs"
-                      multiple
-                      component={Autocomplete}
-                      options={REALMS}
-                      getOptionLabel={(option) => option.label}
-                      fullWidth
-                      renderInput={(params) => (
-                        <MuiTextField
-                          {...params}
-                          error={touched['hubs'] && !!errors['hubs']}
-                          label="Realms"
-                          variant="outlined"
-                        />
-                      )}
                     />
                   </div>
                 </Grid>
