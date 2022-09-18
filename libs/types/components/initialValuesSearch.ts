@@ -1,7 +1,7 @@
 import { HashType } from '../enums';
 
 export type initialValuesSearch = {
-  command: string,
+  command: string | string[],
   realm: { label: string, value: string },
   character: string,
   guild: string,

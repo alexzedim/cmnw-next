@@ -1,5 +1,5 @@
 import { object, string, array } from 'yup';
-import Router, { useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 import MuiTextField from '@material-ui/core/TextField';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
@@ -7,10 +7,10 @@ import { Autocomplete } from 'formik-material-ui-lab';
 import React, { FC } from 'react';
 import { Button, Grid, makeStyles, MenuItem } from '@material-ui/core';
 import { COMMANDS, REALMS, HASH } from '../../constants';
-import AtSign from '../AtSign/AtSign';
+import AtSign from '../AtSign';
 import ArrowForwardOutlinedIcon from '@material-ui/icons/ArrowForwardOutlined';
-import { Commands, HashType, initialValuesSearch } from '../../types';
-import { submitSearchForm } from '../../utils';
+import { Commands, HashType, initialValuesSearch, searchValidation } from '../../types';
+import { initialValues } from '../../utils';
 
 const useStyles = makeStyles(() => ({
   item: {
@@ -26,53 +26,21 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const validation = object().shape({
-  character: string()
-    .min(3, 'Between 3 and 13 symbols!')
-    .max(13, 'Between 3 and 13 symbols!')
-    .required('Required'),
-  guild: string()
-    .min(3, 'Between 3 and 25 symbols!')
-    .max(25, 'Between 3 and 25 symbols!')
-    .required('Required'),
-  hash: string()
-    .min(13, 'Between 14 and 20 symbols!')
-    .max(20, 'Between 14 and 20 symbols!')
-    .required('Required'),
-  realm: object({
-    label: string().default('Гордунни').required(),
-    value: string().default('gordunni').required(),
-  }),
-  item: string().required('Required'),
-  hubs: array().min(1),
-});
-
-const initialValues = (command?: string): initialValuesSearch => ({
-  command: command ? command : 'character',
-  realm: { label: 'Гордунни', value: 'gordunni' },
-  character: 'Блюрателла',
-  guild: 'Депортация',
-  type: HashType.A,
-  hash: 'A99BECEC48B29FF',
-  item: 'FLASK.POWER',
-  hubs: [{ value: "gordunni", label: "Гордунни" }],
-  id: '0',
-  commdty: 'FLASK.POWER',
-})
-
 export const SearchForm: FC = () => {
   const classes = useStyles();
   const router = useRouter();
 
   return (
     <Formik
-      initialValues={initialValues(router.query.command as string)}
-      validationSchema={validation}
-      onSubmit={async (values, { setSubmitting }) => {
-        setSubmitting(true);
-        const route = submitSearchForm(values);
-        await Router.push(route);
-      }}
+      initialValues={initialValues()}
+      validationSchema={searchValidation}
+      onSubmit={
+        async (values, formikHelpers) => {
+          console.log(values, formikHelpers);
+          formikHelpers.setSubmitting(true);
+          // await submitSearchForm(values);
+        }
+      }
     >
       {({ values, touched, errors}) => (
         <Form>
