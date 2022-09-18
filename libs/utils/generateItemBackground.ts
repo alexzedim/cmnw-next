@@ -1,4 +1,4 @@
-import { ItemQuality } from '../types/enums';
+import { ItemQuality } from '../types';
 import { backgroundColors } from '../constants';
 
 export const generateItemBackground = (props: { quality?: string, asset_class?: string[] }) => {

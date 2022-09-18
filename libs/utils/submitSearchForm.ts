@@ -1,5 +1,5 @@
-import { initialValuesSearch } from '../types/components';
-import { Commands } from '../types/enums';
+import { initialValuesSearch } from '../types';
+import { Commands } from '../types';
 
 export const submitSearchForm = (values: initialValuesSearch): string => {
   if (values.command === Commands.characters) {
@@ -8,9 +8,11 @@ export const submitSearchForm = (values: initialValuesSearch): string => {
     return `/${values.command}/${values.guild}@${values.realm.value}`;
   } else if (values.command === Commands.hash) {
     return `/${values.command}/${values.type}@${values.hash}`;
-  } else if (values.command === Commands.item) {
+  } else if (values.command === Commands.commdty) {
+    return `/${values.command}/${values.commdty}`;
+  } else if (values.command === Commands.gold) {
     const realms = values.hubs.map(({value}) => value).join(';');
-    return `/${values.command}/${values.item}@${realms}`;
+    return `/${values.command}/${realms}`;
   }
   return `/${values.command}/${values.character}/${values.realm.value}`;
 }

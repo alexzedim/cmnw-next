@@ -1,4 +1,4 @@
-import { Faction } from '../types/enums';
+import { Faction } from '../types';
 import { randomInt } from './randomInt';
 import { backgroundColors } from '../constants';
 

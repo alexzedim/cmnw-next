@@ -1,7 +1,7 @@
 import React from 'react';
 import MetaHead from '../libs/components/MetaHead';
 import { Button, Container, Grid, makeStyles, Typography } from '@material-ui/core';
-import { DISCORD } from '../libs/constants';
+import { DISCORD } from '../libs';
 
 const useStyles = makeStyles(() => ({
   main: {
