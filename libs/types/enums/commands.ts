@@ -2,5 +2,6 @@ export enum Commands {
   characters = 'character',
   guilds = 'guild',
   hash = 'hash',
-  item = 'item',
+  commdty = 'commdty',
+  gold = 'gold',
 }

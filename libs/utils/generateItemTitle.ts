@@ -1,4 +1,4 @@
-import { itemResponse, realmResponse } from '../types/components';
+import { itemResponse, realmResponse } from '../types';
 
 export const generateItemTitle = (
   item: Partial<itemResponse>,

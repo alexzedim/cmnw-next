@@ -12,7 +12,11 @@ export const COMMANDS = [
     label: 'HASH',
   },
   {
-    value: 'item',
-    label: 'ITEM',
+    value: 'commdty',
+    label: 'COMMDTY',
+  },
+  {
+    value: 'gold',
+    label: 'GOLD',
   }
 ];

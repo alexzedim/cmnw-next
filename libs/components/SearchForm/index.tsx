@@ -9,8 +9,7 @@ import { Button, Grid, makeStyles, MenuItem } from '@material-ui/core';
 import { COMMANDS, REALMS, HASH } from '../../constants';
 import AtSign from '../AtSign/AtSign';
 import ArrowForwardOutlinedIcon from '@material-ui/icons/ArrowForwardOutlined';
-import { initialValuesSearch } from '../../types/components';
-import { Commands, HashType } from '../../types/enums';
+import { Commands, HashType, initialValuesSearch } from '../../types';
 import { submitSearchForm } from '../../utils';
 
 const useStyles = makeStyles(() => ({

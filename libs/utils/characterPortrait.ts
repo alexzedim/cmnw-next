@@ -1,4 +1,4 @@
-import { Faction } from '../types/enums';
+import { Faction } from '../types';
 
 export const characterPortrait = (faction?: Faction, media?: string): string => {
   if (media) return media;
