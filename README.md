@@ -8,7 +8,7 @@ Home repo based on [GitHub](https://github.com/AlexZeDim/cmnw). And all back-end
 
 ## Contribution
 
-We will be glad to receive any amount of contribution or feedback if yoy are experienced in the relative field. Code reviewing, component design ideas, issues & pull requests opened.
+We will be glad to receive any amount of contribution or feedback if > are experienced in the relative field. Code reviewing, component design ideas, issues & pull requests opened.
 
 ## Deploy
 
