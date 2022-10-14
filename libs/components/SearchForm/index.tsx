@@ -28,7 +28,7 @@ export const SearchForm: FC = () => {
               id="realm"
               options={REALMS.sort((a, b) => -b.label.localeCompare(a.label))}
               groupBy={(option) => option.label}
-              getOptionLabel={(option) => option.label}
+              getOptionLabel={(option: { label: string, value: string }) => option.label}
               sx={{ width: 300 }}
               renderInput={(params) => <TextField {...params} label="REALM" />}
             />
