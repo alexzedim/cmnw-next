@@ -5,8 +5,9 @@ import AtSign from '../AtSign';
 import ArrowForwardOutlinedIcon from '@material-ui/icons/ArrowForwardOutlined';
 import { Commands, searchValidation } from '../../types';
 import { initialValues } from '../../utils';
-import { Formik, Field, Form } from 'formik';
+import { Formik, Form } from 'formik';
 import { TextField, Autocomplete, Button } from '@mui/material';
+import { SearchInput } from '../../types/data/searchInput';
 
 
 
@@ -28,7 +29,7 @@ export const SearchForm: FC = () => {
               id="realm"
               options={REALMS.sort((a, b) => -b.label.localeCompare(a.label))}
               groupBy={(option) => option.label}
-              getOptionLabel={(option: { label: string, value: string }) => option.label}
+              getOptionLabel={(option: SearchInput) => option.label}
               sx={{ width: 300 }}
               renderInput={(params) => <TextField {...params} label="REALM" />}
             />

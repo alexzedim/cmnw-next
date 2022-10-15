@@ -1,5 +1,3 @@
-import { nameLocaleEmbed } from './nameLocaleEmbed';
-
 export type AuctionsResponse = {
   feed: Array<{
     id: number;

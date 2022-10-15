@@ -1,4 +1,6 @@
-export const REALMS = [
+import { SearchInput } from '../types/data/searchInput';
+
+export const REALMS: Array<SearchInput> = [
   {
     value: "aggramar",
     label: "Aggramar"
