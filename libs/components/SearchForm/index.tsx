@@ -36,7 +36,7 @@ export const SearchForm: FC = () => {
           alert(JSON.stringify(values, null, 2));
         }}
       >
-        {({ isSubmitting, values, handleChange }) => (
+        {({ isSubmitting, values, handleChange, setFieldValue }) => (
           <Form>
             <Box sx={{ flexGrow: 1 }}>
               <Grid container spacing={5} alignItems={'center'} justifyContent={"center"}>
@@ -77,9 +77,11 @@ export const SearchForm: FC = () => {
                         id="realm"
                         options={REALMS}
                         autoHighlight
+                        defaultValue={values.realm}
                         value={values.realm}
                         isOptionEqualToValue={(option, value) => String(option.value) === String(value.value)}
                         getOptionLabel={(option: SearchInput) => option.label}
+                        onChange={(e, value) => setFieldValue('realm', value)}
                         sx={styleCss.item}
                         renderInput={(params) => <TextField {...params} label="Realm" />}
                       />
@@ -105,9 +107,11 @@ export const SearchForm: FC = () => {
                         id="realm"
                         options={REALMS}
                         autoHighlight
+                        defaultValue={values.realm}
                         value={values.realm}
                         isOptionEqualToValue={(option, value) => String(option.value) === String(value.value)}
                         getOptionLabel={(option: SearchInput) => option.label}
+                        onChange={(e, value) => setFieldValue('realm', value)}
                         sx={styleCss.item}
                         renderInput={(params) => <TextField {...params} label="Realm" />}
                       />
