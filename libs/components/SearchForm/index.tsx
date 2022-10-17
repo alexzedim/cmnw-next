@@ -6,7 +6,7 @@ import ArrowForwardOutlinedIcon from '@material-ui/icons/ArrowForwardOutlined';
 import { Commands, initialValuesSearch, searchValidation } from '../../types';
 import { initialValues } from '../../utils';
 import { Formik, Form } from 'formik';
-import { TextField, Autocomplete, Button, Grid, Box, Select, MenuItem } from '@mui/material';
+import { TextField, Autocomplete, Button, Grid, Box, MenuItem } from '@mui/material';
 import { SearchInput } from '../../types/data/searchInput';
 
 const itemCss = {
@@ -20,6 +20,7 @@ const itemCss = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    justifyContent: 'center',
   }
 }
 
@@ -38,7 +39,7 @@ export const SearchForm: FC = () => {
         {({ isSubmitting, values, handleChange }) => (
           <Form>
             <Box sx={{ flexGrow: 1 }}>
-              <Grid container spacing={2}>
+              <Grid container spacing={5}>
                 <Grid item xs={12} md={5}>
                   <TextField
                     id="command"
@@ -74,7 +75,7 @@ export const SearchForm: FC = () => {
                     size="large"
                     disabled={isSubmitting}
                     type="submit"
-                    sx={itemCss.item}
+                    sx={itemCss.button}
                   >
                     <ArrowForwardOutlinedIcon/>
                   </Button>
