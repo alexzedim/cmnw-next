@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import { COMMANDS, REALMS, HASH } from '../../constants';
 import AtSign from '../AtSign';
 import ArrowForwardOutlinedIcon from '@material-ui/icons/ArrowForwardOutlined';
-import { Commands, searchValidation } from '../../types';
+import { Commands, initialValuesSearch, searchValidation } from '../../types';
 import { initialValues } from '../../utils';
 import { Formik, Form } from 'formik';
 import { TextField, Autocomplete, Button, Grid, Box, Select, MenuItem } from '@mui/material';
@@ -16,6 +16,11 @@ const itemCss = {
     alignItems: 'center',
     minWidth: '20em',
   },
+  button: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  }
 }
 
 export const SearchForm: FC = () => {
@@ -23,32 +28,34 @@ export const SearchForm: FC = () => {
 
   return (
     <div>
-      <Formik
+      <Formik<initialValuesSearch>
         initialValues={initialValues()}
         validationSchema={searchValidation}
         onSubmit={async (values) => {
           alert(JSON.stringify(values, null, 2));
         }}
       >
-        {({ isSubmitting }) => (
+        {({ isSubmitting, values, handleChange }) => (
           <Form>
             <Box sx={{ flexGrow: 1 }}>
               <Grid container spacing={2}>
                 <Grid item xs={12} md={5}>
-                  <Select
-                    labelId="command"
+                  <TextField
                     id="command"
-                    value={"character"}
-                    variant="outlined"
-                    fullWidth
+                    select
+                    name="command"
                     label="Command"
+                    fullWidth
+                    value={values.command}
+                    onChange={handleChange}
+                    sx={itemCss.item}
                   >
                     {COMMANDS.map((option) => (
                       <MenuItem key={option.value} value={option.value}>
                         {option.label}
                       </MenuItem>
                     ))}
-                  </Select>
+                  </TextField>
                 </Grid>
                 <Grid item xs={12} md={5}>
                   <Autocomplete
