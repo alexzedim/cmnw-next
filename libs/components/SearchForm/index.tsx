@@ -1,13 +1,13 @@
 import  { useRouter } from 'next/router'
-import React, { FC } from 'react';
+import React, { FC, Fragment } from 'react';
 import { COMMANDS, REALMS, HASH } from '../../constants';
 import AtSign from '../AtSign';
 import ArrowForwardOutlinedIcon from '@material-ui/icons/ArrowForwardOutlined';
 import { Commands, initialValuesSearch, searchValidation } from '../../types';
 import { initialValues } from '../../utils';
 import { Formik, Form } from 'formik';
-import { TextField, Autocomplete, Button, Grid, Box, MenuItem } from '@mui/material';
 import { SearchInput } from '../../types/data/searchInput';
+import { TextField, Autocomplete, Button, Grid, Box, MenuItem } from '@mui/material';
 
 const itemCss = {
   item: {
@@ -59,7 +59,7 @@ export const SearchForm: FC = () => {
                   </TextField>
                 </Grid>
                 {values.command === Commands.characters && (
-                  <React.Fragment>
+                  <Fragment>
                     <Grid item xs={12} md={3}>
                       <TextField
                         id="character"
@@ -83,7 +83,19 @@ export const SearchForm: FC = () => {
                         renderInput={(params) => <TextField {...params} label="Realm" />}
                       />
                     </Grid>
-                  </React.Fragment>
+                  </Fragment>
+                )}
+                {values.command === Commands.guilds && (
+                  <Fragment></Fragment>
+                )}
+                {values.command === Commands.hash && (
+                  <Fragment></Fragment>
+                )}
+                {values.command === Commands.commdty && (
+                  <Fragment></Fragment>
+                )}
+                {values.command === Commands.gold && (
+                  <Fragment></Fragment>
                 )}
                 <Grid item xs={12} md={1}>
                   <Button
