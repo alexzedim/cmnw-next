@@ -18,5 +18,5 @@ export const searchValidation = object().shape({
     value: string().default('gordunni').required(),
   }),
   item: string().required('Required'),
-  hubs: array().min(1),
+  commdty: string().required('Required'),
 });

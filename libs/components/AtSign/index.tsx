@@ -13,7 +13,7 @@ const styleCss = {
   }
 }
 
-const AtSign: FC<unknown> = () => {
+const AtSign: FC<{}> = () => {
   return (
     <Grid item xs={12} md={1}>
       <Box component="span" sx={styleCss.item}>

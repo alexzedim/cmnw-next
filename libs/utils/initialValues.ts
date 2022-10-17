@@ -9,7 +9,6 @@ export const initialValues = (): initialValuesSearch => {
     type: HashType.A,
     hash: 'A99BECEC48B29FF',
     item: 'FLASK.POWER',
-    hubs: [{ value: "gordunni", label: "Гордунни" }],
     id: '0',
     commdty: 'FLASK.POWER',
   })

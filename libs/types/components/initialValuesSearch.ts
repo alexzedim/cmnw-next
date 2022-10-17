@@ -8,7 +8,6 @@ export type initialValuesSearch = {
   type: HashType,
   item: string,
   commdty: string,
-  hubs: Array<{ label: string, value: string }>
   hash: string,
   id: string,
 }

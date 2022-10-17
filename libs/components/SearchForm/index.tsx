@@ -9,7 +9,7 @@ import { Formik, Form } from 'formik';
 import { SearchInput } from '../../types/data/searchInput';
 import { TextField, Autocomplete, Button, Grid, Box, MenuItem } from '@mui/material';
 
-const itemCss = {
+const styleCss = {
   item: {
     display: 'flex',
     flexDirection: 'column',
@@ -49,7 +49,7 @@ export const SearchForm: FC = () => {
                     fullWidth
                     value={values.command}
                     onChange={handleChange}
-                    sx={itemCss.item}
+                    sx={styleCss.item}
                   >
                     {COMMANDS.map((option) => (
                       <MenuItem key={option.value} value={option.value}>
@@ -68,7 +68,7 @@ export const SearchForm: FC = () => {
                         variant="outlined"
                         value={values.character}
                         onChange={handleChange}
-                        sx={itemCss.item}
+                        sx={styleCss.item}
                       />
                     </Grid>
                     <AtSign/>
@@ -78,15 +78,41 @@ export const SearchForm: FC = () => {
                         options={REALMS}
                         autoHighlight
                         value={values.realm}
+                        isOptionEqualToValue={(option, value) => String(option.value) === String(value.value)}
                         getOptionLabel={(option: SearchInput) => option.label}
-                        sx={itemCss.item}
+                        sx={styleCss.item}
                         renderInput={(params) => <TextField {...params} label="Realm" />}
                       />
                     </Grid>
                   </Fragment>
                 )}
                 {values.command === Commands.guilds && (
-                  <Fragment></Fragment>
+                  <Fragment>
+                    <Grid item xs={12} md={3}>
+                      <TextField
+                        id="guild"
+                        name="guild"
+                        label="Guild"
+                        variant="outlined"
+                        value={values.guild}
+                        onChange={handleChange}
+                        sx={styleCss.item}
+                      />
+                    </Grid>
+                    <AtSign/>
+                    <Grid item xs={12} md={3}>
+                      <Autocomplete
+                        id="realm"
+                        options={REALMS}
+                        autoHighlight
+                        value={values.realm}
+                        isOptionEqualToValue={(option, value) => String(option.value) === String(value.value)}
+                        getOptionLabel={(option: SearchInput) => option.label}
+                        sx={styleCss.item}
+                        renderInput={(params) => <TextField {...params} label="Realm" />}
+                      />
+                    </Grid>
+                  </Fragment>
                 )}
                 {values.command === Commands.hash && (
                   <Fragment></Fragment>
@@ -104,7 +130,7 @@ export const SearchForm: FC = () => {
                     size="large"
                     disabled={isSubmitting}
                     type="submit"
-                    sx={itemCss.button}
+                    sx={styleCss.button}
                   >
                     <ArrowForwardOutlinedIcon/>
                   </Button>
