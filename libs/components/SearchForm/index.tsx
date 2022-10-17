@@ -119,7 +119,39 @@ export const SearchForm: FC = () => {
                   </Fragment>
                 )}
                 {values.command === Commands.hash && (
-                  <Fragment></Fragment>
+                  <Fragment>
+                    <Grid item xs={12} md={3}>
+                      <TextField
+                        id="type"
+                        select
+                        name="type"
+                        label="Type"
+                        fullWidth
+                        value={values.type}
+                        onChange={handleChange}
+                        sx={styleCss.item}
+                      >
+                        {HASH.map((option) => (
+                          <MenuItem key={option.value} value={option.value}>
+                            {option.label}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    </Grid>
+                    <AtSign/>
+                    <Grid item xs={12} md={3}>
+                      <TextField
+                        id="hash"
+                        name="hash"
+                        label="Hash"
+                        variant="outlined"
+                        fullWidth
+                        value={values.hash}
+                        onChange={handleChange}
+                        sx={styleCss.item}
+                      />
+                    </Grid>
+                  </Fragment>
                 )}
                 {values.command === Commands.commdty && (
                   <Fragment></Fragment>
