@@ -39,8 +39,8 @@ export const SearchForm: FC = () => {
         {({ isSubmitting, values, handleChange }) => (
           <Form>
             <Box sx={{ flexGrow: 1 }}>
-              <Grid container spacing={5}>
-                <Grid item xs={12} md={5}>
+              <Grid container spacing={5} alignItems={'center'} justifyContent={"center"}>
+                <Grid item xs={12} md={3}>
                   <TextField
                     id="command"
                     select
@@ -58,17 +58,34 @@ export const SearchForm: FC = () => {
                     ))}
                   </TextField>
                 </Grid>
-                <Grid item xs={12} md={5}>
-                  <Autocomplete
-                    id="realm"
-                    options={REALMS}
-                    autoHighlight
-                    getOptionLabel={(option: SearchInput) => option.label}
-                    sx={itemCss.item}
-                    renderInput={(params) => <TextField {...params} label="REALM" />}
-                  />
-                </Grid>
-                <Grid item xs={12} md={2}>
+                {values.command === Commands.characters && (
+                  <React.Fragment>
+                    <Grid item xs={12} md={3}>
+                      <TextField
+                        id="character"
+                        name="character"
+                        label="Character"
+                        variant="outlined"
+                        value={values.character}
+                        onChange={handleChange}
+                        sx={itemCss.item}
+                      />
+                    </Grid>
+                    <AtSign/>
+                    <Grid item xs={12} md={3}>
+                      <Autocomplete
+                        id="realm"
+                        options={REALMS}
+                        autoHighlight
+                        value={values.realm}
+                        getOptionLabel={(option: SearchInput) => option.label}
+                        sx={itemCss.item}
+                        renderInput={(params) => <TextField {...params} label="Realm" />}
+                      />
+                    </Grid>
+                  </React.Fragment>
+                )}
+                <Grid item xs={12} md={1}>
                   <Button
                     color="secondary"
                     variant="outlined"
