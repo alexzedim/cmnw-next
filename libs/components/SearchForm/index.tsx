@@ -6,10 +6,17 @@ import ArrowForwardOutlinedIcon from '@material-ui/icons/ArrowForwardOutlined';
 import { Commands, searchValidation } from '../../types';
 import { initialValues } from '../../utils';
 import { Formik, Form } from 'formik';
-import { TextField, Autocomplete, Button } from '@mui/material';
+import { TextField, Autocomplete, Button, Grid, Box, Select, MenuItem } from '@mui/material';
 import { SearchInput } from '../../types/data/searchInput';
 
-
+const itemCss = {
+  item: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    minWidth: '20em',
+  },
+}
 
 export const SearchForm: FC = () => {
   const router = useRouter();
@@ -25,17 +32,48 @@ export const SearchForm: FC = () => {
       >
         {({ isSubmitting }) => (
           <Form>
-            <Autocomplete
-              id="realm"
-              options={REALMS.sort((a, b) => -b.label.localeCompare(a.label))}
-              groupBy={(option) => option.label}
-              getOptionLabel={(option: SearchInput) => option.label}
-              sx={{ width: 300 }}
-              renderInput={(params) => <TextField {...params} label="REALM" />}
-            />
-            <Button color="primary" variant="contained" fullWidth type="submit">
-              Submit
-            </Button>
+            <Box sx={{ flexGrow: 1 }}>
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={5}>
+                  <Select
+                    labelId="command"
+                    id="command"
+                    value={"character"}
+                    variant="outlined"
+                    fullWidth
+                    label="Command"
+                  >
+                    {COMMANDS.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </Grid>
+                <Grid item xs={12} md={5}>
+                  <Autocomplete
+                    id="realm"
+                    options={REALMS}
+                    autoHighlight
+                    getOptionLabel={(option: SearchInput) => option.label}
+                    sx={itemCss.item}
+                    renderInput={(params) => <TextField {...params} label="REALM" />}
+                  />
+                </Grid>
+                <Grid item xs={12} md={2}>
+                  <Button
+                    color="secondary"
+                    variant="outlined"
+                    size="large"
+                    disabled={isSubmitting}
+                    type="submit"
+                    sx={itemCss.item}
+                  >
+                    <ArrowForwardOutlinedIcon/>
+                  </Button>
+                </Grid>
+              </Grid>
+            </Box>
           </Form>
         )}
       </Formik>
