@@ -1,23 +1,26 @@
-import { Grid, makeStyles, Typography } from '@material-ui/core';
+import { Grid, Typography, Box } from '@mui/material';
 import React, { FC } from 'react';
 
-const useStyles = makeStyles(theme => ({
+const styleCss = {
   item: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+  },
+  typography: {
+    textTransform: 'uppercase',
+    margin: '0'
   }
-}));
+}
 
 const AtSign: FC<unknown> = () => {
-  const classes = useStyles();
   return (
     <Grid item xs={12} md={1}>
-      <div className={classes.item}>
-        <Typography variant="h3" align="center" style={{textTransform: 'uppercase', margin: '0'}}>
+      <Box component="span" sx={styleCss.item}>
+        <Typography variant="h3" align="center" sx={styleCss.typography}>
           @
         </Typography>
-      </div>
+      </Box>
     </Grid>
   )
 }
