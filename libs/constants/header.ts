@@ -12,8 +12,8 @@ export const HEADER = [
     href: { pathname: '/', query: { command: 'guild' } },
   },
   {
-    label: 'Items & Valuations',
-    href: { pathname: '/', query: { command: 'item' } },
+    label: 'Commdty',
+    href: { pathname: '/', query: { command: 'commdty' } },
   },
   {
     label: 'Who we are',
