@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import React, { FC, Fragment } from 'react';
 import { COMMANDS, REALMS, HASH } from '../../constants';
 import AtSign from '../AtSign';
-import ArrowForwardOutlinedIcon from '@material-ui/icons/ArrowForwardOutlined';
+import { ArrowForward } from '@mui/icons-material';
 import { Commands, initialValuesSearch, searchValidation } from '../../types';
 import { initialValues } from '../../utils';
 import { Formik, Form } from 'formik';
@@ -227,7 +227,7 @@ export const SearchForm: FC = () => {
                     type="submit"
                     sx={styleCss.button}
                   >
-                    <ArrowForwardOutlinedIcon/>
+                    <ArrowForward/>
                   </Button>
                 </Grid>
               </Grid>

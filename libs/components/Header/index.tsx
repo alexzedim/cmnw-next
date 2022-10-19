@@ -1,15 +1,14 @@
-import { makeStyles } from '@material-ui/styles';
 import { HEADER } from '../../constants';
-import React, { useEffect, useState } from 'react';
-import MenuIcon from "@material-ui/icons/Menu";
+import { useEffect, useState } from 'react';
+import { Menu } from '@mui/icons-material';
+import { AppBar, Drawer, IconButton, MenuItem, Toolbar, Typography } from '@mui/material';
 import Link from '../Link';
-import { AppBar, Drawer, IconButton, MenuItem, Toolbar, Typography } from '@material-ui/core';
 
-const useStyles = makeStyles(() => ({
+const styleCss = {
   root: {
     display: "flex",
     flexGrow: 1,
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
   },
   element: {
     paddingLeft: '50px',
@@ -18,11 +17,9 @@ const useStyles = makeStyles(() => ({
   appBar: {
     alignItems: 'center',
   }
-}));
+}
 
 export default function Header() {
-  const classes = useStyles();
-
   const [state, setState] = useState({
     mobileView: false,
     drawerOpen: false,
@@ -45,7 +42,7 @@ export default function Header() {
   const getMenuButtons = () => {
     return HEADER.map(({ label, href }, i) => {
       return (
-        <Typography className={classes.element} key={i} variant="overline" color="primary" align="center" noWrap>
+        <Typography sx={styleCss.element} key={i} variant="overline" color="primary" align="center" noWrap>
           <Link href={href} color="inherit" underline="none">
             {label}
           </Link>
@@ -70,7 +67,7 @@ export default function Header() {
 
   const displayDesktop = () => {
     return (
-      <Toolbar className={classes.root}>
+      <Toolbar sx={styleCss.root}>
         <div>{getMenuButtons()}</div>
       </Toolbar>
     );
@@ -91,7 +88,7 @@ export default function Header() {
             onClick: handleDrawerOpen,
           }}
         >
-          <MenuIcon />
+          <Menu />
         </IconButton>
 
         <Drawer
@@ -110,7 +107,7 @@ export default function Header() {
 
   return (
     <header>
-      <AppBar className={classes.appBar} color={'transparent'}>
+      <AppBar sx={styleCss.appBar} color={'transparent'}>
         {mobileView ? displayMobile() : displayDesktop()}
       </AppBar>
     </header>
