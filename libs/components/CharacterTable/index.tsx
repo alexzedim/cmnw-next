@@ -1,11 +1,12 @@
-import React, { FC, Fragment } from 'react';
+import { FC, Fragment } from 'react';
 import MUIDataTable from 'mui-datatables';
-import { characterTable } from '../../types/components';
+import { characterTable } from '../../types';
 import Link from '../Link';
-import { makeStyles } from '@material-ui/core';
 import dayjs from 'dayjs';
+import { theme } from '../../styles/theme';
+import { Box } from '@mui/material';
 
-const useStyles = makeStyles((theme) => ({
+const styleCss = {
   root: {
     margin: theme.spacing(2),
     borderRadius: '15px',
@@ -16,10 +17,9 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '15px',
     border: 'solid 25px white',
   }
-}));
+};
 
 const CharacterTable: FC<characterTable> = ({ characters, roster }) => {
-  const classes = useStyles();
   const options = {
     download: false,
     fixedSelectColumn: false,
@@ -127,15 +127,15 @@ const CharacterTable: FC<characterTable> = ({ characters, roster }) => {
 
   return (
     <Fragment>
-      <div className={classes.root}>
-        <div className={classes.table}>
+      <Box sx={styleCss.root}>
+        <Box sx={styleCss.table}>
           <MUIDataTable
             data={characters}
             columns={columns}
             options={options}
           />
-        </div>
-      </div>
+        </Box>
+      </Box>
     </Fragment>
   )
 }
