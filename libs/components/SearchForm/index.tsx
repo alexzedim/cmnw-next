@@ -13,11 +13,13 @@ const styleCss = {
   box: {
     flexGrow: 1
   },
+  grid: {
+    width: '50vw',
+  },
   item: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    minWidth: '15em'
   },
   button: {
     display: 'flex',
@@ -45,11 +47,12 @@ export const SearchForm: FC = () => {
               <Grid
                 container
                 direction='row'
-                spacing={5}
+                spacing={2}
                 alignItems={'center'}
                 justifyContent={'center'}
+                sx={styleCss.grid}
               >
-                <Grid item xs={12} md={3}>
+                <Grid item xs={12} md>
                   <TextField
                     id="command"
                     select
@@ -69,7 +72,7 @@ export const SearchForm: FC = () => {
                 </Grid>
                 {values.command === Commands.characters && (
                   <Fragment>
-                    <Grid item xs={12} md={3}>
+                    <Grid item xs={12} md>
                       <TextField
                         id="character"
                         name="character"
@@ -81,7 +84,7 @@ export const SearchForm: FC = () => {
                       />
                     </Grid>
                     <AtSign/>
-                    <Grid item xs={12} md={3}>
+                    <Grid item xs={12} md>
                       <Autocomplete
                         id="realm"
                         options={REALMS}
@@ -99,7 +102,7 @@ export const SearchForm: FC = () => {
                 )}
                 {values.command === Commands.guilds && (
                   <Fragment>
-                    <Grid item xs={12} md={3}>
+                    <Grid item xs={12} md>
                       <TextField
                         id="guild"
                         name="guild"
@@ -111,7 +114,7 @@ export const SearchForm: FC = () => {
                       />
                     </Grid>
                     <AtSign/>
-                    <Grid item xs={12} md={3}>
+                    <Grid item xs={12} md>
                       <Autocomplete
                         id="realm"
                         options={REALMS}
@@ -129,7 +132,7 @@ export const SearchForm: FC = () => {
                 )}
                 {values.command === Commands.hash && (
                   <Fragment>
-                    <Grid item xs={12} md={3}>
+                    <Grid item xs={12} md={2}>
                       <TextField
                         id="type"
                         select
@@ -148,7 +151,7 @@ export const SearchForm: FC = () => {
                       </TextField>
                     </Grid>
                     <AtSign/>
-                    <Grid item xs={12} md={3}>
+                    <Grid item xs={12} md>
                       <TextField
                         id="hash"
                         name="hash"
@@ -164,7 +167,7 @@ export const SearchForm: FC = () => {
                 )}
                 {values.command === Commands.commdty && (
                   <Fragment>
-                    <Grid item xs={12} md={3}>
+                    <Grid item xs={12} md>
                       <TextField
                         id="commdty"
                         name="commdty"
@@ -177,7 +180,7 @@ export const SearchForm: FC = () => {
                       />
                     </Grid>
                     <AtSign/>
-                    <Grid item xs={12} md={3}>
+                    <Grid item xs={12} md>
                       <Autocomplete
                         id="realm"
                         options={REALMS}
@@ -196,7 +199,7 @@ export const SearchForm: FC = () => {
                 {values.command === Commands.gold && (
                   <Fragment>
                     <AtSign/>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} md>
                       <Autocomplete
                         id="realm"
                         options={REALMS}
