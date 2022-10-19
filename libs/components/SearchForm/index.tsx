@@ -17,6 +17,7 @@ const styleCss = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    minWidth: '15em'
   },
   button: {
     display: 'flex',
@@ -41,7 +42,13 @@ export const SearchForm: FC = () => {
         {({ isSubmitting, values, handleChange, setFieldValue }) => (
           <Form>
             <Box sx={styleCss.box}>
-              <Grid container direction='row' spacing={5} alignItems={'center'} justifyContent={'center'}>
+              <Grid
+                container
+                direction='row'
+                spacing={5}
+                alignItems={'center'}
+                justifyContent={'center'}
+              >
                 <Grid item xs={12} md={3}>
                   <TextField
                     id="command"
