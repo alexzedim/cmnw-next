@@ -1,10 +1,11 @@
 import React, { FC, Fragment } from 'react';
-import { characterTitle } from '../../types/components';
+import { characterTitle } from '../../types';
 import Link from '../Link';
-import { Divider, makeStyles, Typography } from '@material-ui/core';
+import { Box, Divider, Typography } from '@mui/material';
 import { generateFactionBackground } from '../../utils';
+import { theme } from '../../styles/theme';
 
-const useStyles = makeStyles((theme) => ({
+const styleCss = {
   root: {
     margin: theme.spacing(2),
     padding: theme.spacing(2),
@@ -43,30 +44,29 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 400,
     textAlign: 'left',
   },
-}));
+};
 
 const CharacterTitle: FC<characterTitle> = ({ name, realm, guild, guild_id, guild_rank, faction }) => {
-  const classes = useStyles();
   const background = generateFactionBackground(faction);
   return (
     <Fragment>
-      <div className={classes.root} style={background}>
-        <div className={classes.title} style={background}>
-          <Typography variant="h1" component="h1" color="textPrimary" className={classes.name}>
+      <Box sx={styleCss.root} style={background}>
+        <Box sx={styleCss.title} style={background}>
+          <Typography variant="h1" component="h1" color="textPrimary" sx={styleCss.name}>
             {name}
           </Typography>
           {(guild && guild_id) ? (
-            <Typography variant="h4" component="h4" color="textPrimary" className={classes.guild}>
+            <Typography variant="h4" component="h4" color="textPrimary" sx={styleCss.guild}>
               #<Link href={`/guild/${guild_id}`} color="textPrimary" underline="hover">{guild}</Link>
               {(guild_rank && typeof guild_rank === 'number') ? ((guild_rank === 0) ? (` // GM`) : (` // R${guild_rank}`)) : ('')}
             </Typography>
           ) : ('')}
-          <Divider className={classes.divider}/>
-          <Typography variant="h4" component="h4" color="textPrimary" className={classes.realm}>
+          <Divider sx={styleCss.divider}/>
+          <Typography variant="h4" component="h4" color="textPrimary" sx={styleCss.realm}>
             @{realm}
           </Typography>
-        </div>
-      </div>
+        </Box>
+      </Box>
     </Fragment>
   )
 }
