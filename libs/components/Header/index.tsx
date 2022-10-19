@@ -6,7 +6,7 @@ import Link from '../Link';
 
 const styleCss = {
   root: {
-    display: "flex",
+    display: 'flex',
     flexGrow: 1,
     justifyContent: 'space-between',
   },
