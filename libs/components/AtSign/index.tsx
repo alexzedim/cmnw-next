@@ -5,7 +5,7 @@ const styleCss = {
   item: {
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center', 
+    alignItems: 'center',
   },
   typography: {
     textTransform: 'uppercase',
@@ -13,7 +13,7 @@ const styleCss = {
   }
 }
 
-const AtSign: FC<{}> = () => {
+const AtSign: FC = () => {
   return (
     <Grid item xs={12} md={1}>
       <Box component="span" sx={styleCss.item}>
