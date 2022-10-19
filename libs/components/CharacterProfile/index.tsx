@@ -1,7 +1,7 @@
 import { pick } from 'lodash';
-import React, { FC, Fragment } from 'react';
-import { characterProfile } from '../../types/components';
-import { Typography } from '@material-ui/core';
+import { FC, Fragment } from 'react';
+import { characterProfile } from '../../types';
+import { Typography } from '@mui/material';
 import humanizeString from 'humanize-string'
 import Link from '../Link';
 
