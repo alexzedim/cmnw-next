@@ -1,13 +1,11 @@
 import { Grid, Typography, Box } from '@mui/material';
 import React, { FC } from 'react';
-import { theme } from '../../styles/theme';
 
 const styleCss = {
   item: {
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
-    padding: theme.spacing(1, 2, 1, 2)
+    alignItems: 'center', 
   },
   typography: {
     textTransform: 'uppercase',

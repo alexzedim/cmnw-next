@@ -81,6 +81,7 @@ export const SearchForm: FC = () => {
                         name="character"
                         label="Character"
                         variant="outlined"
+                        fullWidth
                         value={values.character}
                         onChange={handleChange}
                         sx={styleCss.item}
@@ -111,6 +112,7 @@ export const SearchForm: FC = () => {
                         name="guild"
                         label="Guild"
                         variant="outlined"
+                        fullWidth
                         value={values.guild}
                         onChange={handleChange}
                         sx={styleCss.item}
