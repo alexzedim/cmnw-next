@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Head from 'next/head';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { MuiThemeProvider } from '@material-ui/core/styles';
-import { theme } from '../libs/styles/theme';
+import { theme } from '../libs/styles';
 import Header from '../libs/components/Header';
 import Footer from '../libs/components/Footer';
 

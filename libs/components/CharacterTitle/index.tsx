@@ -3,7 +3,7 @@ import { characterTitle } from '../../types';
 import Link from '../Link';
 import { Box, Divider, Typography } from '@mui/material';
 import { generateFactionBackground } from '../../utils';
-import { theme } from '../../styles/theme';
+import { theme } from '../../styles';
 
 const styleCss = {
   root: {

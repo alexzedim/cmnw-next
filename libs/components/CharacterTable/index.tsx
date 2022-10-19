@@ -3,7 +3,7 @@ import MUIDataTable from 'mui-datatables';
 import { characterTable } from '../../types';
 import Link from '../Link';
 import dayjs from 'dayjs';
-import { theme } from '../../styles/theme';
+import { theme } from '../../styles';
 import { Box } from '@mui/material';
 
 const styleCss = {
