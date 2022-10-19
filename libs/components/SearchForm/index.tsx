@@ -10,11 +10,13 @@ import { SearchInput } from '../../types/data/searchInput';
 import { TextField, Autocomplete, Button, Grid, Box, MenuItem } from '@mui/material';
 
 const styleCss = {
+  box: {
+    flexGrow: 1
+  },
   item: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    minWidth: '20em',
   },
   button: {
     display: 'flex',
@@ -38,8 +40,8 @@ export const SearchForm: FC = () => {
       >
         {({ isSubmitting, values, handleChange, setFieldValue }) => (
           <Form>
-            <Box sx={{ flexGrow: 1 }}>
-              <Grid container spacing={5} alignItems={'center'} justifyContent={"center"}>
+            <Box sx={styleCss.box}>
+              <Grid container direction='row' spacing={5} alignItems={'center'} justifyContent={'center'}>
                 <Grid item xs={12} md={3}>
                   <TextField
                     id="command"
@@ -154,10 +156,54 @@ export const SearchForm: FC = () => {
                   </Fragment>
                 )}
                 {values.command === Commands.commdty && (
-                  <Fragment></Fragment>
+                  <Fragment>
+                    <Grid item xs={12} md={3}>
+                      <TextField
+                        id="commdty"
+                        name="commdty"
+                        label="Commdty"
+                        variant="outlined"
+                        fullWidth
+                        value={values.commdty}
+                        onChange={handleChange}
+                        sx={styleCss.item}
+                      />
+                    </Grid>
+                    <AtSign/>
+                    <Grid item xs={12} md={3}>
+                      <Autocomplete
+                        id="realm"
+                        options={REALMS}
+                        autoHighlight
+                        defaultValue={values.realm}
+                        value={values.realm}
+                        isOptionEqualToValue={(option, value) => String(option.value) === String(value.value)}
+                        getOptionLabel={(option: SearchInput) => option.label}
+                        onChange={(e, value) => setFieldValue('realm', value)}
+                        sx={styleCss.item}
+                        renderInput={(params) => <TextField {...params} label="Realm" />}
+                      />
+                    </Grid>
+                  </Fragment>
                 )}
                 {values.command === Commands.gold && (
-                  <Fragment></Fragment>
+                  <Fragment>
+                    <AtSign/>
+                    <Grid item xs={12} md={6}>
+                      <Autocomplete
+                        id="realm"
+                        options={REALMS}
+                        autoHighlight
+                        defaultValue={values.realm}
+                        value={values.realm}
+                        isOptionEqualToValue={(option, value) => String(option.value) === String(value.value)}
+                        getOptionLabel={(option: SearchInput) => option.label}
+                        onChange={(e, value) => setFieldValue('realm', value)}
+                        sx={styleCss.item}
+                        renderInput={(params) => <TextField {...params} label="Realm" />}
+                      />
+                    </Grid>
+                  </Fragment>
                 )}
                 <Grid item xs={12} md={1}>
                   <Button
