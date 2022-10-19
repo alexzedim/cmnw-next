@@ -1,6 +1,6 @@
 import { LinearProgress, makeStyles } from '@material-ui/core';
 import React, { FC, Fragment } from 'react';
-import { itemValuations, itemValuationsResponse } from '../../types/components';
+import { itemValuations, itemValuationsResponse } from '../../types';
 import useSWR from 'swr';
 import MUIDataTable from 'mui-datatables';
 import { DOMAINS } from '../../constants';
