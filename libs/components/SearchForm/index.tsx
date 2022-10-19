@@ -1,4 +1,4 @@
-import  { useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 import React, { FC, Fragment } from 'react';
 import { COMMANDS, REALMS, HASH } from '../../constants';
 import AtSign from '../AtSign';
@@ -8,6 +8,7 @@ import { initialValues } from '../../utils';
 import { Formik, Form } from 'formik';
 import { SearchInput } from '../../types/data/searchInput';
 import { TextField, Autocomplete, Button, Grid, Box, MenuItem } from '@mui/material';
+import { createRoutingMap } from '../../utils/createRoutingMap';
 
 const styleCss = {
   box: {
@@ -37,8 +38,10 @@ export const SearchForm: FC = () => {
       <Formik<initialValuesSearch>
         initialValues={initialValues()}
         validationSchema={searchValidation}
-        onSubmit={async (values) => {
-          alert(JSON.stringify(values, null, 2));
+        onSubmit={async (values, { setSubmitting }) => {
+          setSubmitting(false);
+          const routingMap = createRoutingMap(values);
+          await router.push(routingMap.get(values.command as Commands));
         }}
       >
         {({ isSubmitting, values, handleChange, setFieldValue }) => (
