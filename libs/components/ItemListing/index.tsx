@@ -1,12 +1,13 @@
-import React, { FC, Fragment } from 'react';
+import { FC, Fragment } from 'react';
 import MUIDataTable from 'mui-datatables';
 import useSWR from 'swr';
+import { LinearProgress, Box } from '@mui/material';
 import { DOMAINS } from '../../constants';
-import { LinearProgress, makeStyles } from '@material-ui/core';
-import { AuctionsResponse, itemQuery } from '../../types/components';
+import { AuctionsResponse, itemQuery } from '../../types';
+import { theme } from '../../styles';
 import Link from '../Link';
 
-const useStyles = makeStyles(theme => ({
+const styleCss = {
   root: {
     padding: theme.spacing(2),
     borderRadius: '15px',
@@ -17,7 +18,7 @@ const useStyles = makeStyles(theme => ({
     padding: '1rem',
     border: 'solid 15px white',
   },
-}));
+}
 
 const options = {
   selectableRows: 'none',
@@ -28,7 +29,6 @@ const options = {
 }
 
 const ItemListing: FC<itemQuery & { name: string }> = ({ id, name, is_gold, is_commdty }) => {
-  const classes = useStyles();
 
   if (is_commdty || is_gold) return <></>
 
@@ -108,15 +108,15 @@ const ItemListing: FC<itemQuery & { name: string }> = ({ id, name, is_gold, is_c
 
   return (
     <Fragment>
-      <div className={classes.root}>
-        <div className={classes.table}>
+      <Box sx={styleCss.root}>
+        <Box sx={styleCss.table}>
           <MUIDataTable
             data={data.feed}
             columns={columns}
             options={options}
           />
-        </div>
-      </div>
+        </Box>
+      </Box>
     </Fragment>
   )
 }
