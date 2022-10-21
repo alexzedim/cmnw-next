@@ -1,33 +1,33 @@
 import React from 'react';
-import MetaHead from '../../libs/components/MetaHead';
-import { Container, makeStyles } from '@material-ui/core';
-import { DOMAINS, HASH_PAGE } from '../../libs/constants';
-import { characterResponse } from '../../libs/types/components';
+import { Container, Box } from '@mui/material';
+import { DOMAINS, HASH_PAGE, characterResponse } from '../../libs';
 import HashTitle from '../../libs/components/HashTitle';
+import MetaHead from '../../libs/components/MetaHead';
 import CharacterTable from '../../libs/components/CharacterTable';
 
-const useStyles = makeStyles(theme => ({
+const styleCss = {
   main: {
     marginTop: '85px',
   }
-}));
+};
 
 const Hash = ({ hash, id }) => {
-  const classes = useStyles();
   const title = id.toString().toUpperCase();
   return (
-    <main className={classes.main}>
-      <MetaHead
-        title={title}
-        description={HASH_PAGE.description}
-        wowhead={false}
-      />
-      <Container maxWidth={false}>
-        <HashTitle id={id}/>
-      </Container>
-      <Container maxWidth={false}>
-        <CharacterTable characters={hash} roster={false}/>
-      </Container>
+    <main>
+      <Box sx={styleCss.main}>
+        <MetaHead
+          title={title}
+          description={HASH_PAGE.description}
+          wowhead={false}
+        />
+        <Container maxWidth={false}>
+          <HashTitle id={id}/>
+        </Container>
+        <Container maxWidth={false}>
+          <CharacterTable characters={hash} roster={false}/>
+        </Container>
+      </Box>
     </main>
   )
 }
