@@ -1,15 +1,14 @@
-import { DOMAINS } from '../../libs/constants';
-import { Container, Divider, Grid, makeStyles } from '@material-ui/core';
-import React from 'react';
+import { Container, Divider, Grid, Box } from '@mui/material';
+import { generateItemTitle, DOMAINS } from '../../libs';
 import MetaHead from '../../libs/components/MetaHead';
-import { generateItemTitle } from '../../libs/utils';
 import ItemTitle from '../../libs/components/ItemTitle';
 import ClusterChart from '../../libs/components/ClusterChart';
 import ItemQuotes from '../../libs/components/ItemQuotes';
 import ItemListing from '../../libs/components/ItemListing';
 import ItemValuations from '../../libs/components/ItemValuations';
+import { theme } from '../../libs/styles';
 
-const useStyles = makeStyles(theme => ({
+const styleCss = {
   main: {
     marginTop: '85px',
     minHeight: '90vh',
@@ -17,7 +16,7 @@ const useStyles = makeStyles(theme => ({
   divider: {
     margin: `${theme.spacing(2)}px auto`,
   },
-}));
+};
 
 const Item = ({ id, item, realm }) => {
 
@@ -27,7 +26,6 @@ const Item = ({ id, item, realm }) => {
     icon
   } = item;
 
-  const classes = useStyles();
   const {
     itemTitle,
     realmTitle,
@@ -37,58 +35,59 @@ const Item = ({ id, item, realm }) => {
   } = generateItemTitle(item, realm);
 
   return (
-    <main className={classes.main}>
-      <MetaHead
-        title={itemTitle}
-        description={'Test'}
-        wowhead={true}
-      />
-      <Container maxWidth={false}>
-        <ItemTitle
-          itemTitle={itemTitle}
-          realmTitle={realmTitle}
-          quality={quality}
-          asset_class={asset_class}
-          icon={icon}
+    <main>
+      <Box sx={styleCss.main}>
+        <MetaHead
+          title={itemTitle}
+          description={'Test'}
+          wowhead={true}
         />
-      </Container>
-      <Divider className={classes.divider}/>
-      <Container maxWidth={false}>
-        <Grid container spacing={4}>
-          <Grid item xs={12} sm={6} md={4}>
-            <ItemQuotes
-              id={id}
-              is_xrs={is_xrs}
-              is_gold={is_gold}
-              is_commdty={is_commdty}
-            />
+        <Container maxWidth={false}>
+          <ItemTitle
+            itemTitle={itemTitle}
+            realmTitle={realmTitle}
+            quality={quality}
+            asset_class={asset_class}
+            icon={icon}
+          />
+        </Container>
+        <Divider sx={styleCss.divider}/>
+        <Container maxWidth={false}>
+          <Grid container spacing={4}>
+            <Grid item xs={12} sm={6} md={4}>
+              <ItemQuotes
+                id={id}
+                is_xrs={is_xrs}
+                is_gold={is_gold}
+                is_commdty={is_commdty}
+              />
+            </Grid>
+            <Grid item xs={12} sm={4} md={6}>
+              <ItemValuations
+                id={id}
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={12} sm={4} md={6}>
-            <ItemValuations
-              id={id}
-            />
-          </Grid>
-        </Grid>
-      </Container>
-      <Divider className={classes.divider}/>
-      <Container maxWidth={false}>
-        <ClusterChart
-          id={id}
-          is_xrs={is_xrs}
-          is_gold={is_gold}
-          is_commdty={is_commdty}
-        />
-      </Container>
-      <Container maxWidth={false}>
-        <ItemListing
-          id={id}
-          name={itemTitle}
-          is_xrs={is_xrs}
-          is_gold={is_gold}
-          is_commdty={is_commdty}
-        />
-      </Container>
-
+        </Container>
+        <Divider sx={styleCss.divider}/>
+        <Container maxWidth={false}>
+          <ClusterChart
+            id={id}
+            is_xrs={is_xrs}
+            is_gold={is_gold}
+            is_commdty={is_commdty}
+          />
+        </Container>
+        <Container maxWidth={false}>
+          <ItemListing
+            id={id}
+            name={itemTitle}
+            is_xrs={is_xrs}
+            is_gold={is_gold}
+            is_commdty={is_commdty}
+          />
+        </Container>
+      </Box>
     </main>
   )
 }
