@@ -1,13 +1,14 @@
-import { LinearProgress, makeStyles } from '@material-ui/core';
-import React, { FC, Fragment } from 'react';
-import { itemValuations, itemValuationsResponse } from '../../types';
+import { LinearProgress, Box } from '@mui/material';
+import { FC, Fragment } from 'react';
 import useSWR from 'swr';
 import MUIDataTable from 'mui-datatables';
+import { itemValuations, itemValuationsResponse } from '../../types';
 import { DOMAINS } from '../../constants';
 import { convertDate } from '../../utils';
 import ItemDetailsTable from '../ItemDetailsTable';
+import { theme } from '../../styles';
 
-const useStyles = makeStyles(theme => ({
+const styleCss = {
   root: {
     padding: theme.spacing(2),
     borderRadius: '15px',
@@ -18,11 +19,10 @@ const useStyles = makeStyles(theme => ({
     padding: '1rem',
     border: 'solid 15px white',
   },
-}));
+}
+
 
 const ItemValuations: FC<itemValuations> = ({ id }) => {
-  const classes = useStyles();
-
   const { data, error } = useSWR<itemValuationsResponse>(`${DOMAINS.domain}/api/dma/item/valuations?_id=${id}`, (url) => fetch(url).then(r => r.json()));
 
   if (error) return <></>
@@ -98,15 +98,15 @@ const ItemValuations: FC<itemValuations> = ({ id }) => {
 
   return (
     <Fragment>
-      <div className={classes.root}>
-        <div className={classes.table}>
+      <Box sx={styleCss.root}>
+        <Box sx={styleCss.table}>
           <MUIDataTable
             data={data.valuations}
             columns={columns}
             options={options}
           />
-        </div>
-      </div>
+        </Box>
+      </Box>
     </Fragment>
   )
 }
