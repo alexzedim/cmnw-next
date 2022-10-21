@@ -1,12 +1,12 @@
-import React, { FC, Fragment } from 'react';
-import { itemQuery } from '../../types/components';
+import { FC, Fragment } from 'react';
+import { LinearProgress, Box } from '@mui/material';
+import { itemQuery, quotesResponse } from '../../types';
 import useSWR from 'swr';
 import MUIDataTable from 'mui-datatables';
 import { DOMAINS } from '../../constants';
-import { quotesResponse } from '../../types/components';
-import { LinearProgress, makeStyles } from '@material-ui/core';
+import { theme } from '../../styles';
 
-const useStyles = makeStyles(theme => ({
+const styleCss = {
   root: {
     padding: theme.spacing(2),
     borderRadius: '15px',
@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
     padding: '1rem',
     border: 'solid 15px white',
   },
-}));
+};
 
 const options = {
   download: false,
@@ -33,8 +33,6 @@ const options = {
 };
 
 const ItemQuotes: FC<itemQuery> = ({ id, is_gold, is_xrs }) => {
-  const classes = useStyles();
-
   if (is_xrs) return <></>
 
   const { data, error } = useSWR<quotesResponse>(`${DOMAINS.domain}/api/dma/item/quotes?_id=${id}`, (url) => fetch(url).then(r => r.json()));
@@ -73,15 +71,15 @@ const ItemQuotes: FC<itemQuery> = ({ id, is_gold, is_xrs }) => {
 
   return (
     <Fragment>
-      <div className={classes.root}>
-        <div className={classes.table}>
+      <Box sx={styleCss.root}>
+        <Box sx={styleCss.table}>
           <MUIDataTable
             data={data.quotes}
             columns={columns}
             options={options}
           />
-        </div>
-      </div>
+        </Box>
+      </Box>
     </Fragment>
   )
 }
