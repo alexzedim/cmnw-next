@@ -1,14 +1,12 @@
-import React from 'react';
-import { Container, Divider, makeStyles } from '@material-ui/core';
+import { Container, Divider, Box } from '@mui/material';
+import { guildResponse, logResponse, GUILD_PAGE, DOMAINS } from '../../libs';
 import MetaHead from '../../libs/components/MetaHead';
-import { GUILD_PAGE } from '../../libs/constants';
-import { DOMAINS } from '../../libs/constants';
-import { guildResponse, logResponse } from '../../libs/types/components';
 import { LogTable } from '../../libs/components/LogTable';
 import GuildTitle from '../../libs/components/GuildTitle';
 import CharacterTable from '../../libs/components/CharacterTable';
+import { theme } from '../../libs/styles';
 
-const useStyles = makeStyles(theme => ({
+const styleCss = {
   main: {
     marginTop: '85px',
   },
@@ -31,7 +29,7 @@ const useStyles = makeStyles(theme => ({
     fontWeight: 400,
     textTransform: 'uppercase'
   }
-}));
+};
 
 const Guild = ({ guild }) => {
   const {
@@ -45,30 +43,31 @@ const Guild = ({ guild }) => {
     logs,
   } = guild;
 
-  const classes = useStyles();
   return (
-    <main className={classes.main}>
-      <MetaHead
-        title={`${name}@${realm}`}
-        description={GUILD_PAGE.description}
-        wowhead={false}
-      />
-      <Container maxWidth={false}>
-        <GuildTitle
-          name={name}
-          realm={realm}
-          member_count={member_count}
-          created_timestamp={created_timestamp}
-          achievement_points={achievement_points}
-          faction={faction}
+    <main>
+      <Box sx={styleCss.main}>
+        <MetaHead
+          title={`${name}@${realm}`}
+          description={GUILD_PAGE.description}
+          wowhead={false}
         />
-      </Container>
-      <Divider className={classes.divider}/>
-      <Container maxWidth={false}>
-        <CharacterTable characters={members} roster={true}/>
-        <Divider className={classes.divider}/>
-        <LogTable logs={logs}/>
-      </Container>
+        <Container maxWidth={false}>
+          <GuildTitle
+            name={name}
+            realm={realm}
+            member_count={member_count}
+            created_timestamp={created_timestamp}
+            achievement_points={achievement_points}
+            faction={faction}
+          />
+        </Container>
+        <Divider sx={styleCss.divider}/>
+        <Container maxWidth={false}>
+          <CharacterTable characters={members} roster={true}/>
+          <Divider sx={styleCss.divider}/>
+          <LogTable logs={logs}/>
+        </Container>
+      </Box>
     </main>
   )
 }
