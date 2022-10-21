@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { MuiThemeProvider } from '@material-ui/core/styles';
+import { CssBaseline } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
 import { theme } from '../libs/styles';
 import Header from '../libs/components/Header';
 import Footer from '../libs/components/Footer';
@@ -17,7 +17,7 @@ function MyApp({ Component, pageProps }) {
   }, []);
 
   return (
-    <MuiThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
       <Head>
         <title>WoW Commonwealth</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width"/>
@@ -26,7 +26,7 @@ function MyApp({ Component, pageProps }) {
       <Header/>
       <Component {...pageProps} />
       <Footer/>
-    </MuiThemeProvider>
+    </ThemeProvider>
   );
 }
 
