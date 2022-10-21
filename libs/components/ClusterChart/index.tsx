@@ -1,20 +1,20 @@
-import React, { FC, Fragment } from 'react';
+import { FC, Fragment } from 'react';
+import { LinearProgress, Box } from '@mui/material';
 import useSWR from 'swr';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import HighchartsExporting from 'highcharts/modules/exporting';
 import Heatmap from 'highcharts/modules/heatmap';
-import { itemQuery } from '../../types/components';
-import { LinearProgress, makeStyles } from '@material-ui/core';
-import { chartResponse } from '../../types/components/chartResponse';
+import { itemQuery, chartResponse } from '../../types';
 import { DOMAINS } from '../../constants';
+import { theme } from '../../styles';
 
 if (typeof Highcharts === 'object') {
   Heatmap(Highcharts);
   HighchartsExporting(Highcharts)
 }
 
-const useStyles = makeStyles(theme => ({
+const styleCss = {
   root: {
     padding: theme.spacing(2),
     borderRadius: '15px',
@@ -25,10 +25,9 @@ const useStyles = makeStyles(theme => ({
     padding: '1rem',
     border: 'solid 15px rgba(167,167,167,1)',
   },
-}));
+};
 
 const ClusterChart: FC<itemQuery> = ({ id, is_commdty }) => {
-  const classes = useStyles();
 
   if (!is_commdty) return <></>
 
@@ -39,8 +38,8 @@ const ClusterChart: FC<itemQuery> = ({ id, is_commdty }) => {
 
   return (
     <Fragment>
-      <div className={classes.root}>
-        <div className={classes.border}>
+      <Box sx={styleCss.root}>
+        <Box sx={styleCss.border}>
           <HighchartsReact
             highcharts={Highcharts}
             constructorType={'chart'}
@@ -115,8 +114,8 @@ const ClusterChart: FC<itemQuery> = ({ id, is_commdty }) => {
               }]
             }}
           />
-        </div>
-      </div>
+        </Box>
+      </Box>
     </Fragment>
   )
 }
