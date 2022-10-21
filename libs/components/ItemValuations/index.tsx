@@ -22,7 +22,7 @@ const styleCss = {
 }
 
 
-const ItemValuations: FC<itemValuations> = ({ id }) => {
+export const ItemValuations: FC<itemValuations> = ({ id }) => {
   const { data, error } = useSWR<itemValuationsResponse>(`${DOMAINS.domain}/api/dma/item/valuations?_id=${id}`, (url) => fetch(url).then(r => r.json()));
 
   if (error) return <></>

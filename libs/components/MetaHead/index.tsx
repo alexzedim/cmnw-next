@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { metaHead } from '../../types';
 import { DOMAINS } from '../../constants';
 
-const MetaHead: FC<metaHead> = ({ title, description, image, wowhead = false }) => {
+export const MetaHead: FC<metaHead> = ({ title, description, image, wowhead = false }) => {
   return (
     <Head>
       <title>{title}</title>

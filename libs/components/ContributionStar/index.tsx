@@ -26,7 +26,7 @@ const styleCss = {
   },
 };
 
-const ContributionStar: FC<contributionStar> = ({ character, name, discord, github, twitter}) => {
+export const ContributionStar: FC<contributionStar> = ({ character, name, discord, github, twitter}) => {
   return (
     <Card sx={styleCss.card}>
       <CardContent>

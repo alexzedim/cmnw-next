@@ -28,7 +28,7 @@ const options = {
   setTableProps: () => ({ size:'small' }),
 }
 
-const ItemListing: FC<itemQuery & { name: string }> = ({ id, name, is_gold, is_commdty }) => {
+export const ItemListing: FC<itemQuery & { name: string }> = ({ id, name, is_gold, is_commdty }) => {
 
   if (is_commdty || is_gold) return <></>
 

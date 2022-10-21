@@ -46,7 +46,7 @@ const styleCss = {
   },
 };
 
-const CharacterTitle: FC<characterTitle> = ({ name, realm, guild, guild_id, guild_rank, faction }) => {
+export const CharacterTitle: FC<characterTitle> = ({ name, realm, guild, guild_id, guild_rank, faction }) => {
   const background = generateFactionBackground(faction);
   return (
     <Fragment>

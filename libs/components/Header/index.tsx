@@ -1,5 +1,5 @@
 import { HEADER } from '../../constants';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, FC } from 'react';
 import { Menu } from '@mui/icons-material';
 import { AppBar, Drawer, IconButton, MenuItem, Toolbar, Typography } from '@mui/material';
 import Link from '../Link';
@@ -19,7 +19,7 @@ const styleCss = {
   }
 }
 
-export default function Header() {
+export const Header: FC = () => {
   const [state, setState] = useState({
     mobileView: false,
     drawerOpen: false,

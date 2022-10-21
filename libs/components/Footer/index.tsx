@@ -7,10 +7,8 @@ const styleCss = {
     bottom: 0,
   }
 };
-
 // TODO css optimize footer
-
-const Footer: FC = () => {
+export const Footer: FC = () => {
   const year = new Date().getFullYear();
   return (
     <AppBar id='footer' sx={styleCss.root} position='relative' color={'transparent'}>

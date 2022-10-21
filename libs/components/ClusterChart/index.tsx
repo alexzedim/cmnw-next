@@ -27,7 +27,7 @@ const styleCss = {
   },
 };
 
-const ClusterChart: FC<itemQuery> = ({ id, is_commdty }) => {
+export const ClusterChart: FC<itemQuery> = ({ id, is_commdty }) => {
 
   if (!is_commdty) return <></>
 

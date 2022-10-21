@@ -1,5 +1,5 @@
 import { Grid, Typography, Box } from '@mui/material';
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 const styleCss = {
   item: {
@@ -13,7 +13,7 @@ const styleCss = {
   }
 }
 
-const AtSign: FC = () => {
+export const AtSign: FC = () => {
   return (
     <Grid item xs={12} md={1}>
       <Box component="span" sx={styleCss.item}>

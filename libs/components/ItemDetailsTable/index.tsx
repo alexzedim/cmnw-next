@@ -4,7 +4,7 @@ import { itemDetailsTable, ValuationTypes } from '../../types';
 import humanizeString from 'humanize-string';
 import Link from '../Link';
 
-const ItemDetailsTable: FC<itemDetailsTable> = ({ type, details, connected_realm_id }) => {
+export const ItemDetailsTable: FC<itemDetailsTable> = ({ type, details, connected_realm_id }) => {
   if (
     type === ValuationTypes.OTC ||
     type === ValuationTypes.GOLD ||

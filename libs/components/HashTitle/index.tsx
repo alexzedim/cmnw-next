@@ -45,7 +45,7 @@ const styleCss = {
   },
 };
 
-const HashTitle: FC<hashTitle> = ({ id }) => {
+export const HashTitle: FC<hashTitle> = ({ id }) => {
   const [copyStatus, setCopyStatus] = useState<string | null>(null);
   const [anchorEl, setAnchorEl] = useState<EventTarget | null>(null);
 

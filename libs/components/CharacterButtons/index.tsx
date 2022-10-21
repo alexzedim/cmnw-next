@@ -1,6 +1,6 @@
 import { Avatar, Grid } from '@mui/material';
+import { FC, Fragment } from 'react';
 import { characterButtons } from '../../types';
-import React, { FC, Fragment } from 'react';
 import Link from '../Link';
 import { DOMAINS } from '../../constants';
 import { theme } from '../../styles';
@@ -14,7 +14,7 @@ const styleCss = {
 };
 
 
-const CharacterButtons: FC<characterButtons> = ({ name, realm }) => {
+export const CharacterButtons: FC<characterButtons> = ({ name, realm }) => {
   return (
     <Fragment>
       <Grid

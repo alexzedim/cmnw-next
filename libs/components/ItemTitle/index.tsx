@@ -43,7 +43,7 @@ const styleCss = {
   },
 };
 
-const ItemTitle: FC<itemTitle> = ({ itemTitle, realmTitle, quality, asset_class, icon}) => {
+export const ItemTitle: FC<itemTitle> = ({ itemTitle, realmTitle, quality, asset_class, icon}) => {
   const backgroundRoot = generateItemBackground({ quality, asset_class });
   const backgroundTitle = generateItemBackground({ asset_class });
   const borderColor = { borderColor: backgroundTitle.backgroundColor };

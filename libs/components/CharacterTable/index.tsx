@@ -1,10 +1,11 @@
 import { FC, Fragment } from 'react';
+import { Box } from '@mui/material';
+import dayjs from 'dayjs';
 import MUIDataTable from 'mui-datatables';
 import { characterTable } from '../../types';
-import Link from '../Link';
-import dayjs from 'dayjs';
 import { theme } from '../../styles';
-import { Box } from '@mui/material';
+import Link from '../Link';
+
 
 const styleCss = {
   root: {
@@ -19,7 +20,7 @@ const styleCss = {
   }
 };
 
-const CharacterTable: FC<characterTable> = ({ characters, roster }) => {
+export const CharacterTable: FC<characterTable> = ({ characters, roster }) => {
   const options = {
     download: false,
     fixedSelectColumn: false,

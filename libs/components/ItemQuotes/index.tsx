@@ -32,7 +32,7 @@ const options = {
   rowsPerPageOptions: [15, 25, 50]
 };
 
-const ItemQuotes: FC<itemQuery> = ({ id, is_gold, is_xrs }) => {
+export const ItemQuotes: FC<itemQuery> = ({ id, is_gold, is_xrs }) => {
   if (is_xrs) return <></>
 
   const { data, error } = useSWR<quotesResponse>(`${DOMAINS.domain}/api/dma/item/quotes?_id=${id}`, (url) => fetch(url).then(r => r.json()));
