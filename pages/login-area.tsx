@@ -1,7 +1,6 @@
-import React from 'react';
-import Image from 'next/image'
-import MetaHead from '../libs/components/MetaHead';
 import { Container, Grid, Typography, Box } from '@mui/material';
+import MetaHead from '../libs/components/MetaHead';
+import Image from 'next/image'
 
 const styleCss = {
   main: {
