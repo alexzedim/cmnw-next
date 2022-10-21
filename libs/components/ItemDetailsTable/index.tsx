@@ -1,7 +1,6 @@
-import React, { FC, Fragment } from 'react';
-import { itemDetailsTable } from '../../types/components';
-import { Avatar, TableCell, TableRow } from '@material-ui/core';
-import { ValuationTypes } from '../../types/enums';
+import { FC, Fragment } from 'react';
+import { Avatar, TableCell, TableRow } from '@mui/material';
+import { itemDetailsTable, ValuationTypes } from '../../types';
 import humanizeString from 'humanize-string';
 import Link from '../Link';
 
