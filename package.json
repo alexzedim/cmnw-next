@@ -16,6 +16,7 @@
     "@material-ui/lab": "4.0.0-alpha.58",
     "@mui/icons-material": "5.10.9",
     "@mui/material": "5.10.4",
+    "@mui/styles": "5.10.10",
     "clsx": "latest",
     "dayjs": "1.10.7",
     "formik": "2.2.9",
