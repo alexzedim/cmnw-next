@@ -1,9 +1,9 @@
 import Head from 'next/head';
-import React from 'react';
+import { FC } from 'react';
 import { metaHead } from '../../types';
 import { DOMAINS } from '../../constants';
 
-const MetaHead: React.FC<metaHead> = ({ title, description, image, wowhead = false }) => {
+const MetaHead: FC<metaHead> = ({ title, description, image, wowhead = false }) => {
   return (
     <Head>
       <title>{title}</title>
