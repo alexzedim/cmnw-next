@@ -1,9 +1,10 @@
-import React, { FC, Fragment } from 'react';
-import { guildTitle } from '../../types/components';
-import { Divider, makeStyles, Typography } from '@material-ui/core';
+import { FC, Fragment } from 'react';
+import { Divider, Typography, Box } from '@mui/material';
 import { generateFactionBackground } from '../../utils';
+import { theme } from '../../styles';
+import { guildTitle } from '../../types';
 
-const useStyles = makeStyles((theme) => ({
+const styleCss = {
   root: {
     margin: theme.spacing(2),
     padding: theme.spacing(4),
@@ -43,27 +44,26 @@ const useStyles = makeStyles((theme) => ({
   divider: {
     background: theme.palette.primary.main
   },
-}));
+};
 
 const GuildTitle: FC<guildTitle> = ({ name, realm, member_count, created_timestamp, achievement_points, faction }) => {
-  const classes = useStyles();
   const background = generateFactionBackground(faction);
   return (
     <Fragment>
-      <div className={classes.root} style={background}>
-        <div className={classes.title} style={background}>
-          <Typography variant="h1" component="h1" color="textPrimary" className={classes.name}>
+      <Box sx={styleCss.root} style={background}>
+        <Box sx={styleCss.title} style={background}>
+          <Typography variant="h1" component="h1" color="textPrimary" sx={styleCss.name}>
             #{name}
           </Typography>
-          <Divider className={classes.divider}/>
+          <Divider sx={styleCss.divider}/>
           <Typography variant="overline" color="textPrimary">
             Created: {new Date(created_timestamp).toLocaleString('en-GB')} | Members: {member_count} | Achievements: {achievement_points}
           </Typography>
-          <Typography variant="h4" component="h4" color="textPrimary" className={classes.realm}>
+          <Typography variant="h4" component="h4" color="textPrimary" sx={styleCss.realm}>
             @{realm}
           </Typography>
-        </div>
-      </div>
+        </Box>
+      </Box>
     </Fragment>
   )
 }

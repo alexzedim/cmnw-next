@@ -1,13 +1,15 @@
-import React, { FC } from 'react';
-import { contributionStar } from '../../types/components';
-import { Card, CardContent, makeStyles, Typography } from '@material-ui/core';
-import StarBorderIcon from '@material-ui/icons/StarBorder';
+import { FC, Fragment } from 'react';
+import { contributionStar } from '../../types';
+import { Card, CardContent, Typography } from '@mui/material';
+import { StarOutlined } from '@mui/icons-material';
+import { theme } from '../../styles';
 import Link from '../Link';
 
-const useStyles = makeStyles(theme => ({
+const styleCss = {
   star: {
     width: theme.spacing(8),
     height: theme.spacing(8),
+    color: theme.palette.primary.main,
     margin: 'auto',
     display: 'block'
   },
@@ -22,55 +24,54 @@ const useStyles = makeStyles(theme => ({
   title: {
     textTransform: 'uppercase',
   },
-}));
+};
 
 const ContributionStar: FC<contributionStar> = ({ character, name, discord, github, twitter}) => {
-  const classes = useStyles();
   return (
-    <Card className={classes.card}>
+    <Card sx={styleCss.card}>
       <CardContent>
-        <StarBorderIcon
-          className={classes.star}
+        <StarOutlined
+          sx={styleCss.star}
           color="secondary"
         />
-        <Typography variant="overline" align="center" className={classes.title} gutterBottom>
+        <Typography variant="overline" align="center" sx={styleCss.title} gutterBottom>
           {name}
         </Typography>
 
         {(twitter) ? (
-          <React.Fragment>
+          <Fragment>
             <br/>
-            <Typography variant="overline" align="center" className={classes.title}>
+            <Typography variant="overline" align="center" sx={styleCss.title}>
               <Link href={`https://www.twitter.com/${twitter}`} prefetch={false}>{twitter}</Link>
             </Typography>
-          </React.Fragment>
+          </Fragment>
         ) : (<></>)}
 
         {(character) ? (
-          <React.Fragment>
+          <Fragment>
             <br/>
-            <Typography variant="overline" align="center" className={classes.title}>
+            <Typography variant="overline" align="center" sx={styleCss.title}>
               <Link href={`/character/${character}`}>{character}</Link>
             </Typography>
-          </React.Fragment>
+          </Fragment>
         ) : (<></>)}
 
         {(discord) ? (
-          <React.Fragment>
+          <Fragment>
             <br/>
-            <Typography variant="overline" align="center" className={classes.title}>
+            <Typography variant="overline" align="center" sx={styleCss.title}>
               {discord}
             </Typography>
-          </React.Fragment>
+          </Fragment>
         ) : (<></>)}
 
         {(github) ? (
-          <React.Fragment>
+          <Fragment>
             <br/>
-            <Typography variant="overline" align="center" className={classes.title}>
+            <Typography variant="overline" align="center" sx={styleCss.title}>
               <Link href={`https://www.github.com/${github}`} prefetch={false}>{github}</Link>
             </Typography>
-          </React.Fragment>
+          </Fragment>
         ) : (<></>)}
 
       </CardContent>
