@@ -1,9 +1,10 @@
-import React, { FC, Fragment } from 'react';
-import MUIDataTable from "mui-datatables";
-import { logTable } from '../../types/components';
-import { makeStyles } from '@material-ui/core';
+import { FC, Fragment } from 'react';
+import MUIDataTable from 'mui-datatables';
+import { logTable } from '../../types';
+import { theme } from '../../styles';
+import { Box } from '@mui/material';
 
-const useStyles = makeStyles((theme) => ({
+const styleCss = {
   root: {
     margin: theme.spacing(2),
     borderRadius: '15px',
@@ -14,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '15px',
     border: 'solid 25px white',
   }
-}));
+};
 
 const columns = [
   {
@@ -54,19 +55,18 @@ const options = {
 
 export const LogTable: FC<logTable> = ({ logs }) => {
   if (!logs || logs.length === 0) return (<div/>);
-  const classes = useStyles();
   const data = logs.map(l => Object.assign(l, { id: l._id }));
   return (
     <Fragment>
-      <div className={classes.root}>
-        <div className={classes.table}>
+      <Box sx={styleCss.root}>
+        <Box sx={styleCss.table}>
           <MUIDataTable
             data={data}
             columns={columns}
             options={options}
           />
-        </div>
-      </div>
+        </Box>
+      </Box>
     </Fragment>
   )
 };
