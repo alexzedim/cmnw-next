@@ -1,5 +1,5 @@
 import { Container, Grid, Typography, Box } from '@mui/material';
-import MetaHead from '../libs/components/MetaHead';
+import { MetaHead } from '../libs/components/MetaHead';
 import Image from 'next/image'
 
 const styleCss = {

@@ -1,11 +1,11 @@
 import { Container, Divider, Grid, Box } from '@mui/material';
 import { generateItemTitle, DOMAINS } from '../../libs';
-import MetaHead from '../../libs/components/MetaHead';
-import ItemTitle from '../../libs/components/ItemTitle';
-import ClusterChart from '../../libs/components/ClusterChart';
-import ItemQuotes from '../../libs/components/ItemQuotes';
-import ItemListing from '../../libs/components/ItemListing';
-import ItemValuations from '../../libs/components/ItemValuations';
+import { MetaHead } from '../../libs/components/MetaHead';
+import { ItemTitle } from '../../libs/components/ItemTitle';
+import { ClusterChart } from '../../libs/components/ClusterChart';
+import { ItemQuotes } from '../../libs/components/ItemQuotes';
+import { ItemListing } from '../../libs/components/ItemListing';
+import { ItemValuations } from '../../libs/components/ItemValuations';
 import { theme } from '../../libs/styles';
 
 const styleCss = {

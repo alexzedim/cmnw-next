@@ -1,7 +1,7 @@
 import { Container, Divider, Grid, Typography, Box } from '@mui/material';
 import { WHO_WE_ARE, CONTRIBUTORS } from '../libs';
-import ContributionStar from '../libs/components/ContributionStar';
-import MetaHead from '../libs/components/MetaHead';
+import { ContributionStar } from '../libs/components/ContributionStar';
+import { MetaHead } from '../libs/components/MetaHead';
 import { theme } from '../libs/styles';
 
 const styleCss = {

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Container, Box } from '@mui/material';
 import { DOMAINS, HASH_PAGE, characterResponse } from '../../libs';
-import HashTitle from '../../libs/components/HashTitle';
-import MetaHead from '../../libs/components/MetaHead';
-import CharacterTable from '../../libs/components/CharacterTable';
+import { HashTitle } from '../../libs/components/HashTitle';
+import { MetaHead } from '../../libs/components/MetaHead';
+import { CharacterTable } from '../../libs/components/CharacterTable';
 
 const styleCss = {
   main: {

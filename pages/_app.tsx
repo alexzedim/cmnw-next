@@ -4,8 +4,8 @@ import Head from 'next/head';
 import { CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { theme } from '../libs/styles';
-import Header from '../libs/components/Header';
-import Footer from '../libs/components/Footer';
+import { Header } from '../libs/components/Header';
+import { Footer } from '../libs/components/Footer';
 
 function MyApp({ Component, pageProps }) {
   React.useEffect(() => {

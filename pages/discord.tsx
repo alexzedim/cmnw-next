@@ -1,5 +1,5 @@
 import React from 'react';
-import MetaHead from '../libs/components/MetaHead';
+import { MetaHead } from '../libs/components/MetaHead';
 import { Button, Container, Grid, Typography } from '@mui/material';
 import { DISCORD } from '../libs';
 

@@ -1,6 +1,6 @@
 import { Container, Box } from '@mui/material';
 import { INDEX_PAGE } from '../libs';
-import MetaHead from '../libs/components/MetaHead';
+import { MetaHead } from '../libs/components/MetaHead';
 import { SearchForm } from '../libs/components/SearchForm';
 
 const styleCss = {

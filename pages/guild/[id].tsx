@@ -1,9 +1,9 @@
 import { Container, Divider, Box } from '@mui/material';
 import { guildResponse, logResponse, GUILD_PAGE, DOMAINS } from '../../libs';
-import MetaHead from '../../libs/components/MetaHead';
+import { MetaHead } from '../../libs/components/MetaHead';
 import { LogTable } from '../../libs/components/LogTable';
-import GuildTitle from '../../libs/components/GuildTitle';
-import CharacterTable from '../../libs/components/CharacterTable';
+import { GuildTitle } from '../../libs/components/GuildTitle';
+import { CharacterTable } from '../../libs/components/CharacterTable';
 import { theme } from '../../libs/styles';
 
 const styleCss = {

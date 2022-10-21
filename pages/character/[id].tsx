@@ -1,10 +1,10 @@
 import { Container, Grid, Paper, Box } from '@mui/material';
 import { CHARACTER_PAGE, DOMAINS, characterPortrait, characterResponse, logResponse  } from '../../libs';
-import MetaHead from '../../libs/components/MetaHead';
-import CharacterButtons from '../../libs/components/CharacterButtons';
-import CharacterProfile from '../../libs/components/CharacterProfile';
+import { MetaHead } from '../../libs/components/MetaHead';
+import { CharacterButtons } from '../../libs/components/CharacterButtons';
+import { CharacterProfile } from '../../libs/components/CharacterProfile';
 import { LogTable } from '../../libs/components/LogTable';
-import CharacterTitle from '../../libs/components/CharacterTitle';
+import { CharacterTitle } from '../../libs/components/CharacterTitle';
 import { theme } from '../../libs/styles';
 
 const styleCss = {
