@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  commonwealth:
+  cmnw:
     image: ghcr.io/alexzedim/cmnw:latest
     container_name: cmnw
     restart: always
@@ -11,7 +11,7 @@ services:
     environment:
       - NODE_ENV=${NODE_ENV}
 
-  cmnw:
+  cmnw-next:
     image: ghcr.io/alexzedim/cmnw-next:latest
     container_name: cmnw-next
     restart: always

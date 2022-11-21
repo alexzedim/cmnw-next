@@ -1,4 +1,4 @@
-Welcome to [commonwealth](https://cmnw.me/) home of conglomerat & other relevant wow communities.
+Welcome to [CMNW](https://cmnw.me/) home of conglomerat & other relevant wow communities.
 
 ## Technology
 
@@ -8,7 +8,7 @@ Home repo based on [GitHub](https://github.com/AlexZeDim/cmnw). And all back-end
 
 ## Contribution
 
-We will be glad to receive any amount of contribution or feedback if > are experienced in the relative field. Code reviewing, component design ideas, issues & pull requests opened.
+We will be glad to receive any amount of contribution or feedback if > are experienced in the relative field. Code reviewing, component design ideas, issues & pull requests are opened.
 
 ## Deploy
 
@@ -18,6 +18,6 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 ___
 
-Therefore, it can be deployed locally via `npm run docker:build` (`docker build -t cmnw .`) & `npm run docker:run` (`docker run -d -p 3000:3000 cmnw`). 
+Therefore, it can be deployed locally via `npm run docker:build` (`docker build -t cmnw-next .`) & `npm run docker:run` (`docker run -d -p 3000:3000 cmnw-next`). 
 
 All the relevant information could be found in `Dockerfile`.
