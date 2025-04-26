@@ -5,3 +5,4 @@ export * from './generateItemTitle';
 export * from './randomInt';
 export * from './convertDate';
 export * from './initialValues';
+export * from './createEmotionCache';

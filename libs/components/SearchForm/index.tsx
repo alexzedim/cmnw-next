@@ -1,18 +1,20 @@
-import { object, string, array } from 'yup';
 import { useRouter } from 'next/router'
 import MuiTextField from '@material-ui/core/TextField';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { Autocomplete } from 'formik-material-ui-lab';
 import React, { FC } from 'react';
-import { Button, Grid, makeStyles, MenuItem } from '@material-ui/core';
 import { COMMANDS, REALMS, HASH } from '../../constants';
 import AtSign from '../AtSign';
 import ArrowForwardOutlinedIcon from '@material-ui/icons/ArrowForwardOutlined';
-import { Commands, HashType, initialValuesSearch, searchValidation } from '../../types';
+import { Commands, searchValidation } from '../../types';
 import { initialValues } from '../../utils';
+import Grid from '@mui/material/Unstable_Grid2';
+import { makeStyles } from '@mui/styles';
+import { Button, MenuItem } from '@mui/material';
 
-const useStyles = makeStyles(() => ({
+
+const useStyles = makeStyles((theme) => ({
   item: {
     display: 'flex',
     flexDirection: 'column',
@@ -28,7 +30,6 @@ const useStyles = makeStyles(() => ({
 
 export const SearchForm: FC = () => {
   const classes = useStyles();
-  const router = useRouter();
 
   return (
     <Formik
@@ -45,7 +46,7 @@ export const SearchForm: FC = () => {
       {({ values, touched, errors}) => (
         <Form>
           <Grid container spacing={5} alignItems={'center'} justifyContent={"center"}>
-            <Grid item xs={12} md={3}>
+            <Grid xs={12} md={3}>
               <div className={classes.item}>
                 <Field
                   component={TextField}
@@ -69,7 +70,7 @@ export const SearchForm: FC = () => {
             </Grid>
             {values.command === Commands.commdty && (
               <React.Fragment>
-                <Grid item xs={12} md={7}>
+                <Grid xs={12} md={7}>
                   <div className={classes.item}>
                     <Field
                       component={TextField}
@@ -85,7 +86,7 @@ export const SearchForm: FC = () => {
             )}
             {values.command === Commands.characters && (
               <React.Fragment>
-                <Grid item xs={12} md={3}>
+                <Grid xs={12} md={3}>
                   <div className={classes.item}>
                     <Field
                       component={TextField}
@@ -98,7 +99,7 @@ export const SearchForm: FC = () => {
                   </div>
                 </Grid>
                 <AtSign/>
-                <Grid item xs={12} md={3}>
+                <Grid xs={12} md={3}>
                   <div className={classes.item}>
                     <Field
                       name="realm"
@@ -121,7 +122,7 @@ export const SearchForm: FC = () => {
             )}
             {values.command === Commands.guilds && (
               <React.Fragment>
-                <Grid item xs={12} md={3}>
+                <Grid xs={12} md={3}>
                   <div className={classes.item}>
                     <Field
                       component={TextField}
@@ -134,7 +135,7 @@ export const SearchForm: FC = () => {
                   </div>
                 </Grid>
                 <AtSign/>
-                <Grid item xs={12} md={3}>
+                <Grid xs={12} md={3}>
                   <div className={classes.item}>
                     <Field
                       name="realm"
@@ -157,7 +158,7 @@ export const SearchForm: FC = () => {
             )}
             {values.command === Commands.hash && (
               <React.Fragment>
-                <Grid item xs={12} md={3}>
+                <Grid xs={12} md={3}>
                   <div className={classes.item}>
                     <Field
                       component={TextField}
@@ -180,7 +181,7 @@ export const SearchForm: FC = () => {
                   </div>
                 </Grid>
                 <AtSign/>
-                <Grid item xs={12} md={3}>
+                <Grid xs={12} md={3}>
                   <div className={classes.item}>
                     <Field
                       component={TextField}
@@ -194,7 +195,7 @@ export const SearchForm: FC = () => {
                 </Grid>
               </React.Fragment>
             )}
-            <Grid item xs={12} md={1}>
+            <Grid xs={12} md={1}>
               <div className={classes.button}>
                 <Button type="submit" variant="outlined" color="secondary" size="large">
                   <ArrowForwardOutlinedIcon/>
