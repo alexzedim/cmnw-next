@@ -1,23 +1,53 @@
-Welcome to [CMNW](https://cmnw.me/) home of conglomerat & other relevant wow communities.
+# Next.js & HeroUI Template
 
-## Technology
+This is a template for creating applications using Next.js 14 (app directory) and HeroUI (v2).
 
-Commonwealth is build on [React](https://reactjs.org/) via [Next.js](https://nextjs.org). [Material-UI](https://material-ui.com/) was taken as a component library.
+[Try it on CodeSandbox](https://githubbox.com/heroui-inc/heroui/next-app-template)
 
-Home repo based on [GitHub](https://github.com/AlexZeDim/cmnw). And all back-end data are served by commonwealth API based on [NestJS](https://nestjs.com/) and received from open sources.
+## Technologies Used
 
-## Contribution
+- [Next.js 14](https://nextjs.org/docs/getting-started)
+- [HeroUI v2](https://heroui.com/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Tailwind Variants](https://tailwind-variants.org)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Framer Motion](https://www.framer.com/motion/)
+- [next-themes](https://github.com/pacocoursey/next-themes)
 
-We will be glad to receive any amount of contribution or feedback if > are experienced in the relative field. Code reviewing, component design ideas, issues & pull requests are opened.
+## How to Use
 
-## Deploy
+### Use the template with create-next-app
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+To create a new project based on this template using `create-next-app`, run the following command:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```bash
+npx create-next-app -e https://github.com/heroui-inc/next-app-template
+```
 
-___
+### Install dependencies
 
-Therefore, it can be deployed locally via `npm run docker:build` (`docker build -t cmnw-next .`) & `npm run docker:run` (`docker run -d -p 3000:3000 cmnw-next`). 
+You can use one of them `npm`, `yarn`, `pnpm`, `bun`, Example using `npm`:
 
-All the relevant information could be found in `Dockerfile`.
+```bash
+npm install
+```
+
+### Run the development server
+
+```bash
+npm run dev
+```
+
+### Setup pnpm (optional)
+
+If you are using `pnpm`, you need to add the following code to your `.npmrc` file:
+
+```bash
+public-hoist-pattern[]=*@heroui/*
+```
+
+After modifying the `.npmrc` file, you need to run `pnpm install` again to ensure that the dependencies are installed correctly.
+
+## License
+
+Licensed under the [MIT license](https://github.com/heroui-inc/next-app-template/blob/main/LICENSE).

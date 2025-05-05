@@ -1,6 +1,4 @@
-// next.config.js
-module.exports = {
-  images: {
-    domains: ['render-eu.worldofwarcraft.com'],
-  },
-}
+/** @type {import('next').NextConfig} */
+const nextConfig = {};
+
+module.exports = nextConfig;
