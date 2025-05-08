@@ -6,6 +6,7 @@ import { button as buttonStyles } from "@heroui/theme";
 import { siteConfig } from "@/config/site";
 import { title, subtitle } from "@/components/primitives";
 import { GithubIcon } from "@/components/icons";
+import { Chart } from "@/components/chart";
 
 export default function Home() {
   return (
@@ -19,6 +20,9 @@ export default function Home() {
         </span>
         <div className={subtitle({ class: "mt-4" })}>
           Beautiful, fast and modern React UI library.
+        </div>
+        <div>
+          <Chart />
         </div>
       </div>
 
