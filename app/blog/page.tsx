@@ -5,7 +5,7 @@ import React from "react";
 import matter from "gray-matter";
 
 import { title } from "@/components/primitives";
-import {Frontmatter, MarkdownPageProps} from "@/types";
+import { Frontmatter, MarkdownPageProps } from "@/types";
 
 // Define the path to your markdown files directory
 const markdownDirectory = path.join(process.cwd(), "content");
