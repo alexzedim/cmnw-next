@@ -66,7 +66,7 @@ export const SearchForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-4xl">
       <div className="flex flex-col gap-4">
-        <div className="flex flex-row gap-4 items-start flex-wrap">
+        <div className="flex flex-row gap-4 items-end flex-wrap">
           <Controller
             name="command"
             control={control}
