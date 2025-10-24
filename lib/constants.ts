@@ -24,3 +24,14 @@ export const backgroundColors = [
   'linear-gradient(135deg, #e6cc80 0%, #d4af37 100%)', // Artifact/Gold (gold)
   'linear-gradient(135deg, #00ccff 0%, #1e90ff 100%)', // Heirloom/WoW Token (cyan)
 ];
+
+// External service domains
+export const DOMAINS = {
+  domain: 'https://cmnw.me',
+  localhost: 'http://localhost:5000',
+  warcraftLogs: 'https://www.warcraftlogs.com',
+  wowProgress: 'https://www.wowprogress.com',
+  raiderIo: 'https://raider.io',
+  battleNet: 'https://worldofwarcraft.com',
+  checkPvp: 'https://check-pvp.fr'
+};
