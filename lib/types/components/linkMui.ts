@@ -3,7 +3,7 @@ export type linkMui = {
   as: string,
   className: string,
   href: string,
-  innerRef: (any) => any | Record<string, any>,
+  innerRef: (arg: any) => any | Record<string, any>,
   naked: boolean,
   onClick: () => void,
   prefetch: boolean,
