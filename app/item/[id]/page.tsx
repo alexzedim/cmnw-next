@@ -4,7 +4,7 @@ import { Divider } from "@heroui/react";
 import { ItemTitle } from '@/components/item-title';
 import { ItemQuotes } from '@/components/item-quotes';
 import { ItemValuations } from '@/components/item-valuations';
-import { ClusterChart } from '@/components/cluster-chart';
+import { MarketHeatmap } from '@/components/market-heatmap';
 import { ItemListing } from '@/components/item-listing';
 import { generateItemTitle } from '@/lib';
 import { DOMAINS } from '@/lib/constants';
@@ -99,7 +99,7 @@ export default async function ItemPage({ params }: ItemPageProps) {
 
         <Divider className="my-8" />
 
-        <ClusterChart
+        <MarketHeatmap
           id={id}
           is_xrs={is_xrs}
           is_gold={is_gold}
