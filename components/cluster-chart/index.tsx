@@ -4,7 +4,8 @@ import { FC, Fragment } from "react";
 import useSWR from "swr";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-import { DOMAINS } from "@/constants";
+import { Card, CardBody, Spinner } from "@heroui/react";
+import { DOMAINS } from "@/lib/constants";
 
 // Initialize Highcharts modules
 if (typeof window !== "undefined") {
@@ -12,9 +13,11 @@ if (typeof window !== "undefined") {
   require("highcharts/modules/exporting")(Highcharts);
 }
 
-interface itemQuery {
-  id: string;
-  isCommodity: boolean;
+interface ClusterChartProps {
+  id: number | string;
+  is_commdty?: boolean;
+  is_gold?: boolean;
+  is_xrs?: boolean;
 }
 
 interface chartResponse {
@@ -23,20 +26,29 @@ interface chartResponse {
   dataset: any[];
 }
 
-export const ClusterChart: FC<itemQuery> = ({ id, isCommodity }) => {
-  if (!isCommodity) return <></>;
+export const ClusterChart: FC<ClusterChartProps> = ({ id, is_commdty = false }) => {
+  if (!is_commdty) return null;
 
-  const { data, error } = useSWR<chartResponse>(
+  const { data, error, isLoading } = useSWR<chartResponse>(
     `${DOMAINS.domain}/api/dma/item/chart?_id=${id}`,
     (url: string) => fetch(url).then((r) => r.json()),
   );
 
-  if (error) return <div>failed to load</div>;
-  if (!data) return <div>Loading...</div>;
+  if (error) return null;
+  if (isLoading) return (
+    <Card className="m-4">
+      <CardBody className="p-8 border-[15px] border-white rounded-xl flex items-center justify-center min-h-[400px]">
+        <Spinner size="lg" />
+      </CardBody>
+    </Card>
+  );
+
+  if (!data) return null;
 
   return (
-    <Fragment>
-      <HighchartsReact
+    <Card className="m-4">
+      <CardBody className="p-4 border-[15px] border-gray-400 rounded-xl">
+        <HighchartsReact
         constructorType={"chart"}
         highcharts={Highcharts}
         options={{
@@ -114,7 +126,8 @@ export const ClusterChart: FC<itemQuery> = ({ id, isCommodity }) => {
             },
           ],
         }}
-      />
-    </Fragment>
+        />
+      </CardBody>
+    </Card>
   );
 };
