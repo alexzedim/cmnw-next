@@ -35,3 +35,6 @@ export const DOMAINS = {
   battleNet: 'https://worldofwarcraft.com',
   checkPvp: 'https://check-pvp.fr'
 };
+
+// Re-export contributors
+export { CONTRIBUTORS, type Contributor } from './constants/contributors';
