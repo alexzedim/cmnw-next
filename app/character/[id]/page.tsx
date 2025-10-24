@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { Image } from "@heroui/react";
+import Image from 'next/image';
 import { CharacterTitle } from '@/components/character-title';
 import { CharacterButtons } from '@/components/character-buttons';
 import { CharacterProfile } from '@/components/character-profile';
@@ -94,15 +94,15 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
           {/* Left Column - Portrait and Title */}
           <div className="md:col-span-4">
             <div className="max-w-md mx-auto">
-              <Image
-                src={portrait}
-                alt={`${character.name} portrait`}
-                className="w-full rounded-xl shadow-2xl"
-                style={{
-                  minHeight: '70vh',
-                  objectFit: 'cover'
-                }}
-              />
+              <div className="relative w-full rounded-xl shadow-2xl overflow-hidden" style={{ minHeight: '70vh' }}>
+                <Image
+                  src={portrait}
+                  alt={`${character.name} portrait`}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </div>
               <CharacterTitle
                 name={character.name}
                 realm={character.realm}

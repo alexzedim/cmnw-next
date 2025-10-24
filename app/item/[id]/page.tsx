@@ -8,17 +8,7 @@ import { ClusterChart } from '@/components/cluster-chart';
 import { ItemListing } from '@/components/item-listing';
 import { generateItemTitle } from '@/lib';
 import { DOMAINS } from '@/lib/constants';
-
-interface ItemResponse {
-  _id: number;
-  name?: {
-    en_GB?: string;
-  };
-  ticker?: string;
-  quality?: string;
-  asset_class?: string[];
-  icon?: string;
-}
+import type { itemResponse } from '@/lib/types';
 
 interface RealmResponse {
   realms?: string[];
@@ -38,7 +28,7 @@ async function getItemData(id: string) {
       return null;
     }
 
-    const data = await res.json() as { item: ItemResponse; realm: RealmResponse[] };
+    const data = await res.json() as { item: Partial<itemResponse>; realm: RealmResponse[] };
     return data;
   } catch (error) {
     console.error('Error fetching item data:', error);
