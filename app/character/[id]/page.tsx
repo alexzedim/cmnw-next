@@ -3,47 +3,27 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { CharacterTitle } from '@/components/character-title';
 import { CharacterButtons } from '@/components/character-buttons';
-import { CharacterProfile } from '@/components/character-profile';
+import { CharacterStats } from '@/components/character/character-stats';
 import { LogTable } from '@/components/log-table';
 import { characterPortrait } from '@/lib';
-import { DOMAINS } from '@/lib/constants';
-import { characterResponse } from '@/lib/types';
-
-interface Log {
-  _id: string;
-  event: string;
-  action: string;
-  original: string | number;
-  updated: string | number;
-  t0: number | string;
-  t1: number | string;
-}
+import { apiClient } from '@/lib/api';
+import type { Character, CharacterLogsResponse } from '@/types/entities';
 
 interface CharacterPageProps {
   params: Promise<{ id: string }>;
 }
 
-async function getCharacterData(id: string) {
+async function getCharacterData(guid: string) {
   try {
-    const [characterRes, logsRes] = await Promise.all([
-      fetch(`${DOMAINS.domain}/api/osint/character?_id=${id}`, {
-        next: { revalidate: 3600 } // Revalidate every hour
-      }),
-      fetch(`${DOMAINS.domain}/api/osint/character/logs?_id=${id}`, {
-        next: { revalidate: 3600 }
-      })
+    const [character, logsResponse] = await Promise.all([
+      apiClient.get<Character>('/api/osint/character', { guid }),
+      apiClient.get<CharacterLogsResponse>('/api/osint/character/logs', { guid })
+        .catch(() => ({ logs: [] })) // Handle missing logs gracefully
     ]);
-
-    if (!characterRes.ok) {
-      return null;
-    }
-
-    const character = await characterRes.json() as characterResponse;
-    const logs = logsRes.ok ? await logsRes.json() as Log[] : [];
 
     return {
       character,
-      logs
+      logs: logsResponse.logs || []
     };
   } catch (error) {
     console.error('Error fetching character data:', error);
@@ -62,7 +42,7 @@ export async function generateMetadata({ params }: CharacterPageProps): Promise<
   }
 
   const { character } = data;
-  const portrait = characterPortrait(character.faction, character.main);
+  const portrait = characterPortrait(character.faction as any, character.mainImage);
   const title = `CMNW: ${character.name.toLowerCase()}@${character.realm.toLowerCase()}`;
 
   return {
@@ -85,7 +65,7 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
   }
 
   const { character, logs } = data;
-  const portrait = characterPortrait(character.faction, character.main);
+  const portrait = characterPortrait(character.faction as any, character.mainImage);
 
   return (
     <main className="min-h-screen pt-20 pb-8">
@@ -107,9 +87,9 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
                 name={character.name}
                 realm={character.realm}
                 guild={character.guild}
-                guild_id={character.guild_id}
-                guild_rank={character.guild_rank}
-                faction={character.faction}
+                guild_id={character.guildGuid}
+                guild_rank={character.guildRank}
+                faction={character.faction as any}
               />
             </div>
           </div>
@@ -122,10 +102,10 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
             />
           </div>
 
-          {/* Right Column - Character Profile */}
+          {/* Right Column - Character Stats */}
           <div className="md:col-span-7">
             <div className="pt-8">
-              <CharacterProfile character={character} />
+              <CharacterStats character={character} />
             </div>
           </div>
         </div>
@@ -133,7 +113,7 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
         {/* Logs Section - Full Width */}
         {logs && logs.length > 0 && (
           <div className="mt-8">
-            <LogTable logs={logs} />
+            <LogTable logs={logs as any} />
           </div>
         )}
       </div>

@@ -27,13 +27,21 @@ export const backgroundColors = [
 
 // External service domains
 export const DOMAINS = {
-  domain: 'https://cmnw.me',
+  domain: process.env.NEXT_PUBLIC_API_URL || 'https://cmnw.me',
   localhost: 'http://localhost:5000',
   warcraftLogs: 'https://www.warcraftlogs.com',
   wowProgress: 'https://www.wowprogress.com',
   raiderIo: 'https://raider.io',
   battleNet: 'https://worldofwarcraft.com',
   checkPvp: 'https://check-pvp.fr'
+};
+
+// API Configuration
+export const API_CONFIG = {
+  revalidation: Number(process.env.NEXT_PUBLIC_API_REVALIDATION) || 3600, // 1 hour default
+  timeout: 30000, // 30 seconds
+  retryCount: 3,
+  retryDelay: 5000,
 };
 
 // Re-export contributors
