@@ -42,7 +42,18 @@ const classColors: Record<string, 'default' | 'primary' | 'secondary' | 'success
   'Evoker': 'primary',
 };
 
-export function GuildRoster({ members }: GuildRosterProps) {
+export function GuildRoster({ members: membersProp }: GuildRosterProps) {
+  // The API returns members with characterGuid but no character details
+  // Extract character name from characterGuid (format: "name@realm")
+  const members = membersProp.map(member => {
+    const [name] = (member.guid || member.characterGuid || '').split('@');
+    return {
+      ...member,
+      name: name || 'Unknown',
+      guid: member.guid || member.characterGuid,
+      guildRank: member.guildRank !== undefined ? member.guildRank : member.rank
+    };
+  });
   const [filterValue, setFilterValue] = useState('');
   const [classFilter, setClassFilter] = useState<Set<string>>(new Set([]));
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
