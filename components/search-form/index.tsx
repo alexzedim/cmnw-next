@@ -82,6 +82,11 @@ export const SearchForm = () => {
                   field.onChange(value);
                 }}
                 disallowEmptySelection
+                variant="flat"
+                classNames={{
+                  trigger: "h-14 min-h-14",
+                  value: "text-small"
+                }}
               >
                 {COMMANDS.map((option) => (
                   <SelectItem key={option.value}>{option.label}</SelectItem>
@@ -179,6 +184,11 @@ export const SearchForm = () => {
                     onSelectionChange={(keys) => {
                       const value = Array.from(keys)[0] as string;
                       field.onChange(value);
+                    }}
+                    variant="flat"
+                    classNames={{
+                      trigger: "h-14 min-h-14",
+                      value: "text-small"
                     }}
                   >
                     {HASH.map((option) => (
