@@ -133,7 +133,7 @@ export function GuildRoster({ members }: GuildRosterProps) {
           className="w-full md:max-w-xs"
         >
           {availableClasses.map((className) => (
-            <SelectItem key={className} value={className}>
+            <SelectItem key={className}>
               {className}
             </SelectItem>
           ))}
