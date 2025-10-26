@@ -5,7 +5,7 @@ import { Fragment, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
-import { Select, SelectItem } from "@heroui/react";
+import { Select, SelectItem, Autocomplete, AutocompleteItem } from "@heroui/react";
 import { COMMANDS, REALMS, HASH } from "@/constants";
 
 type SearchFormValues = {
@@ -106,20 +106,23 @@ export const SearchForm = () => {
               <div className="flex items-center justify-center">
                 <span className="text-3xl font-bold text-default-500">@</span>
               </div>
-              <Select
+              <Autocomplete
                 label="Realm"
                 labelPlacement="inside"
                 className="w-full md:flex-1"
-                selectedKeys={[selectedRealm]}
-                onSelectionChange={(keys) => {
-                  const value = Array.from(keys)[0] as string;
-                  setSelectedRealm(value);
+                defaultSelectedKey={selectedRealm}
+                onSelectionChange={(key) => {
+                  if (key) setSelectedRealm(key as string);
+                }}
+                allowsCustomValue
+                onInputChange={(value) => {
+                  if (value) setSelectedRealm(value);
                 }}
               >
                 {REALMS.map((option) => (
-                  <SelectItem key={option.value}>{option.label}</SelectItem>
+                  <AutocompleteItem key={option.value}>{option.label}</AutocompleteItem>
                 ))}
-              </Select>
+              </Autocomplete>
             </Fragment>
           )}
 
@@ -140,20 +143,23 @@ export const SearchForm = () => {
               <div className="flex items-center justify-center">
                 <span className="text-3xl font-bold text-default-500">@</span>
               </div>
-              <Select
+              <Autocomplete
                 label="Realm"
                 labelPlacement="inside"
                 className="w-full md:flex-1"
-                selectedKeys={[selectedRealm]}
-                onSelectionChange={(keys) => {
-                  const value = Array.from(keys)[0] as string;
-                  setSelectedRealm(value);
+                defaultSelectedKey={selectedRealm}
+                onSelectionChange={(key) => {
+                  if (key) setSelectedRealm(key as string);
+                }}
+                allowsCustomValue
+                onInputChange={(value) => {
+                  if (value) setSelectedRealm(value);
                 }}
               >
                 {REALMS.map((option) => (
-                  <SelectItem key={option.value}>{option.label}</SelectItem>
+                  <AutocompleteItem key={option.value}>{option.label}</AutocompleteItem>
                 ))}
-              </Select>
+              </Autocomplete>
             </Fragment>
           )}
 
@@ -215,20 +221,23 @@ export const SearchForm = () => {
               <div className="flex items-center justify-center">
                 <span className="text-3xl font-bold text-default-500">@</span>
               </div>
-              <Select
+              <Autocomplete
                 label="Realm"
                 labelPlacement="inside"
                 className="w-full md:flex-1"
-                selectedKeys={[selectedRealm]}
-                onSelectionChange={(keys) => {
-                  const value = Array.from(keys)[0] as string;
-                  setSelectedRealm(value);
+                defaultSelectedKey={selectedRealm}
+                onSelectionChange={(key) => {
+                  if (key) setSelectedRealm(key as string);
+                }}
+                allowsCustomValue
+                onInputChange={(value) => {
+                  if (value) setSelectedRealm(value);
                 }}
               >
                 {REALMS.map((option) => (
-                  <SelectItem key={option.value}>{option.label}</SelectItem>
+                  <AutocompleteItem key={option.value}>{option.label}</AutocompleteItem>
                 ))}
-              </Select>
+              </Autocomplete>
             </Fragment>
           )}
 
@@ -237,20 +246,23 @@ export const SearchForm = () => {
               <div className="flex items-center justify-center">
                 <span className="text-3xl font-bold text-default-500">@</span>
               </div>
-              <Select
+              <Autocomplete
                 label="Realm"
                 labelPlacement="inside"
                 className="w-full md:flex-1"
-                selectedKeys={[selectedRealm]}
-                onSelectionChange={(keys) => {
-                  const value = Array.from(keys)[0] as string;
-                  setSelectedRealm(value);
+                defaultSelectedKey={selectedRealm}
+                onSelectionChange={(key) => {
+                  if (key) setSelectedRealm(key as string);
+                }}
+                allowsCustomValue
+                onInputChange={(value) => {
+                  if (value) setSelectedRealm(value);
                 }}
               >
                 {REALMS.map((option) => (
-                  <SelectItem key={option.value}>{option.label}</SelectItem>
+                  <AutocompleteItem key={option.value}>{option.label}</AutocompleteItem>
                 ))}
-              </Select>
+              </Autocomplete>
             </Fragment>
           )}
 
