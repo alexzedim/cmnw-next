@@ -36,7 +36,8 @@ type SortDescriptor = {
   direction: 'ascending' | 'descending';
 };
 
-const getEventColor = (event: string): 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'danger' => {
+const getEventColor = (event?: string): 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'danger' => {
+  if (!event) return 'default';
   const eventLower = event.toLowerCase();
   if (eventLower.includes('join') || eventLower.includes('create')) return 'success';
   if (eventLower.includes('leave') || eventLower.includes('remove')) return 'danger';
@@ -128,7 +129,7 @@ export const LogTable = ({ logs }: LogTableProps) => {
               size="sm"
             >
               {uniqueEvents.map((event) => (
-                <SelectItem key={event}>
+                <SelectItem key={event} value={event}>
                   {event}
                 </SelectItem>
               ))}
@@ -147,15 +148,15 @@ export const LogTable = ({ logs }: LogTableProps) => {
             td: "text-default-600"
           }}
         >
-          <TableHeader columns={columns}>
-            {(column) => (
+          <TableHeader>
+            {columns.map((column) => (
               <TableColumn key={column.key} allowsSorting={column.sortable}>
                 {column.label}
               </TableColumn>
-            )}
+            ))}
           </TableHeader>
-          <TableBody items={filteredLogs}>
-            {(log) => (
+          <TableBody>
+            {filteredLogs.map((log) => (
               <TableRow key={log._id}>
                 <TableCell>
                   <Chip
@@ -163,21 +164,21 @@ export const LogTable = ({ logs }: LogTableProps) => {
                     variant="flat"
                     color={getEventColor(log.event)}
                   >
-                    {log.event}
+                    {log.event || '-'}
                   </Chip>
                 </TableCell>
-                <TableCell>{log.action}</TableCell>
+                <TableCell>{log.action || '-'}</TableCell>
                 <TableCell>
-                  <span className="text-sm text-default-500">{log.original}</span>
+                  <span className="text-sm text-default-500">{log.original || '-'}</span>
                 </TableCell>
                 <TableCell>
-                  <span className="text-sm font-medium">{log.updated}</span>
+                  <span className="text-sm font-medium">{log.updated || '-'}</span>
                 </TableCell>
                 <TableCell>
                   <span className="text-sm">{formatDate(log.t0)}</span>
                 </TableCell>
               </TableRow>
-            )}
+            ))}
           </TableBody>
         </Table>
       </CardBody>
