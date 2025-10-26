@@ -157,18 +157,18 @@ export function GuildRoster({ members }: GuildRosterProps) {
           td: 'text-default-600',
         }}
       >
-        <TableHeader columns={columns}>
-          {(column) => (
+        <TableHeader>
+          {columns.map((column) => (
             <TableColumn
               key={column.key}
               allowsSorting={column.sortable}
             >
               {column.label}
             </TableColumn>
-          )}
+          ))}
         </TableHeader>
-        <TableBody items={filteredMembers}>
-          {(member) => (
+        <TableBody>
+          {filteredMembers.map((member) => (
             <TableRow key={member.guid}>
               <TableCell>
                 <Link
@@ -215,7 +215,7 @@ export function GuildRoster({ members }: GuildRosterProps) {
                   : '-'}
               </TableCell>
             </TableRow>
-          )}
+          ))}
         </TableBody>
       </Table>
     </div>
