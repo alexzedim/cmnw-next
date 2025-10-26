@@ -14,7 +14,7 @@ interface PageMetadata {
 export function generateMetadata({
   title,
   description = 'Commonwealth (CMNW) - WoW Classic Trade and Market Intelligence',
-  ogImage = '/static/cmnw.png',
+  ogImage = '/icons/cmnw.png',
   keywords = ['wow', 'classic', 'trade', 'market', 'commonwealth', 'cmnw'],
 }: PageMetadata): Metadata {
   const fullTitle = `${title} | CMNW`;

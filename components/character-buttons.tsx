@@ -14,27 +14,27 @@ export const CharacterButtons = ({ name, realm }: CharacterButtonsProps) => {
     {
       name: 'WarcraftLogs',
       url: `${DOMAINS.warcraftLogs}/character/eu/${realm}/${name}`,
-      icon: '/static/wcl.svg',
+      icon: '/external/wcl.svg',
     },
     {
       name: 'RaiderIO',
       url: `${DOMAINS.raiderIo}/characters/eu/${realm}/${name}`,
-      icon: '/static/rio.svg',
+      icon: '/external/rio.svg',
     },
     {
       name: 'WoWProgress',
       url: `${DOMAINS.wowProgress}/character/eu/${realm}/${name}`,
-      icon: '/static/wp.svg',
+      icon: '/external/wp.svg',
     },
     {
       name: 'BattleNet',
       url: `${DOMAINS.battleNet}/en-gb/character/eu/${realm}/${name}`,
-      icon: '/static/armory.svg',
+      icon: '/external/armory.svg',
     },
     {
       name: 'Check PvP',
       url: `${DOMAINS.checkPvp}/eu/${realm}/${name}`,
-      icon: '/static/check_pvp.svg',
+      icon: '/external/check-pvp-1.svg',
     },
   ];
 
