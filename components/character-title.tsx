@@ -26,21 +26,15 @@ export const CharacterTitle = ({
 
   return (
     <Card 
-      className="mb-6"
+      className="mb-6 shadow-lg"
       style={{ background }}
     >
-      <CardBody 
-        className="p-6 border-4 border-white rounded-xl"
-        style={{ background }}
-      >
+      <CardBody className="p-6">
         {/* Character Name */}
         <h1 
-          className="font-black uppercase text-white tracking-wide leading-none mb-3"
+          className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-3 leading-tight"
           style={{
-            fontFamily: 'Fira Sans, sans-serif',
-            fontSize: 'clamp(2.5rem, 5vw, 5rem)',
-            textAlign: 'left',
-            textShadow: '3px 3px 6px rgba(0, 0, 0, 0.8)'
+            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)'
           }}
         >
           {name}
@@ -48,44 +42,25 @@ export const CharacterTitle = ({
         
         {/* Guild Info */}
         {guild && guild_id && (
-          <div 
-            className="text-white/95 font-medium mb-2"
-            style={{
-              fontFamily: 'Fira Sans, sans-serif',
-              fontSize: 'clamp(1.1rem, 2.5vw, 1.75rem)',
-              textAlign: 'left',
-              textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)'
-            }}
-          >
-            <span className="text-white/70 font-bold">#</span>
+          <div className="text-lg md:text-xl text-white/90 mb-3">
+            <span className="opacity-60">#</span>
             <Link 
               href={`/guild/${guild_id}`} 
-              className="text-white hover:text-white/90 hover:underline decoration-2 underline-offset-4 transition-all"
+              className="hover:underline decoration-2 underline-offset-2 transition-colors"
             >
               {guild}
             </Link>
             {guild_rank !== undefined && (
-              <span className="text-white/80 font-normal ml-2">
-                {guild_rank === 0 ? '// Guild Master' : `// Rank ${guild_rank}`}
+              <span className="text-white/70 ml-2">
+                · {guild_rank === 0 ? 'Guild Master' : `Rank ${guild_rank}`}
               </span>
             )}
           </div>
         )}
         
-        <Divider className="my-4 bg-white/30" />
-        
         {/* Realm */}
-        <div 
-          className="text-white/90 font-semibold capitalize"
-          style={{
-            fontFamily: 'Fira Sans, sans-serif',
-            fontSize: 'clamp(1.25rem, 3vw, 2rem)',
-            textAlign: 'left',
-            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)',
-            letterSpacing: '0.05em'
-          }}
-        >
-          <span className="text-white/70 font-bold">@</span>{realm}
+        <div className="text-base md:text-lg text-white/80">
+          <span className="opacity-60">@</span>{realm.toLowerCase()}
         </div>
       </CardBody>
     </Card>
