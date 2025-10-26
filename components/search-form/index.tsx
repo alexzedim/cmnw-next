@@ -81,6 +81,7 @@ export const SearchForm = () => {
                   const value = Array.from(keys)[0] as string;
                   field.onChange(value);
                 }}
+                disallowEmptySelection
               >
                 {COMMANDS.map((option) => (
                   <SelectItem key={option.value}>{option.label}</SelectItem>
