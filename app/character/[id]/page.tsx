@@ -73,9 +73,9 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
   return (
     <main className="min-h-screen pt-20 pb-8">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-          {/* Left Column - Portrait and Title */}
-          <div className="md:col-span-4">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Left Column - Portrait */}
+          <div className="lg:col-span-4">
             <div className="max-w-md mx-auto">
               <div className="relative w-full rounded-xl shadow-2xl overflow-hidden" style={{ minHeight: '70vh' }}>
                 <Image
@@ -86,30 +86,31 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
                   priority
                 />
               </div>
-              <CharacterTitle
-                name={character.name}
+            </div>
+          </div>
+
+          {/* Right Column - Title, External Links, and Stats */}
+          <div className="lg:col-span-8">
+            {/* Character Title */}
+            <CharacterTitle
+              name={character.name}
+              realm={character.realm}
+              guild={character.guild}
+              guild_id={character.guildGuid}
+              guild_rank={character.guildRank}
+              faction={character.faction as any}
+            />
+
+            {/* External Links */}
+            <div className="mb-6">
+              <CharacterButtons 
+                name={character.name} 
                 realm={character.realm}
-                guild={character.guild}
-                guild_id={character.guildGuid}
-                guild_rank={character.guildRank}
-                faction={character.faction as any}
               />
             </div>
-          </div>
 
-          {/* Middle Column - External Links */}
-          <div className="md:col-span-1 flex items-start justify-center pt-8">
-            <CharacterButtons 
-              name={character.name} 
-              realm={character.realm}
-            />
-          </div>
-
-          {/* Right Column - Character Stats */}
-          <div className="md:col-span-7">
-            <div className="pt-8">
-              <CharacterStats character={character} />
-            </div>
+            {/* Character Stats */}
+            <CharacterStats character={character} />
           </div>
         </div>
 

@@ -26,11 +26,11 @@ export const CharacterTitle = ({
 
   return (
     <Card 
-      className="max-w-4xl mx-4 my-8"
+      className="mb-6"
       style={{ background }}
     >
       <CardBody 
-        className="p-8 border-5 border-white rounded-xl"
+        className="p-6 border-4 border-white rounded-xl"
         style={{ background }}
       >
         {/* Character Name */}
