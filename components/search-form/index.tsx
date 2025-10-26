@@ -66,7 +66,7 @@ export const SearchForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-4xl">
       <div className="flex flex-col gap-4">
-        <div className="flex flex-row gap-4 items-end flex-wrap">
+        <div className="flex flex-row gap-4 items-start flex-wrap">
           <Controller
             name="command"
             control={control}
@@ -101,7 +101,7 @@ export const SearchForm = () => {
                   />
                 )}
               />
-              <div className="flex items-center justify-center px-2 pt-6">
+              <div className="flex items-end justify-center px-2 pb-2">
                 <span className="text-2xl font-bold text-default-500">@</span>
               </div>
               <Select
@@ -133,7 +133,7 @@ export const SearchForm = () => {
                   />
                 )}
               />
-              <div className="flex items-center justify-center px-2 pt-6">
+              <div className="flex items-end justify-center px-2 pb-2">
                 <span className="text-2xl font-bold text-default-500">@</span>
               </div>
               <Select
@@ -174,7 +174,7 @@ export const SearchForm = () => {
                   </Select>
                 )}
               />
-              <div className="flex items-center justify-center px-2 pt-6">
+              <div className="flex items-end justify-center px-2 pb-2">
                 <span className="text-2xl font-bold text-default-500">@</span>
               </div>
               <Controller
@@ -204,7 +204,7 @@ export const SearchForm = () => {
                   />
                 )}
               />
-              <div className="flex items-center justify-center px-2 pt-6">
+              <div className="flex items-end justify-center px-2 pb-2">
                 <span className="text-2xl font-bold text-default-500">@</span>
               </div>
               <Select
@@ -225,7 +225,7 @@ export const SearchForm = () => {
 
           {command === "gold" && (
             <Fragment>
-              <div className="flex items-center justify-center px-2 pt-6">
+              <div className="flex items-end justify-center px-2 pb-2">
                 <span className="text-2xl font-bold text-default-500">@</span>
               </div>
               <Select
@@ -250,7 +250,7 @@ export const SearchForm = () => {
             size="lg"
             isLoading={isSubmitting}
             isIconOnly
-            className="mt-1"
+            className="self-end mb-2"
           >
             →
           </Button>
