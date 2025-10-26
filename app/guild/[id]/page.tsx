@@ -11,7 +11,10 @@ interface GuildPageProps {
   params: Promise<{ id: string }>;
 }
 
-async function getGuildData(guid: string) {
+async function getGuildData(encodedGuid: string) {
+  // Decode the URL-encoded GUID before passing to API
+  const guid = decodeURIComponent(encodedGuid);
+  
   try {
     const [guildResponse, logsResponse] = await Promise.all([
       apiClient.get<GuildResponse>('/api/osint/guild', { guid }),

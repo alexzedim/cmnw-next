@@ -13,7 +13,10 @@ interface CharacterPageProps {
   params: Promise<{ id: string }>;
 }
 
-async function getCharacterData(guid: string) {
+async function getCharacterData(encodedGuid: string) {
+  // Decode the URL-encoded GUID before passing to API
+  const guid = decodeURIComponent(encodedGuid);
+  
   try {
     const [character, logsResponse] = await Promise.all([
       apiClient.get<Character>('/api/osint/character', { guid }),
