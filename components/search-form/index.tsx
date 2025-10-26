@@ -66,7 +66,7 @@ export const SearchForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-4xl">
       <div className="flex flex-col gap-4">
-        <div className="flex flex-row gap-4 items-start flex-wrap">
+        <div className="flex flex-row gap-3 items-center flex-wrap">
           <Controller
             name="command"
             control={control}
@@ -74,6 +74,7 @@ export const SearchForm = () => {
               <Select
                 {...field}
                 label="Command"
+                labelPlacement="inside"
                 className="w-full md:w-48"
                 selectedKeys={field.value ? [field.value] : []}
                 onSelectionChange={(keys) => {
@@ -97,15 +98,17 @@ export const SearchForm = () => {
                   <Input
                     {...field}
                     label="Character"
+                    labelPlacement="inside"
                     className="w-full md:flex-1"
                   />
                 )}
               />
-              <div className="flex items-end justify-center px-2 pb-2">
-                <span className="text-2xl font-bold text-default-500">@</span>
+              <div className="flex items-center justify-center">
+                <span className="text-3xl font-bold text-default-500">@</span>
               </div>
               <Select
                 label="Realm"
+                labelPlacement="inside"
                 className="w-full md:flex-1"
                 selectedKeys={[selectedRealm]}
                 onSelectionChange={(keys) => {
@@ -129,15 +132,17 @@ export const SearchForm = () => {
                   <Input
                     {...field}
                     label="Guild"
+                    labelPlacement="inside"
                     className="w-full md:flex-1"
                   />
                 )}
               />
-              <div className="flex items-end justify-center px-2 pb-2">
-                <span className="text-2xl font-bold text-default-500">@</span>
+              <div className="flex items-center justify-center">
+                <span className="text-3xl font-bold text-default-500">@</span>
               </div>
               <Select
                 label="Realm"
+                labelPlacement="inside"
                 className="w-full md:flex-1"
                 selectedKeys={[selectedRealm]}
                 onSelectionChange={(keys) => {
@@ -161,6 +166,7 @@ export const SearchForm = () => {
                   <Select
                     {...field}
                     label="Type"
+                    labelPlacement="inside"
                     className="w-full md:w-32"
                     selectedKeys={field.value ? [field.value] : []}
                     onSelectionChange={(keys) => {
@@ -174,8 +180,8 @@ export const SearchForm = () => {
                   </Select>
                 )}
               />
-              <div className="flex items-end justify-center px-2 pb-2">
-                <span className="text-2xl font-bold text-default-500">@</span>
+              <div className="flex items-center justify-center">
+                <span className="text-3xl font-bold text-default-500">@</span>
               </div>
               <Controller
                 name="hash"
@@ -184,6 +190,7 @@ export const SearchForm = () => {
                   <Input
                     {...field}
                     label="Hash"
+                    labelPlacement="inside"
                     className="w-full md:flex-1"
                   />
                 )}
@@ -200,15 +207,17 @@ export const SearchForm = () => {
                   <Input
                     {...field}
                     label="Commodity"
+                    labelPlacement="inside"
                     className="w-full md:flex-1"
                   />
                 )}
               />
-              <div className="flex items-end justify-center px-2 pb-2">
-                <span className="text-2xl font-bold text-default-500">@</span>
+              <div className="flex items-center justify-center">
+                <span className="text-3xl font-bold text-default-500">@</span>
               </div>
               <Select
                 label="Realm"
+                labelPlacement="inside"
                 className="w-full md:flex-1"
                 selectedKeys={[selectedRealm]}
                 onSelectionChange={(keys) => {
@@ -225,11 +234,12 @@ export const SearchForm = () => {
 
           {command === "gold" && (
             <Fragment>
-              <div className="flex items-end justify-center px-2 pb-2">
-                <span className="text-2xl font-bold text-default-500">@</span>
+              <div className="flex items-center justify-center">
+                <span className="text-3xl font-bold text-default-500">@</span>
               </div>
               <Select
                 label="Realm"
+                labelPlacement="inside"
                 className="w-full md:flex-1"
                 selectedKeys={[selectedRealm]}
                 onSelectionChange={(keys) => {
@@ -250,7 +260,6 @@ export const SearchForm = () => {
             size="lg"
             isLoading={isSubmitting}
             isIconOnly
-            className="self-end mb-2"
           >
             →
           </Button>
