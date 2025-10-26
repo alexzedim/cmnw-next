@@ -83,9 +83,12 @@ export const SearchForm = () => {
                 }}
                 disallowEmptySelection
                 variant="flat"
+                size="lg"
                 classNames={{
-                  trigger: "h-14 min-h-14",
-                  value: "text-small"
+                  base: "h-14",
+                  trigger: "h-14 !h-14 min-h-14 py-2",
+                  value: "text-small",
+                  innerWrapper: "py-2"
                 }}
               >
                 {COMMANDS.map((option) => (
@@ -186,9 +189,12 @@ export const SearchForm = () => {
                       field.onChange(value);
                     }}
                     variant="flat"
+                    size="lg"
                     classNames={{
-                      trigger: "h-14 min-h-14",
-                      value: "text-small"
+                      base: "h-14",
+                      trigger: "h-14 !h-14 min-h-14 py-2",
+                      value: "text-small",
+                      innerWrapper: "py-2"
                     }}
                   >
                     {HASH.map((option) => (
