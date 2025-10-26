@@ -71,30 +71,28 @@ export const SearchForm = () => {
             name="command"
             control={control}
             render={({ field }) => (
-              <Select
-                {...field}
-                label="Command"
-                labelPlacement="inside"
-                className="w-full md:w-48"
-                selectedKeys={field.value ? [field.value] : []}
-                onSelectionChange={(keys) => {
-                  const value = Array.from(keys)[0] as string;
-                  field.onChange(value);
-                }}
-                disallowEmptySelection
-                variant="flat"
-                size="lg"
-                classNames={{
-                  base: "h-14",
-                  trigger: "h-14 !h-14 min-h-14 py-2",
-                  value: "text-small",
-                  innerWrapper: "py-2"
-                }}
-              >
-                {COMMANDS.map((option) => (
-                  <SelectItem key={option.value}>{option.label}</SelectItem>
-                ))}
-              </Select>
+              <div className="w-full md:w-48">
+                <Select
+                  {...field}
+                  label="Command"
+                  labelPlacement="inside"
+                  className="w-full"
+                  selectedKeys={field.value ? [field.value] : []}
+                  onSelectionChange={(keys) => {
+                    const value = Array.from(keys)[0] as string;
+                    field.onChange(value);
+                  }}
+                  disallowEmptySelection
+                  variant="flat"
+                  classNames={{
+                    trigger: "min-h-[56px] h-[56px]",
+                  }}
+                >
+                  {COMMANDS.map((option) => (
+                    <SelectItem key={option.value}>{option.label}</SelectItem>
+                  ))}
+                </Select>
+              </div>
             )}
           />
 
@@ -178,29 +176,27 @@ export const SearchForm = () => {
                 name="type"
                 control={control}
                 render={({ field }) => (
-                  <Select
-                    {...field}
-                    label="Type"
-                    labelPlacement="inside"
-                    className="w-full md:w-32"
-                    selectedKeys={field.value ? [field.value] : []}
-                    onSelectionChange={(keys) => {
-                      const value = Array.from(keys)[0] as string;
-                      field.onChange(value);
-                    }}
-                    variant="flat"
-                    size="lg"
-                    classNames={{
-                      base: "h-14",
-                      trigger: "h-14 !h-14 min-h-14 py-2",
-                      value: "text-small",
-                      innerWrapper: "py-2"
-                    }}
-                  >
-                    {HASH.map((option) => (
-                      <SelectItem key={option.value}>{option.label}</SelectItem>
-                    ))}
-                  </Select>
+                  <div className="w-full md:w-32">
+                    <Select
+                      {...field}
+                      label="Type"
+                      labelPlacement="inside"
+                      className="w-full"
+                      selectedKeys={field.value ? [field.value] : []}
+                      onSelectionChange={(keys) => {
+                        const value = Array.from(keys)[0] as string;
+                        field.onChange(value);
+                      }}
+                      variant="flat"
+                      classNames={{
+                        trigger: "min-h-[56px] h-[56px]",
+                      }}
+                    >
+                      {HASH.map((option) => (
+                        <SelectItem key={option.value}>{option.label}</SelectItem>
+                      ))}
+                    </Select>
+                  </div>
                 )}
               />
               <div className="flex items-center justify-center">
