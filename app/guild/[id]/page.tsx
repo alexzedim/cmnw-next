@@ -2,74 +2,28 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Divider } from "@heroui/react";
 import { GuildTitle } from '@/components/guild-title';
-import { CharacterTable } from '@/components/character-table';
+import { GuildRoster } from '@/components/guild/guild-roster';
 import { LogTable } from '@/components/log-table';
-import { DOMAINS } from '@/lib/constants';
-import { Faction } from '@/lib/types';
-
-interface GuildMember {
-  _id: string;
-  hash_a?: string;
-  hash_b?: string;
-  rank?: number;
-  average_item_level?: number;
-  character_class?: string;
-  active_spec?: string;
-  achievement_points?: number;
-  level?: number;
-  race?: string;
-  gender?: string;
-  chosen_covenant?: string;
-  renown_level?: number;
-  last_modified?: string;
-}
-
-interface Log {
-  _id: string;
-  event: string;
-  action: string;
-  original: string | number;
-  updated: string | number;
-  t0: number | string;
-  t1: number | string;
-}
-
-interface GuildResponse {
-  _id: string;
-  name: string;
-  realm: string;
-  faction: Faction;
-  created_timestamp: number;
-  achievement_points: number;
-  member_count: number;
-  members: GuildMember[];
-}
+import { apiClient } from '@/lib/api';
+import type { GuildResponse, GuildLogsResponse, Faction } from '@/types/entities';
 
 interface GuildPageProps {
   params: Promise<{ id: string }>;
 }
 
-async function getGuildData(id: string) {
+async function getGuildData(guid: string) {
   try {
-    const [guildRes, logsRes] = await Promise.all([
-      fetch(`${DOMAINS.domain}/api/osint/guild?_id=${id}`, {
-        next: { revalidate: 3600 } // Revalidate every hour
-      }),
-      fetch(`${DOMAINS.domain}/api/osint/guild/logs?_id=${id}`, {
-        next: { revalidate: 3600 }
-      })
+    const [guildResponse, logsResponse] = await Promise.all([
+      apiClient.get<GuildResponse>('/api/osint/guild', { guid }),
+      apiClient.get<GuildLogsResponse>('/api/osint/guild/logs', { guid })
+        .catch(() => ({ logs: [] })) // Handle missing logs gracefully
     ]);
 
-    if (!guildRes.ok) {
-      return null;
-    }
-
-    const guild = await guildRes.json() as GuildResponse;
-    const logs = logsRes.ok ? await logsRes.json() as Log[] : [];
-
     return {
-      guild,
-      logs
+      guild: guildResponse.guild,
+      members: guildResponse.members,
+      memberCount: guildResponse.memberCount,
+      logs: logsResponse.logs || []
     };
   } catch (error) {
     console.error('Error fetching guild data:', error);
@@ -87,15 +41,15 @@ export async function generateMetadata({ params }: GuildPageProps): Promise<Meta
     };
   }
 
-  const { guild } = data;
+  const { guild, memberCount } = data;
   const title = `CMNW: ${guild.name}@${guild.realm}`;
 
   return {
     title,
-    description: `Guild profile for ${guild.name} on ${guild.realm}. ${guild.member_count} members.`,
+    description: `Guild profile for ${guild.name} on ${guild.realm}. ${memberCount} members.`,
     openGraph: {
       title,
-      description: `Guild profile with ${guild.member_count} members`,
+      description: `Guild profile with ${memberCount} members`,
     },
   };
 }
@@ -108,7 +62,7 @@ export default async function GuildPage({ params }: GuildPageProps) {
     notFound();
   }
 
-  const { guild, logs } = data;
+  const { guild, members, memberCount, logs } = data;
 
   return (
     <main className="min-h-screen pt-20 pb-8">
@@ -116,23 +70,23 @@ export default async function GuildPage({ params }: GuildPageProps) {
         <GuildTitle
           name={guild.name}
           realm={guild.realm}
-          member_count={guild.member_count}
-          created_timestamp={guild.created_timestamp}
-          achievement_points={guild.achievement_points}
-          faction={guild.faction}
+          member_count={memberCount}
+          created_timestamp={guild.createdTimestamp ? new Date(guild.createdTimestamp).getTime() : Date.now()}
+          achievement_points={guild.achievementPoints || 0}
+          faction={guild.faction as any}
         />
 
         <Divider className="my-8" />
 
-        {guild.members && guild.members.length > 0 && (
+        {members && members.length > 0 && (
           <>
-            <CharacterTable characters={guild.members} roster={true} />
+            <GuildRoster members={members} />
             <Divider className="my-8" />
           </>
         )}
 
         {logs && logs.length > 0 && (
-          <LogTable logs={logs} />
+          <LogTable logs={logs as any} />
         )}
       </div>
     </main>
