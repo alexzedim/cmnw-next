@@ -33,49 +33,60 @@ export const CharacterTitle = ({
         className="p-8 border-5 border-white rounded-xl"
         style={{ background }}
       >
+        {/* Character Name */}
         <h1 
-          className="font-black uppercase text-white"
+          className="font-black uppercase text-white tracking-wide leading-none mb-3"
           style={{
             fontFamily: 'Fira Sans, sans-serif',
-            fontSize: 'clamp(2rem, -2.75rem + 16.6667vw, 4rem)',
-            textAlign: 'left'
+            fontSize: 'clamp(2.5rem, 5vw, 5rem)',
+            textAlign: 'left',
+            textShadow: '3px 3px 6px rgba(0, 0, 0, 0.8)'
           }}
         >
           {name}
         </h1>
         
+        {/* Guild Info */}
         {guild && guild_id && (
-          <h4 
-            className="text-white font-normal"
+          <div 
+            className="text-white/95 font-medium mb-2"
             style={{
               fontFamily: 'Fira Sans, sans-serif',
-              fontSize: 'clamp(1rem, -2.75rem + 16.6667vw, 2rem)',
-              textAlign: 'left'
+              fontSize: 'clamp(1.1rem, 2.5vw, 1.75rem)',
+              textAlign: 'left',
+              textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)'
             }}
           >
-            #<Link href={`/guild/${guild_id}`} className="text-white hover:underline">
+            <span className="text-white/70 font-bold">#</span>
+            <Link 
+              href={`/guild/${guild_id}`} 
+              className="text-white hover:text-white/90 hover:underline decoration-2 underline-offset-4 transition-all"
+            >
               {guild}
             </Link>
             {guild_rank !== undefined && (
-              <span>
-                {guild_rank === 0 ? ' // GM' : ` // R${guild_rank}`}
+              <span className="text-white/80 font-normal ml-2">
+                {guild_rank === 0 ? '// Guild Master' : `// Rank ${guild_rank}`}
               </span>
             )}
-          </h4>
+          </div>
         )}
         
-        <Divider className="my-4 bg-primary" />
+        <Divider className="my-4 bg-white/30" />
         
-        <h4 
-          className="text-white font-normal"
+        {/* Realm */}
+        <div 
+          className="text-white/90 font-semibold capitalize"
           style={{
             fontFamily: 'Fira Sans, sans-serif',
-            fontSize: 'clamp(1.3rem, -2.75rem + 16.6667vw, 2rem)',
-            textAlign: 'left'
+            fontSize: 'clamp(1.25rem, 3vw, 2rem)',
+            textAlign: 'left',
+            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)',
+            letterSpacing: '0.05em'
           }}
         >
-          @{realm}
-        </h4>
+          <span className="text-white/70 font-bold">@</span>{realm}
+        </div>
       </CardBody>
     </Card>
   );
