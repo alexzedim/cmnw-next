@@ -21,11 +21,11 @@ export const Counter = () => {
   return (
     <div className="flex items-center gap-2">
       <Button
+        isIconOnly
         color="danger"
+        size="sm"
         variant="flat"
         onPress={decrement}
-        isIconOnly
-        size="sm"
       >
         -
       </Button>
@@ -33,15 +33,15 @@ export const Counter = () => {
         <span className="text-lg font-semibold">{count}</span>
       </div>
       <Button
+        isIconOnly
         color="success"
+        size="sm"
         variant="flat"
         onPress={increment}
-        isIconOnly
-        size="sm"
       >
         +
       </Button>
-      <Button color="default" variant="light" onPress={reset} size="sm">
+      <Button color="default" size="sm" variant="light" onPress={reset}>
         Reset
       </Button>
     </div>

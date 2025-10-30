@@ -7,7 +7,12 @@ type CustomLinkProps = Omit<ComponentProps<typeof HeroUILink>, "href"> & {
   prefetch?: boolean;
 };
 
-export const CustomLink = ({ href, prefetch, children, ...props }: CustomLinkProps) => {
+export const CustomLink = ({
+  href,
+  prefetch,
+  children,
+  ...props
+}: CustomLinkProps) => {
   return (
     <HeroUILink as={NextLink} href={href} prefetch={prefetch} {...props}>
       {children}

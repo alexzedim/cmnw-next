@@ -5,7 +5,13 @@ import { Fragment, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
-import { Select, SelectItem, Autocomplete, AutocompleteItem } from "@heroui/react";
+import {
+  Select,
+  SelectItem,
+  Autocomplete,
+  AutocompleteItem,
+} from "@heroui/react";
+
 import { COMMANDS, REALMS, HASH } from "@/constants";
 
 type SearchFormValues = {
@@ -64,28 +70,29 @@ export const SearchForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-4xl">
+    <form className="w-full max-w-4xl" onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col gap-4">
-        <div className="flex flex-row gap-3 items-center flex-wrap">
+        <div className="flex flex-row gap-4 items-start flex-wrap">
           <Controller
-            name="command"
             control={control}
+            name="command"
             render={({ field }) => (
               <div className="w-full md:w-48">
                 <Select
                   {...field}
-                  label="Command"
-                  labelPlacement="inside"
-                  className="w-full"
-                  selectedKeys={field.value ? [field.value] : []}
-                  onSelectionChange={(keys) => {
-                    const value = Array.from(keys)[0] as string;
-                    field.onChange(value);
-                  }}
                   disallowEmptySelection
-                  variant="flat"
+                  className="w-full heroui-select-fix"
                   classNames={{
                     trigger: "min-h-[56px] h-[56px]",
+                  }}
+                  label="Command"
+                  labelPlacement="inside"
+                  selectedKeys={field.value ? [field.value] : []}
+                  variant="flat"
+                  onSelectionChange={(keys) => {
+                    const value = Array.from(keys)[0] as string;
+
+                    field.onChange(value);
                   }}
                 >
                   {COMMANDS.map((option) => (
@@ -99,14 +106,14 @@ export const SearchForm = () => {
           {command === "character" && (
             <Fragment>
               <Controller
-                name="character"
                 control={control}
+                name="character"
                 render={({ field }) => (
                   <Input
                     {...field}
+                    className="w-full md:flex-1"
                     label="Character"
                     labelPlacement="inside"
-                    className="w-full md:flex-1"
                   />
                 )}
               />
@@ -114,20 +121,22 @@ export const SearchForm = () => {
                 <span className="text-3xl font-bold text-default-500">@</span>
               </div>
               <Autocomplete
+                allowsCustomValue
+                className="w-full md:flex-1 heroui-select-fix"
+                defaultSelectedKey={selectedRealm}
                 label="Realm"
                 labelPlacement="inside"
-                className="w-full md:flex-1"
-                defaultSelectedKey={selectedRealm}
-                onSelectionChange={(key) => {
-                  if (key) setSelectedRealm(key as string);
-                }}
-                allowsCustomValue
                 onInputChange={(value) => {
                   if (value) setSelectedRealm(value);
                 }}
+                onSelectionChange={(key) => {
+                  if (key) setSelectedRealm(key as string);
+                }}
               >
                 {REALMS.map((option) => (
-                  <AutocompleteItem key={option.value}>{option.label}</AutocompleteItem>
+                  <AutocompleteItem key={option.value}>
+                    {option.label}
+                  </AutocompleteItem>
                 ))}
               </Autocomplete>
             </Fragment>
@@ -136,14 +145,14 @@ export const SearchForm = () => {
           {command === "guild" && (
             <Fragment>
               <Controller
-                name="guild"
                 control={control}
+                name="guild"
                 render={({ field }) => (
                   <Input
                     {...field}
+                    className="w-full md:flex-1"
                     label="Guild"
                     labelPlacement="inside"
-                    className="w-full md:flex-1"
                   />
                 )}
               />
@@ -151,20 +160,22 @@ export const SearchForm = () => {
                 <span className="text-3xl font-bold text-default-500">@</span>
               </div>
               <Autocomplete
+                allowsCustomValue
+                className="w-full md:flex-1 heroui-select-fix"
+                defaultSelectedKey={selectedRealm}
                 label="Realm"
                 labelPlacement="inside"
-                className="w-full md:flex-1"
-                defaultSelectedKey={selectedRealm}
-                onSelectionChange={(key) => {
-                  if (key) setSelectedRealm(key as string);
-                }}
-                allowsCustomValue
                 onInputChange={(value) => {
                   if (value) setSelectedRealm(value);
                 }}
+                onSelectionChange={(key) => {
+                  if (key) setSelectedRealm(key as string);
+                }}
               >
                 {REALMS.map((option) => (
-                  <AutocompleteItem key={option.value}>{option.label}</AutocompleteItem>
+                  <AutocompleteItem key={option.value}>
+                    {option.label}
+                  </AutocompleteItem>
                 ))}
               </Autocomplete>
             </Fragment>
@@ -173,27 +184,30 @@ export const SearchForm = () => {
           {command === "hash" && (
             <Fragment>
               <Controller
-                name="type"
                 control={control}
+                name="type"
                 render={({ field }) => (
                   <div className="w-full md:w-32">
                     <Select
                       {...field}
-                      label="Type"
-                      labelPlacement="inside"
-                      className="w-full"
-                      selectedKeys={field.value ? [field.value] : []}
-                      onSelectionChange={(keys) => {
-                        const value = Array.from(keys)[0] as string;
-                        field.onChange(value);
-                      }}
-                      variant="flat"
+                      className="w-full heroui-select-fix"
                       classNames={{
                         trigger: "min-h-[56px] h-[56px]",
                       }}
+                      label="Type"
+                      labelPlacement="inside"
+                      selectedKeys={field.value ? [field.value] : []}
+                      variant="flat"
+                      onSelectionChange={(keys) => {
+                        const value = Array.from(keys)[0] as string;
+
+                        field.onChange(value);
+                      }}
                     >
                       {HASH.map((option) => (
-                        <SelectItem key={option.value}>{option.label}</SelectItem>
+                        <SelectItem key={option.value}>
+                          {option.label}
+                        </SelectItem>
                       ))}
                     </Select>
                   </div>
@@ -203,14 +217,14 @@ export const SearchForm = () => {
                 <span className="text-3xl font-bold text-default-500">@</span>
               </div>
               <Controller
-                name="hash"
                 control={control}
+                name="hash"
                 render={({ field }) => (
                   <Input
                     {...field}
+                    className="w-full md:flex-1"
                     label="Hash"
                     labelPlacement="inside"
-                    className="w-full md:flex-1"
                   />
                 )}
               />
@@ -220,14 +234,14 @@ export const SearchForm = () => {
           {command === "commodity" && (
             <Fragment>
               <Controller
-                name="commodity"
                 control={control}
+                name="commodity"
                 render={({ field }) => (
                   <Input
                     {...field}
+                    className="w-full md:flex-1"
                     label="Commodity"
                     labelPlacement="inside"
-                    className="w-full md:flex-1"
                   />
                 )}
               />
@@ -235,20 +249,22 @@ export const SearchForm = () => {
                 <span className="text-3xl font-bold text-default-500">@</span>
               </div>
               <Autocomplete
+                allowsCustomValue
+                className="w-full md:flex-1 heroui-select-fix"
+                defaultSelectedKey={selectedRealm}
                 label="Realm"
                 labelPlacement="inside"
-                className="w-full md:flex-1"
-                defaultSelectedKey={selectedRealm}
-                onSelectionChange={(key) => {
-                  if (key) setSelectedRealm(key as string);
-                }}
-                allowsCustomValue
                 onInputChange={(value) => {
                   if (value) setSelectedRealm(value);
                 }}
+                onSelectionChange={(key) => {
+                  if (key) setSelectedRealm(key as string);
+                }}
               >
                 {REALMS.map((option) => (
-                  <AutocompleteItem key={option.value}>{option.label}</AutocompleteItem>
+                  <AutocompleteItem key={option.value}>
+                    {option.label}
+                  </AutocompleteItem>
                 ))}
               </Autocomplete>
             </Fragment>
@@ -260,31 +276,33 @@ export const SearchForm = () => {
                 <span className="text-3xl font-bold text-default-500">@</span>
               </div>
               <Autocomplete
-                label="Realm"
-                labelPlacement="inside"
+                allowsCustomValue
                 className="w-full md:flex-1"
                 defaultSelectedKey={selectedRealm}
-                onSelectionChange={(key) => {
-                  if (key) setSelectedRealm(key as string);
-                }}
-                allowsCustomValue
+                label="Realm"
+                labelPlacement="inside"
                 onInputChange={(value) => {
                   if (value) setSelectedRealm(value);
                 }}
+                onSelectionChange={(key) => {
+                  if (key) setSelectedRealm(key as string);
+                }}
               >
                 {REALMS.map((option) => (
-                  <AutocompleteItem key={option.value}>{option.label}</AutocompleteItem>
+                  <AutocompleteItem key={option.value}>
+                    {option.label}
+                  </AutocompleteItem>
                 ))}
               </Autocomplete>
             </Fragment>
           )}
 
           <Button
-            type="submit"
-            color="secondary"
-            size="lg"
-            isLoading={isSubmitting}
             isIconOnly
+            color="secondary"
+            isLoading={isSubmitting}
+            size="lg"
+            type="submit"
           >
             →
           </Button>

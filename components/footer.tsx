@@ -1,4 +1,3 @@
-import { Divider } from "@heroui/react";
 import { Link } from "@heroui/link";
 
 export const Footer = () => {
@@ -13,16 +12,16 @@ export const Footer = () => {
           </p>
           <div className="flex gap-3 sm:gap-4">
             <Link
-              href="https://github.com/alexzedim/cmnw-next"
-              target="_blank"
-              rel="noopener noreferrer"
               className="text-default-600 hover:text-default-900 whitespace-nowrap"
+              href="https://github.com/alexzedim/cmnw-next"
+              rel="noopener noreferrer"
+              target="_blank"
             >
               GitHub
             </Link>
             <Link
-              href="/discord"
               className="text-default-600 hover:text-default-900 whitespace-nowrap"
+              href="/discord"
             >
               Discord
             </Link>

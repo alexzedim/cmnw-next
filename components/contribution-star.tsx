@@ -1,6 +1,7 @@
-'use client';
+"use client";
 
 import { Card, CardBody } from "@heroui/react";
+
 import { Link } from "@/components/custom-link";
 
 interface ContributionStarProps {
@@ -11,41 +12,39 @@ interface ContributionStarProps {
   twitter?: string;
 }
 
-export const ContributionStar = ({ 
-  character, 
-  name, 
-  discord, 
-  github, 
-  twitter 
+export const ContributionStar = ({
+  character,
+  name,
+  discord,
+  github,
+  twitter,
 }: ContributionStarProps) => {
   return (
     <Card className="bg-transparent shadow-none border-none h-[250px]">
       <CardBody className="flex flex-col items-center justify-start text-center gap-2 pt-8">
         {/* Star Icon */}
-        <svg 
+        <svg
           className="w-16 h-16 text-primary mb-2"
-          viewBox="0 0 24 24" 
-          fill="none" 
-          stroke="currentColor" 
+          fill="none"
+          stroke="currentColor"
           strokeWidth="1"
+          viewBox="0 0 24 24"
         >
-          <polygon 
-            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+          <polygon
             fill="none"
+            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
             stroke="currentColor"
           />
         </svg>
 
-        <p className="text-sm uppercase font-semibold">
-          {name}
-        </p>
+        <p className="text-sm uppercase font-semibold">{name}</p>
 
         {twitter && (
           <p className="text-xs uppercase">
-            <Link 
-              href={`https://www.twitter.com/${twitter.replace('@', '')}`}
-              prefetch={false}
+            <Link
               className="text-inherit hover:text-primary transition-colors"
+              href={`https://www.twitter.com/${twitter.replace("@", "")}`}
+              prefetch={false}
             >
               {twitter}
             </Link>
@@ -54,9 +53,9 @@ export const ContributionStar = ({
 
         {character && (
           <p className="text-xs uppercase">
-            <Link 
-              href={`/character/${character}`}
+            <Link
               className="text-inherit hover:text-primary transition-colors"
+              href={`/character/${character}`}
             >
               {character}
             </Link>
@@ -64,17 +63,15 @@ export const ContributionStar = ({
         )}
 
         {discord && (
-          <p className="text-xs uppercase text-default-500">
-            {discord}
-          </p>
+          <p className="text-xs uppercase text-default-500">{discord}</p>
         )}
 
         {github && (
           <p className="text-xs uppercase">
-            <Link 
+            <Link
+              className="text-inherit hover:text-primary transition-colors"
               href={`https://www.github.com/${github}`}
               prefetch={false}
-              className="text-inherit hover:text-primary transition-colors"
             >
               {github}
             </Link>
