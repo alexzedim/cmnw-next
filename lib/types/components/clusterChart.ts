@@ -1,3 +1,3 @@
 export type clusterChart = {
-  readonly _id: string
-}
+  readonly _id: string;
+};

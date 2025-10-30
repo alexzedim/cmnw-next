@@ -1,47 +1,55 @@
-import { nameLocaleEmbed } from './nameLocaleEmbed';
+import { nameLocaleEmbed } from "./nameLocaleEmbed";
 
 export type itemResponse = {
-  _id: number;
+  id: number;
+  _id?: number; // Deprecated, use id
 
-  name: nameLocaleEmbed;
+  name?: string;
+  names?: nameLocaleEmbed;
 
-  quality: string;
+  quality?: string;
 
-  ilvl: number;
+  itemLevel?: number;
 
-  level: number;
+  level?: number;
 
-  icon: string;
+  icon?: string;
 
-  item_class: string;
+  itemClass?: string;
 
-  item_subclass: string;
+  itemSubClass?: string;
 
-  purchase_price: number;
+  purchasePrice?: number;
 
-  purchase_quantity: number;
+  purchaseQuantity?: number;
 
-  sell_price: number;
+  vendorSellPrice?: number;
 
-  is_equippable: boolean;
+  isEquip?: boolean;
 
-  is_stackable: boolean;
+  isStackable?: boolean;
 
-  inventory_type: string;
+  inventoryType?: string;
 
-  loot_type: string;
+  lootType?: string;
 
-  contracts: boolean;
+  hasContracts?: boolean;
 
-  asset_class: string[];
+  asset_class?: string[]; // Keep for compatibility with generateItemBackground
+  assetClass?: string[];
 
-  expansion: string;
+  expansion?: string;
 
-  stackable: number;
+  stackable?: number;
 
-  profession_class: string;
+  professionClass?: string;
 
-  ticker: string;
+  ticker?: string;
 
-  tags: string[];
-}
+  tags?: string[];
+
+  indexBy?: string;
+
+  createdAt?: Date;
+  updatedAt?: Date;
+};

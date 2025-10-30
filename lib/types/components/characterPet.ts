@@ -1,4 +1,4 @@
 export type characterPet = {
-  _id: number,
-  name: string,
-}
+  _id: number;
+  name: string;
+};

@@ -1,4 +1,4 @@
-import { FlagTypes, ValuationTypes } from '../enums';
+import { FlagTypes, ValuationTypes } from "../enums";
 
 export type names = {
   en_US: string;
@@ -10,7 +10,7 @@ export type names = {
   fr_FR: string;
   it_IT: string;
   ru_RU: string;
-}
+};
 
 export type details = {
   wi: number;
@@ -30,12 +30,12 @@ export type details = {
   reagent_items: itemValuation[];
   premium_reagent_items: itemValuation[];
   unsorted_reagent_items: itemValuation[];
-}
+};
 
 export type itemValuation = {
   _id: number;
   quality: string;
-  name: names,
+  name: names;
   ilvl: number;
   level: number;
   icon: string;
@@ -57,7 +57,7 @@ export type itemValuation = {
   tags: string[];
   value: number;
   quantity: number;
-}
+};
 
 export type valuation = {
   item_id: number;
@@ -68,9 +68,9 @@ export type valuation = {
   flag: FlagTypes;
   type: ValuationTypes;
   details: details;
-}
+};
 
 export type itemValuationsResponse = {
   valuations: valuation[];
   is_evaluating: number;
-}
+};

@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata } from "next";
 
 interface PageMetadata {
   title: string;
@@ -13,9 +13,9 @@ interface PageMetadata {
  */
 export function generateMetadata({
   title,
-  description = 'Commonwealth (CMNW) - WoW Classic Trade and Market Intelligence',
-  ogImage = '/icons/cmnw.png',
-  keywords = ['wow', 'classic', 'trade', 'market', 'commonwealth', 'cmnw'],
+  description = "Commonwealth (CMNW) - WoW Classic Trade and Market Intelligence",
+  ogImage = "/icons/cmnw.png",
+  keywords = ["wow", "classic", "trade", "market", "commonwealth", "cmnw"],
 }: PageMetadata): Metadata {
   const fullTitle = `${title} | CMNW`;
 
@@ -34,10 +34,10 @@ export function generateMetadata({
           alt: title,
         },
       ],
-      type: 'website',
+      type: "website",
     },
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       title: fullTitle,
       description,
       images: [ogImage],

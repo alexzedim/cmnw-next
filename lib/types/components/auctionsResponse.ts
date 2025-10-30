@@ -15,5 +15,5 @@ export type AuctionsResponse = {
     time_left: string;
     updatedAt: Date;
     createdAt: Date;
-  }>
-}
+  }>;
+};

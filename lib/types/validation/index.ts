@@ -1,1 +1,1 @@
-export * from './searchValidation';
+export * from "./searchValidation";

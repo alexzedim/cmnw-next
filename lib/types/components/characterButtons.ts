@@ -1,4 +1,4 @@
 export type characterButtons = {
-  name: string,
-  realm: string
-}
+  name: string;
+  realm: string;
+};

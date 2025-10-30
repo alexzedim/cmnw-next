@@ -4,4 +4,4 @@ export type itemTitle = {
   quality?: string;
   asset_class?: string[];
   icon?: string;
-}
+};

@@ -1,13 +1,24 @@
 /**
  * API Module - Centralized exports
- * 
+ *
  * Import API functionality like:
  * import { apiClient } from '@/lib/api';
  * import { useCharacter, useGuild } from '@/lib/api/hooks'; // For client components
+ * import { encodeGuid, decodeGuid, isValidGuid } from '@/lib/api';
  */
 
 // Export API client (for server and client components)
-export { apiClient, ApiClient, ApiError } from './client';
+export { apiClient, ApiClient, ApiError } from "./client";
+
+// Export utility functions
+export {
+  encodeGuid,
+  decodeGuid,
+  isValidGuid,
+  parseGuid,
+  buildGuid,
+  normalizeGuid,
+} from "./utils";
 
 // Note: SWR hooks are exported from './hooks' for client components only
 // Server components should use apiClient directly
@@ -30,4 +41,4 @@ export type {
   CharacterHashQueryParams,
   CharactersLfgQueryParams,
   RealmQueryParams,
-} from '@/types/entities';
+} from "@/lib/types";

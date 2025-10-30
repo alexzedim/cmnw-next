@@ -1,5 +1,5 @@
-import { characterResponse } from './characterResponse';
+import { characterResponse } from "./characterResponse";
 
 export type characterProfile = {
-  character: characterResponse
-}
+  character: characterResponse;
+};

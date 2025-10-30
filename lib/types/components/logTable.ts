@@ -1,5 +1,5 @@
-import { logResponse } from './logResponse';
+import { logResponse } from "./logResponse";
 
 export type logTable = {
-  logs: logResponse[],
-}
+  logs: logResponse[];
+};
