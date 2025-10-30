@@ -1,6 +1,7 @@
 "use client";
 
 import { Card, CardBody, CardHeader, Divider, Code } from "@heroui/react";
+
 import { title, subtitle } from "@/components/primitives";
 
 export default function DocsPage() {
@@ -26,9 +27,7 @@ export default function DocsPage() {
             </p>
             <Divider />
             <div>
-              <h3 className="text-lg font-semibold mb-2">
-                Character Search
-              </h3>
+              <h3 className="text-lg font-semibold mb-2">Character Search</h3>
               <p className="text-default-600 mb-2">
                 Search for any character by name and realm:
               </p>
@@ -66,9 +65,7 @@ export default function DocsPage() {
                 View current gold prices for a specific realm:
               </p>
               <Code className="mb-2">@RealmName</Code>
-              <p className="text-small text-default-500">
-                Example: @Kazzak
-              </p>
+              <p className="text-small text-default-500">Example: @Kazzak</p>
             </div>
           </CardBody>
         </Card>

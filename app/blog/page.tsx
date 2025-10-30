@@ -2,34 +2,9 @@
 
 import { Card, CardBody, CardHeader, CardFooter } from "@heroui/react";
 import { Link } from "@heroui/link";
-import { title, subtitle } from "@/components/primitives";
 
-const blogPosts = [
-  {
-    id: 1,
-    title: "Welcome to CMNW",
-    excerpt:
-      "Introducing Commonwealth - your go-to platform for World of Warcraft community tools and resources.",
-    date: "2025-01-20",
-    slug: "welcome-to-cmnw",
-  },
-  {
-    id: 2,
-    title: "Next.js 16 Upgrade Complete",
-    excerpt:
-      "We've successfully upgraded to Next.js 16 with React 19, bringing better performance and new features.",
-    date: "2025-01-24",
-    slug: "nextjs-16-upgrade",
-  },
-  {
-    id: 3,
-    title: "New Search Features",
-    excerpt:
-      "Enhanced search functionality with better realm selection and commodity tracking.",
-    date: "2025-01-24",
-    slug: "new-search-features",
-  },
-];
+import { title, subtitle } from "@/components/primitives";
+import { BLOG_POSTS } from "@/constants/blog-posts";
 
 export default function BlogPage() {
   return (
@@ -42,7 +17,7 @@ export default function BlogPage() {
       </div>
 
       <div className="grid grid-cols-1 gap-6 max-w-4xl">
-        {blogPosts.map((post) => (
+        {BLOG_POSTS.map((post) => (
           <Card key={post.id} className="hover:shadow-lg transition-shadow">
             <CardHeader className="flex gap-3">
               <div className="flex flex-col w-full">
@@ -54,7 +29,7 @@ export default function BlogPage() {
               <p className="text-default-600">{post.excerpt}</p>
             </CardBody>
             <CardFooter>
-              <Link href={`/blog/${post.slug}`} color="primary">
+              <Link color="primary" href={`/blog/${post.slug}`}>
                 Read more →
               </Link>
             </CardFooter>
