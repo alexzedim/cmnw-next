@@ -1,43 +1,26 @@
-'use client';
+"use client";
 
-import { Card, CardBody, CardHeader, Chip, Progress, Divider } from '@heroui/react';
-import type { Character } from '@/types/entities';
+import type { Character } from "@/lib/types";
+
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  Chip,
+  Progress,
+  Divider,
+} from "@heroui/react";
+
+import { getClassColor, getFactionColor } from "@/lib/utils";
 
 interface CharacterStatsProps {
   character: Character;
 }
 
-// Class color mapping
-const getClassColor = (characterClass?: string): 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'danger' => {
-  const classColors: Record<string, any> = {
-    'Warrior': 'danger',
-    'Paladin': 'warning',
-    'Hunter': 'success',
-    'Rogue': 'default',
-    'Priest': 'default',
-    'Death Knight': 'danger',
-    'Shaman': 'primary',
-    'Mage': 'secondary',
-    'Warlock': 'secondary',
-    'Monk': 'success',
-    'Druid': 'success',
-    'Demon Hunter': 'secondary',
-    'Evoker': 'primary',
-  };
-  return classColors[characterClass || ''] || 'default';
-};
-
-// Faction color mapping
-const getFactionColor = (faction?: string): 'primary' | 'danger' | 'default' => {
-  if (faction === 'Alliance') return 'primary';
-  if (faction === 'Horde') return 'danger';
-  return 'default';
-};
-
 export function CharacterStats({ character }: CharacterStatsProps) {
   const maxItemLevel = 639; // Current max item level for the expansion
-  const itemLevelPercent = character.equippedItemLevel 
-    ? Math.min((character.equippedItemLevel / maxItemLevel) * 100, 100) 
+  const itemLevelPercent = character.equippedItemLevel
+    ? Math.min((character.equippedItemLevel / maxItemLevel) * 100, 100)
     : 0;
 
   const maxAchievements = 20000; // Approximate max achievement points
@@ -56,8 +39,8 @@ export function CharacterStats({ character }: CharacterStatsProps) {
           {/* Level and Class */}
           <div className="flex items-center justify-between">
             <span className="text-sm text-default-600">Level</span>
-            <Chip size="lg" variant="flat" color="primary">
-              {character.level || 'Unknown'}
+            <Chip color="primary" size="lg" variant="flat">
+              {character.level || "Unknown"}
             </Chip>
           </div>
 
@@ -65,10 +48,10 @@ export function CharacterStats({ character }: CharacterStatsProps) {
           {character.class && (
             <div className="flex items-center justify-between">
               <span className="text-sm text-default-600">Class</span>
-              <Chip 
-                size="md" 
-                variant="flat" 
+              <Chip
                 color={getClassColor(character.class)}
+                size="md"
+                variant="flat"
               >
                 {character.class}
               </Chip>
@@ -99,10 +82,10 @@ export function CharacterStats({ character }: CharacterStatsProps) {
           {character.faction && (
             <div className="flex items-center justify-between">
               <span className="text-sm text-default-600">Faction</span>
-              <Chip 
-                size="sm" 
-                variant="flat" 
+              <Chip
                 color={getFactionColor(character.faction)}
+                size="sm"
+                variant="flat"
               >
                 {character.faction}
               </Chip>
@@ -130,12 +113,20 @@ export function CharacterStats({ character }: CharacterStatsProps) {
             <>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-default-600">Equipped</span>
-                <span className="text-lg font-bold">{character.equippedItemLevel}</span>
+                <span className="text-lg font-bold">
+                  {character.equippedItemLevel}
+                </span>
               </div>
-              <Progress 
-                value={itemLevelPercent} 
-                color={itemLevelPercent > 80 ? 'success' : itemLevelPercent > 50 ? 'warning' : 'default'}
+              <Progress
                 className="max-w-full"
+                color={
+                  itemLevelPercent > 80
+                    ? "success"
+                    : itemLevelPercent > 50
+                      ? "warning"
+                      : "default"
+                }
+                value={itemLevelPercent}
               />
             </>
           )}
@@ -144,7 +135,9 @@ export function CharacterStats({ character }: CharacterStatsProps) {
           {character.averageItemLevel && (
             <div className="flex items-center justify-between mt-2">
               <span className="text-sm text-default-600">Average</span>
-              <span className="text-sm font-medium">{character.averageItemLevel}</span>
+              <span className="text-sm font-medium">
+                {character.averageItemLevel}
+              </span>
             </div>
           )}
         </CardBody>
@@ -159,12 +152,14 @@ export function CharacterStats({ character }: CharacterStatsProps) {
           <CardBody className="gap-3">
             <div className="flex items-center justify-between">
               <span className="text-sm text-default-600">Points</span>
-              <span className="text-lg font-bold">{character.achievementPoints.toLocaleString()}</span>
+              <span className="text-lg font-bold">
+                {character.achievementPoints.toLocaleString()}
+              </span>
             </div>
-            <Progress 
-              value={achievementPercent} 
-              color="secondary"
+            <Progress
               className="max-w-full"
+              color="secondary"
+              value={achievementPercent}
             />
           </CardBody>
         </Card>
@@ -180,7 +175,7 @@ export function CharacterStats({ character }: CharacterStatsProps) {
             {character.mountsNumber && (
               <div className="flex items-center justify-between">
                 <span className="text-sm text-default-600">Mounts</span>
-                <Chip size="sm" variant="flat" color="primary">
+                <Chip color="primary" size="sm" variant="flat">
                   {character.mountsNumber}
                 </Chip>
               </div>
@@ -188,7 +183,7 @@ export function CharacterStats({ character }: CharacterStatsProps) {
             {character.petsNumber && (
               <div className="flex items-center justify-between">
                 <span className="text-sm text-default-600">Battle Pets</span>
-                <Chip size="sm" variant="flat" color="secondary">
+                <Chip color="secondary" size="sm" variant="flat">
                   {character.petsNumber}
                 </Chip>
               </div>
@@ -204,7 +199,7 @@ export function CharacterStats({ character }: CharacterStatsProps) {
             <h3 className="text-xl font-bold">Covenant</h3>
           </CardHeader>
           <CardBody>
-            <Chip size="md" variant="flat" color="warning">
+            <Chip color="warning" size="md" variant="flat">
               Covenant ID: {character.covenantId}
             </Chip>
           </CardBody>

@@ -1,7 +1,8 @@
-'use client';
+"use client";
 
-import { pick } from 'lodash';
-import humanizeString from 'humanize-string';
+import { pick } from "lodash";
+import humanizeString from "humanize-string";
+
 import { Link } from "@/components/custom-link";
 
 interface CharacterProfileProps {
@@ -10,20 +11,20 @@ interface CharacterProfileProps {
 
 export const CharacterProfile = ({ character }: CharacterProfileProps) => {
   const fields: string[] = [
-    'id', 
-    'level', 
-    'average_item_level', 
-    'equipped_item_level', 
-    'chosen_covenant', 
-    'renown_level', 
-    'faction', 
-    'gender', 
-    'race', 
-    'character_class', 
-    'active_spec', 
-    'createdBy'
+    "id",
+    "level",
+    "average_item_level",
+    "equipped_item_level",
+    "chosen_covenant",
+    "renown_level",
+    "faction",
+    "gender",
+    "race",
+    "character_class",
+    "active_spec",
+    "createdBy",
   ];
-  const fieldsWithLink: string[] = ['hash_a', 'hash_b'];
+  const fieldsWithLink: string[] = ["hash_a", "hash_b"];
   const profile = pick(character, [...fields, ...fieldsWithLink]);
 
   return (
@@ -32,17 +33,17 @@ export const CharacterProfile = ({ character }: CharacterProfileProps) => {
         if (fieldsWithLink.includes(key) && value !== null) {
           return (
             <p key={index} className="text-sm text-default-600">
-              {humanizeString(key)}:{' '}
-              <Link 
-                href={`/${key.replace('_', '/')}@${value}`} 
+              {humanizeString(key)}:{" "}
+              <Link
                 className="text-foreground hover:underline"
+                href={`/${key.replace("_", "/")}@${value}`}
               >
                 {value as string}
               </Link>
             </p>
           );
         }
-        
+
         if (fields.includes(key) && value !== null) {
           return (
             <p key={index} className="text-sm text-default-600">
@@ -50,15 +51,16 @@ export const CharacterProfile = ({ character }: CharacterProfileProps) => {
             </p>
           );
         }
-        
+
         if (key === "lastModified" && value !== null) {
           return (
             <p key={index} className="text-sm text-default-600">
-              {humanizeString(key)}: {new Date(profile.last_modified).toLocaleString('ru-RU')}
+              {humanizeString(key)}:{" "}
+              {new Date(profile.last_modified).toLocaleString("ru-RU")}
             </p>
           );
         }
-        
+
         return null;
       })}
     </div>

@@ -1,9 +1,20 @@
-'use client';
+"use client";
 
-import { Card, CardBody, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Spinner } from "@heroui/react";
-import useSWR from 'swr';
-import dayjs from 'dayjs';
-import { DOMAINS } from '@/lib/constants';
+import {
+  Card,
+  CardBody,
+  Table,
+  TableHeader,
+  TableColumn,
+  TableBody,
+  TableRow,
+  TableCell,
+  Spinner,
+} from "@heroui/react";
+import useSWR from "swr";
+import dayjs from "dayjs";
+
+import { DOMAINS } from "@/constants";
 
 interface Valuation {
   name: string;
@@ -24,7 +35,7 @@ interface ItemValuationsProps {
   id: number | string;
 }
 
-const fetcher = (url: string) => fetch(url).then(r => r.json());
+const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
 export const ItemValuations = ({ id }: ItemValuationsProps) => {
   const { data, error, isLoading } = useSWR<ValuationsResponse>(
@@ -34,59 +45,58 @@ export const ItemValuations = ({ id }: ItemValuationsProps) => {
   );
 
   if (error) return null;
-  if (isLoading) return (
-    <Card className="m-4">
-      <CardBody className="p-8 border-[15px] border-white rounded-xl flex items-center justify-center min-h-[300px]">
-        <Spinner size="lg" />
-      </CardBody>
-    </Card>
-  );
+  if (isLoading)
+    return (
+      <Card className="m-4">
+        <CardBody className="p-8 border-[15px] border-white rounded-xl flex items-center justify-center min-h-[300px]">
+          <Spinner size="lg" />
+        </CardBody>
+      </Card>
+    );
 
   if (!data || !data.valuations || data.valuations.length === 0) return null;
 
   const columns = [
-    { key: 'name', label: 'Name' },
-    { key: 'flag', label: 'Flag' },
-    { key: 'type', label: 'Type' },
-    { key: 'value', label: 'Value' },
-    { key: 'connected_realm_id', label: 'Realm' },
-    { key: 'last_modified', label: 'Last Modified' },
+    { key: "name", label: "Name" },
+    { key: "flag", label: "Flag" },
+    { key: "type", label: "Type" },
+    { key: "value", label: "Value" },
+    { key: "connected_realm_id", label: "Realm" },
+    { key: "last_modified", label: "Last Modified" },
   ];
 
   const formatDate = (date: string | number) => {
-    return dayjs(date).format('DD/MM/YY HH:mm');
+    return dayjs(date).format("DD/MM/YY HH:mm");
   };
 
   return (
     <Card className="m-4">
       <CardBody className="p-8 border-[15px] border-white rounded-xl">
         {data.is_evaluating && (
-          <div className="mb-4 text-warning text-sm">
-            Evaluating...
-          </div>
+          <div className="mb-4 text-warning text-sm">Evaluating...</div>
         )}
-        <Table 
+        <Table
           aria-label="Item valuations"
           classNames={{
             wrapper: "p-0",
             th: "bg-default-100 text-default-700 font-semibold",
-            td: "text-default-600"
+            td: "text-default-600",
           }}
         >
           <TableHeader columns={columns}>
             {(column) => (
-              <TableColumn key={column.key}>
-                {column.label}
-              </TableColumn>
+              <TableColumn key={column.key}>{column.label}</TableColumn>
             )}
           </TableHeader>
           <TableBody items={data.valuations}>
             {(valuation) => (
-              <TableRow key={`${valuation.name}-${valuation.type}-${valuation.connected_realm_id}`}>
+              <TableRow
+                key={`${valuation.name}-${valuation.type}-${valuation.connected_realm_id}`}
+              >
                 <TableCell>{valuation.name}</TableCell>
                 <TableCell>{valuation.flag}</TableCell>
                 <TableCell>{valuation.type}</TableCell>
-                <TableCell>{valuation.value.toLocaleString('ru-RU')}</TableCell>
+                <TableCell>{valuation.value.toLocaleString("ru-RU")}</TableCell>
                 <TableCell>{valuation.connected_realm_id}</TableCell>
                 <TableCell>{formatDate(valuation.last_modified)}</TableCell>
               </TableRow>

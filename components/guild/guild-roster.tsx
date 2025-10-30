@@ -1,6 +1,8 @@
-'use client';
+"use client";
 
-import { useMemo, useState } from 'react';
+import type { Character } from "@/lib/types";
+
+import { useMemo, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -10,12 +12,12 @@ import {
   TableCell,
   Chip,
   Input,
-  Button,
   Select,
   SelectItem,
-} from '@heroui/react';
-import { Link } from '@/components/custom-link';
-import type { Character } from '@/types/entities';
+} from "@heroui/react";
+
+import { getClassColor } from "@/lib/utils";
+import { Link } from "@/components/custom-link";
 
 interface GuildRosterProps {
   members: Character[];
@@ -23,36 +25,21 @@ interface GuildRosterProps {
 
 type SortDescriptor = {
   column: string;
-  direction: 'ascending' | 'descending';
-};
-
-const classColors: Record<string, 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'danger'> = {
-  'Warrior': 'danger',
-  'Paladin': 'warning',
-  'Hunter': 'success',
-  'Rogue': 'default',
-  'Priest': 'default',
-  'Death Knight': 'danger',
-  'Shaman': 'primary',
-  'Mage': 'secondary',
-  'Warlock': 'secondary',
-  'Monk': 'success',
-  'Druid': 'success',
-  'Demon Hunter': 'secondary',
-  'Evoker': 'primary',
+  direction: "ascending" | "descending";
 };
 
 export function GuildRoster({ members }: GuildRosterProps) {
-  const [filterValue, setFilterValue] = useState('');
+  const [filterValue, setFilterValue] = useState("");
   const [classFilter, setClassFilter] = useState<Set<string>>(new Set([]));
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
-    column: 'name',
-    direction: 'ascending',
+    column: "name",
+    direction: "ascending",
   });
 
   // Get unique classes for filter
   const availableClasses = useMemo(() => {
-    const classes = new Set(members.map(m => m.class).filter(Boolean));
+    const classes = new Set(members.map((m) => m.class).filter(Boolean));
+
     return Array.from(classes);
   }, [members]);
 
@@ -62,15 +49,15 @@ export function GuildRoster({ members }: GuildRosterProps) {
 
     // Text search filter
     if (filterValue) {
-      filtered = filtered.filter(member =>
+      filtered = filtered.filter((member) =>
         member.name?.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
 
     // Class filter
     if (classFilter.size > 0) {
-      filtered = filtered.filter(member => 
-        member.class && classFilter.has(member.class)
+      filtered = filtered.filter(
+        (member) => member.class && classFilter.has(member.class)
       );
     }
 
@@ -84,15 +71,17 @@ export function GuildRoster({ members }: GuildRosterProps) {
       if (second === undefined || second === null) return -1;
 
       // String comparison
-      if (typeof first === 'string' && typeof second === 'string') {
+      if (typeof first === "string" && typeof second === "string") {
         const cmp = first.localeCompare(second);
-        return sortDescriptor.direction === 'ascending' ? cmp : -cmp;
+
+        return sortDescriptor.direction === "ascending" ? cmp : -cmp;
       }
 
       // Number comparison
-      if (typeof first === 'number' && typeof second === 'number') {
+      if (typeof first === "number" && typeof second === "number") {
         const cmp = first - second;
-        return sortDescriptor.direction === 'ascending' ? cmp : -cmp;
+
+        return sortDescriptor.direction === "ascending" ? cmp : -cmp;
       }
 
       return 0;
@@ -102,13 +91,13 @@ export function GuildRoster({ members }: GuildRosterProps) {
   }, [members, filterValue, classFilter, sortDescriptor]);
 
   const columns = [
-    { key: 'name', label: 'Name', sortable: true },
-    { key: 'level', label: 'Level', sortable: true },
-    { key: 'class', label: 'Class', sortable: true },
-    { key: 'specialization', label: 'Spec', sortable: false },
-    { key: 'equippedItemLevel', label: 'iLvl', sortable: true },
-    { key: 'guildRank', label: 'Rank', sortable: true },
-    { key: 'achievementPoints', label: 'Achievements', sortable: true },
+    { key: "name", label: "Name", sortable: true },
+    { key: "level", label: "Level", sortable: true },
+    { key: "class", label: "Class", sortable: true },
+    { key: "specialization", label: "Spec", sortable: false },
+    { key: "equippedItemLevel", label: "iLvl", sortable: true },
+    { key: "guildRank", label: "Rank", sortable: true },
+    { key: "achievementPoints", label: "Achievements", sortable: true },
   ];
 
   return (
@@ -117,25 +106,23 @@ export function GuildRoster({ members }: GuildRosterProps) {
       <div className="flex flex-col md:flex-row gap-4">
         <Input
           isClearable
+          className="w-full md:max-w-xs"
           placeholder="Search by name..."
           value={filterValue}
-          onClear={() => setFilterValue('')}
+          onClear={() => setFilterValue("")}
           onValueChange={setFilterValue}
-          className="w-full md:max-w-xs"
         />
-        
+
         <Select
+          className="w-full md:max-w-xs"
           label="Filter by class"
           placeholder="All classes"
-          selectionMode="multiple"
           selectedKeys={classFilter}
+          selectionMode="multiple"
           onSelectionChange={(keys) => setClassFilter(keys as Set<string>)}
-          className="w-full md:max-w-xs"
         >
           {availableClasses.map((className) => (
-            <SelectItem key={className} value={className}>
-              {className}
-            </SelectItem>
+            <SelectItem key={className}>{className}</SelectItem>
           ))}
         </Select>
 
@@ -149,20 +136,19 @@ export function GuildRoster({ members }: GuildRosterProps) {
       {/* Table */}
       <Table
         aria-label="Guild roster table"
-        sortDescriptor={sortDescriptor}
-        onSortChange={(descriptor) => setSortDescriptor(descriptor as SortDescriptor)}
         classNames={{
-          wrapper: 'p-0',
-          th: 'bg-default-100 text-default-700 font-semibold',
-          td: 'text-default-600',
+          wrapper: "p-0",
+          th: "bg-default-100 text-default-700 font-semibold",
+          td: "text-default-600",
         }}
+        sortDescriptor={sortDescriptor}
+        onSortChange={(descriptor) =>
+          setSortDescriptor(descriptor as SortDescriptor)
+        }
       >
         <TableHeader>
           {columns.map((column) => (
-            <TableColumn
-              key={column.key}
-              allowsSorting={column.sortable}
-            >
+            <TableColumn key={column.key} allowsSorting={column.sortable}>
               {column.label}
             </TableColumn>
           ))}
@@ -172,47 +158,47 @@ export function GuildRoster({ members }: GuildRosterProps) {
             <TableRow key={member.guid}>
               <TableCell>
                 <Link
-                  href={`/character/${member.guid}`}
                   className="text-primary hover:underline font-medium"
+                  href={`/character/${member.guid}`}
                 >
                   {member.name}
                 </Link>
               </TableCell>
-              <TableCell>{member.level || '-'}</TableCell>
+              <TableCell>{member.level || "-"}</TableCell>
               <TableCell>
                 {member.class ? (
                   <Chip
+                    color={getClassColor(member.class)}
                     size="sm"
                     variant="flat"
-                    color={classColors[member.class] || 'default'}
                   >
                     {member.class}
                   </Chip>
                 ) : (
-                  '-'
+                  "-"
                 )}
               </TableCell>
               <TableCell>
-                <span className="text-sm">{member.specialization || '-'}</span>
+                <span className="text-sm">{member.specialization || "-"}</span>
               </TableCell>
               <TableCell>
                 <span className="font-semibold">
-                  {member.equippedItemLevel || '-'}
+                  {member.equippedItemLevel || "-"}
                 </span>
               </TableCell>
               <TableCell>
                 <Chip size="sm" variant="bordered">
                   {member.guildRank !== undefined && member.guildRank !== null
                     ? member.guildRank === 0
-                      ? 'GM'
+                      ? "GM"
                       : `R${member.guildRank}`
-                    : '-'}
+                    : "-"}
                 </Chip>
               </TableCell>
               <TableCell>
                 {member.achievementPoints
                   ? member.achievementPoints.toLocaleString()
-                  : '-'}
+                  : "-"}
               </TableCell>
             </TableRow>
           ))}

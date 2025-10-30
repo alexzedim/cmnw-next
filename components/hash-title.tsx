@@ -1,7 +1,15 @@
-'use client';
+"use client";
 
-import { useState, MouseEvent } from 'react';
-import { Card, CardBody, Divider, Popover, PopoverTrigger, PopoverContent } from "@heroui/react";
+import { useState } from "react";
+import {
+  Card,
+  CardBody,
+  Divider,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@heroui/react";
+
 import { generateFactionBackground } from "@/lib";
 
 interface HashTitleProps {
@@ -10,10 +18,10 @@ interface HashTitleProps {
 
 export const HashTitle = ({ id }: HashTitleProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [copyStatus, setCopyStatus] = useState<string>('');
+  const [copyStatus, setCopyStatus] = useState<string>("");
 
-  const [type, query] = id.split('@');
-  const hash = query.replace(/(.{4})/g, '$1 ');
+  const [type, query] = id.split("@");
+  const hash = query.replace(/(.{4})/g, "$1 ");
 
   const handleClick = async () => {
     try {
@@ -22,7 +30,7 @@ export const HashTitle = ({ id }: HashTitleProps) => {
       setIsOpen(true);
       setTimeout(() => setIsOpen(false), 2000);
     } catch (err) {
-      setCopyStatus('Failed to copy!');
+      setCopyStatus("Failed to copy!");
       setIsOpen(true);
       setTimeout(() => setIsOpen(false), 2000);
     }
@@ -31,28 +39,21 @@ export const HashTitle = ({ id }: HashTitleProps) => {
   const background = generateFactionBackground();
 
   return (
-    <Card 
-      className="max-w-6xl mx-4 my-8"
-      style={{ background }}
-    >
-      <CardBody 
+    <Card className="max-w-6xl mx-4 my-8" style={{ background }}>
+      <CardBody
         className="p-8 border-[15px] border-white rounded-xl"
         style={{ background }}
       >
-        <Popover 
-          isOpen={isOpen}
-          onOpenChange={setIsOpen}
-          placement="bottom"
-        >
+        <Popover isOpen={isOpen} placement="bottom" onOpenChange={setIsOpen}>
           <PopoverTrigger>
-            <h1 
-              onClick={handleClick}
+            <h1
               className="font-black uppercase text-white break-words cursor-pointer hover:opacity-80 transition-opacity"
               style={{
-                fontFamily: 'Fira Sans, sans-serif',
-                fontSize: 'clamp(1.3rem, -2.75rem + 16.6667vw, 6rem)',
-                textAlign: 'left'
+                fontFamily: "Fira Sans, sans-serif",
+                fontSize: "clamp(1.3rem, -2.75rem + 16.6667vw, 6rem)",
+                textAlign: "left",
               }}
+              onClick={handleClick}
             >
               {hash}
             </h1>
@@ -63,15 +64,15 @@ export const HashTitle = ({ id }: HashTitleProps) => {
             </div>
           </PopoverContent>
         </Popover>
-        
+
         <Divider className="my-4 bg-primary" />
-        
-        <h2 
+
+        <h2
           className="text-white font-normal break-words uppercase"
           style={{
-            fontFamily: 'Fira Sans, sans-serif',
-            fontSize: 'clamp(1.3rem, -2.75rem + 16.6667vw, 3rem)',
-            textAlign: 'left'
+            fontFamily: "Fira Sans, sans-serif",
+            fontSize: "clamp(1.3rem, -2.75rem + 16.6667vw, 3rem)",
+            textAlign: "left",
           }}
         >
           Type {type}
