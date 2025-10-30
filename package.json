@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint --fix"
+    "lint": "eslint --fix",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\""
   },
   "dependencies": {
     "@heroui/button": "2.2.19",
