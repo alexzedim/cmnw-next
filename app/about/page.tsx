@@ -1,6 +1,7 @@
 "use client";
 
 import { Card, CardBody, CardHeader } from "@heroui/react";
+
 import { title, subtitle } from "@/components/primitives";
 
 export default function AboutPage() {
