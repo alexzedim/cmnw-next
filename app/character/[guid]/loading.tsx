@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { Skeleton, Card, CardBody } from '@heroui/react';
+import { Skeleton, Card, CardBody } from "@heroui/react";
 
 export default function Loading() {
   return (
@@ -10,7 +10,7 @@ export default function Loading() {
           {/* Left Column - Portrait Skeleton */}
           <div className="md:col-span-4">
             <div className="max-w-md mx-auto">
-              <Skeleton className="rounded-xl" style={{ minHeight: '70vh' }} />
+              <Skeleton className="rounded-xl" style={{ minHeight: "70vh" }} />
               <Card className="mt-8">
                 <CardBody className="p-8">
                   <Skeleton className="h-12 w-3/4 mb-4 rounded-lg" />
