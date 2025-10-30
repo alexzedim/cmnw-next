@@ -37,3 +37,6 @@ next-env.d.ts
 #IDE
 .idea
 tsconfig.tsbuildinfo
+
+# Warp AI project rules
+WARP.md
