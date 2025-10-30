@@ -1,18 +1,37 @@
-import useSWR, { SWRConfiguration } from 'swr';
-import { apiClient } from './client';
+/**
+ * SWR-based React hooks for API data fetching
+ *
+ * USAGE NOTE: Most hooks are currently unused but kept for future features.
+ * They are tree-shaken from production builds, so no bundle size impact.
+ *
+ * CURRENT USAGE:
+ * - useCharactersLfg: Used in app/character/lfg/page.tsx
+ *
+ * FUTURE USE CASES:
+ * - useCharacter: Character comparison tool, live updates
+ * - useGuild: Live guild roster, raid progress tracking
+ * - useCharacterLogs: Activity timeline components
+ * - useGuildLogs: Guild history viewer
+ * - useRealms: Realm selector with live population data
+ *
+ * See API_HOOKS_GUIDE.md for detailed usage patterns.
+ */
+
 import type {
   Character,
-  Guild,
   GuildResponse,
   CharactersResponse,
   CharacterLogsResponse,
   GuildLogsResponse,
   CharacterProfile,
-  Realm,
   RealmsResponse,
   CharactersLfgQueryParams,
   RealmQueryParams,
-} from '@/types/entities';
+} from "@/lib/types";
+
+import useSWR, { SWRConfiguration } from "swr";
+
+import { apiClient } from "./client";
 
 /**
  * Default SWR configuration
@@ -36,7 +55,7 @@ const defaultConfig: SWRConfiguration = {
 export function useCharacter(guid: string | null) {
   return useSWR<Character>(
     guid ? `/api/osint/character?guid=${guid}` : null,
-    () => apiClient.get<Character>('/api/osint/character', { guid }),
+    () => apiClient.get<Character>("/api/osint/character", { guid }),
     {
       ...defaultConfig,
       revalidateOnMount: true,
@@ -52,7 +71,7 @@ export function useCharacterLogs(guid: string | null) {
   return useSWR<CharacterLogsResponse>(
     guid ? `/api/osint/character/logs?guid=${guid}` : null,
     () =>
-      apiClient.get<CharacterLogsResponse>('/api/osint/character/logs', {
+      apiClient.get<CharacterLogsResponse>("/api/osint/character/logs", {
         guid,
       }),
     defaultConfig
@@ -67,7 +86,7 @@ export function useCharactersByHash(hash: string | null) {
   return useSWR<CharactersResponse>(
     hash ? `/api/osint/character/hash?hash=${hash}` : null,
     () =>
-      apiClient.get<CharactersResponse>('/api/osint/character/hash', { hash }),
+      apiClient.get<CharactersResponse>("/api/osint/character/hash", { hash }),
     defaultConfig
   );
 }
@@ -84,6 +103,7 @@ export function useCharactersLfg(params?: CharactersLfgQueryParams | null) {
             if (value !== undefined && value !== null) {
               acc[key] = String(value);
             }
+
             return acc;
           },
           {} as Record<string, string>
@@ -95,7 +115,7 @@ export function useCharactersLfg(params?: CharactersLfgQueryParams | null) {
     queryKey,
     () =>
       apiClient.get<{ characters: CharacterProfile[] }>(
-        '/api/osint/character/lfg',
+        "/api/osint/character/lfg",
         params || {}
       ),
     {
@@ -116,7 +136,7 @@ export function useCharactersLfg(params?: CharactersLfgQueryParams | null) {
 export function useGuild(guid: string | null) {
   return useSWR<GuildResponse>(
     guid ? `/api/osint/guild?guid=${guid}` : null,
-    () => apiClient.get<GuildResponse>('/api/osint/guild', { guid }),
+    () => apiClient.get<GuildResponse>("/api/osint/guild", { guid }),
     {
       ...defaultConfig,
       revalidateOnMount: true,
@@ -131,7 +151,7 @@ export function useGuild(guid: string | null) {
 export function useGuildLogs(guid: string | null) {
   return useSWR<GuildLogsResponse>(
     guid ? `/api/osint/guild/logs?guid=${guid}` : null,
-    () => apiClient.get<GuildLogsResponse>('/api/osint/guild/logs', { guid }),
+    () => apiClient.get<GuildLogsResponse>("/api/osint/guild/logs", { guid }),
     defaultConfig
   );
 }
@@ -152,16 +172,17 @@ export function useRealms(params?: RealmQueryParams | null) {
             if (value !== undefined && value !== null) {
               acc[key] = String(value);
             }
+
             return acc;
           },
           {} as Record<string, string>
         )
       ).toString()}`
-    : '/api/osint/realms';
+    : "/api/osint/realms";
 
   return useSWR<RealmsResponse>(
     queryKey,
-    () => apiClient.get<RealmsResponse>('/api/osint/realms', params || {}),
+    () => apiClient.get<RealmsResponse>("/api/osint/realms", params || {}),
     {
       ...defaultConfig,
       revalidateOnMount: false,
@@ -176,8 +197,7 @@ export function useRealms(params?: RealmQueryParams | null) {
 export function useRealmPopulation(realmId: string | null) {
   return useSWR<string[]>(
     realmId ? `/api/osint/realm/population/${realmId}` : null,
-    () =>
-      apiClient.get<string[]>(`/api/osint/realm/population/${realmId}`, {}),
+    () => apiClient.get<string[]>(`/api/osint/realm/population/${realmId}`, {}),
     {
       ...defaultConfig,
       revalidateOnMount: false,
@@ -196,7 +216,7 @@ export function useRealmPopulation(realmId: string | null) {
 export function usePrefetchCharacter(guid: string) {
   return useSWR(
     `/api/osint/character/prefetch?guid=${guid}`,
-    () => apiClient.get<Character>('/api/osint/character', { guid }),
+    () => apiClient.get<Character>("/api/osint/character", { guid }),
     {
       revalidateOnMount: false,
       revalidateOnFocus: false,
@@ -212,7 +232,7 @@ export function usePrefetchCharacter(guid: string) {
 export function usePrefetchGuild(guid: string) {
   return useSWR(
     `/api/osint/guild/prefetch?guid=${guid}`,
-    () => apiClient.get<GuildResponse>('/api/osint/guild', { guid }),
+    () => apiClient.get<GuildResponse>("/api/osint/guild", { guid }),
     {
       revalidateOnMount: false,
       revalidateOnFocus: false,

@@ -8,4 +8,4 @@ export type nameLocaleEmbed = {
   fr_FR: string;
   it_IT: string;
   ru_RU: string;
-}
+};

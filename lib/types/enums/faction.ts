@@ -1,4 +1,4 @@
 export enum Faction {
-  A = 'Alliance',
-  H = 'Horde'
+  A = "Alliance",
+  H = "Horde",
 }

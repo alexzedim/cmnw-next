@@ -1,9 +1,9 @@
 export type realmResponse = {
-  readonly _id: number,
+  readonly _id: number;
 
-  readonly realms: string[],
+  readonly realms: string[];
 
-  readonly slug: string,
+  readonly slug: string;
 
   readonly connected_realm_id: number;
 
@@ -12,4 +12,4 @@ export type realmResponse = {
   readonly auctions: number;
 
   readonly valuations: number;
-}
+};

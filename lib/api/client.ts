@@ -1,4 +1,4 @@
-import { DOMAINS } from '@/lib/constants';
+import { DOMAINS } from "@/constants/domains";
 
 /**
  * Centralized API client for communicating with the CMNW backend
@@ -32,7 +32,11 @@ export class ApiClient {
           if (Array.isArray(value)) {
             value.forEach((v) => url.searchParams.append(key, String(v)));
           } else {
-            url.searchParams.append(key, String(value));
+            const stringValue = String(value);
+
+            // Special handling for GUID parameters (those containing @)
+            // URLSearchParams automatically encodes special characters
+            url.searchParams.append(key, stringValue);
           }
         }
       });
@@ -40,9 +44,9 @@ export class ApiClient {
 
     try {
       const response = await fetch(url.toString(), {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           ...options?.headers,
         },
         next: { revalidate: 3600 }, // Cache for 1 hour by default
@@ -50,7 +54,8 @@ export class ApiClient {
       });
 
       if (!response.ok) {
-        const errorText = await response.text().catch(() => 'Unknown error');
+        const errorText = await response.text().catch(() => "Unknown error");
+
         throw new ApiError(
           `API Error: ${response.status} ${response.statusText}`,
           response.status,
@@ -64,7 +69,7 @@ export class ApiClient {
         throw error;
       }
       throw new ApiError(
-        `Network error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        `Network error: ${error instanceof Error ? error.message : "Unknown error"}`,
         0,
         String(error)
       );
@@ -83,9 +88,9 @@ export class ApiClient {
 
     try {
       const response = await fetch(url, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           ...options?.headers,
         },
         body: JSON.stringify(body),
@@ -93,7 +98,8 @@ export class ApiClient {
       });
 
       if (!response.ok) {
-        const errorText = await response.text().catch(() => 'Unknown error');
+        const errorText = await response.text().catch(() => "Unknown error");
+
         throw new ApiError(
           `API Error: ${response.status} ${response.statusText}`,
           response.status,
@@ -107,7 +113,7 @@ export class ApiClient {
         throw error;
       }
       throw new ApiError(
-        `Network error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        `Network error: ${error instanceof Error ? error.message : "Unknown error"}`,
         0,
         String(error)
       );
@@ -125,7 +131,7 @@ export class ApiError extends Error {
     public details?: string
   ) {
     super(message);
-    this.name = 'ApiError';
+    this.name = "ApiError";
   }
 
   get isNotFound(): boolean {

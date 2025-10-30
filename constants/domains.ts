@@ -1,5 +1,6 @@
+// External service domains
 export const DOMAINS = {
-  domain: "https://cmnw.me",
+  domain: process.env.NEXT_PUBLIC_API_URL || "https://cmnw.me",
   localhost: "http://localhost:5000",
   warcraftLogs: "https://www.warcraftlogs.com",
   wowProgress: "https://www.wowprogress.com",

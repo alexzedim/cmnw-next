@@ -1,4 +1,4 @@
 export type characterMount = {
-  _id: number,
-  name: string,
-}
+  _id: number;
+  name: string;
+};

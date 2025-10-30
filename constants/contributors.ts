@@ -1,4 +1,13 @@
-export const CONTRIBUTORS = [
+export interface Contributor {
+  value: number;
+  name: string;
+  character?: string;
+  twitter?: string;
+  discord?: string;
+  github?: string;
+}
+
+export const CONTRIBUTORS: Contributor[] = [
   {
     value: 1,
     name: "Forgespirit",
