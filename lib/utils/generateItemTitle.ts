@@ -23,14 +23,19 @@ export const generateItemTitle = (
     itemTitle = `#${itemId}`;
   }
 
-  if (realms.length === 1) {
+  // Commodity items don't have realms (region-wide)
+  if (isCommdty) {
+    realmTitle = "";
+  } else if (realms.length === 1) {
     const [realm] = realms;
 
     realmTitle = realm.realms?.[0] || "Unknown";
-  } else {
+  } else if (realms.length > 1) {
     realmTitle = realms
       .map((r) => r.realms?.map((r) => r).join(", ") || "Unknown")
       .join(", ");
+  } else {
+    realmTitle = "";
   }
 
   return { itemTitle, realmTitle, isGold, isXrs, isCommdty };
