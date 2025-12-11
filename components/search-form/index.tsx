@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation";
 import { Fragment, useState, useCallback } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
 import {
   Select,
@@ -339,15 +338,13 @@ export const SearchForm = () => {
             </Fragment>
           )}
 
-          <Button
-            isIconOnly
-            color="secondary"
-            isLoading={isSubmitting}
-            size="lg"
+          <button
+            className="btn btn-icon btn-ghost"
+            disabled={isSubmitting}
             type="submit"
           >
-            →
-          </Button>
+            {isSubmitting ? "..." : "→"}
+          </button>
         </div>
       </div>
     </form>
