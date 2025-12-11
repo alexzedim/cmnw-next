@@ -1,20 +1,6 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
-  Card,
-  CardBody,
-  CardHeader,
-  Chip,
-  Select,
-  SelectItem,
-} from "@heroui/react";
 import dayjs from "dayjs";
 
 interface Log {
@@ -36,22 +22,14 @@ type SortDescriptor = {
   direction: "ascending" | "descending";
 };
 
-const getEventColor = (
-  event?: string
-): "default" | "primary" | "secondary" | "success" | "warning" | "danger" => {
-  if (!event) return "default";
-  const eventLower = event.toLowerCase();
-
-  if (eventLower.includes("join") || eventLower.includes("create"))
-    return "success";
-  if (eventLower.includes("leave") || eventLower.includes("remove"))
-    return "danger";
-  if (eventLower.includes("update") || eventLower.includes("change"))
-    return "warning";
-  if (eventLower.includes("promotion") || eventLower.includes("rank"))
-    return "primary";
-
-  return "default";
+const eventClass = (event?: string) => {
+  if (!event) return "chip";
+  const e = event.toLowerCase();
+  if (e.includes("join") || e.includes("create")) return "chip";
+  if (e.includes("leave") || e.includes("remove")) return "chip";
+  if (e.includes("update") || e.includes("change")) return "chip";
+  if (e.includes("promotion") || e.includes("rank")) return "chip";
+  return "chip";
 };
 
 export const LogTable = ({ logs }: LogTableProps) => {
@@ -118,85 +96,93 @@ export const LogTable = ({ logs }: LogTableProps) => {
   ];
 
   return (
-    <Card className="m-4">
-      <CardHeader className="flex flex-col items-start pb-0">
-        <div className="flex justify-between items-center w-full">
-          <h3 className="text-xl font-bold">Activity Log</h3>
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-default-500">
-              {filteredLogs.length} / {logs.length} entries
-            </span>
-          </div>
+    <div id="log-table-root" className="card-surface p-6 m-4 density-compact">
+      <div className="flex justify-between items-center w-full">
+        <h3 className="text-xl font-semibold">Activity Log</h3>
+        <div className="text-sm text-muted">
+          {filteredLogs.length} / {logs.length} entries
         </div>
-        {uniqueEvents.length > 1 && (
-          <div className="w-full mt-4">
-            <Select
-              className="max-w-xs"
-              label="Filter by event type"
-              placeholder="All events"
-              selectedKeys={eventFilter}
-              selectionMode="multiple"
-              size="sm"
-              onSelectionChange={(keys) => setEventFilter(keys as Set<string>)}
+      </div>
+
+      {uniqueEvents.length > 1 && (
+        <div className="w-full mt-4 flex flex-wrap gap-2 items-center">
+          {uniqueEvents.map((event) => {
+            const selected = eventFilter.has(event);
+            return (
+              <button
+                key={event}
+                className={`chip ${selected ? "opacity-100" : "opacity-70"}`}
+                onClick={() => {
+                  const next = new Set(eventFilter);
+                  selected ? next.delete(event) : next.add(event);
+                  setEventFilter(next);
+                }}
+                type="button"
+              >
+                {event}
+              </button>
+            );
+          })}
+          {eventFilter.size > 0 && (
+            <button
+              className="chip"
+              onClick={() => setEventFilter(new Set())}
+              type="button"
             >
-              {uniqueEvents.map((event) => (
-                <SelectItem key={event}>{event}</SelectItem>
+              Clear
+            </button>
+          )}
+          <span className="mx-2 text-muted">|</span>
+          <button
+            className="chip"
+            onClick={() => {
+              const root = document.querySelector('#log-table-root');
+              if (root) root.classList.toggle('density-compact');
+            }}
+            type="button"
+          >
+            Compact
+          </button>
+        </div>
+      )}
+
+      <div className="table-container mt-4">
+        <table className="table table-sticky">
+          <thead>
+            <tr>
+              {columns.map((c) => (
+                <th
+                  key={c.key}
+                  onClick={() =>
+                    c.sortable &&
+                    setSortDescriptor(({ column, direction }) => ({
+                      column: c.key,
+                      direction:
+                        column === c.key && direction === "ascending"
+                          ? "descending"
+                          : "ascending",
+                    }))
+                  }
+                  className={c.sortable ? "cursor-pointer select-none" : ""}
+                >
+                  {c.label}
+                </th>
               ))}
-            </Select>
-          </div>
-        )}
-      </CardHeader>
-      <CardBody className="p-4 md:p-8">
-        <Table
-          aria-label="Activity logs"
-          classNames={{
-            wrapper: "p-0",
-            th: "bg-default-100 text-default-700 font-semibold",
-            td: "text-default-600",
-          }}
-          sortDescriptor={sortDescriptor}
-          onSortChange={(descriptor) =>
-            setSortDescriptor(descriptor as SortDescriptor)
-          }
-        >
-          <TableHeader>
-            {columns.map((column) => (
-              <TableColumn key={column.key} allowsSorting={column.sortable}>
-                {column.label}
-              </TableColumn>
-            ))}
-          </TableHeader>
-          <TableBody>
+            </tr>
+          </thead>
+          <tbody>
             {filteredLogs.map((log) => (
-              <TableRow key={log._id}>
-                <TableCell>
-                  <Chip
-                    color={getEventColor(log.event)}
-                    size="sm"
-                    variant="flat"
-                  >
-                    {log.event || "-"}
-                  </Chip>
-                </TableCell>
-                <TableCell>{log.action || "-"}</TableCell>
-                <TableCell>
-                  <span className="text-sm text-default-500">
-                    {log.original || "-"}
-                  </span>
-                </TableCell>
-                <TableCell>
-                  <span className="text-sm font-medium">
-                    {log.updated || "-"}
-                  </span>
-                </TableCell>
-                <TableCell>
-                  <span className="text-sm">{formatDate(log.t0)}</span>
-                </TableCell>
-              </TableRow>
+              <tr key={log._id}>
+                <td><span className={eventClass(log.event)}>{log.event || "-"}</span></td>
+                <td>{log.action || "-"}</td>
+                <td><span className="text-sm text-muted">{log.original || "-"}</span></td>
+                <td><span className="text-sm font-medium">{log.updated || "-"}</span></td>
+                <td><span className="text-sm">{formatDate(log.t0)}</span></td>
+              </tr>
             ))}
-          </TableBody>
-        </Table>
-      </CardBody>
-    </Card>
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 };

@@ -2,9 +2,7 @@ import type { CharactersResponse, HashPageProps } from "@/lib/types";
 
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Card, CardBody, CardHeader, Chip, Divider } from "@heroui/react";
-
-import { Link } from "@/components/custom-link";
+import NextLink from "next/link";
 import { apiClient } from "@/lib/api";
 import { getClassColor } from "@/lib/utils/class-colors";
 import { getFactionColor } from "@/lib/utils/faction-colors";
@@ -56,116 +54,81 @@ export default async function HashPage({ params }: HashPageProps) {
     <main className="min-h-screen pt-20 pb-8">
       <div className="container mx-auto px-4">
         {/* Header */}
-        <Card className="mb-8">
-          <CardHeader className="flex flex-col items-start">
-            <h1 className="text-3xl font-bold">Account Characters</h1>
-            <p className="text-sm text-default-500 mt-2">
-              Hash:{" "}
-              <code className="text-xs bg-default-100 px-2 py-1 rounded">
-                {id}
-              </code>
-            </p>
-          </CardHeader>
-          <CardBody>
-            <p className="text-default-600">
-              Found {characters.length} character
-              {characters.length !== 1 ? "s" : ""} on this account
-            </p>
-          </CardBody>
-        </Card>
+        <div className="card-surface p-6 mb-8">
+          <h1 className="text-3xl font-bold">Account Characters</h1>
+          <p className="text-sm text-muted mt-2">
+            Hash: <code className="code-chip">{id}</code>
+          </p>
+          <p className="text-muted mt-4">
+            Found {characters.length} character{characters.length !== 1 ? "s" : ""} on this account
+          </p>
+        </div>
 
         {/* Character Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {characters.map((character) => (
-            <Card
-              key={character.guid}
-              isPressable
-              as={Link}
-              href={`/character/${character.guid}`}
-            >
-              <CardBody className="p-6">
-                <div className="space-y-3">
-                  {/* Character Name */}
-                  <div>
-                    <h3 className="text-xl font-bold">{character.name}</h3>
-                    <p className="text-sm text-default-500">
-                      @{character.realm}
-                    </p>
-                  </div>
+            <NextLink key={character.guid} href={`/character/${character.guid}`} className="card-surface p-6 block hover:shadow-lg transition-shadow">
+              <div className="space-y-3">
+                {/* Character Name */}
+                <div>
+                  <h3 className="text-xl font-semibold">{character.name}</h3>
+                  <p className="text-sm text-muted">@{character.realm}</p>
+                </div>
 
-                  <Divider />
+                <div className="h-px bg-[var(--border)]" />
 
-                  {/* Character Details */}
-                  <div className="flex flex-wrap gap-2">
-                    {character.level && (
-                      <Chip color="primary" size="sm" variant="flat">
-                        Level {character.level}
-                      </Chip>
-                    )}
-                    {character.class && (
-                      <Chip
-                        color={getClassColor(character.class)}
-                        size="sm"
-                        variant="flat"
-                      >
-                        {character.class}
-                      </Chip>
-                    )}
-                    {character.faction && (
-                      <Chip
-                        color={getFactionColor(character.faction)}
-                        size="sm"
-                        variant="flat"
-                      >
-                        {character.faction}
-                      </Chip>
-                    )}
-                  </div>
-
-                  {/* Stats */}
-                  <div className="space-y-1 text-sm">
-                    {character.equippedItemLevel && (
-                      <div className="flex justify-between">
-                        <span className="text-default-600">Item Level:</span>
-                        <span className="font-semibold">
-                          {character.equippedItemLevel}
-                        </span>
-                      </div>
-                    )}
-                    {character.race && (
-                      <div className="flex justify-between">
-                        <span className="text-default-600">Race:</span>
-                        <span>{character.race}</span>
-                      </div>
-                    )}
-                    {character.specialization && (
-                      <div className="flex justify-between">
-                        <span className="text-default-600">Spec:</span>
-                        <span>{character.specialization}</span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Guild Info */}
-                  {character.guild && (
-                    <>
-                      <Divider />
-                      <div className="text-sm">
-                        <span className="text-default-600">Guild: </span>
-                        <span className="font-medium">{character.guild}</span>
-                        {character.guildRank !== undefined && (
-                          <Chip className="ml-2" size="sm" variant="bordered">
-                            {character.guildRank === 0
-                              ? "GM"
-                              : `R${character.guildRank}`}
-                          </Chip>
-                        )}
-                      </div>
-                    </>
+                {/* Character Details */}
+                <div className="flex flex-wrap gap-2">
+                  {character.level && (
+                    <span className="chip">Level {character.level}</span>
+                  )}
+                  {character.class && (
+                    <span className="chip">{character.class}</span>
+                  )}
+                  {character.faction && (
+                    <span className="chip">{character.faction}</span>
                   )}
                 </div>
-              </CardBody>
-            </Card>
+
+                {/* Stats */}
+                <div className="space-y-1 text-sm">
+                  {character.equippedItemLevel && (
+                    <div className="flex justify-between">
+                      <span className="text-muted">Item Level:</span>
+                      <span className="font-semibold">{character.equippedItemLevel}</span>
+                    </div>
+                  )}
+                  {character.race && (
+                    <div className="flex justify-between">
+                      <span className="text-muted">Race:</span>
+                      <span>{character.race}</span>
+                    </div>
+                  )}
+                  {character.specialization && (
+                    <div className="flex justify-between">
+                      <span className="text-muted">Spec:</span>
+                      <span>{character.specialization}</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Guild Info */}
+                {character.guild && (
+                  <>
+                    <div className="h-px bg-[var(--border)]" />
+                    <div className="text-sm">
+                      <span className="text-muted">Guild: </span>
+                      <span className="font-medium">{character.guild}</span>
+                      {character.guildRank !== undefined && (
+                        <span className="chip ml-2">
+                          {character.guildRank === 0 ? "GM" : `R${character.guildRank}`}
+                        </span>
+                      )}
+                    </div>
+                  </>
+                )}
+              </div>
+            </NextLink>
           ))}
         </div>
       </div>

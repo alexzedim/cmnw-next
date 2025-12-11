@@ -1,0 +1,67 @@
+/* Design tokens for cmnw-next (inspired by Factory IDE page) */
+:root {
+  /* Typography (we'll switch to Geist soon; keep stack sane) */
+  --font-sans-stack: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+    Inter, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji",
+    "Segoe UI Emoji";
+  --font-mono-stack: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+
+  /* Colors */
+  /* Factory-derived palette */
+  --bg: #020202; /* var(--dark-base-primary) */
+  --bg-elevated: #101010; /* var(--dark-base-secondary) */
+  --surface: #101010; /* dark surface default */
+  --border: #2e2c2b; /* neutral-900 */
+  --text: #eeeeee; /* var(--light-base-primary) */
+  --text-muted: #8a8380; /* neutral-500 */
+  --primary: #ee6018; /* accent-200 */
+  --primary-foreground: #020202;
+  --accent: #ef6f2e; /* accent-100 */
+  --accent-foreground: #020202;
+  --gradient-start: #ef6f2e;
+  --gradient-end: #d15010; /* accent-300 */
+}
+
+.dark {
+  --bg: #020202;
+  --bg-elevated: #101010;
+  --surface: #101010;
+  --border: #2e2c2b;
+  --text: #eeeeee;
+  --text-muted: #8a8380;
+  --primary: #ee6018;
+  --primary-foreground: #020202;
+  --accent: #ef6f2e;
+  --accent-foreground: #020202;
+  --gradient-start: #ef6f2e;
+  --gradient-end: #d15010;
+}
+
+/* Base element colors */
+html, body {
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+/* Section rhythm helpers */
+.section {
+  padding-top: clamp(64px, 8vw, 120px);
+  padding-bottom: clamp(64px, 8vw, 120px);
+}
+
+.card-surface {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 8px 30px rgba(0,0,0,0.35);
+}
+
+.token-border {
+  border-color: var(--border);
+}
+
+.token-primary-bg { background-color: var(--primary); }
+.token-primary-fg { color: var(--primary-foreground); }
+.token-accent-bg { background-color: var(--accent); }
+.token-accent-fg { color: var(--accent-foreground); }

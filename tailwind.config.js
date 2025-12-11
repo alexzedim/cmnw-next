@@ -10,13 +10,63 @@ const config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-sans)"],
-        mono: ["var(--font-mono)"],
+        sans: ["var(--font-sans)", "var(--font-sans-stack)"],
+        mono: ["var(--font-mono)", "var(--font-mono-stack)"],
+      },
+      colors: {
+        background: "var(--bg)",
+        foreground: "var(--text)",
+        muted: "var(--text-muted)",
+        divider: "var(--border)",
+        primary: {
+          DEFAULT: "var(--primary)",
+          foreground: "var(--primary-foreground)",
+        },
+        accent: {
+          DEFAULT: "var(--accent)",
+          foreground: "var(--accent-foreground)",
+        },
+      },
+      borderColor: {
+        DEFAULT: "var(--border)",
+      },
+      container: {
+        center: true,
       },
     },
   },
   darkMode: "class",
-  plugins: [heroui()],
+plugins: [
+    heroui({
+      themes: {
+        dark: {
+          colors: {
+            background: "#0b0b0c",
+            foreground: "#ecedee",
+            default: {
+              50: "#fafafa",
+              100: "#f4f4f5",
+              200: "#e4e4e7",
+              300: "#d4d4d8",
+              400: "#a1a1aa",
+              500: "#71717a",
+              600: "#52525b",
+              700: "#3f3f46",
+              800: "#27272a",
+              900: "#18181b",
+            },
+            content1: "#111216",
+            divider: "#1f2126",
+            primary: {
+              DEFAULT: "#7c8cff",
+              foreground: "#0b0b0c",
+            },
+            focus: "#22d3ee",
+          },
+        },
+      },
+    }),
+  ],
 };
 
 module.exports = config;

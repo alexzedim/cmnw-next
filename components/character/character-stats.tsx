@@ -2,15 +2,6 @@
 
 import type { Character } from "@/lib/types";
 
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Chip,
-  Progress,
-  Divider,
-} from "@heroui/react";
-
 import { getClassColor, getFactionColor } from "@/lib/utils";
 
 interface CharacterStatsProps {
@@ -30,181 +21,125 @@ export function CharacterStats({ character }: CharacterStatsProps) {
 
   return (
     <div className="space-y-4">
-      {/* Main Stats Card */}
-      <Card>
-        <CardHeader className="flex flex-col items-start pb-0">
-          <h3 className="text-xl font-bold">Character Information</h3>
-        </CardHeader>
-        <CardBody className="gap-4">
-          {/* Level and Class */}
+      {/* Main Stats */}
+      <div className="card-surface p-6">
+        <h3 className="text-xl font-semibold">Character Information</h3>
+        <div className="mt-4 space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-default-600">Level</span>
-            <Chip color="primary" size="lg" variant="flat">
-              {character.level || "Unknown"}
-            </Chip>
+            <span className="text-sm text-muted">Level</span>
+            <span className="chip">{character.level ?? "Unknown"}</span>
           </div>
 
-          {/* Class */}
           {character.class && (
             <div className="flex items-center justify-between">
-              <span className="text-sm text-default-600">Class</span>
-              <Chip
-                color={getClassColor(character.class)}
-                size="md"
-                variant="flat"
-              >
-                {character.class}
-              </Chip>
+              <span className="text-sm text-muted">Class</span>
+              <span className="chip">{character.class}</span>
             </div>
           )}
 
-          {/* Specialization */}
           {character.specialization && (
             <div className="flex items-center justify-between">
-              <span className="text-sm text-default-600">Specialization</span>
-              <Chip size="sm" variant="bordered">
-                {character.specialization}
-              </Chip>
+              <span className="text-sm text-muted">Specialization</span>
+              <span className="chip">{character.specialization}</span>
             </div>
           )}
 
-          <Divider />
+          <div className="h-px bg-[var(--border)]" />
 
-          {/* Race */}
           {character.race && (
             <div className="flex items-center justify-between">
-              <span className="text-sm text-default-600">Race</span>
+              <span className="text-sm text-muted">Race</span>
               <span className="text-sm font-medium">{character.race}</span>
             </div>
           )}
 
-          {/* Faction */}
           {character.faction && (
             <div className="flex items-center justify-between">
-              <span className="text-sm text-default-600">Faction</span>
-              <Chip
-                color={getFactionColor(character.faction)}
-                size="sm"
-                variant="flat"
-              >
-                {character.faction}
-              </Chip>
+              <span className="text-sm text-muted">Faction</span>
+              <span className="chip">{character.faction}</span>
             </div>
           )}
 
-          {/* Gender */}
           {character.gender && (
             <div className="flex items-center justify-between">
-              <span className="text-sm text-default-600">Gender</span>
+              <span className="text-sm text-muted">Gender</span>
               <span className="text-sm font-medium">{character.gender}</span>
             </div>
           )}
-        </CardBody>
-      </Card>
+        </div>
+      </div>
 
-      {/* Item Level Card */}
-      <Card>
-        <CardHeader className="flex flex-col items-start pb-0">
-          <h3 className="text-xl font-bold">Item Level</h3>
-        </CardHeader>
-        <CardBody className="gap-3">
-          {/* Equipped Item Level */}
+      {/* Item Level */}
+      <div className="card-surface p-6">
+        <h3 className="text-xl font-semibold">Item Level</h3>
+        <div className="mt-4 space-y-3">
           {character.equippedItemLevel && (
             <>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-default-600">Equipped</span>
-                <span className="text-lg font-bold">
-                  {character.equippedItemLevel}
-                </span>
+                <span className="text-sm text-muted">Equipped</span>
+                <span className="text-lg font-bold">{character.equippedItemLevel}</span>
               </div>
-              <Progress
-                className="max-w-full"
-                color={
-                  itemLevelPercent > 80
-                    ? "success"
-                    : itemLevelPercent > 50
-                      ? "warning"
-                      : "default"
-                }
-                value={itemLevelPercent}
-              />
+              <div className="progress" style={{ ["--value" as any]: `${itemLevelPercent}%` }}>
+                <div className="bar" />
+              </div>
             </>
           )}
 
-          {/* Average Item Level */}
           {character.averageItemLevel && (
-            <div className="flex items-center justify-between mt-2">
-              <span className="text-sm text-default-600">Average</span>
-              <span className="text-sm font-medium">
-                {character.averageItemLevel}
-              </span>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-muted">Average</span>
+              <span className="text-sm font-medium">{character.averageItemLevel}</span>
             </div>
           )}
-        </CardBody>
-      </Card>
+        </div>
+      </div>
 
-      {/* Achievements Card */}
+      {/* Achievements */}
       {character.achievementPoints && (
-        <Card>
-          <CardHeader className="flex flex-col items-start pb-0">
-            <h3 className="text-xl font-bold">Achievements</h3>
-          </CardHeader>
-          <CardBody className="gap-3">
+        <div className="card-surface p-6">
+          <h3 className="text-xl font-semibold">Achievements</h3>
+          <div className="mt-4 space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-default-600">Points</span>
-              <span className="text-lg font-bold">
-                {character.achievementPoints.toLocaleString()}
-              </span>
+              <span className="text-sm text-muted">Points</span>
+              <span className="text-lg font-bold">{character.achievementPoints.toLocaleString()}</span>
             </div>
-            <Progress
-              className="max-w-full"
-              color="secondary"
-              value={achievementPercent}
-            />
-          </CardBody>
-        </Card>
+            <div className="progress" style={{ ["--value" as any]: `${achievementPercent}%` }}>
+              <div className="bar" />
+            </div>
+          </div>
+        </div>
       )}
 
-      {/* Collections Card */}
+      {/* Collections */}
       {(character.mountsNumber || character.petsNumber) && (
-        <Card>
-          <CardHeader className="flex flex-col items-start pb-0">
-            <h3 className="text-xl font-bold">Collections</h3>
-          </CardHeader>
-          <CardBody className="gap-2">
+        <div className="card-surface p-6">
+          <h3 className="text-xl font-semibold">Collections</h3>
+          <div className="mt-4 space-y-3">
             {character.mountsNumber && (
               <div className="flex items-center justify-between">
-                <span className="text-sm text-default-600">Mounts</span>
-                <Chip color="primary" size="sm" variant="flat">
-                  {character.mountsNumber}
-                </Chip>
+                <span className="text-sm text-muted">Mounts</span>
+                <span className="chip">{character.mountsNumber}</span>
               </div>
             )}
             {character.petsNumber && (
               <div className="flex items-center justify-between">
-                <span className="text-sm text-default-600">Battle Pets</span>
-                <Chip color="secondary" size="sm" variant="flat">
-                  {character.petsNumber}
-                </Chip>
+                <span className="text-sm text-muted">Battle Pets</span>
+                <span className="chip">{character.petsNumber}</span>
               </div>
             )}
-          </CardBody>
-        </Card>
+          </div>
+        </div>
       )}
 
-      {/* Covenant (if applicable) */}
+      {/* Covenant */}
       {character.covenantId && (
-        <Card>
-          <CardHeader className="flex flex-col items-start pb-0">
-            <h3 className="text-xl font-bold">Covenant</h3>
-          </CardHeader>
-          <CardBody>
-            <Chip color="warning" size="md" variant="flat">
-              Covenant ID: {character.covenantId}
-            </Chip>
-          </CardBody>
-        </Card>
+        <div className="card-surface p-6">
+          <h3 className="text-xl font-semibold">Covenant</h3>
+          <div className="mt-4">
+            <span className="chip">Covenant ID: {character.covenantId}</span>
+          </div>
+        </div>
       )}
     </div>
   );
-}
+};
