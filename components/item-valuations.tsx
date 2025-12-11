@@ -39,7 +39,7 @@ const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
 export const ItemValuations = ({ id }: ItemValuationsProps) => {
   const { data, error, isLoading } = useSWR<ValuationsResponse>(
-    `${DOMAINS.domain}/api/dma/item/valuations?_id=${id}`,
+    `${DOMAINS.domain}/api/dma/item/valuations?id=${id}`,
     fetcher,
     { refreshInterval: 5000 } // Refresh every 5 seconds if evaluating
   );

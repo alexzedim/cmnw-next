@@ -67,7 +67,7 @@ export const ItemListing = ({
   if (isCommdty || isGold) return null;
 
   const { data, error, isLoading } = useSWR<AuctionsResponse>(
-    `${DOMAINS.domain}/api/dma/item/feed?_id=${id}`,
+    `${DOMAINS.domain}/api/dma/item/feed?id=${id}`,
     fetcher
   );
 
