@@ -8,7 +8,6 @@ import {
   CardBody,
   CardHeader,
   Input,
-  Button,
   Select,
   SelectItem,
   Chip,
@@ -118,12 +117,12 @@ export default function CharacterLfgPage() {
             </div>
 
             <div className="flex gap-4 mt-6">
-              <Button color="primary" onPress={handleSearch}>
+              <button className="btn btn-primary" onClick={handleSearch}>
                 Search
-              </Button>
-              <Button variant="bordered" onPress={handleReset}>
+              </button>
+              <button className="btn btn-outline" onClick={handleReset}>
                 Reset
-              </Button>
+              </button>
             </div>
           </CardBody>
         </Card>

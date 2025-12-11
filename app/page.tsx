@@ -1,6 +1,5 @@
 import { title } from "@/components/primitives";
 import { SearchForm } from "@/components/search-form";
-import { Button } from "@heroui/button";
 
 export default function Home() {
   return (
@@ -16,8 +15,8 @@ export default function Home() {
 
         {/* CTA row */}
         <div className="flex items-center gap-3">
-          <Button color="primary" className="min-h-11 px-6">Get Started</Button>
-          <Button variant="bordered" className="min-h-11 px-6">Docs</Button>
+          <button className="btn btn-primary px-6">Get Started</button>
+          <button className="btn btn-outline px-6">Docs</button>
         </div>
 
         {/* Prompt accent */}
@@ -69,8 +68,8 @@ export default function Home() {
         <h2 className="text-3xl font-semibold">Ready to try CMNW?</h2>
         <p className="text-muted mt-2">Start exploring items and logs now.</p>
         <div className="mt-6 flex items-center justify-center gap-3">
-          <Button color="primary" className="min-h-11 px-6">Open App</Button>
-          <Button variant="bordered" className="min-h-11 px-6">Read Docs</Button>
+          <button className="btn btn-primary px-6">Open App</button>
+          <button className="btn btn-outline px-6">Read Docs</button>
         </div>
       </section>
     </>
