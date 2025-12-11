@@ -31,49 +31,51 @@ export const ItemTitle = ({
 
   return (
     <Card
-      className="max-w-6xl mx-4 my-8"
+      className="max-w-6xl mx-4 my-4"
       style={{ background: backgroundRoot }}
     >
       <CardBody
-        className="p-8 border-[15px] rounded-xl"
+        className="p-6 border-8 rounded-xl"
         style={{
           background: backgroundRoot,
           borderColor: borderColor,
         }}
       >
-        <div className="flex items-center gap-4 mb-4">
+        <div className="flex items-center gap-4">
           {icon && (
             <Avatar
               alt="Item Icon"
-              className="w-14 h-14"
+              className="w-16 h-16 flex-shrink-0"
               radius="sm"
               src={icon}
             />
           )}
-          <h1
-            className="font-black uppercase text-white break-words flex-1"
-            style={{
-              fontFamily: "Fira Sans, sans-serif",
-              fontSize: "clamp(1.3rem, -2.75rem + 16.6667vw, 6rem)",
-              textAlign: "left",
-            }}
-          >
-            {itemTitle}
-          </h1>
+          <div className="flex-1 min-w-0">
+            <h1
+              className="font-bold uppercase text-white break-words"
+              style={{
+                fontFamily: "Fira Sans, sans-serif",
+                fontSize: "clamp(1.25rem, 2vw + 0.5rem, 2.5rem)",
+                textAlign: "left",
+                lineHeight: "1.2",
+              }}
+            >
+              {itemTitle}
+            </h1>
+            {realmTitle && (
+              <h4
+                className="text-white/90 font-normal break-words mt-1"
+                style={{
+                  fontFamily: "Fira Sans, sans-serif",
+                  fontSize: "clamp(0.875rem, 1vw + 0.5rem, 1.25rem)",
+                  textAlign: "left",
+                }}
+              >
+                {realmTitle}
+              </h4>
+            )}
+          </div>
         </div>
-
-        <Divider className="mb-4" style={{ backgroundColor: borderColor }} />
-
-        <h4
-          className="text-white font-normal break-words"
-          style={{
-            fontFamily: "Fira Sans, sans-serif",
-            fontSize: "clamp(1.3rem, -2.75rem + 16.6667vw, 3rem)",
-            textAlign: "left",
-          }}
-        >
-          {realmTitle}
-        </h4>
       </CardBody>
     </Card>
   );
