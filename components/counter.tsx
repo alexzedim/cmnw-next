@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { Button } from "@heroui/button";
 
 export const Counter = () => {
   const [count, setCount] = useState(0);
@@ -20,30 +19,12 @@ export const Counter = () => {
 
   return (
     <div className="flex items-center gap-2">
-      <Button
-        isIconOnly
-        color="danger"
-        size="sm"
-        variant="flat"
-        onPress={decrement}
-      >
-        -
-      </Button>
+      <button className="btn btn-sm btn-icon btn-ghost" onClick={decrement}>−</button>
       <div className="min-w-20 text-center">
         <span className="text-lg font-semibold">{count}</span>
       </div>
-      <Button
-        isIconOnly
-        color="success"
-        size="sm"
-        variant="flat"
-        onPress={increment}
-      >
-        +
-      </Button>
-      <Button color="default" size="sm" variant="light" onPress={reset}>
-        Reset
-      </Button>
+      <button className="btn btn-sm btn-icon btn-ghost" onClick={increment}>+</button>
+      <button className="btn btn-sm btn-ghost" onClick={reset}>Reset</button>
     </div>
   );
 };

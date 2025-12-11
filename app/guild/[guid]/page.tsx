@@ -6,7 +6,6 @@ import type {
 
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Divider } from "@heroui/react";
 
 import { GuildTitle } from "@/components/guild-title";
 import { GuildRoster } from "@/components/guild/guild-roster";
@@ -91,12 +90,12 @@ export default async function GuildPage({ params }: GuildPageProps) {
           realm={guild.realm}
         />
 
-        <Divider className="my-8" />
+        <div className="my-8 h-px bg-[var(--border)]" />
 
         {members && members.length > 0 && (
           <>
             <GuildRoster members={members} />
-            <Divider className="my-8" />
+            <div className="my-8 h-px bg-[var(--border)]" />
           </>
         )}
 

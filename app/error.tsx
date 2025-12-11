@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { Button } from "@heroui/button";
 
 export default function Error({
   error,
@@ -10,22 +11,19 @@ export default function Error({
   reset: () => void;
 }) {
   useEffect(() => {
-    // Log the error to an error reporting service
     /* eslint-disable no-console */
     console.error(error);
   }, [error]);
 
   return (
-    <div>
-      <h2>Something went wrong!</h2>
-      <button
-        onClick={
-          // Attempt to recover by trying to re-render the segment
-          () => reset()
-        }
-      >
-        Try again
-      </button>
-    </div>
+    <section className="section container mx-auto px-6">
+      <div className="card-surface p-6">
+        <h2 className="text-2xl font-semibold">Something went wrong</h2>
+        <p className="text-muted mt-2">Please try again. If the problem persists, contact support.</p>
+        <div className="mt-6">
+          <button className="btn btn-primary" onClick={() => reset()}>Try again</button>
+        </div>
+      </div>
+    </section>
   );
 }
