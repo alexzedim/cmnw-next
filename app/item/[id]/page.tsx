@@ -14,7 +14,7 @@ import { DOMAINS } from "@/constants";
 
 async function getItemData(id: string) {
   try {
-    const res = await fetch(`${DOMAINS.domain}/api/dma/item?_id=${id}`, {
+    const res = await fetch(`${DOMAINS.domain}/api/dma/item?id=${id}`, {
       next: { revalidate: 3600 }, // Revalidate every hour
     });
 
@@ -76,8 +76,8 @@ export default async function ItemPage({ params }: ItemPageProps) {
   );
 
   return (
-    <main className="min-h-screen pt-20 pb-8">
-      <div className="container mx-auto px-4">
+    <main className="min-h-screen pt-16 pb-8">
+      <div className="container mx-auto px-4 max-w-7xl">
         <ItemTitle
           assetClass={item.assetClass || item.asset_class}
           icon={item.icon}
@@ -86,9 +86,7 @@ export default async function ItemPage({ params }: ItemPageProps) {
           realmTitle={realmTitle}
         />
 
-        <Divider className="my-8" />
-
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mt-4">
           <div className="md:col-span-5">
             <ItemQuotes id={id} isGold={isGold} isXrs={isXrs} />
           </div>
@@ -96,8 +94,6 @@ export default async function ItemPage({ params }: ItemPageProps) {
             <ItemValuations id={id} />
           </div>
         </div>
-
-        <Divider className="my-8" />
 
         <MarketHeatmap
           id={id}
