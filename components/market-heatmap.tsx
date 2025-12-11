@@ -60,7 +60,7 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = ({
   if (!isCommdty) return null;
 
   const { data, error, isLoading } = useSWR<HeatmapResponse>(
-    `${DOMAINS.domain}/api/dma/item/chart?_id=${id}`,
+    `${DOMAINS.domain}/api/dma/item/chart?id=${id}`,
     (url: string) => fetch(url).then((r) => r.json())
   );
 

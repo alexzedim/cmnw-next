@@ -42,7 +42,7 @@ export const ItemQuotes = ({
   if (isXrs) return null;
 
   const { data, error, isLoading } = useSWR<QuotesResponse>(
-    `${DOMAINS.domain}/api/dma/item/quotes?_id=${id}`,
+    `${DOMAINS.domain}/api/dma/item/quotes?id=${id}`,
     fetcher
   );
 
