@@ -13,9 +13,9 @@ import { LogTable } from "@/components/log-table";
 import { apiClient } from "@/lib/api";
 import { stringToFaction } from "@/lib/utils/faction-converter";
 
-async function getGuildData(encodedGuid: string) {
-  // Decode the URL-encoded GUID before passing to API
-  const guid = decodeURIComponent(encodedGuid);
+async function getGuildData(decodedGuid: string) {
+  // Encode the decoded GUID before passing to API
+  const guid = encodeURIComponent(decodedGuid);
 
   try {
     const [guildResponse, logsResponse] = await Promise.all([
