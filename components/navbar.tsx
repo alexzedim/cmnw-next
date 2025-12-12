@@ -23,8 +23,8 @@ export const Navbar = () => {
     <Input
       aria-label="Search"
       classNames={{
-        inputWrapper: "bg-default-100",
-        input: "text-sm",
+        inputWrapper: "bg-background border border-divider",
+        input: "text-sm text-foreground",
       }}
       endContent={
         <Kbd className="hidden lg:inline-block" keys={["command"]}>
@@ -34,7 +34,7 @@ export const Navbar = () => {
       labelPlacement="outside"
       placeholder="Search..."
       startContent={
-        <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
+        <SearchIcon className="text-base text-muted pointer-events-none flex-shrink-0" />
       }
       type="search"
     />
@@ -52,12 +52,11 @@ export const Navbar = () => {
         <ul className="hidden lg:flex gap-4 justify-start ml-2">
           {siteConfig.navItems.map((item) => (
             <NavbarItem key={item.href}>
-              <NextLink
+            <NextLink
                 className={clsx(
-                  linkStyles({ color: "foreground" }),
+                  "text-foreground hover:text-muted transition-colors",
                   "data-[active=true]:text-primary data-[active=true]:font-medium"
                 )}
-                color="foreground"
                 href={item.href}
               >
                 {item.label}
