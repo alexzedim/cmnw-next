@@ -19,13 +19,6 @@ export default function Home() {
           <button className="btn btn-outline px-6">Docs</button>
         </div>
 
-        {/* Prompt accent */}
-        <div className="card-surface max-w-3xl w-full p-4">
-          <div className="font-mono text-sm text-muted">
-            <span className="text-foreground/80">$</span> cmnw search "Thunderfury"
-          </div>
-        </div>
-
         <div className="w-full flex justify-center px-4">
           <SearchForm />
         </div>
