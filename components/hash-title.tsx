@@ -39,9 +39,9 @@ export const HashTitle = ({ id }: HashTitleProps) => {
   const background = generateFactionBackground();
 
   return (
-    <Card className="max-w-6xl mx-4 my-8" style={{ background }}>
+    <Card className="max-w-6xl mx-4 my-8 border border-divider" style={{ background }}>
       <CardBody
-        className="p-8 border-[15px] border-white rounded-xl"
+        className="p-8 rounded-xl"
         style={{ background }}
       >
         <Popover isOpen={isOpen} placement="bottom" onOpenChange={setIsOpen}>
