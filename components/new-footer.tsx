@@ -41,7 +41,7 @@ export const NewFooter = () => {
   ];
 
   return (
-    <footer className="relative grid grid-cols-4 gap-x-4 lg:grid-cols-12 lg:gap-x-6 my-20 px-4 first:mt-4 lg:px-9 first:lg:mt-10 bg-background mx-auto mb-4 h-auto min-h-[580px] w-[calc(100%-32px)] rounded-xl !p-0 md:min-h-[550px] lg:mt-14 lg:mb-10 lg:min-h-[430px] lg:w-[calc(100%-72px)] lg:rounded-3xl">
+    <footer className="relative grid grid-cols-4 gap-x-4 lg:grid-cols-12 lg:gap-x-6 container mx-auto px-6 my-20 bg-background h-auto min-h-[580px] rounded-xl md:min-h-[550px] lg:min-h-[430px] lg:rounded-3xl">
       {/* Footer Badge */}
       <div className="absolute top-6 left-4 lg:top-8 lg:left-8">
         <div className="inline-flex items-center gap-3 uppercase text-xs tracking-wide opacity-60">
