@@ -49,9 +49,9 @@ export const ItemQuotes = ({
   if (error) return null;
   if (isLoading)
     return (
-      <Card className="m-4">
-        <CardBody className="p-8 border-[15px] border-white rounded-xl flex items-center justify-center min-h-[300px]">
-          <Spinner size="lg" />
+      <Card className="m-4 bg-background border border-divider">
+        <CardBody className="p-8 rounded-xl flex items-center justify-center min-h-[300px] bg-background">
+          <Spinner size="lg" color="warning" />
         </CardBody>
       </Card>
     );
@@ -66,14 +66,14 @@ export const ItemQuotes = ({
   ];
 
   return (
-    <Card className="m-4">
-      <CardBody className="p-8 border-[15px] border-white rounded-xl">
+    <Card className="m-4 bg-background border border-divider">
+      <CardBody className="p-8 rounded-xl bg-background">
         <Table
           aria-label="Item price quotes"
           classNames={{
             wrapper: "p-0",
-            th: "bg-default-100 text-default-700 font-semibold",
-            td: "text-default-600",
+            th: "bg-background border-b border-divider text-foreground font-semibold",
+            td: "text-muted border-b border-divider",
           }}
         >
           <TableHeader columns={columns}>

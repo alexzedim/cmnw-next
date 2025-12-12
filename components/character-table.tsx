@@ -75,7 +75,7 @@ export const CharacterTable = ({
       case "_id":
         return (
           <Link
-            className="text-secondary hover:underline"
+            className="text-primary hover:underline"
             href={`/character/${character._id}`}
           >
             {character._id.toUpperCase()}
@@ -85,7 +85,7 @@ export const CharacterTable = ({
       case "hash_a":
         return character.hash_a ? (
           <Link
-            className="text-secondary hover:underline"
+            className="text-primary hover:underline"
             href={`/hash/a@${character.hash_a}`}
           >
             {`...${character.hash_a.slice(-6).toUpperCase()}`}
@@ -95,7 +95,7 @@ export const CharacterTable = ({
       case "hash_b":
         return character.hash_b ? (
           <Link
-            className="text-secondary hover:underline"
+            className="text-primary hover:underline"
             href={`/hash/b@${character.hash_b}`}
           >
             {`...${character.hash_b.slice(-6).toUpperCase()}`}
@@ -105,7 +105,7 @@ export const CharacterTable = ({
       case "guild":
         return character.guild_id ? (
           <Link
-            className="text-secondary hover:underline"
+            className="text-primary hover:underline"
             href={`/guild/${character.guild_id}`}
           >
             {character.guild}
@@ -126,14 +126,14 @@ export const CharacterTable = ({
   };
 
   return (
-    <Card className="m-4">
-      <CardBody className="p-8 border-8 border-white rounded-xl">
+    <Card className="m-4 bg-background border border-divider">
+      <CardBody className="p-8 rounded-xl bg-background">
         <Table
           aria-label="Character table"
           classNames={{
             wrapper: "bg-transparent",
-            th: "bg-default-100",
-            td: "text-default-600",
+            th: "bg-background border-b border-divider text-foreground font-semibold",
+            td: "text-muted border-b border-divider",
           }}
         >
           <TableHeader columns={columns}>
