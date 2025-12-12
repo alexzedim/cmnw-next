@@ -127,7 +127,7 @@ export function GuildRoster({ members }: GuildRosterProps) {
         </Select>
 
         <div className="flex items-center gap-2">
-          <span className="text-sm text-default-500">
+          <span className="text-sm text-muted">
             {filteredMembers.length} / {members.length} members
           </span>
         </div>
@@ -138,8 +138,8 @@ export function GuildRoster({ members }: GuildRosterProps) {
         aria-label="Guild roster table"
         classNames={{
           wrapper: "p-0",
-          th: "bg-default-100 text-default-700 font-semibold",
-          td: "text-default-600",
+          th: "bg-background border-b border-divider text-foreground font-semibold",
+          td: "text-muted border-b border-divider",
         }}
         sortDescriptor={sortDescriptor}
         onSortChange={(descriptor) =>
