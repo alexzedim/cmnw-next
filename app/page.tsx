@@ -64,16 +64,6 @@ export default function Home() {
           ))}
         </div>
       </section>
-
-      {/* Bottom CTA */}
-      <section className="section container mx-auto px-6 text-center">
-        <h2 className="text-3xl font-semibold">Ready to try CMNW?</h2>
-        <p className="text-muted mt-2">Start exploring items and logs now.</p>
-        <div className="mt-6 flex items-center justify-center gap-3">
-          <button className="btn btn-primary px-6">Open App</button>
-          <button className="btn btn-outline px-6">Read Docs</button>
-        </div>
-      </section>
     </>
   );
 }
