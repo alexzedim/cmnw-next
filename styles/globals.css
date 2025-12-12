@@ -53,9 +53,10 @@
   }
   .table-container { @apply overflow-x-auto; }
   .table { @apply w-full border-collapse; }
-  .table th { background: var(--bg-elevated); color: var(--text); text-align: left; font-weight: 600; font-size: 0.875rem; }
+  .table th { background: var(--bg-elevated); color: var(--text); text-align: left; font-weight: 600; font-size: 0.875rem; border-bottom: 1px solid var(--border); }
   .table th, .table td { border-bottom: 1px solid var(--border); padding: 0.75rem 1rem; }
   .table tbody tr:hover { background: color-mix(in oklab, var(--bg-elevated), white 2%); }
+  .table td { color: var(--text-muted); }
   .progress { position: relative; height: 8px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 9999px; overflow: hidden; }
   .progress > .bar { position: absolute; inset: 0; width: var(--value, 0%); background: var(--accent); }
 
