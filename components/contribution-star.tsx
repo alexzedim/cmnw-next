@@ -63,7 +63,7 @@ export const ContributionStar = ({
         )}
 
         {discord && (
-          <p className="text-xs uppercase text-default-500">{discord}</p>
+          <p className="text-xs uppercase text-muted">{discord}</p>
         )}
 
         {github && (
