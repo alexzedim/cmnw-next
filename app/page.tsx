@@ -28,9 +28,18 @@ export default function Home() {
       <section className="section container mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
-            { title: "No IDE switch", body: "Use CMNW directly in your workflow." },
-            { title: "Fast search", body: "Find items, logs, and valuations instantly." },
-            { title: "Safe by default", body: "Explicit control over changes and data." },
+            {
+              title: "No IDE switch",
+              body: "Use CMNW directly in your workflow.",
+            },
+            {
+              title: "Fast search",
+              body: "Find items, logs, and valuations instantly.",
+            },
+            {
+              title: "Safe by default",
+              body: "Explicit control over changes and data.",
+            },
           ].map((f) => (
             <div key={f.title} className="card-surface p-6">
               <h3 className="text-xl font-semibold">{f.title}</h3>
