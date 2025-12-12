@@ -157,7 +157,7 @@ export const SearchForm = () => {
                 )}
               />
               <div className="flex items-center justify-center">
-                <span className="text-3xl font-bold text-default-500">@</span>
+                <span className="text-3xl font-bold text-muted">@</span>
               </div>
               <Autocomplete
                 allowsCustomValue
@@ -196,7 +196,7 @@ export const SearchForm = () => {
                 )}
               />
               <div className="flex items-center justify-center">
-                <span className="text-3xl font-bold text-default-500">@</span>
+                <span className="text-3xl font-bold text-muted">@</span>
               </div>
               <Autocomplete
                 allowsCustomValue
@@ -253,7 +253,7 @@ export const SearchForm = () => {
                 )}
               />
               <div className="flex items-center justify-center">
-                <span className="text-3xl font-bold text-default-500">@</span>
+                <span className="text-3xl font-bold text-muted">@</span>
               </div>
               <Controller
                 control={control}
@@ -300,7 +300,7 @@ export const SearchForm = () => {
                     >
                       <div className="flex flex-col">
                         <span className="text-small">{item.name}</span>
-                        <span className="text-tiny text-default-400">
+                        <span className="text-tiny text-muted">
                           ID: {item.id}
                         </span>
                       </div>
@@ -314,7 +314,7 @@ export const SearchForm = () => {
           {command === "gold" && (
             <Fragment>
               <div className="flex items-center justify-center">
-                <span className="text-3xl font-bold text-default-500">@</span>
+                <span className="text-3xl font-bold text-muted">@</span>
               </div>
               <Autocomplete
                 allowsCustomValue
