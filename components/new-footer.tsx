@@ -1,0 +1,121 @@
+import { Link } from "@heroui/link";
+import { Logo } from "@/components/icons";
+
+export const NewFooter = () => {
+  const year = new Date().getFullYear();
+
+  const footerSections = [
+    {
+      title: "Resources",
+      links: [
+        { label: "News", href: "/news" },
+        { label: "Docs", href: "/docs" },
+        { label: "Contact Sales", href: "/contact" },
+        { label: "Open Source", href: "https://github.com/alexzedim/cmnw-next", isExternal: true },
+      ],
+    },
+    {
+      title: "Company",
+      links: [
+        { label: "Careers", href: "/careers" },
+        { label: "Enterprise", href: "/enterprise" },
+        { label: "Security", href: "/security" },
+      ],
+    },
+    {
+      title: "Legal",
+      links: [
+        { label: "Privacy Policy", href: "/privacy" },
+        { label: "Terms of Service", href: "/terms" },
+        { label: "SLA", href: "/sla" },
+        { label: "DPA", href: "/dpa" },
+        { label: "BAA", href: "/baa" },
+      ],
+    },
+  ];
+
+  const socialLinks = [
+    { label: "X (Twitter)", href: "https://twitter.com" },
+    { label: "LinkedIn", href: "https://linkedin.com" },
+    { label: "GitHub", href: "https://github.com/alexzedim/cmnw-next" },
+  ];
+
+  return (
+    <footer className="relative grid grid-cols-4 gap-x-4 lg:grid-cols-12 lg:gap-x-6 my-20 px-4 first:mt-4 lg:px-9 first:lg:mt-10 bg-background mx-auto mb-4 h-auto min-h-[580px] w-[calc(100%-32px)] rounded-xl !p-0 md:min-h-[550px] lg:mt-14 lg:mb-10 lg:min-h-[430px] lg:w-[calc(100%-72px)] lg:rounded-3xl">
+      {/* Footer Badge */}
+      <div className="absolute top-6 left-4 lg:top-8 lg:left-8">
+        <div className="inline-flex items-center gap-3 uppercase text-xs tracking-wide opacity-60">
+          <div className="size-2 rounded-full bg-current" />
+          <p className="text-xs uppercase tracking-wide">Footer</p>
+        </div>
+      </div>
+
+      {/* Logo at bottom left - hidden on mobile */}
+      <span className="absolute bottom-4 left-4 hidden md:block lg:bottom-5 lg:left-8">
+        <Logo size={40} />
+      </span>
+
+      {/* Logo at bottom left - mobile only */}
+      <span className="absolute bottom-6 left-4 md:hidden">
+        <Logo size={40} />
+      </span>
+
+      {/* Main Footer Content */}
+      <div className="col-span-full flex h-full flex-col pt-28 pb-8 pl-4 lg:col-span-5 lg:col-start-8 lg:pr-4 lg:pl-0 xl:col-span-4 xl:col-start-9">
+        {/* Footer Links */}
+        <ul className="mb-10 flex flex-wrap gap-x-12 gap-y-8 pr-6 lg:flex-nowrap lg:justify-between lg:gap-x-4 lg:gap-y-0 2xl:max-w-[76%] 2xl:pr-0">
+          {footerSections.map((section) => (
+            <li key={section.title} className="w-fit">
+              <p className="text-foreground text-sm leading-tight mb-3.5">
+                {section.title}
+              </p>
+              <ul className="flex flex-col gap-2.5">
+                {section.links.map((link) => (
+                  <li key={link.label}>
+                    <Link
+                      className="text-sm leading-tight relative flex w-fit items-center transition-colors duration-200 hover:text-orange-500 group after:absolute after:-bottom-px after:left-0 after:h-px after:w-0 after:bg-current after:transition-all after:duration-300 after:ease-in-out hover:after:w-full text-foreground/60"
+                      href={link.href}
+                      {...(link.isExternal && {
+                        rel: "noopener noreferrer",
+                        target: "_blank",
+                      })}
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ul>
+
+        {/* Bottom Section */}
+        <div className="mt-auto -mb-1.5 flex flex-col flex-wrap items-end justify-end gap-x-3 gap-y-1 pr-4 lg:max-w-[90%] lg:flex-row lg:items-center lg:justify-between lg:pr-0">
+          {/* Social Links */}
+          <ul className="flex gap-2">
+            {socialLinks.map((social, index) => (
+              <li key={social.label} className="inline-flex items-center">
+                <Link
+                  className="text-foreground text-sm leading-tight relative flex w-fit items-center transition-colors duration-200 hover:text-orange-500 group after:absolute after:-bottom-px after:left-0 after:h-px after:w-0 after:bg-current after:transition-all after:duration-300 after:ease-in-out hover:after:w-full"
+                  href={social.href}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  {social.label}
+                </Link>
+                {index < socialLinks.length - 1 && (
+                  <span className="text-foreground/50 ml-0.5">,</span>
+                )}
+              </li>
+            ))}
+          </ul>
+
+          {/* Copyright */}
+          <p className="text-foreground text-sm leading-tight">
+            @Factory {year}. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
+};
