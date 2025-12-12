@@ -9,7 +9,7 @@ import { Providers } from "./providers";
 import { siteConfig } from "@/config/site";
 import { fontSans, fontMono } from "@/config/fonts";
 import { Navbar } from "@/components/navbar";
-import { Footer } from "@/components/footer";
+import { NewFooter } from "@/components/new-footer";
 
 export const metadata: Metadata = {
   title: {
@@ -46,7 +46,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <main className="container mx-auto max-w-7xl pt-16 px-6 flex-grow">
               {children}
             </main>
-            <Footer />
+            <NewFooter />
           </div>
         </Providers>
       </body>
