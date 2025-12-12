@@ -32,10 +32,10 @@ export const CharacterProfile = ({ character }: CharacterProfileProps) => {
       {Object.entries(profile).map(([key, value], index) => {
         if (fieldsWithLink.includes(key) && value !== null) {
           return (
-            <p key={index} className="text-sm text-default-600">
+            <p key={index} className="text-sm text-muted">
               {humanizeString(key)}:{" "}
               <Link
-                className="text-foreground hover:underline"
+                className="text-primary hover:text-accent transition-colors"
                 href={`/${key.replace("_", "/")}@${value}`}
               >
                 {value as string}
@@ -46,7 +46,7 @@ export const CharacterProfile = ({ character }: CharacterProfileProps) => {
 
         if (fields.includes(key) && value !== null) {
           return (
-            <p key={index} className="text-sm text-default-600">
+            <p key={index} className="text-sm text-muted">
               {humanizeString(key)}: {value}
             </p>
           );
@@ -54,7 +54,7 @@ export const CharacterProfile = ({ character }: CharacterProfileProps) => {
 
         if (key === "lastModified" && value !== null) {
           return (
-            <p key={index} className="text-sm text-default-600">
+            <p key={index} className="text-sm text-muted">
               {humanizeString(key)}:{" "}
               {new Date(profile.last_modified).toLocaleString("ru-RU")}
             </p>
