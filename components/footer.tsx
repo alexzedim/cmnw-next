@@ -40,8 +40,6 @@ export const Footer = () => {
   ];
 
   const socialLinks = [
-    { label: "X (Twitter)", href: "https://twitter.com" },
-    { label: "LinkedIn", href: "https://linkedin.com" },
     { label: "GitHub", href: "https://github.com/alexzedim/cmnw-next" },
   ];
 
@@ -118,7 +116,7 @@ export const Footer = () => {
 
             {/* Copyright */}
             <p className="text-foreground text-sm leading-tight">
-              ©{year} CMNW. All rights reserved.
+              © {year} CMNW. All rights reserved.
             </p>
           </div>
         </div>
