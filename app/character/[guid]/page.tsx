@@ -8,9 +8,11 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 
-import { CharacterTitle } from "@/components/character-title";
-import { CharacterButtons } from "@/components/character-buttons";
-import { CharacterStats } from "@/components/character/character-stats";
+import {
+  CharacterTitle,
+  CharacterButtons,
+  CharacterStats,
+} from "@/components/character";
 import { LogTable } from "@/components/log-table";
 import { characterPortrait } from "@/lib";
 import { apiClient } from "@/lib/api";
@@ -80,15 +82,26 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
   const portrait = characterPortrait(factionEnum, character.mainImage);
 
   return (
-    <main className="min-h-screen pt-20 pb-8">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <main className="min-h-screen pt-16 pb-12 lg:pt-20 lg:pb-16">
+      <div className="container mx-auto px-4 max-w-7xl">
+        {/* Character Header */}
+        <CharacterTitle
+          faction={factionEnum}
+          guild={character.guild}
+          guildId={character.guildGuid}
+          guildRank={character.guildRank}
+          name={character.name}
+          realm={character.realm}
+        />
+
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
           {/* Left Column - Portrait */}
           <div className="lg:col-span-4">
-            <div className="max-w-md mx-auto">
+            <div className="sticky top-24">
               <div
-                className="relative w-full rounded-xl shadow-2xl overflow-hidden"
-                style={{ minHeight: "70vh" }}
+                className="relative w-full rounded-xl shadow-xl overflow-hidden"
+                style={{ minHeight: "60vh" }}
               >
                 <Image
                   fill
@@ -101,31 +114,19 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
             </div>
           </div>
 
-          {/* Right Column - Title, External Links, and Stats */}
+          {/* Right Column - Stats and External Links */}
           <div className="lg:col-span-8">
-            {/* Character Title */}
-            <CharacterTitle
-              faction={factionEnum}
-              guild={character.guild}
-              guild_id={character.guildGuid}
-              guild_rank={character.guildRank}
-              name={character.name}
-              realm={character.realm}
-            />
-
-            {/* External Links */}
-            <div className="mb-6">
-              <CharacterButtons name={character.name} realm={character.realm} />
-            </div>
-
             {/* Character Stats */}
             <CharacterStats character={character} />
+
+            {/* External Links */}
+            <CharacterButtons name={character.name} realm={character.realm} />
           </div>
         </div>
 
         {/* Logs Section - Full Width */}
         {logs && logs.length > 0 && (
-          <div className="mt-8">
+          <div className="mt-10 lg:mt-12">
             <LogTable logs={logs as any} />
           </div>
         )}

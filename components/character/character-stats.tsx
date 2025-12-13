@@ -2,108 +2,155 @@
 
 import type { Character } from "@/lib/types";
 
-import { getClassColor, getFactionColor } from "@/lib/utils";
+import { InfoSection } from "@/components/character/info-section";
 
 interface CharacterStatsProps {
   character: Character;
 }
 
 export function CharacterStats({ character }: CharacterStatsProps) {
-  const maxItemLevel = 639; // Current max item level for the expansion
+  const maxItemLevel = 639;
   const itemLevelPercent = character.equippedItemLevel
     ? Math.min((character.equippedItemLevel / maxItemLevel) * 100, 100)
     : 0;
 
-  const maxAchievements = 20000; // Approximate max achievement points
+  const maxAchievements = 20000;
   const achievementPercent = character.achievementPoints
     ? Math.min((character.achievementPoints / maxAchievements) * 100, 100)
     : 0;
 
+  // Character Information Items
+  const characterInfoItems = [
+    {
+      label: "Level",
+      value: character.level ?? "Unknown",
+    },
+    ...(character.class ? [{ label: "Class", value: character.class }] : []),
+    ...(character.specialization
+      ? [{ label: "Specialization", value: character.specialization }]
+      : []),
+    ...(character.race ? [{ label: "Race", value: character.race }] : []),
+    ...(character.faction
+      ? [{ label: "Faction", value: character.faction }]
+      : []),
+    ...(character.gender ? [{ label: "Gender", value: character.gender }] : []),
+  ];
+
+  // Additional Profile Items
+  const additionalProfileItems = [
+    ...(character.createdBy
+      ? [{ label: "Created By", value: character.createdBy }]
+      : []),
+    ...(character.createdAt
+      ? [
+          {
+            label: "Created At",
+            value: new Date(character.createdAt).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            }),
+          },
+        ]
+      : []),
+  ];
+
+  // Hash Items (identifiers)
+  const hashItems = [
+    ...(character.hashA ? [{ label: "Hash A", value: character.hashA }] : []),
+    ...(character.hashB ? [{ label: "Hash B", value: character.hashB }] : []),
+    ...(character.hashF ? [{ label: "Hash F", value: character.hashF }] : []),
+  ];
+
+  // ID Items
+  const idItems = [
+    ...(character.uuid ? [{ label: "UUID", value: character.uuid }] : []),
+    ...(character.guid ? [{ label: "GUID", value: character.guid }] : []),
+    ...(character.id ? [{ label: "ID", value: character.id.toString() }] : []),
+  ];
+
+  // Collections Items
+  const collectionsItems = [
+    ...(character.mountsNumber
+      ? [{ label: "Mounts", value: character.mountsNumber }]
+      : []),
+    ...(character.petsNumber
+      ? [{ label: "Battle Pets", value: character.petsNumber }]
+      : []),
+  ];
+
   return (
-    <div className="space-y-4">
-      {/* Main Stats */}
-      <div className="card-surface p-6">
-        <h3 className="text-xl font-semibold">Character Information</h3>
-        <div className="mt-4 space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-muted">Level</span>
-            <span className="chip">{character.level ?? "Unknown"}</span>
-          </div>
-
-          {character.class && (
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-muted">Class</span>
-              <span className="chip">{character.class}</span>
-            </div>
-          )}
-
-          {character.specialization && (
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-muted">Specialization</span>
-              <span className="chip">{character.specialization}</span>
-            </div>
-          )}
-
-          <div className="h-px bg-[var(--border)]" />
-
-          {character.race && (
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-muted">Race</span>
-              <span className="text-sm font-medium">{character.race}</span>
-            </div>
-          )}
-
-          {character.faction && (
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-muted">Faction</span>
-              <span className="chip">{character.faction}</span>
-            </div>
-          )}
-
-          {character.gender && (
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-muted">Gender</span>
-              <span className="text-sm font-medium">{character.gender}</span>
-            </div>
-          )}
-        </div>
-      </div>
+    <div className="space-y-4 lg:space-y-5">
+      {/* Character Information */}
+      {characterInfoItems.length > 0 && (
+        <InfoSection
+          badge="Profile"
+          items={characterInfoItems}
+          title="Character Details"
+        />
+      )}
 
       {/* Item Level */}
-      <div className="card-surface p-6">
-        <h3 className="text-xl font-semibold">Item Level</h3>
-        <div className="mt-4 space-y-3">
-          {character.equippedItemLevel && (
-            <>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted">Equipped</span>
-                <span className="text-lg font-bold">{character.equippedItemLevel}</span>
-              </div>
-              <div className="progress" style={{ ["--value" as any]: `${itemLevelPercent}%` }}>
-                <div className="bar" />
-              </div>
-            </>
-          )}
+      {character.equippedItemLevel && (
+        <div className="card-surface p-6 rounded-xl">
+          <div className="mb-6 flex items-center gap-3">
+            <h3 className="text-lg font-semibold tracking-tight">Item Level</h3>
+            <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider opacity-50">
+              <div className="size-1.5 rounded-full bg-orange-500" />
+              <span>Equipment</span>
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-foreground/60">Equipped</span>
+              <span className="text-lg font-bold text-foreground">
+                {character.equippedItemLevel}
+              </span>
+            </div>
+            <div
+              className="progress"
+              style={{ ["--value" as any]: `${itemLevelPercent}%` }}
+            >
+              <div className="bar" />
+            </div>
+          </div>
 
           {character.averageItemLevel && (
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-muted">Average</span>
-              <span className="text-sm font-medium">{character.averageItemLevel}</span>
+            <div className="mt-3 flex items-center justify-between">
+              <span className="text-sm text-foreground/60">Average</span>
+              <span className="font-medium text-foreground">
+                {character.averageItemLevel}
+              </span>
             </div>
           )}
         </div>
-      </div>
+      )}
 
       {/* Achievements */}
       {character.achievementPoints && (
-        <div className="card-surface p-6">
-          <h3 className="text-xl font-semibold">Achievements</h3>
-          <div className="mt-4 space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-muted">Points</span>
-              <span className="text-lg font-bold">{character.achievementPoints.toLocaleString()}</span>
+        <div className="card-surface p-6 rounded-xl">
+          <div className="mb-6 flex items-center gap-3">
+            <h3 className="text-lg font-semibold tracking-tight">
+              Achievements
+            </h3>
+            <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider opacity-50">
+              <div className="size-1.5 rounded-full bg-orange-500" />
+              <span>Progress</span>
             </div>
-            <div className="progress" style={{ ["--value" as any]: `${achievementPercent}%` }}>
+          </div>
+
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-foreground/60">Total Points</span>
+              <span className="text-lg font-bold text-foreground">
+                {character.achievementPoints.toLocaleString()}
+              </span>
+            </div>
+            <div
+              className="progress"
+              style={{ ["--value" as any]: `${achievementPercent}%` }}
+            >
               <div className="bar" />
             </div>
           </div>
@@ -111,35 +158,46 @@ export function CharacterStats({ character }: CharacterStatsProps) {
       )}
 
       {/* Collections */}
-      {(character.mountsNumber || character.petsNumber) && (
-        <div className="card-surface p-6">
-          <h3 className="text-xl font-semibold">Collections</h3>
-          <div className="mt-4 space-y-3">
-            {character.mountsNumber && (
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted">Mounts</span>
-                <span className="chip">{character.mountsNumber}</span>
-              </div>
-            )}
-            {character.petsNumber && (
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted">Battle Pets</span>
-                <span className="chip">{character.petsNumber}</span>
-              </div>
-            )}
-          </div>
-        </div>
+      {collectionsItems.length > 0 && (
+        <InfoSection
+          badge="Inventory"
+          items={collectionsItems}
+          title="Collections"
+        />
       )}
 
       {/* Covenant */}
       {character.covenantId && (
-        <div className="card-surface p-6">
-          <h3 className="text-xl font-semibold">Covenant</h3>
-          <div className="mt-4">
-            <span className="chip">Covenant ID: {character.covenantId}</span>
-          </div>
-        </div>
+        <InfoSection
+          badge="Bond"
+          items={[{ label: "ID", value: character.covenantId }]}
+          title="Covenant"
+        />
+      )}
+
+      {/* Additional Profile Information */}
+      {additionalProfileItems.length > 0 && (
+        <InfoSection
+          badge="Metadata"
+          items={additionalProfileItems}
+          title="Profile Information"
+        />
+      )}
+
+      {/* Identifiers */}
+      {idItems.length > 0 && (
+        <InfoSection badge="System" items={idItems} title="Identifiers" />
+      )}
+
+      {/* Hashes */}
+      {hashItems.length > 0 && (
+        <InfoSection
+          badge="Verification"
+          divider={false}
+          items={hashItems}
+          title="Character Hashes"
+        />
       )}
     </div>
   );
-};
+}
