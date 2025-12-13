@@ -14,7 +14,6 @@ import {
   CharacterStats,
 } from "@/components/character";
 import { LogTable } from "@/components/log-table";
-import { characterPortrait } from "@/lib";
 import { apiClient } from "@/lib/api";
 import { stringToFaction } from "@/lib/utils/faction-converter";
 
@@ -55,7 +54,6 @@ export async function generateMetadata({
 
   const { character } = data;
   const factionEnum = stringToFaction(character.faction);
-  const portrait = characterPortrait(factionEnum, character.mainImage);
   const title = `CMNW: ${character.name.toLowerCase()}@${character.realm.toLowerCase()}`;
 
   return {
@@ -64,7 +62,7 @@ export async function generateMetadata({
     openGraph: {
       title,
       description: "Character profile and statistics",
-      images: [{ url: portrait }],
+      ...(character.mainImage && { images: [{ url: character.mainImage }] }),
     },
   };
 }
@@ -79,7 +77,6 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
 
   const { character, logs } = data;
   const factionEnum = stringToFaction(character.faction);
-  const portrait = characterPortrait(factionEnum, character.mainImage);
 
   return (
     <main className="min-h-screen pt-16 pb-12 lg:pt-20 lg:pb-16">
@@ -103,13 +100,19 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
                 className="relative w-full rounded-xl shadow-xl overflow-hidden"
                 style={{ minHeight: "60vh" }}
               >
-                <Image
-                  fill
-                  priority
-                  alt={`${character.name} portrait`}
-                  className="object-cover"
-                  src={portrait}
-                />
+                {character.mainImage ? (
+                  <Image
+                    fill
+                    priority
+                    alt={`${character.name} portrait`}
+                    className="object-cover"
+                    src={character.mainImage}
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-foreground/5 to-foreground/10 flex items-center justify-center">
+                    <span className="text-foreground/50 text-sm">No portrait available</span>
+                  </div>
+                )}
               </div>
             </div>
           </div>
