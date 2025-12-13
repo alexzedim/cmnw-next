@@ -46,8 +46,8 @@ export const Footer = () => {
   ];
 
   return (
-    <div className="container mx-auto px-6 my-20">
-      <footer className="relative grid grid-cols-4 gap-x-4 lg:grid-cols-12 lg:gap-x-6 card-surface p-6 h-auto min-h-[580px] rounded-xl md:min-h-[550px] lg:min-h-[430px] lg:rounded-3xl">
+    <div className="container mx-auto px-6 mt-32 mb-20">
+      <footer className="relative grid grid-cols-4 gap-x-4 lg:grid-cols-12 lg:gap-x-6 card-surface p-6 h-auto min-h-[400px] rounded-xl md:min-h-[450px] lg:min-h-[430px] lg:rounded-3xl">
         {/* Footer Badge */}
         <div className="absolute top-6 left-4 lg:top-8 lg:left-8">
           <div className="inline-flex items-center gap-3 uppercase text-xs tracking-wide opacity-60">
@@ -118,7 +118,7 @@ export const Footer = () => {
 
             {/* Copyright */}
             <p className="text-foreground text-sm leading-tight">
-              @CMNW {year}. All rights reserved.
+              ©{year} CMNW. All rights reserved.
             </p>
           </div>
         </div>
