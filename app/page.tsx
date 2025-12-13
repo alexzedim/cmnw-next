@@ -1,4 +1,5 @@
 import { Button } from "@heroui/button";
+
 import { title } from "@/components/primitives";
 import { SearchForm } from "@/components/search-form";
 
@@ -16,8 +17,12 @@ export default function Home() {
 
         {/* CTA row */}
         <div className="flex items-center gap-3">
-          <Button color="primary" className="px-6">Get Started</Button>
-          <Button variant="bordered" className="px-6">Docs</Button>
+          <Button className="px-6" color="primary">
+            Get Started
+          </Button>
+          <Button className="px-6" variant="bordered">
+            Docs
+          </Button>
         </div>
 
         <div className="w-full flex justify-center px-4">

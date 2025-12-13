@@ -1,12 +1,26 @@
 "use client";
 
-import { pick } from "lodash";
-import humanizeString from "humanize-string";
-
 import { Link } from "@/components/custom-link";
 
 interface CharacterProfileProps {
   character: Record<string, any>;
+}
+
+function humanizeString(str: string): string {
+  return str
+    .replace(/([A-Z])/g, " $1")
+    .replace(/_/g, " ")
+    .toLowerCase()
+    .trim()
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
+function pick(obj: Record<string, any>, keys: string[]): Record<string, any> {
+  return Object.fromEntries(
+    keys.filter((key) => key in obj).map((key) => [key, obj[key]])
+  );
 }
 
 export const CharacterProfile = ({ character }: CharacterProfileProps) => {
