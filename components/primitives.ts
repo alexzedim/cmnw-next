@@ -1,7 +1,7 @@
 import { tv } from "tailwind-variants";
 
 export const title = tv({
-  base: "tracking-tight inline font-semibold",
+  base: "tracking-[-0.02em] inline font-semibold",
   variants: {
     color: {
       indigoCyan: "from-[var(--gradient-start)] to-[var(--gradient-end)]",
@@ -29,7 +29,7 @@ export const title = tv({
 });
 
 export const subtitle = tv({
-  base: "w-full md:w-1/2 my-2 text-lg lg:text-xl text-muted block max-w-full",
+  base: "w-full md:w-1/2 my-2 text-lg lg:text-xl text-muted block max-w-full leading-[1.5]",
   variants: {
     fullWidth: {
       true: "!w-full",
@@ -37,5 +37,23 @@ export const subtitle = tv({
   },
   defaultVariants: {
     fullWidth: true,
+  },
+});
+
+export const body = tv({
+  base: "text-base text-foreground leading-[1.6] font-normal",
+  variants: {
+    muted: {
+      true: "text-muted",
+    },
+    size: {
+      sm: "text-sm",
+      md: "text-base",
+      lg: "text-lg",
+    },
+  },
+  defaultVariants: {
+    muted: false,
+    size: "md",
   },
 });
