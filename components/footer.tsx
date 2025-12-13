@@ -49,7 +49,7 @@ export const Footer = () => {
         {/* Footer Badge */}
         <div className="absolute top-6 left-4 lg:top-8 lg:left-8">
           <div className="inline-flex items-center gap-3 uppercase text-xs tracking-wide opacity-60">
-            <div className="size-2 rounded-full bg-current" />
+            <div className="size-2 rounded-full bg-orange-500" />
             <p className="text-xs uppercase tracking-wide">Footer</p>
           </div>
         </div>
