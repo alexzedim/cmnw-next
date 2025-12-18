@@ -25,10 +25,12 @@ type SortDescriptor = {
 const eventClass = (event?: string) => {
   if (!event) return "chip";
   const e = event.toLowerCase();
+
   if (e.includes("join") || e.includes("create")) return "chip";
   if (e.includes("leave") || e.includes("remove")) return "chip";
   if (e.includes("update") || e.includes("change")) return "chip";
   if (e.includes("promotion") || e.includes("rank")) return "chip";
+
   return "chip";
 };
 
@@ -96,7 +98,7 @@ export const LogTable = ({ logs }: LogTableProps) => {
   ];
 
   return (
-    <div id="log-table-root" className="card-surface p-6 m-4 density-compact">
+    <div className="card-surface p-6 m-4 density-compact" id="log-table-root">
       <div className="flex justify-between items-center w-full">
         <h3 className="text-xl font-semibold">Activity Log</h3>
         <div className="text-sm text-muted">
@@ -108,16 +110,18 @@ export const LogTable = ({ logs }: LogTableProps) => {
         <div className="w-full mt-4 flex flex-wrap gap-2 items-center">
           {uniqueEvents.map((event) => {
             const selected = eventFilter.has(event);
+
             return (
               <button
                 key={event}
                 className={`chip ${selected ? "opacity-100" : "opacity-70"}`}
+                type="button"
                 onClick={() => {
                   const next = new Set(eventFilter);
+
                   selected ? next.delete(event) : next.add(event);
                   setEventFilter(next);
                 }}
-                type="button"
               >
                 {event}
               </button>
@@ -126,8 +130,8 @@ export const LogTable = ({ logs }: LogTableProps) => {
           {eventFilter.size > 0 && (
             <button
               className="chip"
-              onClick={() => setEventFilter(new Set())}
               type="button"
+              onClick={() => setEventFilter(new Set())}
             >
               Clear
             </button>
@@ -135,11 +139,12 @@ export const LogTable = ({ logs }: LogTableProps) => {
           <span className="mx-2 text-muted">|</span>
           <button
             className="chip"
-            onClick={() => {
-              const root = document.querySelector('#log-table-root');
-              if (root) root.classList.toggle('density-compact');
-            }}
             type="button"
+            onClick={() => {
+              const root = document.querySelector("#log-table-root");
+
+              if (root) root.classList.toggle("density-compact");
+            }}
           >
             Compact
           </button>
@@ -153,6 +158,7 @@ export const LogTable = ({ logs }: LogTableProps) => {
               {columns.map((c) => (
                 <th
                   key={c.key}
+                  className={c.sortable ? "cursor-pointer select-none" : ""}
                   onClick={() =>
                     c.sortable &&
                     setSortDescriptor(({ column, direction }) => ({
@@ -163,7 +169,6 @@ export const LogTable = ({ logs }: LogTableProps) => {
                           : "ascending",
                     }))
                   }
-                  className={c.sortable ? "cursor-pointer select-none" : ""}
                 >
                   {c.label}
                 </th>
@@ -173,11 +178,25 @@ export const LogTable = ({ logs }: LogTableProps) => {
           <tbody>
             {filteredLogs.map((log) => (
               <tr key={log._id}>
-                <td><span className={eventClass(log.event)}>{log.event || "-"}</span></td>
+                <td>
+                  <span className={eventClass(log.event)}>
+                    {log.event || "-"}
+                  </span>
+                </td>
                 <td>{log.action || "-"}</td>
-                <td><span className="text-sm text-muted">{log.original || "-"}</span></td>
-                <td><span className="text-sm font-medium">{log.updated || "-"}</span></td>
-                <td><span className="text-sm">{formatDate(log.t0)}</span></td>
+                <td>
+                  <span className="text-sm text-muted">
+                    {log.original || "-"}
+                  </span>
+                </td>
+                <td>
+                  <span className="text-sm font-medium">
+                    {log.updated || "-"}
+                  </span>
+                </td>
+                <td>
+                  <span className="text-sm">{formatDate(log.t0)}</span>
+                </td>
               </tr>
             ))}
           </tbody>

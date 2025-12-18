@@ -42,7 +42,9 @@ export const InfoSection = ({
               <span className="text-sm text-foreground/60">{item.label}</span>
               <div className="flex items-center gap-2">
                 {item.icon && <span className="text-sm">{item.icon}</span>}
-                <span className="font-medium text-foreground">{item.value}</span>
+                <span className="font-medium text-foreground">
+                  {item.value}
+                </span>
               </div>
             </div>
             {divider && index < items.length - 1 && (

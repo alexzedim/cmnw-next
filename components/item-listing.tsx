@@ -76,7 +76,7 @@ export const ItemListing = ({
     return (
       <Card className="m-4 bg-background border border-divider">
         <CardBody className="p-8 rounded-xl flex items-center justify-center min-h-[300px] bg-background">
-          <Spinner size="lg" color="warning" />
+          <Spinner color="warning" size="lg" />
         </CardBody>
       </Card>
     );

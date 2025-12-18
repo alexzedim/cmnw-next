@@ -59,14 +59,19 @@ export default async function HashPage({ params }: HashPageProps) {
             Hash: <code className="code-chip">{id}</code>
           </p>
           <p className="text-muted mt-4">
-            Found {characters.length} character{characters.length !== 1 ? "s" : ""} on this account
+            Found {characters.length} character
+            {characters.length !== 1 ? "s" : ""} on this account
           </p>
         </div>
 
         {/* Character Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {characters.map((character) => (
-            <NextLink key={character.guid} href={`/character/${character.guid}`} className="card-surface p-6 block hover:shadow-lg transition-shadow">
+            <NextLink
+              key={character.guid}
+              className="card-surface p-6 block hover:shadow-lg transition-shadow"
+              href={`/character/${character.guid}`}
+            >
               <div className="space-y-3">
                 {/* Character Name */}
                 <div>
@@ -94,7 +99,9 @@ export default async function HashPage({ params }: HashPageProps) {
                   {character.equippedItemLevel && (
                     <div className="flex justify-between">
                       <span className="text-muted">Item Level:</span>
-                      <span className="font-semibold">{character.equippedItemLevel}</span>
+                      <span className="font-semibold">
+                        {character.equippedItemLevel}
+                      </span>
                     </div>
                   )}
                   {character.race && (
@@ -120,7 +127,9 @@ export default async function HashPage({ params }: HashPageProps) {
                       <span className="font-medium">{character.guild}</span>
                       {character.guildRank !== undefined && (
                         <span className="chip ml-2">
-                          {character.guildRank === 0 ? "GM" : `R${character.guildRank}`}
+                          {character.guildRank === 0
+                            ? "GM"
+                            : `R${character.guildRank}`}
                         </span>
                       )}
                     </div>
