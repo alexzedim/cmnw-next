@@ -19,7 +19,7 @@ export default function DiscordPage() {
         rel="noopener noreferrer"
         target="_blank"
       >
-        {'>'} Invite Link
+        {">"} Invite Link
       </a>
     </div>
   );
