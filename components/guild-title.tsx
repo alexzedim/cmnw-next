@@ -1,8 +1,5 @@
 "use client";
 
-import { Card, CardBody, Divider } from "@heroui/react";
-
-import { generateFactionBackground } from "@/lib";
 import { Faction } from "@/lib/types";
 
 interface GuildTitleProps {
@@ -14,6 +11,19 @@ interface GuildTitleProps {
   faction?: Faction;
 }
 
+function getFactionBorderColor(faction?: Faction): string {
+  if (!faction) return "rgb(249, 115, 22)"; // Orange fallback
+
+  const factionColorMap: Record<string, string> = {
+    alliance: "rgb(0, 112, 192)", // Alliance blue
+    horde: "rgb(164, 52, 50)", // Horde red
+  };
+
+  return (
+    factionColorMap[(faction as string).toLowerCase()] || "rgb(249, 115, 22)"
+  );
+}
+
 export const GuildTitle = ({
   name,
   realm,
@@ -22,44 +32,52 @@ export const GuildTitle = ({
   achievement_points,
   faction,
 }: GuildTitleProps) => {
-  const background = generateFactionBackground(faction);
+  const borderColor = getFactionBorderColor(faction);
   const createdDate = new Date(created_timestamp).toLocaleString("en-GB");
 
   return (
-    <Card className="max-w-6xl mx-4 my-8 border border-divider" style={{ background }}>
-      <CardBody
-        className="p-8 rounded-xl"
-        style={{ background }}
-      >
-        <h1
-          className="font-black uppercase text-white break-words"
-          style={{
-            fontFamily: "Fira Sans, sans-serif",
-            fontSize: "clamp(1.3rem, -2.75rem + 16.6667vw, 6rem)",
-            textAlign: "left",
-          }}
-        >
-          #{name}
-        </h1>
+    <div
+      className="card-surface relative p-6 lg:p-8 rounded-xl mb-6 border-l-4 transition-colors duration-200"
+      style={{
+        borderLeftColor: borderColor,
+      }}
+    >
+      {/* Guild Badge */}
+      <div className="mb-5 flex items-center gap-3">
+        <div className="inline-flex items-center gap-2 text-xs uppercase tracking-wider opacity-60">
+          <div className="size-1.5 rounded-full bg-orange-500" />
+          <p>Guild</p>
+        </div>
+      </div>
 
-        <Divider className="my-4 bg-primary" />
+      {/* Guild Name - Using Geist Sans */}
+      <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight mb-3">
+        #{name}
+      </h1>
 
-        <p className="text-white text-sm uppercase">
-          Created: {createdDate} | Members: {member_count} | Achievements:{" "}
-          {achievement_points}
-        </p>
+      {/* Guild Stats */}
+      <div className="mb-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm lg:text-base text-foreground/70">
+        <div className="flex items-baseline gap-2">
+          <span className="text-foreground/50">Members:</span>
+          <span className="font-medium">{member_count.toLocaleString()}</span>
+        </div>
+        <div className="flex items-baseline gap-2">
+          <span className="text-foreground/50">Achievements:</span>
+          <span className="font-medium">
+            {achievement_points.toLocaleString()}
+          </span>
+        </div>
+        <div className="flex items-baseline gap-2">
+          <span className="text-foreground/50">Created:</span>
+          <span className="font-medium">{createdDate}</span>
+        </div>
+      </div>
 
-        <h4
-          className="text-white font-normal break-words mt-2"
-          style={{
-            fontFamily: "Fira Sans, sans-serif",
-            fontSize: "clamp(1.3rem, -2.75rem + 16.6667vw, 4rem)",
-            textAlign: "left",
-          }}
-        >
-          @{realm}
-        </h4>
-      </CardBody>
-    </Card>
+      {/* Realm */}
+      <div className="flex items-baseline gap-2 text-sm lg:text-base text-foreground/70">
+        <span className="text-foreground/50">@</span>
+        <span className="font-medium">{realm.toLowerCase()}</span>
+      </div>
+    </div>
   );
 };
