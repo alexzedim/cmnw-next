@@ -19,12 +19,18 @@ export const Counter = () => {
 
   return (
     <div className="flex items-center gap-2">
-      <button className="btn btn-sm btn-icon btn-ghost" onClick={decrement}>−</button>
+      <button className="btn btn-sm btn-icon btn-ghost" onClick={decrement}>
+        −
+      </button>
       <div className="min-w-20 text-center">
         <span className="text-lg font-semibold">{count}</span>
       </div>
-      <button className="btn btn-sm btn-icon btn-ghost" onClick={increment}>+</button>
-      <button className="btn btn-sm btn-ghost" onClick={reset}>Reset</button>
+      <button className="btn btn-sm btn-icon btn-ghost" onClick={increment}>
+        +
+      </button>
+      <button className="btn btn-sm btn-ghost" onClick={reset}>
+        Reset
+      </button>
     </div>
   );
 };

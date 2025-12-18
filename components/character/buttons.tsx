@@ -55,9 +55,9 @@ export const CharacterButtons = ({ name, realm }: CharacterButtonsProps) => {
         {services.map((service) => (
           <Link
             key={service.name}
+            className="group relative"
             href={service.url}
             prefetch={false}
-            className="group relative"
             title={service.name}
           >
             <Avatar

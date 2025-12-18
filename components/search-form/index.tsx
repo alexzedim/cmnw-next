@@ -106,11 +106,13 @@ export const SearchForm = () => {
 
   const handleSearch = async (query: string = searchQuery) => {
     const trimmedQuery = query.trim();
+
     if (!trimmedQuery) return;
 
     // If a suggestion was explicitly chosen earlier, navigate to it
     if (selectedSuggestion) {
       navigateToSuggestion(selectedSuggestion);
+
       return;
     }
 
@@ -131,6 +133,7 @@ export const SearchForm = () => {
         // Navigate to first result if available
         const firstResult =
           data.characters?.[0] || data.guilds?.[0] || data.items?.[0];
+
         if (firstResult) {
           const suggestion: SearchSuggestion = {
             value:
@@ -143,6 +146,7 @@ export const SearchForm = () => {
                 ? "guild"
                 : "item",
           };
+
           navigateToSuggestion(suggestion);
         }
       }

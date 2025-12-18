@@ -23,25 +23,39 @@ export default function DocsPage() {
             </p>
             <div>
               <h3 className="text-lg font-semibold mb-2">Character Search</h3>
-              <p className="text-muted mb-2">Search for any character by name and realm:</p>
-              <code className="code-chip mb-2 inline-block">CharacterName@RealmName</code>
+              <p className="text-muted mb-2">
+                Search for any character by name and realm:
+              </p>
+              <code className="code-chip mb-2 inline-block">
+                CharacterName@RealmName
+              </code>
               <p className="text-xs text-muted">Example: Arthas@Silvermoon</p>
             </div>
             <div className="mt-4">
               <h3 className="text-lg font-semibold mb-2">Guild Search</h3>
-              <p className="text-muted mb-2">Find guild information and rosters:</p>
-              <code className="code-chip mb-2 inline-block">GuildName@RealmName</code>
+              <p className="text-muted mb-2">
+                Find guild information and rosters:
+              </p>
+              <code className="code-chip mb-2 inline-block">
+                GuildName@RealmName
+              </code>
               <p className="text-xs text-muted">Example: Method@Tarren Mill</p>
             </div>
             <div className="mt-4">
               <h3 className="text-lg font-semibold mb-2">Commodity Search</h3>
-              <p className="text-muted mb-2">Track commodity prices and availability:</p>
-              <code className="code-chip mb-2 inline-block">CommodityName@RealmName</code>
+              <p className="text-muted mb-2">
+                Track commodity prices and availability:
+              </p>
+              <code className="code-chip mb-2 inline-block">
+                CommodityName@RealmName
+              </code>
               <p className="text-xs text-muted">Example: Soul Dust@Draenor</p>
             </div>
             <div className="mt-4">
               <h3 className="text-lg font-semibold mb-2">Gold Prices</h3>
-              <p className="text-muted mb-2">View current gold prices for a specific realm:</p>
+              <p className="text-muted mb-2">
+                View current gold prices for a specific realm:
+              </p>
               <code className="code-chip mb-2 inline-block">@RealmName</code>
               <p className="text-xs text-muted">Example: @Kazzak</p>
             </div>

@@ -110,7 +110,9 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
                   />
                 ) : (
                   <div className="w-full h-full bg-gradient-to-br from-foreground/5 to-foreground/10 flex items-center justify-center">
-                    <span className="text-foreground/50 text-sm">No portrait available</span>
+                    <span className="text-foreground/50 text-sm">
+                      No portrait available
+                    </span>
                   </div>
                 )}
               </div>

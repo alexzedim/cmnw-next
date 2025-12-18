@@ -43,12 +43,18 @@ export default function Error({
             </p>
 
             <div className="flex gap-4 justify-center">
-              <button className="btn btn-primary" onClick={reset}>Try Again</button>
-              <Link className="btn btn-outline" href="/">Go Home</Link>
+              <button className="btn btn-primary" onClick={reset}>
+                Try Again
+              </button>
+              <Link className="btn btn-outline" href="/">
+                Go Home
+              </Link>
             </div>
 
             {error.digest && (
-              <p className="mt-6 text-xs text-muted">Error ID: {error.digest}</p>
+              <p className="mt-6 text-xs text-muted">
+                Error ID: {error.digest}
+              </p>
             )}
           </div>
         </div>

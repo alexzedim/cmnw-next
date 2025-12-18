@@ -17,6 +17,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const url = new URL(`${API_BASE_URL}/api/dma/item/search`);
+
     url.searchParams.set("q", query);
     url.searchParams.set("limit", limit);
 
@@ -30,6 +31,7 @@ export async function GET(request: NextRequest) {
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
+
       return NextResponse.json(
         { error: errorData.message || "Failed to search items" },
         { status: response.status }
@@ -41,6 +43,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(data);
   } catch (error) {
     console.error("Error searching items:", error);
+
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

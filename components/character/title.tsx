@@ -21,8 +21,7 @@ function getFactionBorderColor(faction?: Faction): string {
   };
 
   return (
-    factionColorMap[(faction as string).toLowerCase()] ||
-    "rgb(249, 115, 22)"
+    factionColorMap[(faction as string).toLowerCase()] || "rgb(249, 115, 22)"
   );
 }
 
