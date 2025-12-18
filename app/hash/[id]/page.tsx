@@ -3,9 +3,8 @@ import type { CharactersResponse, HashPageProps } from "@/lib/types";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import NextLink from "next/link";
+
 import { apiClient } from "@/lib/api";
-import { getClassColor } from "@/lib/utils/class-colors";
-import { getFactionColor } from "@/lib/utils/faction-colors";
 
 async function getHashData(hash: string) {
   try {

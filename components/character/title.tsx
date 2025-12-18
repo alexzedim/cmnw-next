@@ -1,7 +1,6 @@
 "use client";
 
 import { Link } from "@/components/custom-link";
-import { generateFactionBackground } from "@/lib";
 import { Faction } from "@/lib/types";
 
 interface CharacterTitleProps {
