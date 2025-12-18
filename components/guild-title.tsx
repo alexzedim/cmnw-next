@@ -52,7 +52,7 @@ export const GuildTitle = ({
 
       {/* Guild Name - Using Geist Sans */}
       <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight mb-3">
-        #{name}
+        # {name}
       </h1>
 
       {/* Guild Stats */}
