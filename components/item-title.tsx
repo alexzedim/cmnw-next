@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardBody, Divider, Avatar } from "@heroui/react";
+import { Card, CardBody, Avatar } from "@heroui/react";
 
 import { generateItemBackground } from "@/lib";
 

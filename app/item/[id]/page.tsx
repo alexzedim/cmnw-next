@@ -2,7 +2,6 @@ import type { itemResponse, ItemPageProps, RealmResponse } from "@/lib/types";
 
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Divider } from "@heroui/react";
 
 import { ItemTitle } from "@/components/item-title";
 import { ItemQuotes } from "@/components/item-quotes";
