@@ -76,6 +76,14 @@ export class ApiClient {
     }
   }
 
+  private logError(error: ApiError | Error, context: string) {
+    console.error(`API Error in ${context}:`, error.message);
+    if (error instanceof ApiError) {
+      console.error("Status Code:", error.statusCode);
+      console.error("Details:", error.details);
+    }
+  }
+
   /**
    * Make a POST request to the API (for future use)
    */
