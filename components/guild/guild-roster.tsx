@@ -18,6 +18,7 @@ import {
 
 import { getClassColor } from "@/lib/utils";
 import { Link } from "@/components/custom-link";
+import { classColors } from "@/constants/class-colors";
 
 interface GuildRosterProps {
   members: Character[];
@@ -98,6 +99,8 @@ export function GuildRoster({ members }: GuildRosterProps) {
     { key: "equippedItemLevel", label: "iLvl", sortable: true },
     { key: "guildRank", label: "Rank", sortable: true },
     { key: "achievementPoints", label: "Achievements", sortable: true },
+    { key: "hashA", label: "Hash A", sortable: false },
+    { key: "hashB", label: "Hash B", sortable: false },
   ];
 
   return (
@@ -138,8 +141,8 @@ export function GuildRoster({ members }: GuildRosterProps) {
         aria-label="Guild roster table"
         classNames={{
           wrapper: "p-0",
-          th: "bg-background border-b border-divider text-foreground font-semibold",
-          td: "text-muted border-b border-divider",
+          th: "bg-background border-b border-divider text-foreground font-semibold font-sans",
+          td: "text-muted border-b border-divider font-sans",
         }}
         sortDescriptor={sortDescriptor}
         onSortChange={(descriptor) =>
@@ -154,54 +157,75 @@ export function GuildRoster({ members }: GuildRosterProps) {
           ))}
         </TableHeader>
         <TableBody>
-          {filteredMembers.map((member) => (
-            <TableRow key={member.guid}>
-              <TableCell>
-                <Link
-                  className="text-primary hover:underline font-medium"
-                  href={`/character/${member.guid}`}
-                >
-                  {member.name}
-                </Link>
-              </TableCell>
-              <TableCell>{member.level || "-"}</TableCell>
-              <TableCell>
-                {member.class ? (
-                  <Chip
-                    color={getClassColor(member.class)}
-                    size="sm"
-                    variant="flat"
+          {filteredMembers.map((member) => {
+            const classColor = member.class
+              ? classColors.get(member.class)
+              : null;
+
+            return (
+              <TableRow key={member.guid}>
+                <TableCell>
+                  <Link
+                    className="hover:underline font-medium transition-colors duration-200"
+                    href={`/character/${member.guid}`}
+                    style={{
+                      color: classColor || "inherit",
+                    }}
                   >
-                    {member.class}
+                    {member.name}
+                  </Link>
+                </TableCell>
+                <TableCell>{member.level || "-"}</TableCell>
+                <TableCell>
+                  {member.class ? (
+                    <Chip
+                      color={getClassColor(member.class)}
+                      size="sm"
+                      variant="flat"
+                    >
+                      {member.class}
+                    </Chip>
+                  ) : (
+                    "-"
+                  )}
+                </TableCell>
+                <TableCell>
+                  <span className="text-sm">
+                    {member.specialization || "-"}
+                  </span>
+                </TableCell>
+                <TableCell>
+                  <span className="font-semibold">
+                    {member.equippedItemLevel || "-"}
+                  </span>
+                </TableCell>
+                <TableCell>
+                  <Chip size="sm" variant="bordered">
+                    {member.guildRank !== undefined && member.guildRank !== null
+                      ? member.guildRank === 0
+                        ? "GM"
+                        : `R${member.guildRank}`
+                      : "-"}
                   </Chip>
-                ) : (
-                  "-"
-                )}
-              </TableCell>
-              <TableCell>
-                <span className="text-sm">{member.specialization || "-"}</span>
-              </TableCell>
-              <TableCell>
-                <span className="font-semibold">
-                  {member.equippedItemLevel || "-"}
-                </span>
-              </TableCell>
-              <TableCell>
-                <Chip size="sm" variant="bordered">
-                  {member.guildRank !== undefined && member.guildRank !== null
-                    ? member.guildRank === 0
-                      ? "GM"
-                      : `R${member.guildRank}`
+                </TableCell>
+                <TableCell>
+                  {member.achievementPoints
+                    ? member.achievementPoints.toLocaleString()
                     : "-"}
-                </Chip>
-              </TableCell>
-              <TableCell>
-                {member.achievementPoints
-                  ? member.achievementPoints.toLocaleString()
-                  : "-"}
-              </TableCell>
-            </TableRow>
-          ))}
+                </TableCell>
+                <TableCell>
+                  <span className="text-xs font-mono text-foreground/60">
+                    {member.hashA || "-"}
+                  </span>
+                </TableCell>
+                <TableCell>
+                  <span className="text-xs font-mono text-foreground/60">
+                    {member.hashB || "-"}
+                  </span>
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </div>
