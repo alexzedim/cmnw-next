@@ -1,11 +1,7 @@
-import { Fira_Code as FontMono, Geist as FontSans } from "next/font/google";
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
 
-export const fontSans = FontSans({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
+// Geist package includes full glyph set with Cyrillic support
+export const fontSans = GeistSans;
 
-export const fontMono = FontMono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-});
+export const fontMono = GeistMono;
