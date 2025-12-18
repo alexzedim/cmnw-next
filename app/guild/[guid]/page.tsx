@@ -15,7 +15,7 @@ import { stringToFaction } from "@/lib/utils/faction-converter";
 
 async function getGuildData(decodedGuid: string) {
   // Encode the decoded GUID before passing to API
-  const guid = encodeURIComponent(decodedGuid);
+  const guid = decodedGuid;
 
   try {
     const [guildResponse, logsResponse] = await Promise.all([
