@@ -37,7 +37,7 @@ export const GuildTitle = ({
 
   return (
     <div
-      className="card-surface relative p-6 lg:p-8 rounded-xl mb-6 border-l-4 transition-colors duration-200"
+      className="card-surface relative p-6 lg:p-8 rounded-xl mb-6 border-l-4 transition-colors duration-200 font-sans"
       style={{
         borderLeftColor: borderColor,
       }}
@@ -46,17 +46,17 @@ export const GuildTitle = ({
       <div className="mb-5 flex items-center gap-3">
         <div className="inline-flex items-center gap-2 text-xs uppercase tracking-wider opacity-60">
           <div className="size-1.5 rounded-full bg-orange-500" />
-          <p>Guild</p>
+          <p className="font-sans">Guild</p>
         </div>
       </div>
 
       {/* Guild Name - Using Geist Sans */}
-      <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight mb-3">
-        # {name}
+      <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight mb-3 font-sans">
+        #{name}
       </h1>
 
       {/* Guild Stats */}
-      <div className="mb-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm lg:text-base text-foreground/70">
+      <div className="mb-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm lg:text-base text-foreground/70 font-sans">
         <div className="flex items-baseline gap-2">
           <span className="text-foreground/50">Members:</span>
           <span className="font-medium">{member_count.toLocaleString()}</span>
@@ -74,7 +74,7 @@ export const GuildTitle = ({
       </div>
 
       {/* Realm */}
-      <div className="flex items-baseline gap-2 text-sm lg:text-base text-foreground/70">
+      <div className="flex items-baseline gap-2 text-sm lg:text-base text-foreground/70 font-sans">
         <span className="text-foreground/50">@</span>
         <span className="font-medium">{realm.toLowerCase()}</span>
       </div>
