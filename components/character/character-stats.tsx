@@ -9,15 +9,17 @@ interface CharacterStatsProps {
 }
 
 export function CharacterStats({ character }: CharacterStatsProps) {
-  const maxItemLevel = 639;
-  const itemLevelPercent = character.equippedItemLevel
-    ? Math.min((character.equippedItemLevel / maxItemLevel) * 100, 100)
-    : 0;
+  // Use global percentiles from API if available, otherwise calculate fallback
+  const itemLevelPercent = character.percentiles?.global?.averageItemLevel ?? 0;
+  const achievementPercent =
+    character.percentiles?.global?.achievementPoints ?? 0;
 
-  const maxAchievements = 20000;
-  const achievementPercent = character.achievementPoints
-    ? Math.min((character.achievementPoints / maxAchievements) * 100, 100)
-    : 0;
+  // Helper to format percentile text
+  const formatPercentile = (value: number | null | undefined) => {
+    if (value === null || value === undefined) return null;
+
+    return `Top ${(100 - value).toFixed(1)}%`;
+  };
 
   // Character Information Items
   const characterInfoItems = [
@@ -69,15 +71,9 @@ export function CharacterStats({ character }: CharacterStatsProps) {
     ...(character.id ? [{ label: "ID", value: character.id.toString() }] : []),
   ];
 
-  // Collections Items with progress bars
-  const maxMounts = 1000; // Approximate maximum collectible mounts
-  const maxPets = 2000; // Approximate maximum collectible battle pets
-  const mountsPercent = character.mountsNumber
-    ? Math.min((character.mountsNumber / maxMounts) * 100, 100)
-    : 0;
-  const petsPercent = character.petsNumber
-    ? Math.min((character.petsNumber / maxPets) * 100, 100)
-    : 0;
+  // Collections percentiles from API
+  const mountsPercent = character.percentiles?.global?.mountsNumber ?? 0;
+  const petsPercent = character.percentiles?.global?.petsNumber ?? 0;
 
   return (
     <div className="space-y-4 lg:space-y-5">
@@ -113,6 +109,11 @@ export function CharacterStats({ character }: CharacterStatsProps) {
             >
               <div className="bar" />
             </div>
+            {formatPercentile(itemLevelPercent) && (
+              <div className="text-xs text-foreground/50 text-right">
+                {formatPercentile(itemLevelPercent)} globally
+              </div>
+            )}
           </div>
 
           {character.averageItemLevel && (
@@ -149,6 +150,11 @@ export function CharacterStats({ character }: CharacterStatsProps) {
             >
               <div className="bar" />
             </div>
+            {formatPercentile(achievementPercent) && (
+              <div className="text-xs text-foreground/50 text-right">
+                {formatPercentile(achievementPercent)} globally
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -179,6 +185,11 @@ export function CharacterStats({ character }: CharacterStatsProps) {
                 >
                   <div className="bar" />
                 </div>
+                {formatPercentile(mountsPercent) && (
+                  <div className="text-xs text-foreground/50 text-right">
+                    {formatPercentile(mountsPercent)} globally
+                  </div>
+                )}
               </div>
             )}
 
@@ -199,6 +210,11 @@ export function CharacterStats({ character }: CharacterStatsProps) {
                 >
                   <div className="bar" />
                 </div>
+                {formatPercentile(petsPercent) && (
+                  <div className="text-xs text-foreground/50 text-right">
+                    {formatPercentile(petsPercent)} globally
+                  </div>
+                )}
               </div>
             )}
           </div>
