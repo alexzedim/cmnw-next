@@ -53,7 +53,6 @@ export async function generateMetadata({
   }
 
   const { character } = data;
-  const factionEnum = stringToFaction(character.faction);
   const title = `CMNW: ${character.name.toLowerCase()}@${character.realm.toLowerCase()}`;
 
   return {
@@ -121,11 +120,11 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
 
           {/* Right Column - Stats and External Links */}
           <div className="lg:col-span-8">
-            {/* Character Stats */}
-            <CharacterStats character={character} />
-
             {/* External Links */}
             <CharacterButtons name={character.name} realm={character.realm} />
+
+            {/* Character Stats */}
+            <CharacterStats character={character} />
           </div>
         </div>
 
