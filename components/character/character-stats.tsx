@@ -36,6 +36,21 @@ export function CharacterStats({ character }: CharacterStatsProps) {
       ? [{ label: "Faction", value: character.faction }]
       : []),
     ...(character.gender ? [{ label: "Gender", value: character.gender }] : []),
+    ...(character.lastModified
+      ? [
+          {
+            label: "Last Time Active",
+            value: new Date(character.lastModified).toLocaleDateString(
+              "en-US",
+              {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              }
+            ),
+          },
+        ]
+      : []),
   ];
 
   // Additional Profile Items
