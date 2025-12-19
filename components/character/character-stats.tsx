@@ -61,14 +61,18 @@ export function CharacterStats({ character }: CharacterStatsProps) {
   const hashItems = [
     ...(character.hashA ? [{ label: "Hash A", value: character.hashA }] : []),
     ...(character.hashB ? [{ label: "Hash B", value: character.hashB }] : []),
-    ...(character.hashF ? [{ label: "Hash F", value: character.hashF }] : []),
   ];
 
-  // ID Items
-  const idItems = [
-    ...(character.uuid ? [{ label: "UUID", value: character.uuid }] : []),
+  // System Items (without UUID)
+  const systemItems = [
     ...(character.guid ? [{ label: "GUID", value: character.guid }] : []),
     ...(character.id ? [{ label: "ID", value: character.id.toString() }] : []),
+  ];
+
+  // Combined Metadata + System Items (without UUID)
+  const combinedMetadataSystemItems = [
+    ...additionalProfileItems,
+    ...systemItems,
   ];
 
   // Collections percentiles from API
