@@ -4,6 +4,21 @@
  */
 
 /**
+ * Percentile data for character statistics
+ */
+export interface CharacterPercentiles {
+  achievementPoints: number | null;
+  averageItemLevel: number | null;
+  mountsNumber: number | null;
+  petsNumber: number | null;
+}
+
+export interface CharacterPercentileData {
+  global: CharacterPercentiles;
+  realm: CharacterPercentiles;
+}
+
+/**
  * Character entity matching CharactersEntity from backend
  */
 export interface Character {
@@ -37,6 +52,7 @@ export interface Character {
   mainImage?: string;
   mountsNumber?: number;
   petsNumber?: number;
+  percentiles?: CharacterPercentileData;
   createdBy?: string;
   updatedBy: string;
   lastModified?: string | Date;
