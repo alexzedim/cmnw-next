@@ -1,5 +1,14 @@
-import { GeistSans } from "geist/font/sans";
-import { GeistMono } from "geist/font/mono";
+import { PT_Mono } from "next/font/google";
 
-// Geist package includes full glyph set with Cyrillic support
-export { GeistSans as fontSans, GeistMono as fontMono };
+// PT Mono has excellent Cyrillic support
+export const fontSans = PT_Mono({
+  subsets: ["latin", "cyrillic"],
+  weight: "400",
+  variable: "--font-sans",
+});
+
+export const fontMono = PT_Mono({
+  subsets: ["latin", "cyrillic"],
+  weight: "400",
+  variable: "--font-mono",
+});
