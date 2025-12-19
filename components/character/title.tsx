@@ -1,6 +1,7 @@
 "use client";
 
 import { Link } from "@/components/custom-link";
+import { GuildRank } from "@/components/character/guild-rank";
 import { Faction } from "@/lib/types";
 
 interface CharacterTitleProps {
@@ -65,11 +66,7 @@ export const CharacterTitle = ({
           >
             {guild}
           </Link>
-          {guildRank !== undefined && (
-            <span className="text-foreground/60 text-xs">
-              · {guildRank === 0 ? "Guild Master" : `Rank ${guildRank}`}
-            </span>
-          )}
+          <GuildRank guildRank={guildRank} />
         </div>
       )}
 
