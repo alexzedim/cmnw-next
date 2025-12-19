@@ -25,7 +25,6 @@ export const InfoSection = ({
     <div className="card-surface p-6 rounded-xl">
       {/* Section Header with Badge */}
       <div className="mb-6 flex items-center gap-3">
-        <h3 className="text-lg font-semibold tracking-tight">{title}</h3>
         {badge && (
           <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider opacity-50">
             <div className="size-1.5 rounded-full bg-orange-500" />
