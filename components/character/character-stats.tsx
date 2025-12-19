@@ -69,15 +69,15 @@ export function CharacterStats({ character }: CharacterStatsProps) {
     ...(character.id ? [{ label: "ID", value: character.id.toString() }] : []),
   ];
 
-  // Collections Items
-  const collectionsItems = [
-    ...(character.mountsNumber
-      ? [{ label: "Mounts", value: character.mountsNumber }]
-      : []),
-    ...(character.petsNumber
-      ? [{ label: "Battle Pets", value: character.petsNumber }]
-      : []),
-  ];
+  // Collections Items with progress bars
+  const maxMounts = 1000; // Approximate maximum collectible mounts
+  const maxPets = 2000; // Approximate maximum collectible battle pets
+  const mountsPercent = character.mountsNumber
+    ? Math.min((character.mountsNumber / maxMounts) * 100, 100)
+    : 0;
+  const petsPercent = character.petsNumber
+    ? Math.min((character.petsNumber / maxPets) * 100, 100)
+    : 0;
 
   return (
     <div className="space-y-4 lg:space-y-5">
@@ -94,7 +94,6 @@ export function CharacterStats({ character }: CharacterStatsProps) {
       {character.equippedItemLevel && (
         <div className="card-surface p-6 rounded-xl">
           <div className="mb-6 flex items-center gap-3">
-            <h3 className="text-lg font-semibold tracking-tight">Item Level</h3>
             <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider opacity-50">
               <div className="size-1.5 rounded-full bg-orange-500" />
               <span>Equipment</span>
@@ -131,12 +130,9 @@ export function CharacterStats({ character }: CharacterStatsProps) {
       {character.achievementPoints && (
         <div className="card-surface p-6 rounded-xl">
           <div className="mb-6 flex items-center gap-3">
-            <h3 className="text-lg font-semibold tracking-tight">
-              Achievements
-            </h3>
             <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider opacity-50">
               <div className="size-1.5 rounded-full bg-orange-500" />
-              <span>Progress</span>
+              <span>Achievement Progress</span>
             </div>
           </div>
 
@@ -158,18 +154,61 @@ export function CharacterStats({ character }: CharacterStatsProps) {
       )}
 
       {/* Collections */}
-      {collectionsItems.length > 0 && (
-        <InfoSection
-          badge="Inventory"
-          items={collectionsItems}
-          title="Collections"
-        />
+      {(character.mountsNumber || character.petsNumber) && (
+        <div className="card-surface p-6 rounded-xl">
+          <div className="mb-6 flex items-center gap-3">
+            <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider opacity-50">
+              <div className="size-1.5 rounded-full bg-orange-500" />
+              <span>Collections</span>
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            {/* Mounts */}
+            {character.mountsNumber && (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-foreground/60">Mounts</span>
+                  <span className="text-lg font-bold text-foreground">
+                    {character.mountsNumber.toLocaleString()}
+                  </span>
+                </div>
+                <div
+                  className="progress"
+                  style={{ ["--value" as any]: `${mountsPercent}%` }}
+                >
+                  <div className="bar" />
+                </div>
+              </div>
+            )}
+
+            {/* Battle Pets */}
+            {character.petsNumber && (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-foreground/60">
+                    Battle Pets
+                  </span>
+                  <span className="text-lg font-bold text-foreground">
+                    {character.petsNumber.toLocaleString()}
+                  </span>
+                </div>
+                <div
+                  className="progress"
+                  style={{ ["--value" as any]: `${petsPercent}%` }}
+                >
+                  <div className="bar" />
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       )}
 
       {/* Covenant */}
       {character.covenantId && (
         <InfoSection
-          badge="Bond"
+          badge="Covenant"
           items={[{ label: "ID", value: character.covenantId }]}
           title="Covenant"
         />
