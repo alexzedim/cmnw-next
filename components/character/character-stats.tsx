@@ -90,6 +90,16 @@ export function CharacterStats({ character }: CharacterStatsProps) {
         />
       )}
 
+      {/* Hashes / Verification */}
+      {hashItems.length > 0 && (
+        <InfoSection
+          badge="Verification"
+          divider={false}
+          items={hashItems}
+          title="Character Hashes"
+        />
+      )}
+
       {/* Item Level */}
       {character.equippedItemLevel && (
         <div className="card-surface p-6 rounded-xl">
@@ -225,36 +235,12 @@ export function CharacterStats({ character }: CharacterStatsProps) {
         </div>
       )}
 
-      {/* Covenant */}
-      {character.covenantId && (
+      {/* Combined Metadata and System Information */}
+      {combinedMetadataSystemItems.length > 0 && (
         <InfoSection
-          badge="Covenant"
-          items={[{ label: "ID", value: character.covenantId }]}
-          title="Covenant"
-        />
-      )}
-
-      {/* Additional Profile Information */}
-      {additionalProfileItems.length > 0 && (
-        <InfoSection
-          badge="Metadata"
-          items={additionalProfileItems}
-          title="Profile Information"
-        />
-      )}
-
-      {/* Identifiers */}
-      {idItems.length > 0 && (
-        <InfoSection badge="System" items={idItems} title="Identifiers" />
-      )}
-
-      {/* Hashes */}
-      {hashItems.length > 0 && (
-        <InfoSection
-          badge="Verification"
-          divider={false}
-          items={hashItems}
-          title="Character Hashes"
+          badge="System"
+          items={combinedMetadataSystemItems}
+          title="Metadata"
         />
       )}
     </div>
