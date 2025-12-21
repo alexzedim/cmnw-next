@@ -1,4 +1,4 @@
-import type { CharactersResponse, HashPageProps } from "@/lib/types";
+import type { CharactersResponse } from "@/lib/types";
 
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -6,12 +6,16 @@ import NextLink from "next/link";
 
 import { apiClient } from "@/lib/api";
 
-async function getHashData(hash: string) {
+interface HashPageProps {
+  params: Promise<{
+    hashType: string;
+    hashQuery: string;
+  }>;
+}
+
+async function getHashData(hashType: string, hashQuery: string) {
   try {
-    // Extract hash type (a or b) and hash query from format like "a@31c2c0ee"
-    const [hashType, hashQuery] = hash.split("@");
-    
-    if (!hashType || !hashQuery || !["a", "b"].includes(hashType)) {
+    if (!["a", "b"].includes(hashType)) {
       return null;
     }
 
@@ -34,8 +38,8 @@ async function getHashData(hash: string) {
 export async function generateMetadata({
   params,
 }: HashPageProps): Promise<Metadata> {
-  const { id } = await params;
-  const title = id.toString().toUpperCase();
+  const { hashType, hashQuery } = await params;
+  const title = `${hashType}@${hashQuery}`.toUpperCase();
 
   return {
     title: `CMNW: ${title}`,
@@ -48,8 +52,8 @@ export async function generateMetadata({
 }
 
 export default async function HashPage({ params }: HashPageProps) {
-  const { id } = await params;
-  const characters = await getHashData(id);
+  const { hashType, hashQuery } = await params;
+  const characters = await getHashData(hashType, hashQuery);
 
   if (!characters) {
     notFound();
@@ -62,7 +66,7 @@ export default async function HashPage({ params }: HashPageProps) {
         <div className="card-surface p-6 mb-8">
           <h1 className="text-3xl font-bold">Account Characters</h1>
           <p className="text-sm text-muted mt-2">
-            Hash: <code className="code-chip">{id}</code>
+            Hash: <code className="code-chip">{hashType}@{hashQuery}</code>
           </p>
           <p className="text-muted mt-4">
             Found {characters.length} character
