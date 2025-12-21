@@ -53,6 +53,8 @@ export async function generateMetadata({
   const { guild, memberCount } = data;
   const title = `CMNW: ${guild.name}@${guild.realm}`;
 
+  console.log(data);
+
   return {
     title,
     description: `Guild profile for ${guild.name} on ${guild.realm}. ${memberCount} members.`,
