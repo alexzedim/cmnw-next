@@ -6,9 +6,5 @@ export const HASH = [
   {
     value: "b",
     label: "B",
-  },
-  {
-    value: "f",
-    label: "F",
-  },
+  }
 ];

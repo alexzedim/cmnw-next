@@ -9,8 +9,7 @@ import { apiClient } from "@/lib/api";
 async function getHashData(hash: string) {
   try {
     const response = await apiClient.get<CharactersResponse>(
-      "/api/osint/character/hash",
-      { hash }
+      `/api/osint/character/hash/${encodeURIComponent(hash)}`
     );
 
     if (!response.characters || response.characters.length === 0) {

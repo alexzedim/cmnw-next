@@ -9,19 +9,19 @@ type ChipColor =
   | "danger";
 
 const CLASS_COLORS: Record<WowClass, ChipColor> = {
-  [WowClass.Warrior]: "danger",
-  [WowClass.Paladin]: "warning",
-  [WowClass.Hunter]: "success",
-  [WowClass.Rogue]: "default",
-  [WowClass.Priest]: "default",
-  [WowClass.DeathKnight]: "danger",
-  [WowClass.Shaman]: "primary",
-  [WowClass.Mage]: "secondary",
-  [WowClass.Warlock]: "secondary",
-  [WowClass.Monk]: "success",
-  [WowClass.Druid]: "success",
-  [WowClass.DemonHunter]: "secondary",
-  [WowClass.Evoker]: "primary",
+  [WowClass.DeathKnight]: "danger", // #C41E3A - red
+  [WowClass.DemonHunter]: "secondary", // #A330C9 - purple
+  [WowClass.Druid]: "warning", // #FF7C0A - orange
+  [WowClass.Hunter]: "success", // #AAD372 - green
+  [WowClass.Mage]: "primary", // #3FC7EB - cyan
+  [WowClass.Monk]: "success", // #00FF98 - bright green
+  [WowClass.Paladin]: "warning", // #F48CBA - pink/rose
+  [WowClass.Priest]: "default", // #cdcdcd - white/gray
+  [WowClass.Rogue]: "warning", // #FFF468 - yellow
+  [WowClass.Shaman]: "primary", // #0070DD - blue
+  [WowClass.Warlock]: "secondary", // #8788EE - purple
+  [WowClass.Warrior]: "warning", // #C69B6D - tan/brown
+  [WowClass.Evoker]: "primary", // Blue tones
 };
 
 export function getClassColor(characterClass?: string): ChipColor {

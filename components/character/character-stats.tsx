@@ -1,6 +1,7 @@
 "use client";
 
 import type { Character } from "@/lib/types";
+import NextLink from "next/link";
 
 import { InfoSection } from "@/components/character/info-section";
 
@@ -74,8 +75,36 @@ export function CharacterStats({ character }: CharacterStatsProps) {
 
   // Hash Items (identifiers)
   const hashItems = [
-    ...(character.hashA ? [{ label: "Hash A", value: character.hashA }] : []),
-    ...(character.hashB ? [{ label: "Hash B", value: character.hashB }] : []),
+    ...(character.hashA
+      ? [
+          {
+            label: "Hash A",
+            value: (
+              <NextLink
+                href={`/hash/a@${character.hashA}`}
+                className="text-orange-500 hover:text-orange-400 transition-colors font-medium"
+              >
+                {character.hashA}
+              </NextLink>
+            ),
+          },
+        ]
+      : []),
+    ...(character.hashB
+      ? [
+          {
+            label: "Hash B",
+            value: (
+              <NextLink
+                href={`/hash/b@${character.hashB}`}
+                className="text-orange-500 hover:text-orange-400 transition-colors font-medium"
+              >
+                {character.hashB}
+              </NextLink>
+            ),
+          },
+        ]
+      : []),
   ];
 
   // System Items (without UUID)
