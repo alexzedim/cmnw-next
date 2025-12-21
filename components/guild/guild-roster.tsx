@@ -14,6 +14,7 @@ import {
   Input,
   Select,
   SelectItem,
+  Pagination,
 } from "@heroui/react";
 
 import { getClassColor } from "@/lib/utils";
@@ -29,6 +30,8 @@ type SortDescriptor = {
   direction: "ascending" | "descending";
 };
 
+const ITEMS_PER_PAGE = 50;
+
 export function GuildRoster({ members }: GuildRosterProps) {
   const [filterValue, setFilterValue] = useState("");
   const [classFilter, setClassFilter] = useState<Set<string>>(new Set([]));
@@ -36,6 +39,7 @@ export function GuildRoster({ members }: GuildRosterProps) {
     column: "name",
     direction: "ascending",
   });
+  const [page, setPage] = useState(1);
 
   // Get unique classes for filter
   const availableClasses = useMemo(() => {
@@ -91,6 +95,21 @@ export function GuildRoster({ members }: GuildRosterProps) {
     return filtered;
   }, [members, filterValue, classFilter, sortDescriptor]);
 
+  // Paginate filtered members
+  const paginatedMembers = useMemo(() => {
+    const start = (page - 1) * ITEMS_PER_PAGE;
+    const end = start + ITEMS_PER_PAGE;
+
+    return filteredMembers.slice(start, end);
+  }, [filteredMembers, page]);
+
+  const totalPages = Math.ceil(filteredMembers.length / ITEMS_PER_PAGE);
+
+  // Reset to first page when filters change
+  useMemo(() => {
+    setPage(1);
+  }, [filterValue, classFilter]);
+
   const columns = [
     { key: "name", label: "Name", sortable: true },
     { key: "level", label: "Level", sortable: true },
@@ -131,7 +150,9 @@ export function GuildRoster({ members }: GuildRosterProps) {
 
         <div className="flex items-center gap-2">
           <span className="text-sm text-muted">
-            {filteredMembers.length} / {members.length} members
+            {paginatedMembers.length} / {filteredMembers.length} shown
+            {filteredMembers.length < members.length &&
+              ` (${filteredMembers.length} / ${members.length} filtered)`}
           </span>
         </div>
       </div>
@@ -157,13 +178,13 @@ export function GuildRoster({ members }: GuildRosterProps) {
           ))}
         </TableHeader>
         <TableBody>
-          {filteredMembers.map((member) => {
+          {paginatedMembers.map((member, index) => {
             const classColor = member.class
               ? classColors.get(member.class)
               : null;
 
             return (
-              <TableRow key={member.guid}>
+              <TableRow key={`${member.uuid}-${index}`}>
                 <TableCell>
                   <Link
                     className="hover:underline font-medium transition-colors duration-200"
@@ -228,6 +249,25 @@ export function GuildRoster({ members }: GuildRosterProps) {
           })}
         </TableBody>
       </Table>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex justify-center">
+          <Pagination
+            isCompact
+            showControls
+            page={page}
+            total={totalPages}
+            onChange={setPage}
+            classNames={{
+              item: "text-black",
+              cursor: "bg-orange-500 text-black",
+              prev: "text-black [&_svg]:text-black",
+              next: "text-black",
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 }
