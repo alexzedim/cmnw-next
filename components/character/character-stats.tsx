@@ -81,7 +81,7 @@ export function CharacterStats({ character }: CharacterStatsProps) {
             label: "Hash A",
             value: (
               <NextLink
-                href={`/hash/a@${character.hashA}`}
+                href={`/a/${character.hashA}`}
                 className="text-orange-500 hover:text-orange-400 transition-colors font-medium"
               >
                 {character.hashA}
@@ -96,7 +96,7 @@ export function CharacterStats({ character }: CharacterStatsProps) {
             label: "Hash B",
             value: (
               <NextLink
-                href={`/hash/b@${character.hashB}`}
+                href={`/b/${character.hashB}`}
                 className="text-orange-500 hover:text-orange-400 transition-colors font-medium"
               >
                 {character.hashB}
