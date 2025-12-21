@@ -8,8 +8,15 @@ import { apiClient } from "@/lib/api";
 
 async function getHashData(hash: string) {
   try {
+    // Extract hash type (a or b) and hash query from format like "a@31c2c0ee"
+    const [hashType, hashQuery] = hash.split("@");
+    
+    if (!hashType || !hashQuery || !["a", "b"].includes(hashType)) {
+      return null;
+    }
+
     const response = await apiClient.get<CharactersResponse>(
-      `/api/osint/character/hash/${encodeURIComponent(hash)}`
+      `/character/hash/${hashType}/${encodeURIComponent(hashQuery)}`
     );
 
     if (!response.characters || response.characters.length === 0) {
