@@ -3,6 +3,21 @@
 import type { Character } from "@/lib/types";
 
 import { useMemo, useState } from "react";
+
+// Convert hex color to pastel by blending with white (50% opacity)
+function getPastelColor(hexColor: string): string {
+  const hex = hexColor.replace("#", "");
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+
+  // Blend with white (255, 255, 255) at 50%
+  const pastelR = Math.round((r + 255) / 2);
+  const pastelG = Math.round((g + 255) / 2);
+  const pastelB = Math.round((b + 255) / 2);
+
+  return `rgb(${pastelR}, ${pastelG}, ${pastelB})`;
+}
 import {
   Table,
   TableHeader,
@@ -36,7 +51,7 @@ export function GuildRoster({ members }: GuildRosterProps) {
   const [filterValue, setFilterValue] = useState("");
   const [classFilter, setClassFilter] = useState<Set<string>>(new Set([]));
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
-    column: "name",
+    column: "guildRank",
     direction: "ascending",
   });
   const [page, setPage] = useState(1);
@@ -112,9 +127,10 @@ export function GuildRoster({ members }: GuildRosterProps) {
 
   const columns = [
     { key: "name", label: "Name", sortable: true },
+    { key: "id", label: "BlizzID", sortable: true },
+    { key: "realmName", label: "Realm", sortable: true },
     { key: "level", label: "Level", sortable: true },
-    { key: "class", label: "Class", sortable: true },
-    { key: "specialization", label: "Spec", sortable: false },
+    { key: "class", label: "Specialization", sortable: true },
     { key: "equippedItemLevel", label: "iLvl", sortable: true },
     { key: "guildRank", label: "Rank", sortable: true },
     { key: "achievementPoints", label: "Achievements", sortable: true },
@@ -196,24 +212,26 @@ export function GuildRoster({ members }: GuildRosterProps) {
                     {member.name}
                   </Link>
                 </TableCell>
+                <TableCell>{member.id || "-"}</TableCell>
+                <TableCell>{member.realmName || "-"}</TableCell>
                 <TableCell>{member.level || "-"}</TableCell>
                 <TableCell>
                   {member.class ? (
                     <Chip
-                      color={getClassColor(member.class)}
                       size="sm"
                       variant="flat"
+                      style={{
+                        backgroundColor: classColor ? getPastelColor(classColor) : "inherit",
+                        color: "#000",
+                      }}
                     >
-                      {member.class}
+                      {member.specialization && member.class
+                        ? `${member.specialization} ${member.class}`
+                        : member.class}
                     </Chip>
                   ) : (
                     "-"
                   )}
-                </TableCell>
-                <TableCell>
-                  <span className="text-sm">
-                    {member.specialization || "-"}
-                  </span>
                 </TableCell>
                 <TableCell>
                   <span className="font-semibold">
