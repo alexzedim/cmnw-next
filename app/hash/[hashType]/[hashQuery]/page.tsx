@@ -68,10 +68,10 @@ export default async function HashPage({ params }: HashPageProps) {
       <div className="container mx-auto px-4">
         {/* Header */}
         <HashAccountTitle
-          hashType={hashType}
-          hashQuery={hashQuery}
           characterCount={characters.length}
           characters={characters}
+          hashQuery={hashQuery}
+          hashType={hashType}
         />
 
         {/* Character Cards Grid */}
