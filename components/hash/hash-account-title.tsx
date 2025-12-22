@@ -67,7 +67,12 @@ export const HashAccountTitle = ({
   // Calculate guild allocation quality based on concentration
   const getGuildAllocationQuality = () => {
     if (guildStats.guildCount === 0) {
-      return { status: "No Guild Data", percentage: 0, color: "text-gray-600", bgColor: "bg-gray-500/10" };
+      return {
+        status: "No Guild Data",
+        percentage: 0,
+        color: "text-gray-600",
+        bgColor: "bg-gray-500/10",
+      };
     }
 
     // Calculate concentration: 100% for 1 guild, decreases as guilds increase
