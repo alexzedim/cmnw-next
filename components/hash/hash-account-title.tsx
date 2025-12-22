@@ -106,7 +106,7 @@ export const HashAccountTitle = ({
         </div>
       </div>
 
-      {/* Guild Security Check */}
+      {/* Guild Characters Allocation Check */}
       {characters && characters.length > 0 && guildStats.guildCount > 0 && (
         <div className="mt-6 px-4 py-3 rounded-lg bg-yellow-500/10">
           <div className="text-sm font-medium text-yellow-600">
