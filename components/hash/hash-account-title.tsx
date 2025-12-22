@@ -92,7 +92,7 @@ export const HashAccountTitle = ({
         <div className="text-xs text-foreground/60 mt-1">
           {isGoodMatch
             ? `This account has ${characterCount} character${characterCount !== 1 ? "s" : ""}`
-            : `This hash value is shared by ${characterCount} characters from different accounts`}
+            : `This hash value is too common and shared by ${characterCount} characters from different accounts`}
         </div>
       </div>
 
