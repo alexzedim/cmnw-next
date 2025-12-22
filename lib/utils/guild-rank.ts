@@ -1,7 +1,12 @@
 export function getGuildRankDisplay(
-  guildRank: number | undefined
+  guildRank: number | undefined | null
 ): { symbol: string; text: string; isBold?: boolean } | null {
-  if (guildRank === undefined) return null;
+  if (guildRank === undefined || guildRank === null) {
+    return {
+      symbol: "•",
+      text: "Rank u/r",
+    };
+  }
 
   switch (guildRank) {
     case 0:
