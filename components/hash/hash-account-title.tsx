@@ -48,11 +48,11 @@ export const HashAccountTitle = ({
   const displayHash = `${hashType}@${hashQuery}`.toUpperCase();
 
   // Determine match quality based on character count
-  const isGoodMatch = characterCount <= 65;
+  const isPrecisionMatch = characterCount <= 65;
   const otherHashType = hashType === "a" ? "b" : "a";
-  const matchQuality = isGoodMatch
+  const matchQuality = isPrecisionMatch
     ? {
-        text: "Good Match",
+        text: "Precision Match",
         color: "text-green-500",
         bgColor: "bg-green-500/10",
         suggestion: `Try Hash ${otherHashType.toUpperCase()} for more precise match`,
@@ -163,11 +163,11 @@ export const HashAccountTitle = ({
         </div>
         <div className="text-xs text-foreground/60 mt-2 space-y-1">
           <div>
-            {isGoodMatch
+            {isPrecisionMatch
               ? `This account has ${characterCount} character${characterCount !== 1 ? "s" : ""}`
               : `This hash value is shared by ${characterCount} characters from different accounts`}
           </div>
-          {isGoodMatch && (
+          {!isPrecisionMatch && (
             <div className="italic text-foreground/50">
               {matchQuality.suggestion}
             </div>
