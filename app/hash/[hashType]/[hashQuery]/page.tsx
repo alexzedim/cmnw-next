@@ -100,7 +100,14 @@ export default async function HashPage({ params }: HashPageProps) {
               <div className="space-y-3">
                 {/* Character Name */}
                 <div>
-                  <h3 className="text-xl font-semibold">{character.name}</h3>
+                  <h3
+                    className="text-xl font-semibold"
+                    style={{
+                      color: classColor || "inherit",
+                    }}
+                  >
+                    {character.name}
+                  </h3>
                   <p className="text-sm text-muted">@{character.realm}</p>
                 </div>
 
