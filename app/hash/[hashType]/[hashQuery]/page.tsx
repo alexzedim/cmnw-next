@@ -8,6 +8,7 @@ import { apiClient } from "@/lib/api";
 import { classColors } from "@/constants/class-colors";
 import { getPastelColor, getFactionBorderColor } from "@/lib/utils/color";
 import { getGuildRankDisplay } from "@/lib/utils/guild-rank";
+import { HashAccountTitle } from "@/components/hash/hash-account-title";
 
 interface HashPageProps {
   params: Promise<{
@@ -66,19 +67,11 @@ export default async function HashPage({ params }: HashPageProps) {
     <main className="min-h-screen pt-20 pb-8">
       <div className="container mx-auto px-4">
         {/* Header */}
-        <div className="card-surface p-6 mb-8">
-          <h1 className="text-3xl font-bold">Account Characters</h1>
-          <p className="text-sm text-muted mt-2">
-            Hash:{" "}
-            <code className="code-chip">
-              {hashType}@{hashQuery}
-            </code>
-          </p>
-          <p className="text-muted mt-4">
-            Found {characters.length} character
-            {characters.length !== 1 ? "s" : ""} on this account
-          </p>
-        </div>
+        <HashAccountTitle
+          characterCount={characters.length}
+          hashQuery={hashQuery}
+          hashType={hashType}
+        />
 
         {/* Character Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
