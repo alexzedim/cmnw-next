@@ -1,6 +1,6 @@
 // Simplified background gradients (CSS strings) for faction and item quality backgrounds
 // Used by generateFactionBackground and generateItemBackground utility functions
-export const backgroundGradients = [
+export const gradientColors = [
   // Alliance colors (0-4)
   "linear-gradient(135deg, #667eea 0%, #764ba2 100%)", // Alliance purple 1
   "linear-gradient(135deg, #5f72bd 0%, #9b23ea 100%)", // Alliance purple 2
