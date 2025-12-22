@@ -76,8 +76,16 @@ export const HashAccountTitle = ({
 
       {/* Header Title */}
       <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight mb-3">
-        Hash: {displayHash}
+        Account Characters
       </h1>
+
+      {/* Hash Info */}
+      <div className="mb-3 flex items-baseline gap-2 text-sm lg:text-base">
+        <span className="text-foreground/50">Hash:</span>
+        <span className="font-mono font-medium text-foreground/80 tracking-wider">
+          {displayHash}
+        </span>
+      </div>
 
       {/* Character Count */}
       <div className="flex items-baseline gap-2 text-sm lg:text-base text-foreground/70">
@@ -96,11 +104,14 @@ export const HashAccountTitle = ({
           <div>
             {isGoodMatch
               ? `This account has ${characterCount} character${characterCount !== 1 ? "s" : ""}`
-              : `This hash value is shared by ${characterCount} characters from different accounts`}{" | "}
-            {matchQuality.suggestion}
+              : `This hash value is shared by ${characterCount} characters from different accounts`}
           </div>
+          {isGoodMatch && (
+            <div className="italic text-foreground/50">
+              {matchQuality.suggestion}
+            </div>
+          )}
         </div>
-      </div>
 
       {/* Guild Security Check */}
       {characters && characters.length > 0 && guildStats.guildCount > 0 && (
