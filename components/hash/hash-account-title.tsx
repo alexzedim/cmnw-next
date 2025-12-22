@@ -1,7 +1,5 @@
 "use client";
 
-import { getFactionBorderColor } from "@/lib/utils/color";
-
 interface HashAccountTitleProps {
   hashType: string;
   hashQuery: string;
@@ -15,13 +13,30 @@ export const HashAccountTitle = ({
 }: HashAccountTitleProps) => {
   const displayHash = `${hashType}@${hashQuery}`.toUpperCase();
 
+  // Determine match quality based on character count
+  const isGoodMatch = characterCount === 65;
+  const isPrecise = characterCount <= 65;
+  const matchQuality = isGoodMatch
+    ? { text: "Perfect Match", color: "text-green-500", bgColor: "bg-green-500/10" }
+    : isPrecise
+      ? {
+          text: "Good Match",
+          color: "text-blue-500",
+          bgColor: "bg-blue-500/10",
+        }
+      : {
+          text: "Match Not Precise",
+          color: "text-red-500",
+          bgColor: "bg-red-500/10",
+        };
+
   return (
     <div className="card-surface p-6 lg:p-8 rounded-xl mb-6">
       {/* Account Badge */}
       <div className="mb-5 flex items-center gap-3">
         <div className="inline-flex items-center gap-2 text-xs uppercase tracking-wider opacity-60">
           <div className="size-1.5 rounded-full bg-orange-500" />
-          <p>Account</p>
+          <p>Account Characters Detective</p>
         </div>
       </div>
 
@@ -44,6 +59,20 @@ export const HashAccountTitle = ({
         <span className="font-medium">
           {characterCount} character{characterCount !== 1 ? "s" : ""}
         </span>
+      </div>
+
+      {/* Match Quality */}
+      <div className={`mt-4 px-4 py-3 rounded-lg ${matchQuality.bgColor}`}>
+        <div className={`text-sm font-medium ${matchQuality.color}`}>
+          {matchQuality.text}
+        </div>
+        <div className="text-xs text-foreground/60 mt-1">
+          {isGoodMatch
+            ? "This account has exactly 65 characters"
+            : isPrecise
+              ? `This account has ${characterCount} character${characterCount !== 1 ? "s" : ""}`
+              : `This account has ${characterCount} characters, which is more than the typical 65`}
+        </div>
       </div>
     </div>
   );
