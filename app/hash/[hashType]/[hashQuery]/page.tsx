@@ -166,7 +166,7 @@ export default async function HashPage({ params }: HashPageProps) {
                     <div className="text-sm">
                       <span className="text-muted">Guild: </span>
                       <span className="font-medium">{character.guild}</span>
-                      {character.guildRank !== undefined && (() => {
+                      {(() => {
                         const rankDisplay = getGuildRankDisplay(character.guildRank);
                         return rankDisplay ? (
                           <span
