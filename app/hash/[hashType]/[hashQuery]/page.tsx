@@ -5,6 +5,8 @@ import { notFound } from "next/navigation";
 import NextLink from "next/link";
 
 import { apiClient } from "@/lib/api";
+import { classColors } from "@/constants/class-colors";
+import { getPastelColor, getFactionBorderColor } from "@/lib/utils/color";
 
 interface HashPageProps {
   params: Promise<{
@@ -79,10 +81,19 @@ export default async function HashPage({ params }: HashPageProps) {
 
         {/* Character Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {characters.map((character) => (
+          {characters.map((character) => {
+            const classColor = character.class
+              ? classColors.get(character.class)
+              : null;
+            const factionColor = getFactionBorderColor(character.faction);
+
+            return (
             <NextLink
               key={character.guid}
-              className="card-surface p-6 block hover:shadow-lg transition-shadow"
+              className="card-surface p-6 block hover:shadow-lg transition-shadow border-l-4"
+              style={{
+                borderLeftColor: factionColor,
+              }}
               href={`/character/${character.guid}`}
             >
               <div className="space-y-3">
@@ -100,10 +111,26 @@ export default async function HashPage({ params }: HashPageProps) {
                     <span className="chip">Level {character.level}</span>
                   )}
                   {character.class && (
-                    <span className="chip">{character.class}</span>
+                    <span
+                      className="chip"
+                      style={{
+                        backgroundColor: classColor ? getPastelColor(classColor) : "inherit",
+                        color: "#000",
+                      }}
+                    >
+                      {character.class}
+                    </span>
                   )}
                   {character.faction && (
-                    <span className="chip">{character.faction}</span>
+                    <span
+                      className="chip"
+                      style={{
+                        borderColor: factionColor,
+                        borderWidth: "1px",
+                      }}
+                    >
+                      {character.faction}
+                    </span>
                   )}
                 </div>
 
@@ -150,7 +177,8 @@ export default async function HashPage({ params }: HashPageProps) {
                 )}
               </div>
             </NextLink>
-          ))}
+            );
+          })}
         </div>
       </div>
     </main>
