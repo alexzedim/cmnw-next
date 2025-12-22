@@ -64,57 +64,60 @@ export const HashAccountTitle = ({
         suggestion: `Try Hash ${otherHashType.toUpperCase()} for more precise match`,
       };
 
-  // Calculate guild allocation quality based on concentration
+  // Calculate guild allocation quality based on character concentration
   const getGuildAllocationQuality = () => {
-    if (guildStats.guildCount === 0) {
-      return {
-        status: "No Guild Data",
-        percentage: 0,
-        color: "text-gray-600",
-        bgColor: "bg-gray-500/10",
-      };
+    if (guildStats.guildCount === 0 || characterCount === 0) {
+      return { status: "No Guild Data", percentage: 0, color: "text-gray-600", bgColor: "bg-gray-500/10" };
     }
 
-    // Calculate concentration: 100% for 1 guild, decreases as guilds increase
-    // Formula: percentage = max(0, 100 - (guildCount - 1) * 10)
-    const basePercentage = Math.max(0, 100 - (guildStats.guildCount - 1) * 15);
+    // Calculate concentration: find the largest guild and calculate what % of characters are there
+    let maxCharactersInGuild = 0;
+    guildStats.rankMap.forEach((ranks) => {
+      const totalInGuild = Array.from(ranks.values()).reduce((a, b) => a + b, 0);
+      maxCharactersInGuild = Math.max(maxCharactersInGuild, totalInGuild);
+    });
 
-    if (basePercentage >= 95) {
+    // Percentage of characters in the largest guild
+    const concentrationPercentage = Math.round(
+      (maxCharactersInGuild / characterCount) * 100
+    );
+
+    if (concentrationPercentage >= 95) {
       return {
         status: "Excellent",
-        percentage: 100,
+        percentage: concentrationPercentage,
         color: "text-emerald-600",
         bgColor: "bg-emerald-500/10",
       };
     }
-    if (basePercentage >= 85) {
+    if (concentrationPercentage >= 85) {
       return {
         status: "Very Good",
-        percentage: 85,
+        percentage: concentrationPercentage,
         color: "text-green-600",
         bgColor: "bg-green-500/10",
       };
     }
-    if (basePercentage >= 65) {
+    if (concentrationPercentage >= 70) {
       return {
         status: "Good",
-        percentage: 70,
+        percentage: concentrationPercentage,
         color: "text-lime-600",
         bgColor: "bg-lime-500/10",
       };
     }
-    if (basePercentage >= 50) {
+    if (concentrationPercentage >= 50) {
       return {
         status: "Moderate",
-        percentage: 50,
+        percentage: concentrationPercentage,
         color: "text-yellow-600",
         bgColor: "bg-yellow-500/10",
       };
     }
-    if (basePercentage >= 30) {
+    if (concentrationPercentage >= 30) {
       return {
         status: "Concerning",
-        percentage: 35,
+        percentage: concentrationPercentage,
         color: "text-orange-600",
         bgColor: "bg-orange-500/10",
       };
@@ -122,6 +125,11 @@ export const HashAccountTitle = ({
 
     return {
       status: "Spread Out",
+      percentage: concentrationPercentage,
+      color: "text-red-600",
+      bgColor: "bg-red-500/10",
+    };
+  };
       percentage: 20,
       color: "text-red-600",
       bgColor: "bg-red-500/10",
@@ -175,8 +183,9 @@ export const HashAccountTitle = ({
       {/* Guild Characters Allocation Check */}
       {characters && characters.length > 0 && guildStats.guildCount > 0 && (
         <div className={`mt-6 px-4 py-3 rounded-lg ${guildQuality.bgColor}`}>
-        <div className={`text-sm font-medium ${guildQuality.color}`}>
-            Guild Characters Allocation Check - {guildQuality.status} ({guildQuality.percentage}%)
+          <div className={`text-sm font-medium ${guildQuality.color}`}>
+            Guild Characters Allocation Check - {guildQuality.status} (
+            {guildQuality.percentage}%)
           </div>
           <div className="text-xs text-foreground/60 mt-2">
             <div className="mb-3">
