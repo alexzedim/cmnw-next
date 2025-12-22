@@ -1,6 +1,7 @@
 "use client";
 
 import type { Character } from "@/lib/types";
+
 import NextLink from "next/link";
 
 import { InfoSection } from "@/components/character/info-section";
@@ -81,8 +82,8 @@ export function CharacterStats({ character }: CharacterStatsProps) {
             label: "Hash A",
             value: (
               <NextLink
-                href={`/a/${character.hashA}`}
                 className="text-orange-500 hover:text-orange-400 transition-colors font-medium"
+                href={`/hash/a/${character.hashA}`}
               >
                 {character.hashA}
               </NextLink>
@@ -96,8 +97,8 @@ export function CharacterStats({ character }: CharacterStatsProps) {
             label: "Hash B",
             value: (
               <NextLink
-                href={`/b/${character.hashB}`}
                 className="text-orange-500 hover:text-orange-400 transition-colors font-medium"
+                href={`/hash/b/${character.hashB}`}
               >
                 {character.hashB}
               </NextLink>

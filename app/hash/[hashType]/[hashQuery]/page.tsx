@@ -20,7 +20,7 @@ async function getHashData(hashType: string, hashQuery: string) {
     }
 
     const response = await apiClient.get<CharactersResponse>(
-      `/character/hash/${hashType}/${encodeURIComponent(hashQuery)}`
+      `/api/osint/character/hash/${hashType}/${encodeURIComponent(hashQuery)}`
     );
 
     if (!response.characters || response.characters.length === 0) {
@@ -66,7 +66,10 @@ export default async function HashPage({ params }: HashPageProps) {
         <div className="card-surface p-6 mb-8">
           <h1 className="text-3xl font-bold">Account Characters</h1>
           <p className="text-sm text-muted mt-2">
-            Hash: <code className="code-chip">{hashType}@{hashQuery}</code>
+            Hash:{" "}
+            <code className="code-chip">
+              {hashType}@{hashQuery}
+            </code>
           </p>
           <p className="text-muted mt-4">
             Found {characters.length} character
