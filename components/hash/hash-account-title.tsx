@@ -64,31 +64,66 @@ export const HashAccountTitle = ({
         suggestion: `Try Hash ${otherHashType.toUpperCase()} for more precise match`,
       };
 
-  // Determine guild allocation quality based on unique guild count
-  const getGuildAllocationQuality = (guildCount: number) => {
-    if (guildCount <= 2) {
+  // Calculate guild allocation quality based on concentration
+  const getGuildAllocationQuality = () => {
+    if (guildStats.guildCount === 0) {
+      return { status: "No Guild Data", percentage: 0, color: "text-gray-600", bgColor: "bg-gray-500/10" };
+    }
+
+    // Calculate concentration: 100% for 1 guild, decreases as guilds increase
+    // Formula: percentage = max(0, 100 - (guildCount - 1) * 10)
+    const basePercentage = Math.max(0, 100 - (guildStats.guildCount - 1) * 15);
+
+    if (basePercentage >= 95) {
       return {
-        status: "Good",
+        status: "Excellent",
+        percentage: 100,
+        color: "text-emerald-600",
+        bgColor: "bg-emerald-500/10",
+      };
+    }
+    if (basePercentage >= 85) {
+      return {
+        status: "Very Good",
+        percentage: 85,
         color: "text-green-600",
         bgColor: "bg-green-500/10",
       };
     }
-    if (guildCount === 3) {
+    if (basePercentage >= 65) {
       return {
-        status: "Okay",
+        status: "Good",
+        percentage: 70,
+        color: "text-lime-600",
+        bgColor: "bg-lime-500/10",
+      };
+    }
+    if (basePercentage >= 50) {
+      return {
+        status: "Moderate",
+        percentage: 50,
         color: "text-yellow-600",
         bgColor: "bg-yellow-500/10",
+      };
+    }
+    if (basePercentage >= 30) {
+      return {
+        status: "Concerning",
+        percentage: 35,
+        color: "text-orange-600",
+        bgColor: "bg-orange-500/10",
       };
     }
 
     return {
       status: "Spread Out",
+      percentage: 20,
       color: "text-red-600",
       bgColor: "bg-red-500/10",
     };
   };
 
-  const guildQuality = getGuildAllocationQuality(guildStats.guildCount);
+  const guildQuality = getGuildAllocationQuality();
 
   return (
     <div className="card-surface p-6 lg:p-8 rounded-xl mb-6">
@@ -143,8 +178,8 @@ export const HashAccountTitle = ({
       {/* Guild Characters Allocation Check */}
       {characters && characters.length > 0 && guildStats.guildCount > 0 && (
         <div className={`mt-6 px-4 py-3 rounded-lg ${guildQuality.bgColor}`}>
-          <div className={`text-sm font-medium ${guildQuality.color}`}>
-            Guild Characters Allocation Check - {guildQuality.status}
+        <div className={`text-sm font-medium ${guildQuality.color}`}>
+            Guild Characters Allocation Check - {guildQuality.status} ({guildQuality.percentage}%)
           </div>
           <div className="text-xs text-foreground/60 mt-2">
             <div className="mb-3">
