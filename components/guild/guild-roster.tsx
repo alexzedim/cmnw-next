@@ -253,14 +253,28 @@ export function GuildRoster({ members }: GuildRosterProps) {
                     : "-"}
                 </TableCell>
                 <TableCell>
-                  <span className="text-xs font-mono text-foreground/60">
-                    {member.hashA || "-"}
-                  </span>
+                  {member.hashA ? (
+                    <Link
+                      className="text-xs font-mono text-orange-500 hover:text-orange-400 transition-colors font-medium"
+                      href={`/hash/a/${member.hashA}`}
+                    >
+                      {member.hashA}
+                    </Link>
+                  ) : (
+                    <span className="text-xs font-mono text-foreground/60">-</span>
+                  )}
                 </TableCell>
                 <TableCell>
-                  <span className="text-xs font-mono text-foreground/60">
-                    {member.hashB || "-"}
-                  </span>
+                  {member.hashB ? (
+                    <Link
+                      className="text-xs font-mono text-orange-500 hover:text-orange-400 transition-colors font-medium"
+                      href={`/hash/b/${member.hashB}`}
+                    >
+                      {member.hashB}
+                    </Link>
+                  ) : (
+                    <span className="text-xs font-mono text-foreground/60">-</span>
+                  )}
                 </TableCell>
               </TableRow>
             );
