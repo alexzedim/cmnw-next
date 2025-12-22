@@ -1,6 +1,6 @@
 import { ItemQuality } from "../types";
 
-import { backgroundGradients } from "@/constants/background-gradients";
+import { gradientColors } from "@/constants/gradient-colors";
 
 export const generateItemBackground = (props: {
   quality?: string;
@@ -26,5 +26,5 @@ export const generateItemBackground = (props: {
       index = 17;
   }
 
-  return backgroundGradients[index];
+  return gradientColors[index];
 };

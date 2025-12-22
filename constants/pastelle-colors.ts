@@ -1,4 +1,4 @@
-export const backgroundColors = [
+export const pastelleColors = [
   // Alliance
   {
     backgroundColor: "#8EC5FC",

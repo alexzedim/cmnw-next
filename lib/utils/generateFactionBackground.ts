@@ -2,7 +2,7 @@ import { Faction } from "../types";
 
 import { randomInt } from "./randomInt";
 
-import { backgroundGradients } from "@/constants/background-gradients";
+import { gradientColors } from "@/constants/gradient-colors";
 
 export const generateFactionBackground = (faction?: Faction) => {
   let min = 0;
@@ -14,5 +14,5 @@ export const generateFactionBackground = (faction?: Faction) => {
   }
   const index = randomInt(min, max);
 
-  return backgroundGradients[index];
+  return gradientColors[index];
 };
