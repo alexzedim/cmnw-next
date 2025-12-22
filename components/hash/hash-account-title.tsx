@@ -18,7 +18,10 @@ export const HashAccountTitle = ({
   // Calculate guild security stats
   const guildStats = (() => {
     if (!characters || characters.length === 0) {
-      return { guildCount: 0, rankMap: new Map<string, Map<number | null, number>>() };
+      return {
+        guildCount: 0,
+        rankMap: new Map<string, Map<number | null, number>>(),
+      };
     }
 
     const rankMap = new Map<string, Map<number | null, number>>();
@@ -35,6 +38,7 @@ export const HashAccountTitle = ({
         }
 
         const ranks = rankMap.get(guildName)!;
+
         ranks.set(rank, (ranks.get(rank) ?? 0) + 1);
       }
     });
@@ -100,28 +104,40 @@ export const HashAccountTitle = ({
           </div>
           <div className="text-xs text-foreground/60 mt-2">
             <div className="mb-3">
-              Account spread across <span className="font-medium text-foreground">{guildStats.guildCount}</span> unique guild{guildStats.guildCount !== 1 ? "s" : ""}
+              Account spread across{" "}
+              <span className="font-medium text-foreground">
+                {guildStats.guildCount}
+              </span>{" "}
+              unique guild{guildStats.guildCount !== 1 ? "s" : ""}
             </div>
             <div className="space-y-2">
-              {Array.from(guildStats.rankMap.entries()).map(([guildName, ranks]) => {
-                const totalInGuild = Array.from(ranks.values()).reduce((a, b) => a + b, 0);
-                return (
-                  <div key={guildName} className="text-xs">
-                    <div className="font-medium text-foreground mb-1">
-                      {guildName} ({totalInGuild})
+              {Array.from(guildStats.rankMap.entries()).map(
+                ([guildName, ranks]) => {
+                  const totalInGuild = Array.from(ranks.values()).reduce(
+                    (a, b) => a + b,
+                    0
+                  );
+
+                  return (
+                    <div key={guildName} className="text-xs">
+                      <div className="font-medium text-foreground mb-1">
+                        {guildName} ({totalInGuild})
+                      </div>
+                      <div className="ml-2 space-y-1 text-foreground/70">
+                        {Array.from(ranks.entries())
+                          .sort((a, b) => (a[0] ?? 999) - (b[0] ?? 999))
+                          .map(([rank, count]) => (
+                            <div key={rank === null ? "unranked" : rank}>
+                              Rank{" "}
+                              {rank === 0 ? "GM" : rank === null ? "u/r" : rank}
+                              : {count} character{count !== 1 ? "s" : ""}
+                            </div>
+                          ))}
+                      </div>
                     </div>
-                    <div className="ml-2 space-y-1 text-foreground/70">
-                      {Array.from(ranks.entries())
-                        .sort((a, b) => (a[0] ?? 999) - (b[0] ?? 999))
-                        .map(([rank, count]) => (
-                          <div key={rank === null ? "unranked" : rank}>
-                            Rank {rank === 0 ? "GM" : rank === null ? "u/r" : rank}: {count} character{count !== 1 ? "s" : ""}
-                          </div>
-                        ))}
-                    </div>
-                  </div>
-                );
-              })}
+                  );
+                }
+              )}
             </div>
           </div>
         </div>
