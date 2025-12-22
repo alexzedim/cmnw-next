@@ -64,6 +64,32 @@ export const HashAccountTitle = ({
         suggestion: `Try Hash ${otherHashType.toUpperCase()} for more precise match`,
       };
 
+  // Determine guild allocation quality based on unique guild count
+  const getGuildAllocationQuality = (guildCount: number) => {
+    if (guildCount <= 2) {
+      return {
+        status: "Good",
+        color: "text-green-600",
+        bgColor: "bg-green-500/10",
+      };
+    }
+    if (guildCount === 3) {
+      return {
+        status: "Okay",
+        color: "text-yellow-600",
+        bgColor: "bg-yellow-500/10",
+      };
+    }
+
+    return {
+      status: "Spread Out",
+      color: "text-red-600",
+      bgColor: "bg-red-500/10",
+    };
+  };
+
+  const guildQuality = getGuildAllocationQuality(guildStats.guildCount);
+
   return (
     <div className="card-surface p-6 lg:p-8 rounded-xl mb-6">
       {/* Account Badge */}
@@ -76,8 +102,16 @@ export const HashAccountTitle = ({
 
       {/* Header Title */}
       <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight mb-3">
-        Hash: {displayHash}
+        Account Characters
       </h1>
+
+      {/* Hash Info */}
+      <div className="mb-3 flex items-baseline gap-2 text-sm lg:text-base">
+        <span className="text-foreground/50">Hash:</span>
+        <span className="font-mono font-medium text-foreground/80 tracking-wider">
+          {displayHash}
+        </span>
+      </div>
 
       {/* Character Count */}
       <div className="flex items-baseline gap-2 text-sm lg:text-base text-foreground/70">
@@ -98,7 +132,7 @@ export const HashAccountTitle = ({
               ? `This account has ${characterCount} character${characterCount !== 1 ? "s" : ""}`
               : `This hash value is shared by ${characterCount} characters from different accounts`}
           </div>
-          {!isGoodMatch && (
+          {isGoodMatch && (
             <div className="italic text-foreground/50">
               {matchQuality.suggestion}
             </div>
@@ -108,9 +142,9 @@ export const HashAccountTitle = ({
 
       {/* Guild Characters Allocation Check */}
       {characters && characters.length > 0 && guildStats.guildCount > 0 && (
-        <div className="mt-6 px-4 py-3 rounded-lg bg-yellow-500/10">
-          <div className="text-sm font-medium text-yellow-600">
-            Guild Characters Allocation Check
+        <div className={`mt-6 px-4 py-3 rounded-lg ${guildQuality.bgColor}`}>
+          <div className={`text-sm font-medium ${guildQuality.color}`}>
+            Guild Characters Allocation Check - {guildQuality.status}
           </div>
           <div className="text-xs text-foreground/60 mt-2">
             <div className="mb-3">
