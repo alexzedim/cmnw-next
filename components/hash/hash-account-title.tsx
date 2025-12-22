@@ -49,16 +49,19 @@ export const HashAccountTitle = ({
 
   // Determine match quality based on character count
   const isGoodMatch = characterCount <= 65;
+  const otherHashType = hashType === "a" ? "b" : "a";
   const matchQuality = isGoodMatch
     ? {
         text: "Good Match",
         color: "text-green-500",
         bgColor: "bg-green-500/10",
+        suggestion: `Try Hash ${otherHashType.toUpperCase()} for more precise match`,
       }
     : {
         text: "Hash Too Common",
         color: "text-red-500",
         bgColor: "bg-red-500/10",
+        suggestion: `Try Hash ${otherHashType.toUpperCase()} for more precise match`,
       };
 
   return (
@@ -73,8 +76,16 @@ export const HashAccountTitle = ({
 
       {/* Header Title */}
       <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight mb-3">
-        Hash: {displayHash}
+        Account Characters
       </h1>
+
+      {/* Hash Info */}
+      <div className="mb-3 flex items-baseline gap-2 text-sm lg:text-base">
+        <span className="text-foreground/50">Hash:</span>
+        <span className="font-mono font-medium text-foreground/80 tracking-wider">
+          {displayHash}
+        </span>
+      </div>
 
       {/* Character Count */}
       <div className="flex items-baseline gap-2 text-sm lg:text-base text-foreground/70">
@@ -89,10 +100,15 @@ export const HashAccountTitle = ({
         <div className={`text-sm font-medium ${matchQuality.color}`}>
           {matchQuality.text}
         </div>
-        <div className="text-xs text-foreground/60 mt-1">
-          {isGoodMatch
-            ? `This account has ${characterCount} character${characterCount !== 1 ? "s" : ""}`
-            : `This hash value is too common and shared by ${characterCount} characters from different accounts`}
+        <div className="text-xs text-foreground/60 mt-2 space-y-1">
+          <div>
+            {isGoodMatch
+              ? `This account has ${characterCount} character${characterCount !== 1 ? "s" : ""}`
+              : `This hash value is shared by ${characterCount} characters from different accounts`}
+          </div>
+          <div className="italic text-foreground/50">
+            {matchQuality.suggestion}
+          </div>
         </div>
       </div>
 
