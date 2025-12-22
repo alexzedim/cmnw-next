@@ -112,6 +112,7 @@ export const HashAccountTitle = ({
             </div>
           )}
         </div>
+      </div>
 
       {/* Guild Security Check */}
       {characters && characters.length > 0 && guildStats.guildCount > 0 && (
@@ -160,5 +161,5 @@ export const HashAccountTitle = ({
         </div>
       )}
     </div>
-  );
+  });
 };
