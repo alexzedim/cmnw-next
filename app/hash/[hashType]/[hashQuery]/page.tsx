@@ -7,6 +7,7 @@ import NextLink from "next/link";
 import { apiClient } from "@/lib/api";
 import { classColors } from "@/constants/class-colors";
 import { getPastelColor, getFactionBorderColor } from "@/lib/utils/color";
+import { getGuildRankDisplay } from "@/lib/utils/guild-rank";
 
 interface HashPageProps {
   params: Promise<{
@@ -165,13 +166,17 @@ export default async function HashPage({ params }: HashPageProps) {
                     <div className="text-sm">
                       <span className="text-muted">Guild: </span>
                       <span className="font-medium">{character.guild}</span>
-                      {character.guildRank !== undefined && (
-                        <span className="chip ml-2">
-                          {character.guildRank === 0
-                            ? "GM"
-                            : `R${character.guildRank}`}
-                        </span>
-                      )}
+                      {character.guildRank !== undefined && (() => {
+                        const rankDisplay = getGuildRankDisplay(character.guildRank);
+                        return rankDisplay ? (
+                          <span
+                            className={`ml-2 ${rankDisplay.isBold ? "font-bold" : ""}`}
+                            title={rankDisplay.text}
+                          >
+                            {rankDisplay.symbol} {rankDisplay.text}
+                          </span>
+                        ) : null;
+                      })()}
                     </div>
                   </>
                 )}
