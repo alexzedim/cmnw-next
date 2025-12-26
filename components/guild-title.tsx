@@ -1,6 +1,8 @@
 "use client";
 
 import { Faction } from "@/lib/types";
+import { NAMING_CONSTANTS } from "@/constants";
+import { fontJetBrains } from "@/config/fonts";
 
 interface GuildTitleProps {
   name: string;
@@ -44,13 +46,16 @@ export const GuildTitle = ({
     >
       {/* Guild Badge */}
       <div className="mb-5 flex items-center gap-3">
-        <div className="inline-flex items-center gap-2 text-xs uppercase tracking-wider opacity-60">
+        <div
+          className="inline-flex items-center gap-2 text-xs uppercase tracking-wider opacity-60"
+          style={{ fontFamily: fontJetBrains.style.fontFamily }}
+        >
           <div className="size-1.5 rounded-full bg-orange-500" />
-          <p className="font-sans">Guild</p>
+          <p>{NAMING_CONSTANTS.GUILD}</p>
         </div>
       </div>
 
-      {/* Guild Name - Using Geist Sans */}
+      {/* Guild Name */}
       <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight mb-3 font-sans">
         # {name}
       </h1>
