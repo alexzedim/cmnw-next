@@ -9,6 +9,7 @@ export * from "./expansions";
 export * from "./factions";
 export * from "./hash";
 export * from "./header";
+export * from "./naming";
 export * from "./profession-colors";
 export * from "./professions";
 export * from "./realms";

@@ -1,0 +1,6 @@
+export const NAMING_CONSTANTS = {
+  // Original: Greek Capital Lambda Λ (U+039B) - appears larger
+  CHARACTER: "CHΛRΛCTER",
+  CHARACTER_ACCOUNT_DETECTIVE: "CHΛRΛCTER ΛCCOUNT ΔETECTIVE",
+  GUILD: "GUILΔ",
+};
