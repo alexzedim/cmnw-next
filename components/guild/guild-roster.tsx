@@ -256,7 +256,7 @@ export function GuildRoster({ members }: GuildRosterProps) {
                   {member.hashA ? (
                     <Link
                       className="text-xs font-mono text-orange-500 hover:text-orange-400 transition-colors font-medium"
-                      href={`/hash/a/${member.hashA}`}
+                      href={`/hash/a${member.hashA}`}
                     >
                       {member.hashA}
                     </Link>
@@ -268,7 +268,7 @@ export function GuildRoster({ members }: GuildRosterProps) {
                   {member.hashB ? (
                     <Link
                       className="text-xs font-mono text-orange-500 hover:text-orange-400 transition-colors font-medium"
-                      href={`/hash/b/${member.hashB}`}
+                      href={`/hash/b${member.hashB}`}
                     >
                       {member.hashB}
                     </Link>
