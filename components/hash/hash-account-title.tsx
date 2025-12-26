@@ -151,15 +151,18 @@ export const HashAccountTitle = ({
     <div className="card-surface p-6 lg:p-8 rounded-xl mb-6">
       {/* Account Badge */}
       <div className="mb-5 flex items-center gap-3">
-        <div className="inline-flex items-center gap-2 text-xs uppercase tracking-wider opacity-60">
+        <div
+          className="inline-flex items-center gap-2 text-xs uppercase tracking-wider opacity-60"
+          style={{ fontFamily: fontJetBrains.style.fontFamily }}
+        >
           <div className="size-1.5 rounded-full bg-orange-500" />
-          <p>Characters Account Detective</p>
+          <p>{NAMING_CONSTANTS.CHARACTER_ACCOUNT_DETECTIVE}</p>
         </div>
       </div>
 
       {/* Header Title */}
       <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight mb-3">
-        Hash: {displayHash}
+        Hash {displayHash}
       </h1>
 
       {/* Character Count */}

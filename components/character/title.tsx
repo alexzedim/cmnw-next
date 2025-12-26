@@ -3,6 +3,8 @@
 import { Link } from "@/components/custom-link";
 import { GuildRank } from "@/components/character/guild-rank";
 import { Faction } from "@/lib/types";
+import { NAMING_CONSTANTS } from "@/constants";
+import { fontJetBrains } from "@/config/fonts";
 
 interface CharacterTitleProps {
   name: string;
@@ -45,9 +47,12 @@ export const CharacterTitle = ({
     >
       {/* Character Badge */}
       <div className="mb-5 flex items-center gap-3">
-        <div className="inline-flex items-center gap-2 text-xs uppercase tracking-wider opacity-60">
+        <div
+          className="inline-flex items-center gap-2 text-xs uppercase tracking-wider opacity-60"
+          style={{ fontFamily: fontJetBrains.style.fontFamily }}
+        >
           <div className="size-1.5 rounded-full bg-orange-500" />
-          <p>Character</p>
+          <p className="inline-block">{NAMING_CONSTANTS.CHARACTER}</p>
         </div>
       </div>
 
