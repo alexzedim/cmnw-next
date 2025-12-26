@@ -1,16 +1,16 @@
 "use client";
 
 import type { Character } from "@/lib/types";
+import { NAMING_CONSTANTS } from "@/constants";
+import { fontJetBrains } from "@/config/fonts";
 
 interface HashAccountTitleProps {
-  hashType: string;
   hashQuery: string;
   characterCount: number;
   characters?: Character[];
 }
 
 export const HashAccountTitle = ({
-  hashType,
   hashQuery,
   characterCount,
   characters,
@@ -45,35 +45,44 @@ export const HashAccountTitle = ({
 
     return { guildCount: uniqueGuilds.size, rankMap };
   })();
-  const displayHash = `${hashType}@${hashQuery}`.toUpperCase();
+  const displayHash = hashQuery.toUpperCase();
 
   // Determine match quality based on character count
   const isPrecisionMatch = characterCount <= 65;
-  const otherHashType = hashType === "a" ? "b" : "a";
   const matchQuality = isPrecisionMatch
     ? {
         text: "Precision Match",
         color: "text-green-500",
         bgColor: "bg-green-500/10",
-        suggestion: `Try Hash ${otherHashType.toUpperCase()} for more precise match`,
+        suggestion: "This account is uniquely identified by this hash",
       }
     : {
         text: "Hash Too Common",
         color: "text-red-500",
         bgColor: "bg-red-500/10",
-        suggestion: `Try Hash ${otherHashType.toUpperCase()} for more precise match`,
+        suggestion: "This hash value is shared by multiple accounts",
       };
 
   // Calculate guild allocation quality based on character concentration
   const getGuildAllocationQuality = () => {
     if (guildStats.guildCount === 0 || characterCount === 0) {
-      return { status: "No Guild Data", percentage: 0, color: "text-gray-600", bgColor: "bg-gray-500/10" };
+      return {
+        status: "No Guild Data",
+        percentage: 0,
+        color: "text-gray-600",
+        bgColor: "bg-gray-500/10",
+      };
     }
 
     // Calculate concentration: find the largest guild and calculate what % of characters are there
     let maxCharactersInGuild = 0;
+
     guildStats.rankMap.forEach((ranks) => {
-      const totalInGuild = Array.from(ranks.values()).reduce((a, b) => a + b, 0);
+      const totalInGuild = Array.from(ranks.values()).reduce(
+        (a, b) => a + b,
+        0
+      );
+
       maxCharactersInGuild = Math.max(maxCharactersInGuild, totalInGuild);
     });
 
