@@ -139,11 +139,6 @@ export const HashAccountTitle = ({
       bgColor: "bg-red-500/10",
     };
   };
-      percentage: 20,
-      color: "text-red-600",
-      bgColor: "bg-red-500/10",
-    };
-  };
 
   const guildQuality = getGuildAllocationQuality();
 
