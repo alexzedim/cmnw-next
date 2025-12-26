@@ -12,19 +12,14 @@ import { HashAccountTitle } from "@/components/hash/hash-account-title";
 
 interface HashPageProps {
   params: Promise<{
-    hashType: string;
     hashQuery: string;
   }>;
 }
 
-async function getHashData(hashType: string, hashQuery: string) {
+async function getHashData(hashQuery: string) {
   try {
-    if (!["a", "b"].includes(hashType)) {
-      return null;
-    }
-
     const response = await apiClient.get<CharactersResponse>(
-      `/api/osint/character/hash/${hashType}/${encodeURIComponent(hashQuery)}`
+      `/api/osint/character/hash/${encodeURIComponent(hashQuery)}`
     );
 
     if (!response.characters || response.characters.length === 0) {
@@ -42,8 +37,8 @@ async function getHashData(hashType: string, hashQuery: string) {
 export async function generateMetadata({
   params,
 }: HashPageProps): Promise<Metadata> {
-  const { hashType, hashQuery } = await params;
-  const title = `${hashType}@${hashQuery}`.toUpperCase();
+  const { hashQuery } = await params;
+  const title = hashQuery.toUpperCase();
 
   return {
     title: `CMNW: ${title}`,
@@ -56,8 +51,8 @@ export async function generateMetadata({
 }
 
 export default async function HashPage({ params }: HashPageProps) {
-  const { hashType, hashQuery } = await params;
-  const characters = await getHashData(hashType, hashQuery);
+  const { hashQuery } = await params;
+  const characters = await getHashData(hashQuery);
 
   if (!characters) {
     notFound();
@@ -71,7 +66,6 @@ export default async function HashPage({ params }: HashPageProps) {
           characterCount={characters.length}
           characters={characters}
           hashQuery={hashQuery}
-          hashType={hashType}
         />
 
         {/* Character Cards Grid */}
