@@ -196,7 +196,7 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
       `${DOMAINS.domain}/api/dma/item/chart?id=${id}`,
       (url: string) => fetch(url).then((r) => r.json())
     );
-    console.log(data);
+
     // Scroll to the right to show latest data
     useEffect(() => {
       if (scrollContainerRef.current && data) {
