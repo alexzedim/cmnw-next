@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import type { Character } from "@/lib/types";
+
+import { useState } from "react";
 
 export type SortOption =
   | "name"
@@ -23,10 +24,7 @@ const SORT_OPTIONS: { value: SortOption; label: string }[] = [
   { value: "realmName", label: "Realm (A-Z)" },
 ];
 
-function sortCharacters(
-  chars: Character[],
-  sortBy: SortOption
-): Character[] {
+function sortCharacters(chars: Character[], sortBy: SortOption): Character[] {
   const sorted = [...chars];
 
   switch (sortBy) {
@@ -38,14 +36,12 @@ function sortCharacters(
       break;
     case "itemLevel":
       sorted.sort(
-        (a, b) =>
-          (b.equippedItemLevel || 0) - (a.equippedItemLevel || 0)
+        (a, b) => (b.equippedItemLevel || 0) - (a.equippedItemLevel || 0)
       );
       break;
     case "achievementPoints":
       sorted.sort(
-        (a, b) =>
-          (b.achievementPoints || 0) - (a.achievementPoints || 0)
+        (a, b) => (b.achievementPoints || 0) - (a.achievementPoints || 0)
       );
       break;
     case "realmName":
@@ -68,21 +64,19 @@ export function HashCharactersSort({
   };
 
   return (
-    <div className="mb-6 card-surface p-6">
-      <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center">
-        <label className="text-sm font-medium text-[var(--text-muted)] whitespace-nowrap">Sort by:</label>
-        <select
-          value={sortBy}
-          onChange={(e) => handleSort(e.target.value as SortOption)}
-          className="w-full lg:w-64 px-4 py-2.5 rounded-lg border border-[var(--border)] bg-[var(--bg-elevated)] text-[var(--text)] text-sm transition-colors focus-visible:border-[var(--accent)]"
-        >
-          {SORT_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </div>
-    </div>
+    <>
+      <label className="text-sm font-medium text-[var(--text-muted)] whitespace-nowrap">Sort by:</label>
+      <select
+        value={sortBy}
+        onChange={(e) => handleSort(e.target.value as SortOption)}
+        className="px-4 py-2.5 rounded-lg border border-[var(--border)] bg-[var(--bg-elevated)] text-[var(--text)] text-sm transition-colors focus-visible:border-[var(--accent)] w-full sm:w-64"
+      >
+        {SORT_OPTIONS.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+    </>
   );
 }
