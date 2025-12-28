@@ -27,14 +27,12 @@ interface ItemQuotesProps {
   id: number | string;
   /** Whether the item is a gold token (sets seller count label) */
   isGold?: boolean;
-  /** Whether the item is XRS (cross-realm sale) - returns null if true */
-  isXrs?: boolean;
 }
 
 /**
  * Quote row column type definition
  */
-type QuoteColumn = "price" | "quantity" | "open_interest" | "size";
+type QuoteColumn = "price" | "quantity" | "openInterest" | "size";
 
 interface QuoteColumnDef {
   key: QuoteColumn;
@@ -117,36 +115,31 @@ ItemQuotesTable.displayName = "ItemQuotesTable";
  * @example
  * <ItemQuotes id="12345" isGold={false} />
  */
-export const ItemQuotes = memo(
-  ({ id, isGold = false, isXrs = false }: ItemQuotesProps) => {
-    // Skip rendering for XRS items
-    if (isXrs) return null;
+export const ItemQuotes = memo(({ id, isGold = false }: ItemQuotesProps) => {
+  const { data, error, isLoading } = useItemQuotes(id);
 
-    const { data, error, isLoading } = useItemQuotes(id);
+  // Memoize columns definition
+  const columns = useMemo<QuoteColumnDef[]>(
+    () => [
+      { key: "price", label: "Price" },
+      { key: "quantity", label: "Quantity" },
+      { key: "openInterest", label: "Open Interest" },
+      { key: "size", label: isGold ? "Sellers" : "Orders" },
+    ],
+    [isGold]
+  );
 
-    // Memoize columns definition
-    const columns = useMemo<QuoteColumnDef[]>(
-      () => [
-        { key: "price", label: "Price" },
-        { key: "quantity", label: "Quantity" },
-        { key: "open_interest", label: "Open Interest" },
-        { key: "size", label: isGold ? "Sellers" : "Orders" },
-      ],
-      [isGold]
-    );
+  // Error state - return null (silent failure following project pattern)
+  if (error) return null;
 
-    // Error state - return null (silent failure following project pattern)
-    if (error) return null;
+  // Loading state
+  if (isLoading) return <ItemQuotesLoading />;
 
-    // Loading state
-    if (isLoading) return <ItemQuotesLoading />;
+  // Empty state - no quotes available
+  if (!data?.quotes?.length) return null;
 
-    // Empty state - no quotes available
-    if (!data?.quotes?.length) return null;
-
-    // Render table with quotes
-    return <ItemQuotesTable columns={columns} quotes={data.quotes} />;
-  }
-);
+  // Render table with quotes
+  return <ItemQuotesTable columns={columns} quotes={data.quotes} />;
+});
 
 ItemQuotes.displayName = "ItemQuotes";

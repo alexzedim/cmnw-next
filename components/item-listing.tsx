@@ -42,7 +42,6 @@ interface ItemListingProps {
   name: string;
   isGold?: boolean;
   isCommdty?: boolean;
-  isXrs?: boolean;
 }
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
@@ -59,7 +58,6 @@ export const ItemListing = ({
   name,
   isGold = false,
   isCommdty = false,
-  isXrs = false,
 }: ItemListingProps) => {
   const [page, setPage] = useState(1);
   const rowsPerPage = 25;

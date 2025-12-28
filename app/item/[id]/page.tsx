@@ -70,27 +70,21 @@ export default async function ItemPage({ params }: ItemPageProps) {
   }
 
   const { item, realm } = data;
-  const { itemTitle, realmTitle, isXrs, isGold, isCommdty } = generateItemTitle(
-    item,
+  const { itemTitle, realmTitle, isGold, isCommdty } = generateItemTitle(
+    item as Partial<itemResponse>,
     realm
   );
 
   return (
     <main className="min-h-screen pt-20 pb-8">
       <div className="container mx-auto px-4">
-        <ItemTitle
-          assetClass={item.assetClass || item.asset_class}
-          icon={item.icon}
-          itemTitle={itemTitle}
-          quality={item.quality}
-          realmTitle={realmTitle}
-        />
+        <ItemTitle item={item} />
 
         <div className="my-8 h-px bg-[var(--border)]" />
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mt-4">
           <div className="md:col-span-5">
-            <ItemQuotes id={id} isGold={isGold} isXrs={isXrs} />
+            <ItemQuotes id={id} isGold={isGold} />
           </div>
           <div className="md:col-span-7">
             <ItemValuations id={id} />
@@ -104,7 +98,6 @@ export default async function ItemPage({ params }: ItemPageProps) {
           id={id}
           isCommdty={isCommdty}
           isGold={isGold}
-          isXrs={isXrs}
         />
 
         <div className="my-8 h-px bg-[var(--border)]" />
@@ -113,7 +106,6 @@ export default async function ItemPage({ params }: ItemPageProps) {
           id={id}
           isCommdty={isCommdty}
           isGold={isGold}
-          isXrs={isXrs}
           name={itemTitle}
         />
       </div>
