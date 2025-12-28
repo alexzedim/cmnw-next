@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
+
 import { NAMING_CONSTANTS } from "@/constants";
 import { fontJetBrains } from "@/config/fonts";
-import { generateItemBackground } from "@/lib";
 
 interface ItemTitleProps {
   itemTitle: string;
@@ -23,9 +23,7 @@ function getItemBorderColor(quality?: string): string {
     poor: "rgb(158, 158, 158)", // Light gray
   };
 
-  return (
-    qualityColorMap[(quality || "").toLowerCase()] || "rgb(249, 115, 22)"
-  );
+  return qualityColorMap[(quality || "").toLowerCase()] || "rgb(249, 115, 22)";
 }
 
 export const ItemTitle = ({
@@ -59,12 +57,7 @@ export const ItemTitle = ({
       <div className="flex items-start gap-4">
         {icon && (
           <div className="relative w-20 h-20 lg:w-24 lg:h-24 flex-shrink-0 rounded-lg overflow-hidden bg-foreground/5">
-            <Image
-              alt={itemTitle}
-              fill
-              className="object-cover"
-              src={icon}
-            />
+            <Image fill alt={itemTitle} className="object-cover" src={icon} />
           </div>
         )}
         <div className="flex-1 min-w-0">

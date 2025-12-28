@@ -1,1 +1,79 @@
-/**\n * Item Components - Shared Constants\n *\n * This module contains shared constants, types, and utility functions\n * used across item-related components (ItemQuotes, ItemValuations, ItemListing).\n */\n\n/**\n * Locale settings for number and date formatting\n */\nexport const LOCALE = \"ru-RU\";\n\n/**\n * Common column definitions for item-related tables\n */\nexport const ITEM_TABLE_COLUMNS = {\n  QUOTES: [\n    { key: \"price\" as const, label: \"Price\" },\n    { key: \"quantity\" as const, label: \"Quantity\" },\n    { key: \"open_interest\" as const, label: \"Open Interest\" },\n  ],\n} as const;\n\n/**\n * Table styling classes used across item components\n */\nexport const TABLE_CLASS_NAMES = {\n  wrapper: \"p-0\",\n  th: \"bg-background border-b border-divider text-foreground font-semibold\",\n  td: \"text-muted border-b border-divider\",\n} as const;\n\n/**\n * Card and container styling constants\n */\nexport const CARD_CLASS_NAMES = {\n  root: \"m-4 bg-background border border-divider\",\n  body: \"p-8 rounded-xl bg-background\",\n  loading: \"flex items-center justify-center min-h-[300px]\",\n} as const;\n\n/**\n * Badge section color variants\n */\nexport const BADGE_COLORS = {\n  DEFAULT: \"bg-orange-500\",\n  QUOTES: \"bg-cyan-500\",\n  VALUATIONS: \"bg-amber-500\",\n  LISTINGS: \"bg-green-500\",\n} as const;\n\n/**\n * Format a number using locale-specific formatting\n * @param value - Number to format\n * @param locale - Locale string (default: ru-RU)\n * @returns Formatted number string\n */\nexport const formatNumber = (value: number, locale = LOCALE): string => {\n  return value.toLocaleString(locale);\n};\n\n/**\n * Format a date string or timestamp using locale-specific formatting\n * @param date - Date string or timestamp to format\n * @param format - Date format options\n * @returns Formatted date string\n */\nexport const formatDate = (\n  date: string | number,\n  format: \"date\" | \"datetime\" = \"datetime\"\n): string => {\n  const dateObj = new Date(date);\n\n  if (format === \"date\") {\n    return dateObj.toLocaleDateString(\"en-GB\");\n  }\n\n  return dateObj.toLocaleString(\"en-GB\");\n};\n"
+/**
+ * Item Components - Shared Constants
+ *
+ * This module contains shared constants, types, and utility functions
+ * used across item-related components (ItemQuotes, ItemValuations, ItemListing).
+ */
+
+/**
+ * Locale settings for number and date formatting
+ */
+export const LOCALE = "ru-RU";
+
+/**
+ * Common column definitions for item-related tables
+ */
+export const ITEM_TABLE_COLUMNS = {
+  QUOTES: [
+    { key: "price" as const, label: "Price" },
+    { key: "quantity" as const, label: "Quantity" },
+    { key: "open_interest" as const, label: "Open Interest" },
+  ],
+} as const;
+
+/**
+ * Table styling classes used across item components
+ */
+export const TABLE_CLASS_NAMES = {
+  wrapper: "p-0",
+  th: "bg-background border-b border-divider text-foreground font-semibold",
+  td: "text-muted border-b border-divider",
+} as const;
+
+/**
+ * Card and container styling constants
+ */
+export const CARD_CLASS_NAMES = {
+  root: "m-4 bg-background border border-divider",
+  body: "p-8 rounded-xl bg-background",
+  loading: "flex items-center justify-center min-h-[300px]",
+} as const;
+
+/**
+ * Badge section color variants
+ */
+export const BADGE_COLORS = {
+  DEFAULT: "bg-orange-500",
+  QUOTES: "bg-cyan-500",
+  VALUATIONS: "bg-amber-500",
+  LISTINGS: "bg-green-500",
+} as const;
+
+/**
+ * Format a number using locale-specific formatting
+ * @param value - Number to format
+ * @param locale - Locale string (default: ru-RU)
+ * @returns Formatted number string
+ */
+export const formatNumber = (value: number, locale = LOCALE): string => {
+  return value.toLocaleString(locale);
+};
+
+/**
+ * Format a date string or timestamp using locale-specific formatting
+ * @param date - Date string or timestamp to format
+ * @param format - Date format options
+ * @returns Formatted date string
+ */
+export const formatDate = (
+  date: string | number,
+  format: "date" | "datetime" = "datetime"
+): string => {
+  const dateObj = new Date(date);
+
+  if (format === "date") {
+    return dateObj.toLocaleDateString("en-GB");
+  }
+
+  return dateObj.toLocaleString("en-GB");
+};

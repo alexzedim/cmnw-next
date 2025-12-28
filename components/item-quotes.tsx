@@ -47,7 +47,7 @@ interface QuoteColumnDef {
 const ItemQuotesLoading = memo(() => (
   <Card className={CARD_CLASS_NAMES.root}>
     <CardBody className={CARD_CLASS_NAMES.body}>
-      <BadgeSection label="Market Quotes" color={BADGE_COLORS.QUOTES} />
+      <BadgeSection color={BADGE_COLORS.QUOTES} label="Market Quotes" />
       <div className={`${CARD_CLASS_NAMES.loading} min-h-[300px]`}>
         <Spinner color="warning" size="lg" />
       </div>
@@ -67,41 +67,36 @@ interface ItemQuotesTableProps {
     open_interest: number;
     size: number;
   }>;
-  isGold: boolean;
   columns: QuoteColumnDef[];
 }
 
-const ItemQuotesTable = memo(
-  ({ quotes, isGold, columns }: ItemQuotesTableProps) => (
-    <Card className={CARD_CLASS_NAMES.root}>
-      <CardBody className={CARD_CLASS_NAMES.body}>
-        <BadgeSection label="Market Quotes" color={BADGE_COLORS.QUOTES} />
-        <Table
-          aria-label="Item market price quotes"
-          classNames={TABLE_CLASS_NAMES}
-        >
-          <TableHeader columns={columns}>
-            {(column) => (
-              <TableColumn key={column.key}>{column.label}</TableColumn>
-            )}
-          </TableHeader>
-          <TableBody items={quotes}>
-            {(quote) => (
-              <TableRow key={`${quote.price}-${quote.quantity}`}>
-                <TableCell>{formatNumber(quote.price)}</TableCell>
-                <TableCell>{formatNumber(quote.quantity)}</TableCell>
-                <TableCell>
-                  {formatNumber(quote.open_interest)}
-                </TableCell>
-                <TableCell>{quote.size}</TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </CardBody>
-    </Card>
-  )
-);
+const ItemQuotesTable = memo(({ quotes, columns }: ItemQuotesTableProps) => (
+  <Card className={CARD_CLASS_NAMES.root}>
+    <CardBody className={CARD_CLASS_NAMES.body}>
+      <BadgeSection color={BADGE_COLORS.QUOTES} label="Market Quotes" />
+      <Table
+        aria-label="Item market price quotes"
+        classNames={TABLE_CLASS_NAMES}
+      >
+        <TableHeader columns={columns}>
+          {(column) => (
+            <TableColumn key={column.key}>{column.label}</TableColumn>
+          )}
+        </TableHeader>
+        <TableBody items={quotes}>
+          {(quote) => (
+            <TableRow key={`${quote.price}-${quote.quantity}`}>
+              <TableCell>{formatNumber(quote.price)}</TableCell>
+              <TableCell>{formatNumber(quote.quantity)}</TableCell>
+              <TableCell>{formatNumber(quote.open_interest)}</TableCell>
+              <TableCell>{quote.size}</TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </CardBody>
+  </Card>
+));
 
 ItemQuotesTable.displayName = "ItemQuotesTable";
 
@@ -122,12 +117,15 @@ export const ItemQuotes = memo(
     const { data, error, isLoading } = useItemQuotes(id);
 
     // Memoize columns definition
-    const columns = useMemo<QuoteColumnDef[]>(() => [
-      { key: "price", label: "Price" },
-      { key: "quantity", label: "Quantity" },
-      { key: "open_interest", label: "Open Interest" },
-      { key: "size", label: isGold ? "Sellers" : "Orders" },
-    ], [isGold]);
+    const columns = useMemo<QuoteColumnDef[]>(
+      () => [
+        { key: "price", label: "Price" },
+        { key: "quantity", label: "Quantity" },
+        { key: "open_interest", label: "Open Interest" },
+        { key: "size", label: isGold ? "Sellers" : "Orders" },
+      ],
+      [isGold]
+    );
 
     // Error state - return null (silent failure following project pattern)
     if (error) return null;
@@ -139,13 +137,7 @@ export const ItemQuotes = memo(
     if (!data?.quotes?.length) return null;
 
     // Render table with quotes
-    return (
-      <ItemQuotesTable
-        quotes={data.quotes}
-        isGold={isGold}
-        columns={columns}
-      />
-    );
+    return <ItemQuotesTable columns={columns} quotes={data.quotes} />;
   }
 );
 
