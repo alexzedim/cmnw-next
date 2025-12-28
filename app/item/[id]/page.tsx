@@ -100,11 +100,11 @@ export default async function ItemPage({ params }: ItemPageProps) {
         <div className="my-8 h-px bg-[var(--border)]" />
 
         <MarketHeatmap
+          hasContracts={item.hasContracts}
           id={id}
           isCommdty={isCommdty}
           isGold={isGold}
           isXrs={isXrs}
-          hasContracts={item.hasContracts}
         />
 
         <div className="my-8 h-px bg-[var(--border)]" />
