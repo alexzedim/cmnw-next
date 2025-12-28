@@ -63,6 +63,7 @@ export async function generateMetadata({
 export default async function ItemPage({ params }: ItemPageProps) {
   const { id } = await params;
   const data = await getItemData(id);
+  console.log(data);
 
   if (!data) {
     notFound();
@@ -103,6 +104,7 @@ export default async function ItemPage({ params }: ItemPageProps) {
           isCommdty={isCommdty}
           isGold={isGold}
           isXrs={isXrs}
+          hasContracts={item.hasContracts}
         />
 
         <div className="my-8 h-px bg-[var(--border)]" />

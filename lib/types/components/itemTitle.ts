@@ -3,5 +3,28 @@ export type itemTitle = {
   realmTitle: string;
   quality?: string;
   asset_class?: string[];
+  assetClass?: string[];
   icon?: string;
+  itemClass?: string;
+  itemSubClass?: string;
+  itemLevel?: number;
+  level?: number;
+  purchasePrice?: number;
+  purchaseQuantity?: number;
+  vendorSellPrice?: number;
+  isEquip?: boolean;
+  isStackable?: boolean;
+  inventoryType?: string;
+  lootType?: string;
+  hasContracts?: boolean;
+  expansion?: string;
+  stackable?: number;
+  professionClass?: string;
+  ticker?: string;
+  tags?: string[];
+  indexBy?: string;
+  // Computed flags
+  isGold: boolean;
+  isXrs: boolean;
+  isCommdty: boolean;
 };

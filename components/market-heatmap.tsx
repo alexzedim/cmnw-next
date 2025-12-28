@@ -26,6 +26,7 @@ interface MarketHeatmapProps {
   isCommdty?: boolean;
   isGold?: boolean;
   isXrs?: boolean;
+  hasContracts?: boolean;
 }
 
 const getHeatColor = (value: number, max: number): string => {
@@ -53,16 +54,22 @@ const formatAxisLabel = (value: string | number): string => {
 export const MarketHeatmap: FC<MarketHeatmapProps> = ({
   id,
   isCommdty = false,
+  isGold = false,
+  hasContracts = false,
 }) => {
   const [hoveredCell, setHoveredCell] = useState<HeatmapDataPoint | null>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
-  if (!isCommdty) return null;
+  // Render heatmap for commodity items, gold items, or items with contracts
+  const shouldShowChart = isCommdty || isGold || hasContracts;
+  if (!shouldShowChart) return null;
 
   const { data, error, isLoading } = useSWR<HeatmapResponse>(
     `${DOMAINS.domain}/api/dma/item/chart?id=${id}`,
     (url: string) => fetch(url).then((r) => r.json())
   );
+
+  console.log(data);
 
   if (error) return null;
   if (isLoading)
