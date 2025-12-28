@@ -256,7 +256,7 @@ export function useItemQuotes(id: string | number | null) {
   interface Quote {
     price: number;
     quantity: number;
-    open_interest: number;
+    openInterest: number;
     size: number;
   }
 
@@ -264,10 +264,35 @@ export function useItemQuotes(id: string | number | null) {
     quotes: Quote[];
   }
 
-  return useSWR<QuotesResponse>(
+  interface QuoteCamelCase {
+    price: number;
+    quantity: number;
+    openInterest: number;
+    size: number;
+  }
+
+  interface QuotesResponseCamelCase {
+    quotes: QuoteCamelCase[];
+  }
+
+  return useSWR<QuotesResponseCamelCase>(
     id ? `/api/dma/item/quotes?id=${id}` : null,
     id
-      ? () => apiClient.get<QuotesResponse>("/api/dma/item/quotes", { id })
+      ? async () => {
+          const data = await apiClient.get<QuotesResponse>(
+            "/api/dma/item/quotes",
+            { id }
+          );
+
+          return {
+            quotes: data.quotes.map((quote) => ({
+              price: quote.price,
+              quantity: quote.quantity,
+              openInterest: quote.openInterest,
+              size: quote.size,
+            })),
+          };
+        }
       : null,
     defaultConfig
   );
