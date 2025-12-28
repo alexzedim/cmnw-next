@@ -209,7 +209,7 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
               <div
                 className="grid border-collapse"
                 style={{
-                  gridTemplateColumns: `minmax(80px, auto) repeat(${data.xAxis.length}, minmax(50px, 1fr))`,
+                  gridTemplateColumns: `minmax(80px, auto) repeat(${data.xAxis.length}, minmax(70px, 1fr))`,
                   borderSpacing: "1px",
                   backgroundColor: "var(--color-divider)",
                 }}
