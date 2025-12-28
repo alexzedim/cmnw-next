@@ -1,6 +1,7 @@
 "use client";
 
 import type { Character } from "@/lib/types";
+
 import { NAMING_CONSTANTS } from "@/constants";
 import { fontJetBrains } from "@/config/fonts";
 
