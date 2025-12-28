@@ -35,7 +35,7 @@ export const TABLE_CLASS_NAMES = {
  */
 export const CARD_CLASS_NAMES = {
   root: "m-4 bg-background border border-divider",
-  body: "p-8 rounded-xl bg-background",
+  body: "pt-8 px-0 pb-0 rounded-xl bg-background",
   loading: "flex items-center justify-center min-h-[300px]",
 } as const;
 
@@ -44,7 +44,7 @@ export const CARD_CLASS_NAMES = {
  */
 export const BADGE_COLORS = {
   DEFAULT: "bg-orange-500",
-  QUOTES: "bg-cyan-500",
+  QUOTES: "bg-orange-500",
   VALUATIONS: "bg-amber-500",
   LISTINGS: "bg-green-500",
 } as const;
