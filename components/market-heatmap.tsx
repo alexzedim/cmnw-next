@@ -158,13 +158,6 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-    // Scroll to the right to show latest data
-    useEffect(() => {
-      if (scrollContainerRef.current) {
-        scrollContainerRef.current.scrollLeft = scrollContainerRef.current.scrollWidth;
-      }
-    }, [data]);
-
     // Render heatmap for commodity items, gold items, or items with contracts
     const shouldShowChart = isCommdty || isGold || hasContracts;
 
@@ -174,6 +167,13 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
       `${DOMAINS.domain}/api/dma/item/chart?id=${id}`,
       (url: string) => fetch(url).then((r) => r.json())
     );
+
+    // Scroll to the right to show latest data
+    useEffect(() => {
+      if (scrollContainerRef.current && data) {
+        scrollContainerRef.current.scrollLeft = scrollContainerRef.current.scrollWidth;
+      }
+    }, [data]);
 
     // Error state - return null (silent failure following project pattern)
     if (error) return null;
