@@ -22,7 +22,7 @@ async function getItemData(id: string) {
     }
 
     const data = (await res.json()) as {
-      item: Partial<itemResponse>;
+      item: itemResponse;
       realm: RealmResponse[];
     };
 
