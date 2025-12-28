@@ -32,7 +32,6 @@ import {
   Pagination,
 } from "@heroui/react";
 
-import { getClassColor } from "@/lib/utils";
 import { Link } from "@/components/custom-link";
 import { classColors } from "@/constants/class-colors";
 
