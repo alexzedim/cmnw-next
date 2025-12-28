@@ -4,7 +4,7 @@ import { Fragment, FC, useState, MouseEvent, memo, useRef, useEffect } from "rea
 import { Card, CardBody, Spinner } from "@heroui/react";
 import useSWR from "swr";
 
-import { DOMAINS } from "@/constants";
+import {DOMAINS, NAMING_CONSTANTS} from "@/constants";
 import { BadgeSection } from "@/components/shared/BadgeSection";
 import {
   CARD_CLASS_NAMES,
@@ -56,7 +56,7 @@ const getHeatColor = (value: number, max: number): string => {
  */
 const getTextColorByIntensity = (value: number, max: number): string => {
   if (value === 0 || max === 0) return "#ffffff";
-  
+
   const intensity = Math.min(value / max, 1);
   return intensity > 0.5 ? "#000000" : "#ffffff";
 };
@@ -209,7 +209,7 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
         <div className="mb-6">
           <BadgeSection
             color={BADGE_COLORS.DEFAULT}
-            label="Market Allocation"
+            label={NAMING_CONSTANTS.MARKET_VOLUME_ALLOCATION}
           />
         </div>
 
