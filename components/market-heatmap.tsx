@@ -150,59 +150,60 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
               <div
                 className="grid border-collapse"
                 style={{
-                  gridTemplateColumns: `120px repeat(${data.xAxis.length}, minmax(70px, 1fr))`,
+                  gridTemplateColumns: `120px repeat(${data.xAxis.length}, minmax(100px, 1fr))`,
                   borderSpacing: "1px",
                   backgroundColor: "var(--color-divider)",
                 }}
               >
-                {/* Top-left corner cell */}
-                <div className="bg-slate-700 p-3 font-semibold text-xs text-slate-100 sticky left-0 z-20" />
+                {/* Y-axis labels and data cells (reversed for price inversion) */}
+                {[...data.yAxis].reverse().map((yLabel, reversedIndex) => {
+                  const yIndex = data.yAxis.length - 1 - reversedIndex;
+                  return (
+                    <Fragment key={`row-${yIndex}`}>
+                      {/* Y-axis label (price) */}
+                      <div
+                        key={`y-${yIndex}`}
+                        className="bg-slate-600 p-3 text-xs font-semibold text-orange-500 text-right sticky left-0 z-10"
+                      >
+                        {parseFloat(yLabel).toFixed(2)}
+                      </div>
 
-                {/* X-axis labels (timestamps) */}
+                      {/* Data cells */}
+                      {data.xAxis.map((_, xIndex) => {
+                        const point = dataMap.get(`${xIndex}-${yIndex}`);
+                        const value = point?.value || 0;
+                        const bgColor = getHeatColor(value, maxValue);
+
+                        return (
+                          <div
+                            key={`cell-${xIndex}-${yIndex}`}
+                            className="relative p-2 text-center text-xs font-semibold transition-all duration-150 hover:ring-2 hover:ring-offset-1 hover:ring-orange-500 hover:z-30 cursor-pointer bg-background"
+                            style={{ backgroundColor: bgColor }}
+                            onMouseLeave={handleMouseLeave}
+                            onMouseMove={(e) => point && handleMouseMove(e, point)}
+                          >
+                            {value > 0 && (
+                              <span className="text-orange-500">
+                                {value.toLocaleString(LOCALE)}
+                              </span>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </Fragment>
+                  );
+                })}
+
+                {/* X-axis labels (timestamps) at bottom */}
+                <div className="bg-slate-600 p-3 font-semibold text-xs text-slate-200 sticky left-0 z-20" />
                 {data.xAxis.map((xLabel, i) => (
                   <div
                     key={`x-${i}`}
-                    className="bg-slate-700 p-3 text-xs font-semibold text-slate-100 text-center truncate"
+                    className="bg-slate-600 p-4 text-xs font-semibold text-slate-200 text-center"
                     title={formatAxisLabel(xLabel)}
                   >
                     {formatAxisLabel(xLabel)}
                   </div>
-                ))}
-
-                {/* Y-axis labels and data cells */}
-                {data.yAxis.map((yLabel, yIndex) => (
-                  <Fragment key={`row-${yIndex}`}>
-                    {/* Y-axis label (price) */}
-                    <div
-                      key={`y-${yIndex}`}
-                      className="bg-slate-700 p-3 text-xs font-semibold text-orange-400 text-right sticky left-0 z-10"
-                    >
-                      {yLabel}
-                    </div>
-
-                    {/* Data cells */}
-                    {data.xAxis.map((_, xIndex) => {
-                      const point = dataMap.get(`${xIndex}-${yIndex}`);
-                      const value = point?.value || 0;
-                      const bgColor = getHeatColor(value, maxValue);
-
-                      return (
-                        <div
-                          key={`cell-${xIndex}-${yIndex}`}
-                          className="relative p-2 text-center text-xs font-semibold transition-all duration-150 hover:ring-2 hover:ring-offset-1 hover:ring-orange-500 hover:z-30 cursor-pointer bg-background"
-                          style={{ backgroundColor: bgColor }}
-                          onMouseLeave={handleMouseLeave}
-                          onMouseMove={(e) => point && handleMouseMove(e, point)}
-                        >
-                          {value > 0 && (
-                            <span className="text-orange-400">
-                              {value.toLocaleString(LOCALE)}
-                            </span>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </Fragment>
                 ))}
               </div>
             </div>
@@ -211,7 +212,7 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
           {/* Tooltip */}
           {hoveredCell && (
             <div
-              className="fixed z-50 bg-slate-900 text-orange-50 text-xs p-4 rounded-lg shadow-xl pointer-events-none max-w-xs border border-orange-500/30 backdrop-blur"
+              className="fixed z-50 bg-slate-800 text-orange-50 text-xs p-4 rounded-lg shadow-xl pointer-events-none max-w-xs border border-orange-500/30 backdrop-blur"
               style={{
                 left: mousePosition.x + 15,
                 top: mousePosition.y + 15,
@@ -219,33 +220,33 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
             >
               <div className="space-y-2">
                 <div className="flex justify-between gap-2">
-                  <span className="font-semibold text-orange-400">Time:</span>
-                  <span className="text-slate-300">
+                  <span className="font-semibold text-orange-500">Time:</span>
+                  <span className="text-slate-200">
                     {formatAxisLabel(data.xAxis[hoveredCell.x])}
                   </span>
                 </div>
                 <div className="flex justify-between gap-2">
-                  <span className="font-semibold text-orange-400">Price:</span>
-                  <span className="text-slate-300">
-                    {data.yAxis[hoveredCell.y]}
+                  <span className="font-semibold text-orange-500">Price:</span>
+                  <span className="text-slate-200">
+                    {parseFloat(data.yAxis[hoveredCell.y]).toFixed(2)}
                   </span>
                 </div>
                 <div className="flex justify-between gap-2">
-                  <span className="font-semibold text-orange-400">Quantity:</span>
+                  <span className="font-semibold text-orange-500">Quantity:</span>
                   <span className="text-orange-300 font-semibold">
                     {hoveredCell.value.toLocaleString(LOCALE)}
                   </span>
                 </div>
                 {hoveredCell.orders !== undefined && (
                   <div className="flex justify-between gap-2 pt-1 border-t border-orange-500/20">
-                    <span className="font-semibold text-orange-400">Orders:</span>
-                    <span className="text-slate-300">{hoveredCell.orders}</span>
+                    <span className="font-semibold text-orange-500">Orders:</span>
+                    <span className="text-slate-200">{hoveredCell.orders}</span>
                   </div>
                 )}
                 {hoveredCell.oi !== undefined && (
                   <div className="flex justify-between gap-2">
-                    <span className="font-semibold text-orange-400">O.I.:</span>
-                    <span className="text-slate-300">
+                    <span className="font-semibold text-orange-500">O.I.:</span>
+                    <span className="text-slate-200">
                       {parseInt(String(hoveredCell.oi)).toLocaleString(LOCALE)}
                     </span>
                   </div>
@@ -271,7 +272,7 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
                 return (
                   <div
                     key={intensity}
-                    className="flex-1 border border-slate-600"
+                    className="flex-1 border border-slate-500"
                     style={{
                       backgroundColor: `rgba(${r}, ${g}, ${b}, ${0.4 + intensity * 0.6})`,
                     }}
@@ -279,7 +280,7 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
                 );
               })}
             </div>
-            <span className="text-orange-400 font-semibold">High Activity</span>
+            <span className="text-orange-500 font-semibold">High Activity</span>
           </div>
         </CardBody>
       </Card>
