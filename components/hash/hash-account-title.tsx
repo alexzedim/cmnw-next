@@ -178,8 +178,7 @@ export const HashAccountTitle = ({
               : `This hash value is shared by ${characterCount} characters from different accounts`}
           </div>
           <div>
-            {showAsterisk &&
-              `But you could always use hash B******** for more precision match`}
+            {showAsterisk && `Hash B******** gives more precision match`}
           </div>
           {!isPrecisionMatch && (
             <div className="italic text-foreground/50">
