@@ -242,6 +242,55 @@ export function usePrefetchGuild(guid: string) {
 }
 
 /**
+ * Fetch contract data for an item
+ * @param id - Item ID
+ * @param period - Time period (1m, 1w, 30d, 1d, 24h)
+ * @returns SWR result with contract data
+ * @example
+ * const { data, error, isLoading } = useContracts('12345', '1d');
+ */
+export function useContracts(
+  id: string | number | null,
+  period: string = "1d"
+) {
+  interface Contract {
+    id: string;
+    itemId: number;
+    connectedRealmId: number;
+    timestamp: number;
+    day: number;
+    week: number;
+    month: number;
+    year: number;
+    price: number;
+    priceMedian: number;
+    priceTop: number;
+    quantity: number;
+    openInterest: number;
+    type: string;
+    sellers?: string[];
+    createdAt?: string;
+  }
+
+  interface ContractsResponse {
+    contracts: Contract[];
+  }
+
+  return useSWR<ContractsResponse>(
+    id && period ? `/api/dma/contracts?itemId=${id}&period=${period}` : null,
+    id && period
+      ? async () => {
+          return await apiClient.get<ContractsResponse>("/api/dma/contracts", {
+            itemId: id,
+            period,
+          });
+        }
+      : null,
+    defaultConfig
+  );
+}
+
+/**
  * Market Data Hooks
  */
 
