@@ -142,6 +142,11 @@ export const HashAccountTitle = ({
 
   const guildQuality = getGuildAllocationQuality();
 
+  // Determine if hash starts with 'a' or 'b'
+  const startsWithA = displayHash.toLowerCase().startsWith("a");
+  const startsWithB = displayHash.toLowerCase().startsWith("b");
+  const showAsterisk = startsWithA && !startsWithB;
+
   return (
     <div className="card-surface p-6 lg:p-8 rounded-xl mb-6">
       {/* Account Badge */}
@@ -157,16 +162,8 @@ export const HashAccountTitle = ({
 
       {/* Header Title */}
       <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight mb-3">
-        Hash {displayHash}
+        Hash {displayHash} {showAsterisk && "*"}
       </h1>
-
-      {/* Character Count */}
-      <div className="flex items-baseline gap-2 text-sm lg:text-base text-foreground/70">
-        <span className="text-foreground/50">Found:</span>
-        <span className="font-medium">
-          {characterCount} character{characterCount !== 1 ? "s" : ""}
-        </span>
-      </div>
 
       {/* Match Quality */}
       <div className={`mt-4 px-4 py-3 rounded-lg ${matchQuality.bgColor}`}>
@@ -178,6 +175,10 @@ export const HashAccountTitle = ({
             {isPrecisionMatch
               ? `This account has ${characterCount} character${characterCount !== 1 ? "s" : ""}`
               : `This hash value is shared by ${characterCount} characters from different accounts`}
+          </div>
+          <div>
+            {showAsterisk &&
+              `But you could always use hash B******** for more precision match`}
           </div>
           {!isPrecisionMatch && (
             <div className="italic text-foreground/50">
