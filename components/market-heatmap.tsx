@@ -250,12 +250,12 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
                       {data.xAxis.map((_, xIndex) => {
                         const point = dataMap.get(`${xIndex}-${yIndex}`);
                         const value = point?.value || 0;
-                        const bgColor = getHeatColor(value, maxValue);
+                        const bgColor = value > 0 ? getHeatColor(value, maxValue) : "#101010";
 
                         return (
                           <div
                             key={`cell-${xIndex}-${yIndex}`}
-                            className="relative p-2 text-center text-xs font-semibold transition-all duration-150 hover:ring-2 hover:ring-offset-1 hover:ring-orange-500 hover:z-30 cursor-pointer bg-background"
+                            className="relative p-2 text-center text-xs font-semibold transition-all duration-150 hover:ring-2 hover:ring-offset-1 hover:ring-orange-500 hover:z-30 cursor-pointer"
                             style={{ backgroundColor: bgColor }}
                             onMouseLeave={handleMouseLeave}
                             onMouseMove={(e) =>
