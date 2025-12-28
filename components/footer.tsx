@@ -9,7 +9,8 @@ import { getRandomItems } from "@/utils/random";
 
 export const Footer = () => {
   const [mounted, setMounted] = useState(false);
-  const generateBraille = () => getRandomItems(Array.from(SYMBOLS.BRAILLE), 7);
+  const [symbolSet] = useState(() => Math.random() > 0.5 ? SYMBOLS.BRAILLE : SYMBOLS.HEX);
+  const generateSymbols = () => getRandomItems(Array.from(symbolSet), 7);
   const year = new Date().getFullYear();
 
   useEffect(() => {
@@ -19,11 +20,11 @@ export const Footer = () => {
   const footerSections = mounted
     ? [
         {
-          title: generateBraille(),
+          title: generateSymbols(),
           links: [
-            { label: generateBraille(), href: "/news" },
-            { label: generateBraille(), href: "/docs" },
-            { label: generateBraille(), href: "/contact" },
+            { label: generateSymbols(), href: "/news" },
+            { label: generateSymbols(), href: "/docs" },
+            { label: generateSymbols(), href: "/contact" },
             {
               label: "GitHub",
               href: "https://github.com/alexzedim/cmnw-next",
@@ -32,21 +33,21 @@ export const Footer = () => {
           ],
         },
         {
-          title: generateBraille(),
+          title: generateSymbols(),
           links: [
-            { label: generateBraille(), href: "/careers" },
-            { label: generateBraille(), href: "/enterprise" },
-            { label: generateBraille(), href: "/security" },
+            { label: generateSymbols(), href: "/careers" },
+            { label: generateSymbols(), href: "/enterprise" },
+            { label: generateSymbols(), href: "/security" },
           ],
         },
         {
-          title: generateBraille(),
+          title: generateSymbols(),
           links: [
-            { label: generateBraille(), href: "/privacy" },
-            { label: generateBraille(), href: "/terms" },
-            { label: generateBraille(), href: "/sla" },
-            { label: generateBraille(), href: "/dpa" },
-            { label: generateBraille(), href: "/baa" },
+            { label: generateSymbols(), href: "/privacy" },
+            { label: generateSymbols(), href: "/terms" },
+            { label: generateSymbols(), href: "/sla" },
+            { label: generateSymbols(), href: "/dpa" },
+            { label: generateSymbols(), href: "/baa" },
           ],
         },
       ]
