@@ -8,6 +8,7 @@ import { ItemQuotes } from "@/components/item-quotes";
 import { ItemValuations } from "@/components/item-valuations";
 import { MarketHeatmap } from "@/components/market-heatmap";
 import { ItemListing } from "@/components/item-listing";
+import { ItemContracts } from "@/components/item-contracts";
 import { generateItemTitle } from "@/lib";
 import { DOMAINS } from "@/constants";
 
@@ -63,8 +64,6 @@ export default async function ItemPage({ params }: ItemPageProps) {
   const { id } = await params;
   const data = await getItemData(id);
 
-  console.log(data);
-
   if (!data) {
     notFound();
   }
@@ -89,6 +88,10 @@ export default async function ItemPage({ params }: ItemPageProps) {
             <ItemValuations id={id} />
           </div>
         </div>
+
+        <div className="my-8 h-px bg-[var(--border)]" />
+
+        <ItemContracts id={id} />
 
         <div className="my-8 h-px bg-[var(--border)]" />
 
