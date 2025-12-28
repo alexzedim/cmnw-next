@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 
 import { apiClient } from "@/lib/api";
 import { HashAccountTitle } from "@/components/hash/hash-account-title";
-import { HashCharactersGrid } from "@/components/hash/hash-characters-grid";
+import { HashCharactersContent } from "@/components/hash/hash-characters-content";
 
 interface HashPageProps {
   params: Promise<{
@@ -65,8 +65,8 @@ export default async function HashPage({ params }: HashPageProps) {
           hashQuery={hashQuery}
         />
 
-        {/* Character Cards Grid */}
-        <HashCharactersGrid characters={characters} />
+        {/* Characters Content with Sorting */}
+        <HashCharactersContent characters={characters} />
       </div>
     </main>
   );
