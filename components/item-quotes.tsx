@@ -64,7 +64,7 @@ interface ItemQuotesTableProps {
   quotes: Array<{
     price: number;
     quantity: number;
-    open_interest: number;
+    openInterest: number;
     size: number;
   }>;
   columns: QuoteColumnDef[];
@@ -86,10 +86,18 @@ const ItemQuotesTable = memo(({ quotes, columns }: ItemQuotesTableProps) => (
         <TableBody items={quotes}>
           {(quote) => (
             <TableRow key={`${quote.price}-${quote.quantity}`}>
-              <TableCell>{formatNumber(quote.price)}</TableCell>
-              <TableCell>{formatNumber(quote.quantity)}</TableCell>
-              <TableCell>{formatNumber(quote.open_interest)}</TableCell>
-              <TableCell>{quote.size}</TableCell>
+              <TableCell className="text-orange-500 font-medium">
+                {formatNumber(quote.price)}
+              </TableCell>
+              <TableCell className="text-orange-500 font-medium">
+                {formatNumber(quote.quantity)}
+              </TableCell>
+              <TableCell className="text-orange-500 font-medium">
+                {formatNumber(quote.openInterest)}
+              </TableCell>
+              <TableCell className="text-orange-500 font-medium">
+                {quote.size}
+              </TableCell>
             </TableRow>
           )}
         </TableBody>
