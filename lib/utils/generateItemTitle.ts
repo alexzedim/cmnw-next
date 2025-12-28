@@ -1,11 +1,7 @@
-import { itemResponse, realmResponse } from "../types";
+import { itemResponse } from "../types";
 
-export const generateItemTitle = (
-  item: Partial<itemResponse>,
-  realms: Partial<realmResponse>[]
-) => {
+export const generateItemTitle = (item: Partial<itemResponse>) => {
   let itemTitle: string = "Unknown Item";
-  let realmTitle: string = "Unknown Realm";
 
   const itemId = item.id;
   const isGold = itemId === 1;
@@ -17,27 +13,11 @@ export const generateItemTitle = (
   } else if (item.name) {
     itemTitle = item.name;
   } else if (itemId) {
-    itemTitle = `#${itemId}`;
-  }
-
-  // Commodity items don't have realms (region-wide)
-  if (isCommdty) {
-    realmTitle = "";
-  } else if (realms.length === 1) {
-    const [realm] = realms;
-
-    realmTitle = realm.realms?.[0] || "Unknown";
-  } else if (realms.length > 1) {
-    realmTitle = realms
-      .map((r) => r.realms?.map((r) => r).join(", ") || "Unknown")
-      .join(", ");
-  } else {
-    realmTitle = "";
+    itemTitle = `${itemId}`;
   }
 
   return {
     itemTitle,
-    realmTitle,
     isGold,
     isCommdty,
     // Item properties
