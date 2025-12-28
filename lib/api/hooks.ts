@@ -240,3 +240,33 @@ export function usePrefetchGuild(guid: string) {
     }
   );
 }
+
+/**
+ * Market Data Hooks
+ */
+
+/**
+ * Fetch item market quotes (real-time pricing)
+ * @param id - Item ID
+ * @returns SWR result with market quotes data
+ * @example
+ * const { data, error, isLoading } = useItemQuotes('12345');
+ */
+export function useItemQuotes(id: string | number | null) {
+  interface Quote {
+    price: number;
+    quantity: number;
+    open_interest: number;
+    size: number;
+  }
+
+  interface QuotesResponse {
+    quotes: Quote[];
+  }
+
+  return useSWR<QuotesResponse>(
+    id ? `/api/dma/item/quotes?id=${id}` : null,
+    id ? () => apiClient.get<QuotesResponse>("/api/dma/item/quotes", { id }) : null,
+    defaultConfig
+  );
+}
