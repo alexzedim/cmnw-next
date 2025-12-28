@@ -68,7 +68,7 @@ export const ItemTitle = ({ item }: ItemTitleProps) => {
       <div className="flex-1 min-w-0">
         {/* Item Name */}
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight mb-2">
-          {`> ${name}`}
+          {`$ ${name}`}
         </h1>
 
         {/* Quality and Item Details Grid */}
