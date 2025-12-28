@@ -4,12 +4,12 @@ import { useState, useEffect } from "react";
 import { Link } from "@heroui/link";
 
 import { Logo } from "@/components/icons";
-import { symbols } from "@/constants/symbols";
+import { SYMBOLS } from "@/constants/symbols";
 import { getRandomItems } from "@/utils/random";
 
 export const Footer = () => {
   const [mounted, setMounted] = useState(false);
-  const generateBraille = () => getRandomItems(Array.from(symbols.braille), 7);
+  const generateBraille = () => getRandomItems(Array.from(SYMBOLS.BRAILLE), 7);
   const year = new Date().getFullYear();
 
   useEffect(() => {
