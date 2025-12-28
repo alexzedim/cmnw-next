@@ -2,7 +2,7 @@
 
 import type { Character } from "@/lib/types";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 import { HashCharactersFilter } from "./hash-characters-filter";
 import { HashCharactersSort } from "./hash-characters-sort";
@@ -18,14 +18,14 @@ export function HashCharactersContent({
   const [filteredCharacters, setFilteredCharacters] = useState(characters);
   const [displayCharacters, setDisplayCharacters] = useState(characters);
 
-  const handleFilter = (filtered: Character[]) => {
+  const handleFilter = useCallback((filtered: Character[]) => {
     setFilteredCharacters(filtered);
     setDisplayCharacters(filtered);
-  };
+  }, []);
 
-  const handleSort = (sorted: Character[]) => {
+  const handleSort = useCallback((sorted: Character[]) => {
     setDisplayCharacters(sorted);
-  };
+  }, []);
 
   return (
     <>
