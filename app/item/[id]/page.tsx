@@ -47,7 +47,7 @@ export async function generateMetadata({
   }
 
   const { item, realm } = data;
-  const { itemTitle } = generateItemTitle(item, realm);
+  const { itemTitle } = generateItemTitle(item as Partial<itemResponse>, realm);
 
   return {
     title: `CMNW: ${itemTitle}`,
@@ -55,7 +55,6 @@ export async function generateMetadata({
     openGraph: {
       title: `CMNW: ${itemTitle}`,
       description: `Item details and market data for ${itemTitle}`,
-      images: item.icon ? [{ url: item.icon }] : [],
     },
   };
 }
