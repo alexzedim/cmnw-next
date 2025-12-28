@@ -213,8 +213,8 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
           />
         </div>
 
-        {/* Full viewport width heatmap container */}
-        <div className="w-screen relative left-[calc(-50vw+50%)] bg-background">
+        {/* Full viewport width heatmap container with side margins */}
+        <div className="w-screen relative left-[calc(-50vw+50%)] bg-background px-4 md:px-6 lg:px-8">
           {/* Heatmap chart - full viewport width */}
           <div
             ref={scrollContainerRef}
