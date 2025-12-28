@@ -1,11 +1,16 @@
 "use client";
 
-import { FC, useState, MouseEvent } from "react";
-import { Card } from "@tremor/react";
+import { FC, useState, MouseEvent, memo } from "react";
+import { Card, CardBody, Spinner } from "@heroui/react";
 import useSWR from "swr";
-import { Spinner } from "@heroui/react";
 
 import { DOMAINS } from "@/constants";
+import { BadgeSection } from "@/components/shared/BadgeSection";
+import {
+  CARD_CLASS_NAMES,
+  BADGE_COLORS,
+  LOCALE,
+} from "@/components/item/constants";
 
 interface HeatmapDataPoint {
   x: number;
@@ -29,18 +34,28 @@ interface MarketHeatmapProps {
   hasContracts?: boolean;
 }
 
+/**
+ * Get color intensity gradient for heatmap cells
+ * Uses orange color scheme for better visual hierarchy
+ */
 const getHeatColor = (value: number, max: number): string => {
-  if (value === 0) return "rgba(167,167,167,0.05)";
+  if (value === 0 || max === 0) return "rgba(30, 30, 30, 0.3)";
 
   const intensity = Math.min(value / max, 1);
-  const opacity = 0.1 + intensity * 0.9;
+  // Orange color gradient: from light to deep orange
+  const r = Math.floor(255 * (0.5 + intensity * 0.5));
+  const g = Math.floor(153 * (0.3 + intensity * 0.7));
+  const b = Math.floor(51 * (0.2 + intensity * 0.8));
 
-  return `rgba(167,167,167,${opacity})`;
+  return `rgba(${r}, ${g}, ${b}, ${0.4 + intensity * 0.6})`;
 };
 
+/**
+ * Format axis label for display
+ */
 const formatAxisLabel = (value: string | number): string => {
   if (typeof value === "number") {
-    return new Date(value).toLocaleString("ru-RU", {
+    return new Date(value).toLocaleString(LOCALE, {
       month: "2-digit",
       day: "2-digit",
       hour: "2-digit",
@@ -51,171 +66,226 @@ const formatAxisLabel = (value: string | number): string => {
   return String(value);
 };
 
-export const MarketHeatmap: FC<MarketHeatmapProps> = ({
-  id,
-  isCommdty = false,
-  isGold = false,
-  hasContracts = false,
-}) => {
-  const [hoveredCell, setHoveredCell] = useState<HeatmapDataPoint | null>(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+/**
+ * Loading State Component
+ */
+const MarketHeatmapLoading = memo(() => (
+  <Card className={CARD_CLASS_NAMES.root}>
+    <CardBody className={CARD_CLASS_NAMES.body}>
+      <BadgeSection label="Market Heatmap" color={BADGE_COLORS.DEFAULT} />
+      <div className={`${CARD_CLASS_NAMES.loading} min-h-[400px]`}>
+        <Spinner color="warning" size="lg" />
+      </div>
+    </CardBody>
+  </Card>
+));
 
-  // Render heatmap for commodity items, gold items, or items with contracts
-  const shouldShowChart = isCommdty || isGold || hasContracts;
-  if (!shouldShowChart) return null;
+MarketHeatmapLoading.displayName = "MarketHeatmapLoading";
 
-  const { data, error, isLoading } = useSWR<HeatmapResponse>(
-    `${DOMAINS.domain}/api/dma/item/chart?id=${id}`,
-    (url: string) => fetch(url).then((r) => r.json())
-  );
+/**
+ * MarketHeatmap Component
+ *
+ * Displays market data as an interactive heatmap for commodity items,
+ * gold items, or items with contracts. Shows price levels (Y-axis) vs
+ * timestamps (X-axis) with intensity indicating market quantity.
+ *
+ * @example
+ * <MarketHeatmap id="12345" isCommdty={true} />
+ */
+export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
+  ({
+    id,
+    isCommdty = false,
+    isGold = false,
+    hasContracts = false,
+  }: MarketHeatmapProps) => {
+    const [hoveredCell, setHoveredCell] =
+      useState<HeatmapDataPoint | null>(null);
+    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
-  console.log(data);
+    // Render heatmap for commodity items, gold items, or items with contracts
+    const shouldShowChart = isCommdty || isGold || hasContracts;
+    if (!shouldShowChart) return null;
 
-  if (error) return null;
-  if (isLoading)
-    return (
-      <Card className="m-4 p-8 flex items-center justify-center min-h-[400px]">
-        <Spinner size="lg" />
-      </Card>
+    const { data, error, isLoading } = useSWR<HeatmapResponse>(
+      `${DOMAINS.domain}/api/dma/item/chart?id=${id}`,
+      (url: string) => fetch(url).then((r) => r.json())
     );
 
-  if (!data || !data.dataset.length) return null;
+    // Error state - return null (silent failure following project pattern)
+    if (error) return null;
 
-  // Calculate max value for color scaling
-  const maxValue = Math.max(...data.dataset.map((d) => d.value));
+    // Loading state
+    if (isLoading) return <MarketHeatmapLoading />;
 
-  // Create a map for quick data lookup
-  const dataMap = new Map<string, HeatmapDataPoint>();
+    // Empty state - no data available
+    if (!data || !data.dataset.length) return null;
 
-  data.dataset.forEach((point) => {
-    dataMap.set(`${point.x}-${point.y}`, point);
-  });
+    // Calculate max value for color scaling
+    const maxValue = Math.max(...data.dataset.map((d) => d.value));
 
-  const handleMouseMove = (e: MouseEvent, point: HeatmapDataPoint) => {
-    setHoveredCell(point);
-    setMousePosition({ x: e.clientX, y: e.clientY });
-  };
+    // Create a map for quick data lookup
+    const dataMap = new Map<string, HeatmapDataPoint>();
 
-  const handleMouseLeave = () => {
-    setHoveredCell(null);
-  };
+    data.dataset.forEach((point) => {
+      dataMap.set(`${point.x}-${point.y}`, point);
+    });
 
-  return (
-    <Card className="m-4 p-4 relative">
-      <div className="overflow-x-auto">
-        <div className="inline-block min-w-full">
-          {/* Grid Container */}
-          <div
-            className="grid gap-[1px] bg-gray-200"
-            style={{
-              gridTemplateColumns: `100px repeat(${data.xAxis.length}, minmax(60px, 1fr))`,
-            }}
-          >
-            {/* Top-left corner cell */}
-            <div className="bg-gray-100 p-2 font-semibold text-xs sticky left-0 z-20" />
+    const handleMouseMove = (e: MouseEvent, point: HeatmapDataPoint) => {
+      setHoveredCell(point);
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
 
-            {/* X-axis labels */}
-            {data.xAxis.map((xLabel, i) => (
+    const handleMouseLeave = () => {
+      setHoveredCell(null);
+    };
+
+    return (
+      <Card className={CARD_CLASS_NAMES.root}>
+        <CardBody className={CARD_CLASS_NAMES.body}>
+          <BadgeSection label="Market Heatmap" color={BADGE_COLORS.DEFAULT} />
+
+          <div className="overflow-x-auto rounded-lg border border-divider bg-background">
+            <div className="inline-block min-w-full">
+              {/* Grid Container */}
               <div
-                key={`x-${i}`}
-                className="bg-gray-100 p-2 text-xs font-medium text-center truncate"
-                title={formatAxisLabel(xLabel)}
+                className="grid border-collapse"
+                style={{
+                  gridTemplateColumns: `120px repeat(${data.xAxis.length}, minmax(70px, 1fr))`,
+                  borderSpacing: "1px",
+                  backgroundColor: "var(--color-divider)",
+                }}
               >
-                {formatAxisLabel(xLabel)}
-              </div>
-            ))}
+                {/* Top-left corner cell */}
+                <div className="bg-slate-700 p-3 font-semibold text-xs text-slate-100 sticky left-0 z-20" />
 
-            {/* Y-axis and data cells */}
-            {data.yAxis.map((yLabel, yIndex) => (
-              <>
-                {/* Y-axis label */}
-                <div
-                  key={`y-${yIndex}`}
-                  className="bg-gray-100 p-2 text-xs font-medium text-right sticky left-0 z-10"
-                >
-                  {yLabel}
-                </div>
+                {/* X-axis labels (timestamps) */}
+                {data.xAxis.map((xLabel, i) => (
+                  <div
+                    key={`x-${i}`}
+                    className="bg-slate-700 p-3 text-xs font-semibold text-slate-100 text-center truncate"
+                    title={formatAxisLabel(xLabel)}
+                  >
+                    {formatAxisLabel(xLabel)}
+                  </div>
+                ))}
 
-                {/* Data cells */}
-                {data.xAxis.map((_, xIndex) => {
-                  const point = dataMap.get(`${xIndex}-${yIndex}`);
-                  const value = point?.value || 0;
-                  const bgColor = getHeatColor(value, maxValue);
-
-                  return (
+                {/* Y-axis labels and data cells */}
+                {data.yAxis.map((yLabel, yIndex) => (
+                  <>
+                    {/* Y-axis label (price) */}
                     <div
-                      key={`cell-${xIndex}-${yIndex}`}
-                      className="p-2 text-xs font-medium text-center cursor-pointer transition-all hover:ring-2 hover:ring-primary hover:z-30 relative"
-                      style={{ backgroundColor: bgColor }}
-                      onMouseLeave={handleMouseLeave}
-                      onMouseMove={(e) => point && handleMouseMove(e, point)}
+                      key={`y-${yIndex}`}
+                      className="bg-slate-700 p-3 text-xs font-semibold text-orange-400 text-right sticky left-0 z-10"
                     >
-                      {value > 0 && (
-                        <span className="text-gray-800">
-                          {value.toLocaleString("ru-RU")}
-                        </span>
-                      )}
+                      {yLabel}
                     </div>
-                  );
-                })}
-              </>
-            ))}
-          </div>
-        </div>
-      </div>
 
-      {/* Tooltip */}
-      {hoveredCell && (
-        <div
-          className="fixed z-50 bg-gray-900 text-white text-xs p-3 rounded-lg shadow-lg pointer-events-none max-w-xs"
-          style={{
-            left: mousePosition.x + 15,
-            top: mousePosition.y + 15,
-          }}
-        >
-          <div className="space-y-1">
-            <div>
-              <strong>Time:</strong>{" "}
-              {formatAxisLabel(data.xAxis[hoveredCell.x])}
-            </div>
-            <div>
-              <strong>Price:</strong> {data.yAxis[hoveredCell.y]}
-            </div>
-            <div>
-              <strong>Quantity:</strong>{" "}
-              {hoveredCell.value.toLocaleString("ru-RU")}
-            </div>
-            {hoveredCell.orders !== undefined && (
-              <div>
-                <strong>Orders:</strong> {hoveredCell.orders}
-              </div>
-            )}
-            {hoveredCell.oi !== undefined && (
-              <div>
-                <strong>Open Interest:</strong>{" "}
-                {parseInt(String(hoveredCell.oi)).toLocaleString("ru-RU")}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+                    {/* Data cells */}
+                    {data.xAxis.map((_, xIndex) => {
+                      const point = dataMap.get(`${xIndex}-${yIndex}`);
+                      const value = point?.value || 0;
+                      const bgColor = getHeatColor(value, maxValue);
 
-      {/* Legend */}
-      <div className="mt-4 flex items-center justify-center gap-2 text-xs">
-        <span className="text-gray-600">Low</span>
-        <div className="flex h-4 w-32">
-          {[0, 0.25, 0.5, 0.75, 1].map((intensity, i) => (
+                      return (
+                        <div
+                          key={`cell-${xIndex}-${yIndex}`}
+                          className="relative p-2 text-center text-xs font-semibold transition-all duration-150 hover:ring-2 hover:ring-offset-1 hover:ring-orange-500 hover:z-30 cursor-pointer bg-background"
+                          style={{ backgroundColor: bgColor }}
+                          onMouseLeave={handleMouseLeave}
+                          onMouseMove={(e) => point && handleMouseMove(e, point)}
+                        >
+                          {value > 0 && (
+                            <span className="text-orange-400">
+                              {value.toLocaleString(LOCALE)}
+                            </span>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Tooltip */}
+          {hoveredCell && (
             <div
-              key={i}
-              className="flex-1"
+              className="fixed z-50 bg-slate-900 text-orange-50 text-xs p-4 rounded-lg shadow-xl pointer-events-none max-w-xs border border-orange-500/30 backdrop-blur"
               style={{
-                backgroundColor: `rgba(167,167,167,${0.1 + intensity * 0.9})`,
+                left: mousePosition.x + 15,
+                top: mousePosition.y + 15,
               }}
-            />
-          ))}
-        </div>
-        <span className="text-gray-600">High</span>
-      </div>
-    </Card>
-  );
-};
+            >
+              <div className="space-y-2">
+                <div className="flex justify-between gap-2">
+                  <span className="font-semibold text-orange-400">Time:</span>
+                  <span className="text-slate-300">
+                    {formatAxisLabel(data.xAxis[hoveredCell.x])}
+                  </span>
+                </div>
+                <div className="flex justify-between gap-2">
+                  <span className="font-semibold text-orange-400">Price:</span>
+                  <span className="text-slate-300">
+                    {data.yAxis[hoveredCell.y]}
+                  </span>
+                </div>
+                <div className="flex justify-between gap-2">
+                  <span className="font-semibold text-orange-400">Quantity:</span>
+                  <span className="text-orange-300 font-semibold">
+                    {hoveredCell.value.toLocaleString(LOCALE)}
+                  </span>
+                </div>
+                {hoveredCell.orders !== undefined && (
+                  <div className="flex justify-between gap-2 pt-1 border-t border-orange-500/20">
+                    <span className="font-semibold text-orange-400">Orders:</span>
+                    <span className="text-slate-300">{hoveredCell.orders}</span>
+                  </div>
+                )}
+                {hoveredCell.oi !== undefined && (
+                  <div className="flex justify-between gap-2">
+                    <span className="font-semibold text-orange-400">O.I.:</span>
+                    <span className="text-slate-300">
+                      {parseInt(String(hoveredCell.oi)).toLocaleString(LOCALE)}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Legend */}
+          <div className="mt-6 flex items-center justify-center gap-4 text-xs font-medium">
+            <span className="text-slate-400">Low Activity</span>
+            <div className="flex h-5 w-40 gap-px rounded-md overflow-hidden">
+              {[0, 0.2, 0.4, 0.6, 0.8, 1].map((intensity) => {
+                const r = Math.floor(
+                  255 * (0.5 + intensity * 0.5)
+                );
+                const g = Math.floor(
+                  153 * (0.3 + intensity * 0.7)
+                );
+                const b = Math.floor(
+                  51 * (0.2 + intensity * 0.8)
+                );
+                return (
+                  <div
+                    key={intensity}
+                    className="flex-1 border border-slate-600"
+                    style={{
+                      backgroundColor: `rgba(${r}, ${g}, ${b}, ${0.4 + intensity * 0.6})`,
+                    }}
+                  />
+                );
+              })}
+            </div>
+            <span className="text-orange-400 font-semibold">High Activity</span>
+          </div>
+        </CardBody>
+      </Card>
+    );
+  }
+);
+
+MarketHeatmap.displayName = "MarketHeatmap";
