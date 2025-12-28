@@ -14,6 +14,7 @@ import {
 import useSWR from "swr";
 
 import { DOMAINS } from "@/constants";
+import { fontJetBrains } from "@/config/fonts";
 
 interface Quote {
   price: number;
@@ -50,8 +51,20 @@ export const ItemQuotes = ({
   if (isLoading)
     return (
       <Card className="m-4 bg-background border border-divider">
-        <CardBody className="p-8 rounded-xl flex items-center justify-center min-h-[300px] bg-background">
-          <Spinner color="warning" size="lg" />
+        <CardBody className="p-8 rounded-xl bg-background">
+          {/* Item Quotes Badge */}
+          <div className="mb-6 flex items-center gap-3">
+            <div
+              className="inline-flex items-center gap-2 text-xs uppercase tracking-wider opacity-60"
+              style={{ fontFamily: fontJetBrains.style.fontFamily }}
+            >
+              <div className="size-1.5 rounded-full bg-cyan-500" />
+              <p className="inline-block">Market Quotes</p>
+            </div>
+          </div>
+          <div className="flex items-center justify-center min-h-[300px]">
+            <Spinner color="warning" size="lg" />
+          </div>
         </CardBody>
       </Card>
     );
@@ -68,6 +81,16 @@ export const ItemQuotes = ({
   return (
     <Card className="m-4 bg-background border border-divider">
       <CardBody className="p-8 rounded-xl bg-background">
+        {/* Item Quotes Badge */}
+        <div className="mb-6 flex items-center gap-3">
+          <div
+            className="inline-flex items-center gap-2 text-xs uppercase tracking-wider opacity-60"
+            style={{ fontFamily: fontJetBrains.style.fontFamily }}
+          >
+            <div className="size-1.5 rounded-full bg-cyan-500" />
+            <p className="inline-block">Market Quotes</p>
+          </div>
+        </div>
         <Table
           aria-label="Item price quotes"
           classNames={{
