@@ -50,6 +50,18 @@ const getHeatColor = (value: number, max: number): string => {
 };
 
 /**
+ * Get text color based on activity intensity
+ * High activity (intensity > 0.5): black text
+ * Low activity (intensity <= 0.5): white text
+ */
+const getTextColorByIntensity = (value: number, max: number): string => {
+  if (value === 0 || max === 0) return "#ffffff";
+  
+  const intensity = Math.min(value / max, 1);
+  return intensity > 0.5 ? "#000000" : "#ffffff";
+};
+
+/**
  * Convert month number to Roman numeral
  */
 const toRomanNumeral = (num: number): string => {
@@ -251,6 +263,7 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
                         const point = dataMap.get(`${xIndex}-${yIndex}`);
                         const value = point?.value || 0;
                         const bgColor = value > 0 ? getHeatColor(value, maxValue) : "#101010";
+                        const textColor = getTextColorByIntensity(value, maxValue);
 
                         return (
                           <div
@@ -263,7 +276,7 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
                             }
                           >
                             {value > 0 && (
-                              <span className="text-orange-500">
+                              <span style={{ color: textColor }}>
                                 {value.toLocaleString(LOCALE)}
                               </span>
                             )}
