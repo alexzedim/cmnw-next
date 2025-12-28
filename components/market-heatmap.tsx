@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, FC, useState, MouseEvent, memo } from "react";
+import { Fragment, FC, useState, MouseEvent, memo, useRef, useEffect } from "react";
 import { Card, CardBody, Spinner } from "@heroui/react";
 import useSWR from "swr";
 
@@ -156,6 +156,14 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
       null
     );
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+    // Scroll to the right to show latest data
+    useEffect(() => {
+      if (scrollContainerRef.current) {
+        scrollContainerRef.current.scrollLeft = scrollContainerRef.current.scrollWidth;
+      }
+    }, [data]);
 
     // Render heatmap for commodity items, gold items, or items with contracts
     const shouldShowChart = isCommdty || isGold || hasContracts;
@@ -203,7 +211,10 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
             label="Market Allocation"
           />
 
-          <div className="overflow-x-auto rounded-lg border border-divider bg-background">
+          <div
+            ref={scrollContainerRef}
+            className="overflow-x-auto rounded-lg border border-divider bg-background"
+          >
             <div className="inline-block min-w-full">
               {/* Grid Container */}
               <div
