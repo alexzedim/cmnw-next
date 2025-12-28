@@ -27,7 +27,7 @@ export function getGuildRankDisplay(
       };
     case 3:
       return {
-        symbol: "︽",
+        symbol: "☰",
         text: "Rank 3",
         isBold: true,
       };
