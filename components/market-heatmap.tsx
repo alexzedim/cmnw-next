@@ -30,7 +30,6 @@ interface MarketHeatmapProps {
   id: number | string;
   isCommdty?: boolean;
   isGold?: boolean;
-  isXrs?: boolean;
   hasContracts?: boolean;
 }
 
