@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useState, MouseEvent, memo } from "react";
+import { Fragment, FC, useState, MouseEvent, memo } from "react";
 import { Card, CardBody, Spinner } from "@heroui/react";
 import useSWR from "swr";
 
@@ -171,7 +171,7 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
 
                 {/* Y-axis labels and data cells */}
                 {data.yAxis.map((yLabel, yIndex) => (
-                  <>
+                  <Fragment key={`row-${yIndex}`}>
                     {/* Y-axis label (price) */}
                     <div
                       key={`y-${yIndex}`}
@@ -202,7 +202,7 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
                         </div>
                       );
                     })}
-                  </>
+                  </Fragment>
                 ))}
               </div>
             </div>
