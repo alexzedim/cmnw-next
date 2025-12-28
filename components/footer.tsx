@@ -1,17 +1,28 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import { Link } from "@heroui/link";
 
 import { Logo } from "@/components/icons";
+import { symbols } from "@/constants/symbols";
+import { getRandomItems } from "@/utils/random";
 
 export const Footer = () => {
+  const [mounted, setMounted] = useState(false);
+  const generateBraille = () => getRandomItems(Array.from(symbols.braille), 7);
   const year = new Date().getFullYear();
 
-  const footerSections = [
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const footerSections = mounted ? [
     {
-      title: "Resources",
+      title: generateBraille(),
       links: [
-        { label: "News", href: "/news" },
-        { label: "Docs", href: "/docs" },
-        { label: "Contact Sales", href: "/contact" },
+        { label: generateBraille(), href: "/news" },
+        { label: generateBraille(), href: "/docs" },
+        { label: generateBraille(), href: "/contact" },
         {
           label: "Open Source",
           href: "https://github.com/alexzedim/cmnw-next",
@@ -20,24 +31,24 @@ export const Footer = () => {
       ],
     },
     {
-      title: "Company",
+      title: generateBraille(),
       links: [
-        { label: "Careers", href: "/careers" },
-        { label: "Enterprise", href: "/enterprise" },
-        { label: "Security", href: "/security" },
+        { label: generateBraille(), href: "/careers" },
+        { label: generateBraille(), href: "/enterprise" },
+        { label: generateBraille(), href: "/security" },
       ],
     },
     {
-      title: "Legal",
+      title: generateBraille(),
       links: [
-        { label: "Privacy Policy", href: "/privacy" },
-        { label: "Terms of Service", href: "/terms" },
-        { label: "SLA", href: "/sla" },
-        { label: "DPA", href: "/dpa" },
-        { label: "BAA", href: "/baa" },
+        { label: generateBraille(), href: "/privacy" },
+        { label: generateBraille(), href: "/terms" },
+        { label: generateBraille(), href: "/sla" },
+        { label: generateBraille(), href: "/dpa" },
+        { label: generateBraille(), href: "/baa" },
       ],
     },
-  ];
+  ] : [];
 
   const socialLinks = [
     { label: "GitHub", href: "https://github.com/alexzedim/cmnw-next" },
