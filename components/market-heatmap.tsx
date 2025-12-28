@@ -205,16 +205,16 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
 
     return (
       <>
+        {/* Badge and title section - normal container */}
+        <div className="mb-6">
+          <BadgeSection
+            color={BADGE_COLORS.DEFAULT}
+            label="Market Allocation"
+          />
+        </div>
+
         {/* Full viewport width heatmap container */}
         <div className="w-screen relative left-[calc(-50vw+50%)] bg-background">
-          {/* Badge and title section */}
-          <div className="mx-4 md:mx-6 lg:mx-8 pt-8 pb-6">
-            <BadgeSection
-              color={BADGE_COLORS.DEFAULT}
-              label="Market Allocation"
-            />
-          </div>
-
           {/* Heatmap chart - full viewport width */}
           <div
             ref={scrollContainerRef}
@@ -393,7 +393,7 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
         )}
 
         {/* Legend section */}
-        <div className="mx-4 md:mx-6 lg:mx-8 mt-8 pb-8 flex items-center justify-center gap-4 text-xs font-medium">
+        <div className="mt-8 pb-8 flex items-center justify-center gap-4 text-xs font-medium">
           <span className="text-slate-500">Low Activity</span>
           <div
             className="flex h-5 w-40 gap-px rounded overflow-hidden"
