@@ -63,7 +63,7 @@ export const CharacterTitle = ({
 
       {/* Guild Info */}
       {guild && guildId && (
-        <div className="mb-3 flex items-baseline gap-2 text-sm lg:text-base">
+        <div className="mb-3 flex items-baseline gap-2 text-base lg:text-lg">
           <span className="text-foreground/50">#</span>
           <Link
             className="font-medium transition-colors duration-200 hover:text-orange-500 relative inline-flex items-center after:absolute after:-bottom-0.5 after:left-0 after:h-px after:w-0 after:bg-current after:transition-all after:duration-300 after:ease-in-out hover:after:w-full"
