@@ -65,7 +65,7 @@ export const SearchForm = () => {
           // Add items to suggestions
           data.items?.forEach((item: any) => {
             suggestions.push({
-              value: item.name || item.id?.toString(),
+              value: item.id.toString(),
               type: "item",
               label: item.name,
             });
@@ -174,8 +174,7 @@ export const SearchForm = () => {
         router.push(`/guild/${suggestion.value}`);
         break;
       case "item":
-        // TODO: Implement item page navigation when item route is ready
-        console.log("TODO: navigate to item page for", suggestion.value);
+        router.push(`/item/${suggestion.value}`);
         break;
       default:
         break;
@@ -279,11 +278,22 @@ export const SearchForm = () => {
                   <span className="text-base">
                     {getTypeIcon(suggestion.type)}
                   </span>
-                  <span className="flex-1">{suggestion.value}</span>
-                  {suggestion.label && (
-                    <span className="text-xs text-[var(--text-muted)] opacity-70">
-                      {suggestion.label}
-                    </span>
+                  {suggestion.type === "item" && suggestion.label ? (
+                    <>
+                      <span className="flex-1">{suggestion.label}</span>
+                      <span className="text-xs text-[var(--text-muted)] opacity-70">
+                        {suggestion.value}
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="flex-1">{suggestion.value}</span>
+                      {suggestion.label && (
+                        <span className="text-xs text-[var(--text-muted)] opacity-70">
+                          {suggestion.label}
+                        </span>
+                      )}
+                    </>
                   )}
                 </button>
               ))}

@@ -1,7 +1,8 @@
 "use client";
 
-import { Card, CardBody, Avatar } from "@heroui/react";
-
+import Image from "next/image";
+import { NAMING_CONSTANTS } from "@/constants";
+import { fontJetBrains } from "@/config/fonts";
 import { generateItemBackground } from "@/lib";
 
 interface ItemTitleProps {
@@ -12,6 +13,21 @@ interface ItemTitleProps {
   icon?: string;
 }
 
+function getItemBorderColor(quality?: string): string {
+  const qualityColorMap: Record<string, string> = {
+    mythic: "rgb(255, 128, 0)", // Orange
+    epic: "rgb(163, 53, 238)", // Purple
+    rare: "rgb(0, 112, 192)", // Blue
+    uncommon: "rgb(31, 178, 34)", // Green
+    common: "rgb(157, 157, 157)", // Gray
+    poor: "rgb(158, 158, 158)", // Light gray
+  };
+
+  return (
+    qualityColorMap[(quality || "").toLowerCase()] || "rgb(249, 115, 22)"
+  );
+}
+
 export const ItemTitle = ({
   itemTitle,
   realmTitle,
@@ -19,64 +35,52 @@ export const ItemTitle = ({
   assetClass,
   icon,
 }: ItemTitleProps) => {
-  const backgroundRoot = generateItemBackground({
-    quality,
-    asset_class: assetClass,
-  });
-  const backgroundTitle = generateItemBackground({ asset_class: assetClass });
-
-  // Extract backgroundColor from gradient for border
-  const borderColorMatch = backgroundTitle.match(/rgba?\([^)]+\)/);
-  const borderColor = borderColorMatch ? borderColorMatch[0] : "#ffffff";
+  const borderColor = getItemBorderColor(quality);
 
   return (
-    <Card
-      className="max-w-6xl mx-4 my-4"
-      style={{ background: backgroundRoot }}
+    <div
+      className="card-surface relative p-6 lg:p-8 rounded-xl mb-6 border-l-4 transition-colors duration-200"
+      style={{
+        borderLeftColor: borderColor,
+      }}
     >
-      <CardBody
-        className="p-6 border-8 rounded-xl"
-        style={{
-          background: backgroundRoot,
-          borderColor: borderColor,
-        }}
-      >
-        <div className="flex items-center gap-4">
-          {icon && (
-            <Avatar
-              alt="Item Icon"
-              className="w-16 h-16 flex-shrink-0"
-              radius="sm"
+      {/* Item Badge */}
+      <div className="mb-5 flex items-center gap-3">
+        <div
+          className="inline-flex items-center gap-2 text-xs uppercase tracking-wider opacity-60"
+          style={{ fontFamily: fontJetBrains.style.fontFamily }}
+        >
+          <div className="size-1.5 rounded-full bg-orange-500" />
+          <p className="inline-block">{NAMING_CONSTANTS.ITEM}</p>
+        </div>
+      </div>
+
+      {/* Item Name */}
+      <div className="flex items-start gap-4">
+        {icon && (
+          <div className="relative w-20 h-20 lg:w-24 lg:h-24 flex-shrink-0 rounded-lg overflow-hidden bg-foreground/5">
+            <Image
+              alt={itemTitle}
+              fill
+              className="object-cover"
               src={icon}
             />
-          )}
-          <div className="flex-1 min-w-0">
-            <h1
-              className="font-bold uppercase text-white break-words"
-              style={{
-                fontFamily: "Fira Sans, sans-serif",
-                fontSize: "clamp(1.25rem, 2vw + 0.5rem, 2.5rem)",
-                textAlign: "left",
-                lineHeight: "1.2",
-              }}
-            >
-              {itemTitle}
-            </h1>
-            {realmTitle && (
-              <h4
-                className="text-white/90 font-normal break-words mt-1"
-                style={{
-                  fontFamily: "Fira Sans, sans-serif",
-                  fontSize: "clamp(0.875rem, 1vw + 0.5rem, 1.25rem)",
-                  textAlign: "left",
-                }}
-              >
-                {realmTitle}
-              </h4>
-            )}
           </div>
+        )}
+        <div className="flex-1 min-w-0">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight mb-3">
+            {itemTitle}
+          </h1>
+
+          {/* Realm */}
+          {realmTitle && (
+            <div className="flex items-baseline gap-2 text-sm lg:text-base text-foreground/70">
+              <span className="text-foreground/50">@</span>
+              <span className="font-medium">{realmTitle}</span>
+            </div>
+          )}
         </div>
-      </CardBody>
-    </Card>
+      </div>
+    </div>
   );
 };
