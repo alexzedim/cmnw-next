@@ -68,20 +68,11 @@ export const ItemTitle = ({ item }: ItemTitleProps) => {
       <div className="flex-1 min-w-0">
         {/* Item Name */}
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight mb-2">
-          {name}
+          {`> ${name}`}
         </h1>
 
-        {/* Expansion */}
-        <div className="flex flex-wrap items-center gap-2 mb-4">
-          {expansion && (
-            <span className="text-xs lg:text-sm text-foreground/60 uppercase tracking-wide">
-              {expansion}
-            </span>
-          )}
-        </div>
-
         {/* Quality and Item Details Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-5 mb-5">
           {quality && (
             <div className="flex flex-col">
               <span className="text-xs text-foreground/50 uppercase tracking-wider">
@@ -112,6 +103,12 @@ export const ItemTitle = ({ item }: ItemTitleProps) => {
               Sub Class
             </span>
             <span className="font-medium">{itemSubClass}</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="text-xs text-foreground/50 uppercase tracking-wider">
+              Expansion
+            </span>
+            <span className="font-medium">{expansion}</span>
           </div>
         </div>
 
