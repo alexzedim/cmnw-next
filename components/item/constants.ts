@@ -55,7 +55,8 @@ export const BADGE_COLORS = {
  * @param locale - Locale string (default: ru-RU)
  * @returns Formatted number string
  */
-export const formatNumber = (value: number, locale = LOCALE): string => {
+export const formatNumber = (value?: number | null, locale = LOCALE): string => {
+  if (value === null || value === undefined) return "-";
   return value.toLocaleString(locale);
 };
 
