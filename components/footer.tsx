@@ -16,43 +16,41 @@ export const Footer = () => {
     setMounted(true);
   }, []);
 
-  const footerSections = mounted ? [
-    {
-      title: generateBraille(),
-      links: [
-        { label: generateBraille(), href: "/news" },
-        { label: generateBraille(), href: "/docs" },
-        { label: generateBraille(), href: "/contact" },
+  const footerSections = mounted
+    ? [
         {
-          label: "Open Source",
-          href: "https://github.com/alexzedim/cmnw-next",
-          isExternal: true,
+          title: generateBraille(),
+          links: [
+            { label: generateBraille(), href: "/news" },
+            { label: generateBraille(), href: "/docs" },
+            { label: generateBraille(), href: "/contact" },
+            {
+              label: "GitHub",
+              href: "https://github.com/alexzedim/cmnw-next",
+              isExternal: true,
+            },
+          ],
         },
-      ],
-    },
-    {
-      title: generateBraille(),
-      links: [
-        { label: generateBraille(), href: "/careers" },
-        { label: generateBraille(), href: "/enterprise" },
-        { label: generateBraille(), href: "/security" },
-      ],
-    },
-    {
-      title: generateBraille(),
-      links: [
-        { label: generateBraille(), href: "/privacy" },
-        { label: generateBraille(), href: "/terms" },
-        { label: generateBraille(), href: "/sla" },
-        { label: generateBraille(), href: "/dpa" },
-        { label: generateBraille(), href: "/baa" },
-      ],
-    },
-  ] : [];
-
-  const socialLinks = [
-    { label: "GitHub", href: "https://github.com/alexzedim/cmnw-next" },
-  ];
+        {
+          title: generateBraille(),
+          links: [
+            { label: generateBraille(), href: "/careers" },
+            { label: generateBraille(), href: "/enterprise" },
+            { label: generateBraille(), href: "/security" },
+          ],
+        },
+        {
+          title: generateBraille(),
+          links: [
+            { label: generateBraille(), href: "/privacy" },
+            { label: generateBraille(), href: "/terms" },
+            { label: generateBraille(), href: "/sla" },
+            { label: generateBraille(), href: "/dpa" },
+            { label: generateBraille(), href: "/baa" },
+          ],
+        },
+      ]
+    : [];
 
   return (
     <div className="container mx-auto px-6 mt-32 mb-20">
@@ -106,25 +104,6 @@ export const Footer = () => {
 
           {/* Bottom Section */}
           <div className="mt-auto -mb-1.5 flex flex-col flex-wrap items-end justify-end gap-x-3 gap-y-1 pr-4 lg:max-w-[90%] lg:flex-row lg:items-center lg:justify-between lg:pr-0">
-            {/* Social Links */}
-            <ul className="flex gap-2">
-              {socialLinks.map((social, index) => (
-                <li key={social.label} className="inline-flex items-center">
-                  <Link
-                    className="text-foreground text-sm leading-tight relative flex w-fit items-center transition-colors duration-200 hover:text-orange-500 group after:absolute after:-bottom-px after:left-0 after:h-px after:w-0 after:bg-current after:transition-all after:duration-300 after:ease-in-out hover:after:w-full"
-                    href={social.href}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    {social.label}
-                  </Link>
-                  {index < socialLinks.length - 1 && (
-                    <span className="text-foreground/50 ml-0.5">,</span>
-                  )}
-                </li>
-              ))}
-            </ul>
-
             {/* Copyright */}
             <p className="text-foreground text-sm leading-tight">
               © {year} CMNW. All rights reserved.
