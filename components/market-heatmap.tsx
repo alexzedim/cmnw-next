@@ -1,10 +1,18 @@
 "use client";
 
-import { Fragment, FC, useState, MouseEvent, memo, useRef, useEffect } from "react";
+import {
+  Fragment,
+  FC,
+  useState,
+  MouseEvent,
+  memo,
+  useRef,
+  useEffect,
+} from "react";
 import { Card, CardBody, Spinner } from "@heroui/react";
 import useSWR from "swr";
 
-import {DOMAINS, NAMING_CONSTANTS} from "@/constants";
+import { DOMAINS, NAMING_CONSTANTS } from "@/constants";
 import { BadgeSection } from "@/components/shared/BadgeSection";
 import {
   CARD_CLASS_NAMES,
@@ -58,6 +66,7 @@ const getTextColorByIntensity = (value: number, max: number): string => {
   if (value === 0 || max === 0) return "#ffffff";
 
   const intensity = Math.min(value / max, 1);
+
   return intensity > 0.5 ? "#000000" : "#ffffff";
 };
 
@@ -167,11 +176,12 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
       `${DOMAINS.domain}/api/dma/item/chart?id=${id}`,
       (url: string) => fetch(url).then((r) => r.json())
     );
-
+    console.log(data);
     // Scroll to the right to show latest data
     useEffect(() => {
       if (scrollContainerRef.current && data) {
-        scrollContainerRef.current.scrollLeft = scrollContainerRef.current.scrollWidth;
+        scrollContainerRef.current.scrollLeft =
+          scrollContainerRef.current.scrollWidth;
       }
     }, [data]);
 
@@ -285,8 +295,12 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
                       {data.xAxis.map((_, xIndex) => {
                         const point = dataMap.get(`${xIndex}-${yIndex}`);
                         const value = point?.value || 0;
-                        const bgColor = value > 0 ? getHeatColor(value, maxValue) : "#0a0a0a";
-                        const textColor = getTextColorByIntensity(value, maxValue);
+                        const bgColor =
+                          value > 0 ? getHeatColor(value, maxValue) : "#0a0a0a";
+                        const textColor = getTextColorByIntensity(
+                          value,
+                          maxValue
+                        );
 
                         return (
                           <div
