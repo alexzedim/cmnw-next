@@ -421,24 +421,28 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
                 </span>
               </div>
               <div className="flex justify-between gap-2">
-                <span className="font-semibold text-orange-500">Price:</span>
+                <span className="font-semibold text-orange-500">
+                  {hoveredCell.y === data.yAxis.length - 1
+                    ? "Price Avg:"
+                    : "Price:"}
+                </span>
                 <span className="text-slate-200">
-                  {parseFloat(data.yAxis[hoveredCell.y]).toFixed(2)}
+                  {formatPrice(
+                    data.yAxis[hoveredCell.y],
+                    hoveredCell.value,
+                    hoveredCell.oi
+                  )}
                 </span>
               </div>
               <div className="flex justify-between gap-2">
-                <span className="font-semibold text-orange-500">
-                  Quantity:
-                </span>
+                <span className="font-semibold text-orange-500">Quantity:</span>
                 <span className="text-orange-300 font-semibold">
                   {hoveredCell.value.toLocaleString(LOCALE)}
                 </span>
               </div>
               {hoveredCell.orders !== undefined && (
                 <div className="flex justify-between gap-2 pt-1 border-t border-orange-500/20">
-                  <span className="font-semibold text-orange-500">
-                    Orders:
-                  </span>
+                  <span className="font-semibold text-orange-500">Orders:</span>
                   <span className="text-slate-200">{hoveredCell.orders}</span>
                 </div>
               )}
