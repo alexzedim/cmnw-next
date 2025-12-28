@@ -24,7 +24,7 @@ export const BadgeSection = ({
   color = "bg-orange-500",
 }: BadgeSectionProps) => {
   return (
-    <div className="mb-6 flex items-center gap-3">
+    <div className="mb-6 px-8 flex items-center gap-3">
       <div
         className="inline-flex items-center gap-2 text-xs uppercase tracking-wider opacity-60"
         style={{ fontFamily: fontJetBrains.style.fontFamily }}
