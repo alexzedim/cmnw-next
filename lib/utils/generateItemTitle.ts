@@ -38,5 +38,34 @@ export const generateItemTitle = (
     realmTitle = "";
   }
 
-  return { itemTitle, realmTitle, isGold, isXrs, isCommdty };
+  return {
+    itemTitle,
+    realmTitle,
+    isGold,
+    isXrs,
+    isCommdty,
+    // Item properties
+    quality: item.quality,
+    asset_class: item.asset_class,
+    assetClass: item.assetClass,
+    icon: item.icon,
+    itemClass: item.itemClass,
+    itemSubClass: item.itemSubClass,
+    itemLevel: item.itemLevel,
+    level: item.level,
+    purchasePrice: item.purchasePrice,
+    purchaseQuantity: item.purchaseQuantity,
+    vendorSellPrice: item.vendorSellPrice,
+    isEquip: item.isEquip,
+    isStackable: item.isStackable,
+    inventoryType: item.inventoryType,
+    lootType: item.lootType,
+    hasContracts: item.hasContracts,
+    expansion: item.expansion,
+    stackable: item.stackable,
+    professionClass: item.professionClass,
+    ticker: item.ticker,
+    tags: item.tags,
+    indexBy: item.indexBy,
+  };
 };
