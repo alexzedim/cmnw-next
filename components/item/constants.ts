@@ -11,17 +11,6 @@
 export const LOCALE = "ru-RU";
 
 /**
- * Common column definitions for item-related tables
- */
-export const ITEM_TABLE_COLUMNS = {
-  QUOTES: [
-    { key: "price" as const, label: "Price" },
-    { key: "quantity" as const, label: "Quantity" },
-    { key: "open_interest" as const, label: "Open Interest" },
-  ],
-} as const;
-
-/**
  * Table styling classes used across item components
  */
 export const TABLE_CLASS_NAMES = {
