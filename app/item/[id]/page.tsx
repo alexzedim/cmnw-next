@@ -62,16 +62,16 @@ export async function generateMetadata({
 export default async function ItemPage({ params }: ItemPageProps) {
   const { id } = await params;
   const data = await getItemData(id);
+
   console.log(data);
 
   if (!data) {
     notFound();
   }
 
-  const { item, realm } = data;
-  const { itemTitle, realmTitle, isGold, isCommdty } = generateItemTitle(
-    item as Partial<itemResponse>,
-    realm
+  const { item } = data;
+  const { itemTitle, isGold, isCommdty } = generateItemTitle(
+    item as Partial<itemResponse>
   );
 
   return (
