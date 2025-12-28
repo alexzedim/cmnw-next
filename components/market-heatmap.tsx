@@ -205,8 +205,8 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
 
     return (
       <>
-        {/* Full-width heatmap container */}
-        <div className="-mx-4 md:-mx-6 lg:-mx-8 bg-background">
+        {/* Full viewport width heatmap container */}
+        <div className="w-screen relative left-[calc(-50vw+50%)] bg-background">
           {/* Badge and title section */}
           <div className="mx-4 md:mx-6 lg:mx-8 pt-8 pb-6">
             <BadgeSection
@@ -215,7 +215,7 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
             />
           </div>
 
-          {/* Heatmap chart - full width */}
+          {/* Heatmap chart - full viewport width */}
           <div
             ref={scrollContainerRef}
             className="overflow-x-auto bg-background"
