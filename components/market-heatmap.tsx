@@ -129,6 +129,26 @@ const formatTimestampXAxis = (value: string | number): string => {
 };
 
 /**
+ * Format price: if oi (open interest) is available, divide oi by quantity,
+ * otherwise use the priceValue as-is. Always parseFloat and toFixed(2).
+ */
+const formatPrice = (
+  priceValue: string | number,
+  quantity?: number,
+  oi?: number
+): string => {
+  let price: number;
+
+  if (oi !== undefined && oi > 0 && quantity !== undefined && quantity > 0) {
+    price = oi / quantity;
+  } else {
+    price = parseFloat(String(priceValue));
+  }
+
+  return price.toFixed(2);
+};
+
+/**
  * Loading State Component
  */
 const MarketHeatmapLoading = memo(() => (
