@@ -34,11 +34,17 @@ export function HashCharactersContent({
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-start">
           {/* Filter Section */}
           <div className="lg:col-span-2 space-y-3">
-            <HashCharactersFilter characters={characters} onFilter={handleFilter} />
+            <HashCharactersFilter
+              characters={characters}
+              onFilter={handleFilter}
+            />
           </div>
           {/* Sort Section */}
           <div className="lg:col-span-1 flex flex-col gap-3 items-start lg:flex-row lg:items-center justify-start lg:justify-end">
-            <HashCharactersSort characters={filteredCharacters} onSort={handleSort} />
+            <HashCharactersSort
+              characters={filteredCharacters}
+              onSort={handleSort}
+            />
           </div>
         </div>
       </div>

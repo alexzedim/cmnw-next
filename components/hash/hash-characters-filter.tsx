@@ -50,20 +50,20 @@ export function HashCharactersFilter({
       {/* Search Input */}
       <div className="w-full">
         <input
-          type="text"
+          className="w-full px-4 py-2.5 rounded-lg border border-[var(--border)] bg-[var(--bg-elevated)] text-[var(--text)] text-sm placeholder-[var(--text-muted)] transition-colors focus-visible:border-[var(--accent)]"
           placeholder="Search by name, realm, or guild..."
+          type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full px-4 py-2.5 rounded-lg border border-[var(--border)] bg-[var(--bg-elevated)] text-[var(--text)] text-sm placeholder-[var(--text-muted)] transition-colors focus-visible:border-[var(--accent)]"
         />
       </div>
 
       {/* Filter Dropdowns */}
       <div className="flex gap-4 w-full flex-col sm:flex-row">
         <select
+          className="flex-1 sm:flex-none px-4 py-2.5 rounded-lg border border-[var(--border)] bg-[var(--bg-elevated)] text-[var(--text)] text-sm transition-colors focus-visible:border-[var(--accent)]"
           value={selectedClass}
           onChange={(e) => setSelectedClass(e.target.value)}
-          className="flex-1 sm:flex-none px-4 py-2.5 rounded-lg border border-[var(--border)] bg-[var(--bg-elevated)] text-[var(--text)] text-sm transition-colors focus-visible:border-[var(--accent)]"
         >
           <option value="">All Classes</option>
           {uniqueClasses.map((cls) => (
@@ -74,9 +74,9 @@ export function HashCharactersFilter({
         </select>
 
         <select
+          className="flex-1 sm:flex-none px-4 py-2.5 rounded-lg border border-[var(--border)] bg-[var(--bg-elevated)] text-[var(--text)] text-sm transition-colors focus-visible:border-[var(--accent)]"
           value={selectedFaction}
           onChange={(e) => setSelectedFaction(e.target.value)}
-          className="flex-1 sm:flex-none px-4 py-2.5 rounded-lg border border-[var(--border)] bg-[var(--bg-elevated)] text-[var(--text)] text-sm transition-colors focus-visible:border-[var(--accent)]"
         >
           <option value="">All Factions</option>
           {uniqueFactions.map((faction) => (

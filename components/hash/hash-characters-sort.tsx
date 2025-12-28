@@ -65,11 +65,13 @@ export function HashCharactersSort({
 
   return (
     <>
-      <label className="text-sm font-medium text-[var(--text-muted)] whitespace-nowrap">Sort by:</label>
+      <label className="text-sm font-medium text-[var(--text-muted)] whitespace-nowrap">
+        Sort by:
+      </label>
       <select
+        className="px-4 py-2.5 rounded-lg border border-[var(--border)] bg-[var(--bg-elevated)] text-[var(--text)] text-sm transition-colors focus-visible:border-[var(--accent)] w-full sm:w-64"
         value={sortBy}
         onChange={(e) => handleSort(e.target.value as SortOption)}
-        className="px-4 py-2.5 rounded-lg border border-[var(--border)] bg-[var(--bg-elevated)] text-[var(--text)] text-sm transition-colors focus-visible:border-[var(--accent)] w-full sm:w-64"
       >
         {SORT_OPTIONS.map((option) => (
           <option key={option.value} value={option.value}>
