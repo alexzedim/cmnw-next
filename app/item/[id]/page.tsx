@@ -75,8 +75,8 @@ export default async function ItemPage({ params }: ItemPageProps) {
   );
 
   return (
-    <main className="min-h-screen pt-16 pb-8">
-      <div className="container mx-auto px-4 max-w-7xl">
+    <main className="min-h-screen pt-20 pb-8">
+      <div className="container mx-auto px-4">
         <ItemTitle
           assetClass={item.assetClass || item.asset_class}
           icon={item.icon}
@@ -84,6 +84,8 @@ export default async function ItemPage({ params }: ItemPageProps) {
           quality={item.quality}
           realmTitle={realmTitle}
         />
+
+        <div className="my-8 h-px bg-[var(--border)]" />
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mt-4">
           <div className="md:col-span-5">
@@ -94,12 +96,16 @@ export default async function ItemPage({ params }: ItemPageProps) {
           </div>
         </div>
 
+        <div className="my-8 h-px bg-[var(--border)]" />
+
         <MarketHeatmap
           id={id}
           isCommdty={isCommdty}
           isGold={isGold}
           isXrs={isXrs}
         />
+
+        <div className="my-8 h-px bg-[var(--border)]" />
 
         <ItemListing
           id={id}
