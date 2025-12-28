@@ -46,8 +46,8 @@ export async function generateMetadata({
     };
   }
 
-  const { item, realm } = data;
-  const { itemTitle } = generateItemTitle(item as Partial<itemResponse>, realm);
+  const { item } = data;
+  const { itemTitle } = generateItemTitle(item);
 
   return {
     title: `CMNW: ${itemTitle}`,
