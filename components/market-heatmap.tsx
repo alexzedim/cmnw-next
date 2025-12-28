@@ -225,7 +225,7 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
               <div
                 className="grid"
                 style={{
-                  gridTemplateColumns: `minmax(80px, auto) repeat(${data.xAxis.length}, minmax(70px, 1fr))`,
+                  gridTemplateColumns: `minmax(80px, auto) repeat(${data.xAxis.length}, minmax(70px, 1fr)) minmax(80px, auto)`,
                   borderSpacing: "0",
                   backgroundColor: "#0a0a0a",
                 }}
@@ -251,6 +251,14 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
                     {formatTimestampHeader(xLabel)}
                   </div>
                 ))}
+                {/* Right side empty header cell */}
+                <div
+                  className="text-xs font-semibold text-slate-500 sticky right-0 z-20"
+                  style={{
+                    backgroundColor: "#0a0a0a",
+                    padding: "12px 8px",
+                  }}
+                />
 
                 {/* Y-axis labels and data cells (reversed for price inversion) */}
                 {[...data.yAxis].reverse().map((yLabel, reversedIndex) => {
@@ -301,6 +309,20 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
                           </div>
                         );
                       })}
+
+                      {/* Right side Y-axis label (price) */}
+                      <div
+                        className="flex items-center justify-center text-xs font-semibold text-orange-500 sticky right-0 z-10"
+                        style={{
+                          backgroundColor: "#0a0a0a",
+                          paddingLeft: "8px",
+                          paddingRight: "8px",
+                          paddingTop: "8px",
+                          paddingBottom: "8px",
+                        }}
+                      >
+                        {parseFloat(yLabel).toFixed(2)}
+                      </div>
                     </Fragment>
                   );
                 })}
@@ -326,6 +348,14 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
                     {formatTimestampXAxis(xLabel)}
                   </div>
                 ))}
+                {/* Right side empty bottom cell */}
+                <div
+                  className="text-xs font-semibold text-slate-500 sticky right-0 z-20"
+                  style={{
+                    backgroundColor: "#0a0a0a",
+                    padding: "12px 8px",
+                  }}
+                />
               </div>
             </div>
           </div>
