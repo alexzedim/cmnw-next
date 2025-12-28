@@ -1,1 +1,37 @@
-\"use client\";\n\nimport { fontJetBrains } from \"@/config/fonts\";\n\ninterface BadgeSectionProps {\n  /** Badge label text */\n  label: string;\n  /** Badge dot color (Tailwind color class) */\n  color?: string;\n}\n\n/**\n * BadgeSection Component\n *\n * A reusable badge header component used across item-related components\n * (ItemQuotes, ItemValuations, etc.) to provide consistent visual hierarchy\n * and styling.\n *\n * @example\n * <BadgeSection label=\"Market Quotes\" color=\"bg-cyan-500\" />\n */\nexport const BadgeSection = ({\n  label,\n  color = \"bg-orange-500\",\n}: BadgeSectionProps) => {\n  return (\n    <div className=\"mb-6 flex items-center gap-3\">\n      <div\n        className=\"inline-flex items-center gap-2 text-xs uppercase tracking-wider opacity-60\"\n        style={{ fontFamily: fontJetBrains.style.fontFamily }}\n      >\n        <div className={`size-1.5 rounded-full ${color}`} />\n        <p className=\"inline-block\">{label}</p>\n      </div>\n    </div>\n  );\n};\n"
+"use client";
+
+import { fontJetBrains } from "@/config/fonts";
+
+interface BadgeSectionProps {
+  /** Badge label text */
+  label: string;
+  /** Badge dot color (Tailwind color class) */
+  color?: string;
+}
+
+/**
+ * BadgeSection Component
+ *
+ * A reusable badge header component used across item-related components
+ * (ItemQuotes, ItemValuations, etc.) to provide consistent visual hierarchy
+ * and styling.
+ *
+ * @example
+ * <BadgeSection label="Market Quotes" color="bg-cyan-500" />
+ */
+export const BadgeSection = ({
+  label,
+  color = "bg-orange-500",
+}: BadgeSectionProps) => {
+  return (
+    <div className="mb-6 flex items-center gap-3">
+      <div
+        className="inline-flex items-center gap-2 text-xs uppercase tracking-wider opacity-60"
+        style={{ fontFamily: fontJetBrains.style.fontFamily }}
+      >
+        <div className={`size-1.5 rounded-full ${color}`} />
+        <p className="inline-block">{label}</p>
+      </div>
+    </div>
+  );
+};

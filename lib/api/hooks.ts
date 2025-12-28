@@ -266,7 +266,9 @@ export function useItemQuotes(id: string | number | null) {
 
   return useSWR<QuotesResponse>(
     id ? `/api/dma/item/quotes?id=${id}` : null,
-    id ? () => apiClient.get<QuotesResponse>("/api/dma/item/quotes", { id }) : null,
+    id
+      ? () => apiClient.get<QuotesResponse>("/api/dma/item/quotes", { id })
+      : null,
     defaultConfig
   );
 }

@@ -218,11 +218,13 @@ export function GuildRoster({ members }: GuildRosterProps) {
                   {member.class ? (
                     <Chip
                       size="sm"
-                      variant="flat"
                       style={{
-                        backgroundColor: classColor ? getPastelColor(classColor) : "inherit",
+                        backgroundColor: classColor
+                          ? getPastelColor(classColor)
+                          : "inherit",
                         color: "#000",
                       }}
+                      variant="flat"
                     >
                       {member.specialization && member.class
                         ? `${member.specialization} ${member.class}`
@@ -260,7 +262,9 @@ export function GuildRoster({ members }: GuildRosterProps) {
                       {`a${member.hashA}`}
                     </Link>
                   ) : (
-                    <span className="text-xs font-mono text-foreground/60">-</span>
+                    <span className="text-xs font-mono text-foreground/60">
+                      -
+                    </span>
                   )}
                 </TableCell>
                 <TableCell>
@@ -272,7 +276,9 @@ export function GuildRoster({ members }: GuildRosterProps) {
                       {`b${member.hashB}`}
                     </Link>
                   ) : (
-                    <span className="text-xs font-mono text-foreground/60">-</span>
+                    <span className="text-xs font-mono text-foreground/60">
+                      -
+                    </span>
                   )}
                 </TableCell>
               </TableRow>
@@ -287,15 +293,15 @@ export function GuildRoster({ members }: GuildRosterProps) {
           <Pagination
             isCompact
             showControls
-            page={page}
-            total={totalPages}
-            onChange={setPage}
             classNames={{
               item: "text-black",
               cursor: "bg-orange-500 text-black",
               prev: "text-black [&_svg]:text-black",
               next: "text-black",
             }}
+            page={page}
+            total={totalPages}
+            onChange={setPage}
           />
         </div>
       )}
