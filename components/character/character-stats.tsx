@@ -85,7 +85,7 @@ export function CharacterStats({ character }: CharacterStatsProps) {
                 className="text-orange-500 hover:text-orange-400 transition-colors font-medium"
                 href={`/hash/a${character.hashA}`}
               >
-                {character.hashA}
+                {`a${character.hashA}`}
               </NextLink>
             ),
           },
@@ -100,7 +100,7 @@ export function CharacterStats({ character }: CharacterStatsProps) {
                 className="text-orange-500 hover:text-orange-400 transition-colors font-medium"
                 href={`/hash/b${character.hashB}`}
               >
-                {character.hashB}
+                {`b${character.hashB}`}
               </NextLink>
             ),
           },
