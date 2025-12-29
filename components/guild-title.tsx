@@ -1,8 +1,9 @@
 "use client";
 
-import { Faction } from "@/lib/types";
+import type { Character, Faction } from "@/lib/types";
 import { NAMING_CONSTANTS } from "@/constants";
 import { fontJetBrains } from "@/config/fonts";
+import { GuildRankAllocation } from "./guild/guild-rank-allocation";
 
 interface GuildTitleProps {
   name: string;
@@ -11,6 +12,7 @@ interface GuildTitleProps {
   created_timestamp: number | string;
   achievement_points: number;
   faction?: Faction;
+  members?: Character[];
 }
 
 function getFactionBorderColor(faction?: Faction): string {
@@ -33,6 +35,7 @@ export const GuildTitle = ({
   created_timestamp,
   achievement_points,
   faction,
+  members,
 }: GuildTitleProps) => {
   const borderColor = getFactionBorderColor(faction);
   const createdDate = new Date(created_timestamp).toLocaleString("en-GB");
@@ -83,6 +86,13 @@ export const GuildTitle = ({
         <span className="text-foreground/50">@</span>
         <span className="font-medium">{realm.toLowerCase()}</span>
       </div>
+
+      {/* Guild Rank Allocation Block */}
+      {members && members.length > 0 && (
+        <div className="mt-6">
+          <GuildRankAllocation members={members} />
+        </div>
+      )}
     </div>
   );
 };
