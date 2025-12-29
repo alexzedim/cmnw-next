@@ -304,7 +304,7 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
       className={`px-4 py-3 rounded-lg ${guildType.bgColor}`}
       style={
         guildType.hexBgColor
-          ? { backgroundColor: `${guildType.hexBgColor}15` }
+          ? { backgroundColor: `${guildType.hexBgColor}25` }
           : undefined
       }
     >
