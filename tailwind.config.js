@@ -27,6 +27,35 @@ const config = {
           DEFAULT: "var(--accent)",
           foreground: "var(--accent-foreground)",
         },
+        tremor: {
+          brand: {
+            faint: "#ffa50033",
+            muted: "#ff8c0080",
+            subtle: "#ff9900",
+            DEFAULT: "#ff9900",
+            emphasis: "#ff6600",
+            inverted: "#ffffff",
+          },
+          background: {
+            muted: "#0b0b0c",
+            subtle: "#1f2126",
+            DEFAULT: "#111216",
+            emphasis: "#ffffff",
+          },
+          border: {
+            DEFAULT: "#1f2126",
+          },
+          ring: {
+            DEFAULT: "#ff9900",
+          },
+          content: {
+            subtle: "#71717a",
+            DEFAULT: "#ecedee",
+            emphasis: "#ffffff",
+            strong: "#ffffff",
+            inverted: "#0b0b0c",
+          },
+        },
       },
       borderColor: {
         DEFAULT: "var(--border)",
