@@ -9,7 +9,9 @@ import { getRandomItems } from "@/utils/random";
 
 export const Footer = () => {
   const [mounted, setMounted] = useState(false);
-  const [symbolSet] = useState(() => Math.random() > 0.5 ? SYMBOLS.BRAILLE : SYMBOLS.HEX);
+  const [symbolSet] = useState(() =>
+    Math.random() > 0.5 ? SYMBOLS.BRAILLE : SYMBOLS.HEX
+  );
   const generateSymbols = () => getRandomItems(Array.from(symbolSet), 7);
   const year = new Date().getFullYear();
 
