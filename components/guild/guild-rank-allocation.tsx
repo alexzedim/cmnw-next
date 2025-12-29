@@ -240,85 +240,88 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
     };
   })();
 
-  // Determine concentration quality based on rank distribution
-  const getRankAllocationQuality = () => {
+  // Detect guild type based on structure and characteristics
+  const detectGuildType = () => {
     if (rankStats.rankCount === 0 || members.length === 0) {
       return {
         status: "No Rank Data",
-        percentage: 0,
+        type: "unknown",
         color: "text-gray-600",
         bgColor: "bg-gray-500/10",
       };
     }
 
-    // Calculate concentration: find the largest rank and calculate what % of members are there
-    let maxMembersInRank = 0;
+    // Count unique accounts (hashA values)
+    const uniqueAccounts = new Set<string>();
+    members.forEach((member) => {
+      if (member.hashA) {
+        uniqueAccounts.add(member.hashA);
+      }
+    });
+    const uniqueAccountCount = uniqueAccounts.size;
 
-    rankStats.rankMap.forEach((count) => {
-      maxMembersInRank = Math.max(maxMembersInRank, count);
+    // Get roster rank count
+    let rosterCount = 0;
+    Array.from(officerClassifications.values()).forEach((classification) => {
+      if (classification.rosterIndex) {
+        rosterCount++;
+      }
     });
 
-    // Percentage of members in the largest rank
-    const concentrationPercentage = Math.round(
-      (maxMembersInRank / members.length) * 100
-    );
+    // Bank Guild: <= 10 members, few unique accounts
+    if (members.length <= 10) {
+      return {
+        status: "Bank Guild",
+        type: "bank",
+        color: "text-violet-600",
+        bgColor: "bg-violet-500/10",
+      };
+    }
 
-    if (concentrationPercentage >= 95) {
+    // Twink Guild: Many characters, very few unique accounts (<=3)
+    if (uniqueAccountCount <= 3 && members.length > 5) {
       return {
-        status: "Highly Concentrated",
-        percentage: concentrationPercentage,
-        color: "text-emerald-600",
-        bgColor: "bg-emerald-500/10",
-      };
-    }
-    if (concentrationPercentage >= 85) {
-      return {
-        status: "Very Concentrated",
-        percentage: concentrationPercentage,
-        color: "text-green-600",
-        bgColor: "bg-green-500/10",
-      };
-    }
-    if (concentrationPercentage >= 70) {
-      return {
-        status: "Concentrated",
-        percentage: concentrationPercentage,
-        color: "text-lime-600",
-        bgColor: "bg-lime-500/10",
-      };
-    }
-    if (concentrationPercentage >= 50) {
-      return {
-        status: "Balanced",
-        percentage: concentrationPercentage,
-        color: "text-yellow-600",
-        bgColor: "bg-yellow-500/10",
-      };
-    }
-    if (concentrationPercentage >= 30) {
-      return {
-        status: "Well Distributed",
-        percentage: concentrationPercentage,
+        status: "Twink Guild",
+        type: "twink",
         color: "text-orange-600",
         bgColor: "bg-orange-500/10",
       };
     }
 
+    // Raiding Guild: Has at least one roster (especially both)
+    if (rosterCount >= 1) {
+      const raidingStatus =
+        rosterCount >= 2
+          ? "Raiding Guild (Full Structure)"
+          : "Raiding Guild (Single Roster)";
+      const raidingColor =
+        rosterCount >= 2 ? "text-blue-600" : "text-cyan-600";
+      const raidingBg =
+        rosterCount >= 2 ? "bg-blue-500/10" : "bg-cyan-500/10";
+
+      return {
+        status: raidingStatus,
+        type: "raiding",
+        color: raidingColor,
+        bgColor: raidingBg,
+      };
+    }
+
+    // Generic guild with various ranks
     return {
-      status: "Evenly Distributed",
-      percentage: concentrationPercentage,
-      color: "text-red-600",
-      bgColor: "bg-red-500/10",
+      status: "Mixed Guild",
+      type: "mixed",
+      color: "text-slate-600",
+      bgColor: "bg-slate-500/10",
     };
   };
 
-  const rankQuality = getRankAllocationQuality();
+  const guildType = detectGuildType();
 
   return (
-    <div className={`px-4 py-3 rounded-lg ${rankQuality.bgColor}`}>
-      <div className={`text-sm font-medium ${rankQuality.color}`}>
-        Guild Rank Allocation & Proximity To Power - {rankQuality.status} (
-        {rankQuality.percentage}%)
+    <div className={`px-4 py-3 rounded-lg ${guildType.bgColor}`}>
+      <div className={`text-sm font-medium ${guildType.color}`}>
+        Guild Type: {guildType.status}
       </div>
       <div className="text-xs text-foreground/60 mt-2">
         <div className="mb-3">
