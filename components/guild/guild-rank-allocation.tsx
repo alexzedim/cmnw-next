@@ -167,14 +167,16 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
 
       // Sort roster candidates by rank number (lower first = Roster I)
       rosterCandidates.sort((a, b) => a.rank - b.rank);
-      
+
       rosterCandidates.forEach((candidate, index) => {
         rosterRanks.set(candidate.rank, index + 1);
       });
 
       // Minimum roster rank number (highest numeric rank among roster ranks)
       const minRosterRank =
-        rosterRanks.size > 0 ? Math.max(...Array.from(rosterRanks.keys())) : 999;
+        rosterRanks.size > 0
+          ? Math.max(...Array.from(rosterRanks.keys()))
+          : 999;
 
       numericRanks.forEach(([rank, count]) => {
         const rankNum = rank as number;
@@ -253,6 +255,7 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
 
     // Count unique accounts (hashA values)
     const uniqueAccounts = new Set<string>();
+
     members.forEach((member) => {
       if (member.hashA) {
         uniqueAccounts.add(member.hashA);
@@ -262,6 +265,7 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
 
     // Get roster rank count
     let rosterCount = 0;
+
     Array.from(officerClassifications.values()).forEach((classification) => {
       if (classification.rosterIndex) {
         rosterCount++;
@@ -328,7 +332,9 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
     <div
       className={`px-4 py-3 rounded-lg ${guildType.bgColor}`}
       style={
-        guildType.hexBgColor ? { backgroundColor: `${guildType.hexBgColor}15` } : undefined
+        guildType.hexBgColor
+          ? { backgroundColor: `${guildType.hexBgColor}15` }
+          : undefined
       }
     >
       <div className={`text-sm font-medium ${guildType.color}`}>
@@ -354,8 +360,9 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
                 : 0;
               const uniqueHashCount = classification?.uniqueHashCount || 0;
               const rosterIndex = classification?.rosterIndex;
-              
+
               let rankLabel = "";
+
               if (rank === 0) {
                 rankLabel = "GM";
               } else if (rank === null) {
@@ -363,9 +370,11 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
               } else {
                 rankLabel = `Rank ${rank}`;
               }
-              
-              const rosterLabel = rosterIndex ? ` [Roster ${String.fromCharCode(64 + rosterIndex)}]` : "";
-              
+
+              const rosterLabel = rosterIndex
+                ? ` [Roster ${String.fromCharCode(64 + rosterIndex)}]`
+                : "";
+
               const officerLabel =
                 classification?.type === "gm"
                   ? " [GM]"
