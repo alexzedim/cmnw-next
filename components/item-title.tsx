@@ -30,19 +30,13 @@ export const ItemTitle = ({ item }: ItemTitleProps) => {
     itemClass,
     itemSubClass,
     itemLevel,
-    purchasePrice,
-    purchaseQuantity,
-    vendorSellPrice,
     isEquip,
     isStackable,
     inventoryType,
     hasContracts,
     expansion,
-    stackable,
     indexBy,
     assetClass,
-    createdAt,
-    updatedAt,
   } = item;
   const borderColor = getItemBorderColor(quality);
 

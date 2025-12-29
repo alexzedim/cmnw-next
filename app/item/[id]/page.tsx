@@ -4,11 +4,11 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { ItemTitle } from "@/components/item-title";
-import { ItemQuotes } from "@/components/item-quotes";
-import { MarketHeatmap } from "@/components/market-heatmap";
-import { ItemListing } from "@/components/item-listing";
-import { ItemContracts } from "@/components/item-contracts";
-import { ItemContractsChart } from "@/components/item-contracts-chart";
+import { ItemQuotes } from "@/components/item/item-quotes";
+import { MarketHeatmap } from "@/components/item/market-heatmap";
+import { ItemListing } from "@/components/item/item-listing";
+import { ItemContracts } from "@/components/item/item-contracts";
+import { ItemContractsChart } from "@/components/item/item-contracts-chart";
 import { generateItemTitle } from "@/lib";
 import { DOMAINS } from "@/constants";
 
