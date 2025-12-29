@@ -1,6 +1,16 @@
 "use client";
 
 import type { Character } from "@/lib/types";
+import {
+  RANK_PROXIMITY_DECAY_RATE,
+  PTP_WEIGHTS,
+  PTP_THRESHOLDS,
+  GUILD_TYPE_THRESHOLDS,
+  GUILD_TYPES,
+  getOfficerLabel,
+  getRankLabel,
+  getRosterLabel,
+} from "./constants";
 
 interface GuildRankAllocationProps {
   members: Character[];
@@ -22,9 +32,7 @@ interface RankClassification {
  * Uses exponential decay - distances from GM increase exponentially
  */
 function calculateNonLinearRankProximity(rank: number): number {
-  const decayRate = 0.35;
-
-  return Math.exp(-decayRate * (rank - 1));
+  return Math.exp(-RANK_PROXIMITY_DECAY_RATE * (rank - 1));
 }
 
 /**
@@ -59,10 +67,10 @@ function calculateProximityToPowerIndex(
 
   // 5. Combined Proximity to Power Index
   return (
-    (rankProximity * 0.45 +
-      scarcity * 0.25 +
-      concentration * 0.2 +
-      multiCharBonus * 0.1) *
+    (rankProximity * PTP_WEIGHTS.RANK_PROXIMITY +
+      scarcity * PTP_WEIGHTS.SCARCITY +
+      concentration * PTP_WEIGHTS.CONCENTRATION +
+      multiCharBonus * PTP_WEIGHTS.MULTI_CHAR_BONUS) *
     100
   );
 }
@@ -207,13 +215,13 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
           // Officer ranks MUST be numerically lower than roster ranks
           const isValidOfficerPosition = rankNum < minRosterRank;
 
-          if (isValidOfficerPosition && proximityIndex >= 35) {
+          if (isValidOfficerPosition && proximityIndex >= PTP_THRESHOLDS.JUNIOR) {
             type = "officer";
-            if (proximityIndex >= 80) {
+            if (proximityIndex >= PTP_THRESHOLDS.HIGH_RANKING) {
               officerLevel = 4; // High Ranking Officer
-            } else if (proximityIndex >= 65) {
+            } else if (proximityIndex >= PTP_THRESHOLDS.SENIOR) {
               officerLevel = 3; // Senior Officer
-            } else if (proximityIndex >= 50) {
+            } else if (proximityIndex >= PTP_THRESHOLDS.OFFICER) {
               officerLevel = 2; // Officer
             } else {
               officerLevel = 1; // Junior Officer
@@ -245,17 +253,11 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
   // Detect guild type based on structure and characteristics
   const detectGuildType = () => {
     if (rankStats.rankCount === 0 || members.length === 0) {
-      return {
-        status: "No Rank Data",
-        type: "unknown",
-        color: "text-gray-600",
-        bgColor: "bg-gray-500/10",
-      };
+      return GUILD_TYPES.UNKNOWN;
     }
 
     // Count unique accounts (hashA values)
     const uniqueAccounts = new Set<string>();
-
     members.forEach((member) => {
       if (member.hashA) {
         uniqueAccounts.add(member.hashA);
@@ -265,65 +267,34 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
 
     // Get roster rank count
     let rosterCount = 0;
-
     Array.from(officerClassifications.values()).forEach((classification) => {
       if (classification.rosterIndex) {
         rosterCount++;
       }
     });
 
-    // Bank Guild: <= 10 members, few unique accounts
-    // Use dark amaranth (#6D213C - deep green-like dark red)
-    if (members.length <= 10) {
-      return {
-        status: "Bank Guild",
-        type: "bank",
-        color: "text-emerald-700",
-        bgColor: "bg-emerald-950/20",
-        hexBgColor: "#6D213C",
-      };
+    // Bank Guild: <= 10 members
+    if (members.length <= GUILD_TYPE_THRESHOLDS.BANK_MAX_MEMBERS) {
+      return GUILD_TYPES.BANK;
     }
 
-    // Twink Guild: Many characters, very few unique accounts (<=3)
-    if (uniqueAccountCount <= 3 && members.length > 5) {
-      return {
-        status: "Twink Guild",
-        type: "twink",
-        color: "text-orange-600",
-        bgColor: "bg-orange-500/10",
-      };
+    // Twink Guild: Very few unique accounts with many characters
+    if (
+      uniqueAccountCount <= GUILD_TYPE_THRESHOLDS.TWINK_MAX_UNIQUE &&
+      members.length > GUILD_TYPE_THRESHOLDS.TWINK_MIN_MEMBERS
+    ) {
+      return GUILD_TYPES.TWINK;
     }
 
-    // Raiding Guild: Has at least one roster (especially both)
-    // Use violet imperial (#4B0082 - deep violet) and dark amaranth (#6D213C)
-    if (rosterCount >= 1) {
-      const raidingStatus =
-        rosterCount >= 2
-          ? "Raiding Guild (Full Structure)"
-          : "Raiding Guild (Single Roster)";
-      const raidingColor =
-        rosterCount >= 2 ? "text-indigo-300" : "text-purple-400";
-      const raidingBg =
-        rosterCount >= 2
-          ? "bg-indigo-950/30" // Violet Imperial
-          : "bg-purple-950/30"; // Violet Imperial lighter
-
-      return {
-        status: raidingStatus,
-        type: "raiding",
-        color: raidingColor,
-        bgColor: raidingBg,
-        hexBgColor: rosterCount >= 2 ? "#4B0082" : "#6D213C",
-      };
+    // Raiding Guild: Has roster ranks
+    if (rosterCount >= GUILD_TYPE_THRESHOLDS.ROSTER_MIN_COUNT) {
+      return rosterCount >= GUILD_TYPE_THRESHOLDS.FULL_ROSTER_COUNT
+        ? GUILD_TYPES.RAIDING_FULL
+        : GUILD_TYPES.RAIDING_SINGLE;
     }
 
-    // Generic guild with various ranks
-    return {
-      status: "Mixed Guild",
-      type: "mixed",
-      color: "text-slate-600",
-      bgColor: "bg-slate-500/10",
-    };
+    // Mixed guild fallback
+    return GUILD_TYPES.MIXED;
   };
 
   const guildType = detectGuildType();
@@ -356,36 +327,18 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
               const percentage = Math.round((count / members.length) * 100);
               const classification = officerClassifications.get(rank);
               const proximityIndex = classification?.proximityToPowerIndex
-                ? Math.round(classification.proximityToPowerIndex)
+                ? Math.round(classification?.proximityToPowerIndex)
                 : 0;
               const uniqueHashCount = classification?.uniqueHashCount || 0;
-              const rosterIndex = classification?.rosterIndex;
 
-              let rankLabel = "";
-
-              if (rank === 0) {
-                rankLabel = "GM";
-              } else if (rank === null) {
-                rankLabel = "u/r";
-              } else {
-                rankLabel = `Rank ${rank}`;
-              }
-
-              const rosterLabel = rosterIndex
-                ? ` [Roster ${String.fromCharCode(64 + rosterIndex)}]`
-                : "";
-
+              const rankLabel = getRankLabel(rank);
+              const rosterLabel = getRosterLabel(classification?.rosterIndex);
+              const officerLabelObj = getOfficerLabel(classification?.officerLevel || 0);
               const officerLabel =
                 classification?.type === "gm"
-                  ? " [GM]"
+                  ? officerLabelObj.displayLabel
                   : classification?.type === "officer"
-                    ? classification.officerLevel === 4
-                      ? " [High Ranking Officer]"
-                      : classification.officerLevel === 3
-                        ? " [Senior Officer]"
-                        : classification.officerLevel === 2
-                          ? " [Officer]"
-                          : " [Junior Officer]"
+                    ? officerLabelObj.displayLabel
                     : "";
 
               return (
