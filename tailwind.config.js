@@ -65,6 +65,7 @@ const config = {
       },
     },
   },
+<<<<<<< Updated upstream
   darkMode: "class",
   theme: {
     extend: {
@@ -101,6 +102,8 @@ const config = {
       },
     },
   },
+=======
+>>>>>>> Stashed changes
 plugins: [
     heroui({
       themes: {
