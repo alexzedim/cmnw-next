@@ -161,10 +161,16 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
         .sort((a, b) => b.count - a.count);
 
       // The two most populated ranks are roster ranks
+      // But label them by rank proximity to 0 (lower rank = earlier in alphabet)
+      const rosterCandidates = rankSizes.slice(0, 2);
       const rosterRanks = new Map<number, number>(); // rank -> rosterIndex (1, 2, etc)
 
-      if (rankSizes.length >= 1) rosterRanks.set(rankSizes[0].rank, 1);
-      if (rankSizes.length >= 2) rosterRanks.set(rankSizes[1].rank, 2);
+      // Sort roster candidates by rank number (lower first = Roster I)
+      rosterCandidates.sort((a, b) => a.rank - b.rank);
+      
+      rosterCandidates.forEach((candidate, index) => {
+        rosterRanks.set(candidate.rank, index + 1);
+      });
 
       // Minimum roster rank number (highest numeric rank among roster ranks)
       const minRosterRank =
