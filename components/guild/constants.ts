@@ -53,8 +53,8 @@ export const GUILD_TYPES = {
     bgColor: "bg-indigo-950/30",
     hexBgColor: "#4B0082" as const,
   },
-  RAIDING_SINGLE: {
-    status: "Raiding Guild (Single Roster)",
+  RAIDING: {
+    status: "Raiding Guild",
     type: "raiding",
     color: "text-purple-400",
     bgColor: "bg-purple-950/30",
