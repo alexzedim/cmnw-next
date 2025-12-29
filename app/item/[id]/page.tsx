@@ -8,7 +8,6 @@ import { ItemQuotes } from "@/components/item/item-quotes";
 import { MarketHeatmap } from "@/components/item/market-heatmap";
 import { ItemListing } from "@/components/item/item-listing";
 import { ItemContracts } from "@/components/item/item-contracts";
-import { ItemContractsChart } from "@/components/item/item-contracts-chart";
 import { generateItemTitle } from "@/lib";
 import { DOMAINS } from "@/constants";
 
@@ -85,7 +84,7 @@ export default async function ItemPage({ params }: ItemPageProps) {
             <ItemQuotes id={id} isGold={isGold} />
           </div>
           <div className="md:col-span-7">
-            <ItemContractsChart id={id} />
+            {/** <ItemContractsChart id={id} /> **/}
           </div>
         </div>
 
