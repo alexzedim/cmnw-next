@@ -33,14 +33,14 @@ export const GUILD_TYPE_THRESHOLDS = {
  */
 export const GUILD_TYPES = {
   BANK: {
-    status: "Bank Guild",
+    status: "Special Purpose Guild | Bank Guild",
     type: "bank",
     color: "text-emerald-700",
     bgColor: "bg-emerald-950/20",
     hexBgColor: "#6D213C" as const,
   },
   TWINK: {
-    status: "Twink Guild",
+    status: "Friends & Twinks Guild",
     type: "twink",
     color: "text-orange-600",
     bgColor: "bg-orange-500/10",
