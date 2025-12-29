@@ -5,10 +5,10 @@ import { notFound } from "next/navigation";
 
 import { ItemTitle } from "@/components/item-title";
 import { ItemQuotes } from "@/components/item-quotes";
-import { ItemValuations } from "@/components/item-valuations";
 import { MarketHeatmap } from "@/components/market-heatmap";
 import { ItemListing } from "@/components/item-listing";
 import { ItemContracts } from "@/components/item-contracts";
+import { ItemContractsChart } from "@/components/item-contracts-chart";
 import { generateItemTitle } from "@/lib";
 import { DOMAINS } from "@/constants";
 
@@ -85,7 +85,7 @@ export default async function ItemPage({ params }: ItemPageProps) {
             <ItemQuotes id={id} isGold={isGold} />
           </div>
           <div className="md:col-span-7">
-            <ItemValuations id={id} />
+            <ItemContractsChart id={id} />
           </div>
         </div>
 
