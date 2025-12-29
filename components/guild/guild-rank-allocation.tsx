@@ -326,6 +326,7 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
               const proximityIndex = classification?.proximityToPowerIndex
                 ? Math.round(classification.proximityToPowerIndex)
                 : 0;
+              const uniqueHashCount = classification?.uniqueHashCount || 0;
               const officerLabel =
                 classification?.type === "gm"
                   ? " [GM]"
@@ -344,8 +345,7 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
                   <span className="font-medium text-foreground">
                     Rank {rank === 0 ? "GM" : rank === null ? "u/r" : rank}:
                   </span>{" "}
-                  {count} member{count !== 1 ? "s" : ""} ({percentage}%) |
-                  PTP Index: {proximityIndex}
+                  {count} member{count !== 1 ? "s" : ""} ({percentage}%) | {uniqueHashCount} unique | PTP Index: {proximityIndex}
                   {officerLabel && (
                     <span className="text-foreground/60 text-xs ml-1">
                       {officerLabel}
