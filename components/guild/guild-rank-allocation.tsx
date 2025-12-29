@@ -290,7 +290,7 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
     if (rosterCount >= GUILD_TYPE_THRESHOLDS.ROSTER_MIN_COUNT) {
       return rosterCount >= GUILD_TYPE_THRESHOLDS.FULL_ROSTER_COUNT
         ? GUILD_TYPES.RAIDING_FULL
-        : GUILD_TYPES.RAIDING_SINGLE;
+        : GUILD_TYPES.RAIDING;
     }
 
     // Mixed guild fallback
