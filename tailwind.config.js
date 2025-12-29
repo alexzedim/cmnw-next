@@ -65,45 +65,6 @@ const config = {
       },
     },
   },
-<<<<<<< Updated upstream
-  darkMode: "class",
-  theme: {
-    extend: {
-      colors: {
-        tremor: {
-          brand: {
-            faint: "#ffa50033",
-            muted: "#ff8c0080",
-            subtle: "#ff9900",
-            DEFAULT: "#ff9900",
-            emphasis: "#ff6600",
-            inverted: "#ffffff",
-          },
-          background: {
-            muted: "#0b0b0c",
-            subtle: "#1f2126",
-            DEFAULT: "#111216",
-            emphasis: "#ffffff",
-          },
-          border: {
-            DEFAULT: "#1f2126",
-          },
-          ring: {
-            DEFAULT: "#ff9900",
-          },
-          text: {
-            muted: "#a1a1aa",
-            subtle: "#71717a",
-            DEFAULT: "#ecedee",
-            emphasis: "#ffffff",
-            inverted: "#0b0b0c",
-          },
-        },
-      },
-    },
-  },
-=======
->>>>>>> Stashed changes
 plugins: [
     heroui({
       themes: {
