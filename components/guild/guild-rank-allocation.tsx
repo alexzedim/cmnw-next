@@ -319,6 +319,7 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
         </div>
         <div className="space-y-2">
           {Array.from(rankStats.rankMap.entries())
+            .filter(([rank]) => rank !== 0) // Exclude GM from display
             .sort((a, b) => (a[0] ?? 999) - (b[0] ?? 999))
             .map(([rank, count]) => {
               const percentage = Math.round((count / members.length) * 100);
