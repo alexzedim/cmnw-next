@@ -269,12 +269,14 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
     });
 
     // Bank Guild: <= 10 members, few unique accounts
+    // Use dark amaranth (#6D213C - deep green-like dark red)
     if (members.length <= 10) {
       return {
         status: "Bank Guild",
         type: "bank",
-        color: "text-violet-600",
-        bgColor: "bg-violet-500/10",
+        color: "text-emerald-700",
+        bgColor: "bg-emerald-950/20",
+        hexBgColor: "#6D213C",
       };
     }
 
@@ -289,21 +291,25 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
     }
 
     // Raiding Guild: Has at least one roster (especially both)
+    // Use violet imperial (#4B0082 - deep violet) and dark amaranth (#6D213C)
     if (rosterCount >= 1) {
       const raidingStatus =
         rosterCount >= 2
           ? "Raiding Guild (Full Structure)"
           : "Raiding Guild (Single Roster)";
       const raidingColor =
-        rosterCount >= 2 ? "text-blue-600" : "text-cyan-600";
+        rosterCount >= 2 ? "text-indigo-300" : "text-purple-400";
       const raidingBg =
-        rosterCount >= 2 ? "bg-blue-500/10" : "bg-cyan-500/10";
+        rosterCount >= 2
+          ? "bg-indigo-950/30" // Violet Imperial
+          : "bg-purple-950/30"; // Violet Imperial lighter
 
       return {
         status: raidingStatus,
         type: "raiding",
         color: raidingColor,
         bgColor: raidingBg,
+        hexBgColor: rosterCount >= 2 ? "#4B0082" : "#6D213C",
       };
     }
 
@@ -319,7 +325,12 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
   const guildType = detectGuildType();
 
   return (
-    <div className={`px-4 py-3 rounded-lg ${guildType.bgColor}`}>
+    <div
+      className={`px-4 py-3 rounded-lg ${guildType.bgColor}`}
+      style={
+        guildType.hexBgColor ? { backgroundColor: `${guildType.hexBgColor}15` } : undefined
+      }
+    >
       <div className={`text-sm font-medium ${guildType.color}`}>
         Guild Type: {guildType.status}
       </div>
