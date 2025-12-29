@@ -150,17 +150,34 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
       });
       const totalUniqueHashes = allUniqueHashes.size;
 
+      // Step 1: Identify roster ranks (2 most common ranks with highest member count)
+      const rankSizes = numericRanks
+        .map(([rank, count]) => ({
+          rank: rank as number,
+          count,
+          uniquePlayers: rankHashData.get(rank)?.uniqueHashes.size || 0,
+        }))
+        .sort((a, b) => b.count - a.count);
+
+      // The two most populated ranks are roster ranks
+      const rosterRanks = new Set<number>();
+      if (rankSizes.length >= 1) rosterRanks.add(rankSizes[0].rank);
+      if (rankSizes.length >= 2) rosterRanks.add(rankSizes[1].rank);
+
+      // Minimum roster rank number (highest numeric rank among roster ranks)
+      const minRosterRank = rosterRanks.size > 0 ? Math.max(...Array.from(rosterRanks)) : 999;
+
       numericRanks.forEach(([rank, count]) => {
-        const rankData = rankHashData.get(rank);
+        const rankNum = rank as number;
+        const rankData = rankHashData.get(rankNum);
         if (!rankData) return;
 
         const uniqueHashCount = rankData.uniqueHashes.size;
         const characterCount = rankData.characterCount;
 
         // Calculate Proximity to Power Index for this rank
-        // rank is guaranteed to be a number here due to filter above
         const proximityIndex = calculateProximityToPowerIndex(
-          rank as number,
+          rankNum,
           characterCount,
           uniqueHashCount,
           members.length,
@@ -170,24 +187,31 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
         let officerLevel = 0;
         let type: "member" | "officer" = "member";
 
-        // Officer classification based on Proximity to Power Index
-        if (proximityIndex >= 50) {
-          type = "officer";
-          if (proximityIndex >= 80) {
-            officerLevel = 4; // High Ranking Officer
-          } else if (proximityIndex >= 65) {
-            officerLevel = 3; // Senior Officer
-          } else {
-            officerLevel = 2; // Officer
+        // Check if this is a roster rank
+        if (rosterRanks.has(rankNum)) {
+          type = "member";
+          officerLevel = 0;
+        } else {
+          // Officer ranks MUST be numerically lower than roster ranks
+          const isValidOfficerPosition = rankNum < minRosterRank;
+
+          if (isValidOfficerPosition && proximityIndex >= 35) {
+            type = "officer";
+            if (proximityIndex >= 80) {
+              officerLevel = 4; // High Ranking Officer
+            } else if (proximityIndex >= 65) {
+              officerLevel = 3; // Senior Officer
+            } else if (proximityIndex >= 50) {
+              officerLevel = 2; // Officer
+            } else {
+              officerLevel = 1; // Junior Officer
+            }
           }
-        } else if (proximityIndex >= 35) {
-          type = "officer";
-          officerLevel = 1; // Junior Officer
         }
 
         const classification: RankClassification = {
-          rank,
-          label: `Rank ${rank}`,
+          rank: rankNum,
+          label: `Rank ${rankNum}`,
           type,
           officerLevel,
           proximityToPowerIndex: proximityIndex,
@@ -195,7 +219,7 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
           characterCount,
         };
 
-        officerClassifications.set(rank, classification);
+        officerClassifications.set(rankNum, classification);
       });
     }
 
