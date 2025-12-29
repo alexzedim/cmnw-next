@@ -14,6 +14,7 @@ interface RankClassification {
   proximityToPowerIndex?: number; // Proximity to Power Index (0-100)
   uniqueHashCount?: number; // Number of unique hash values in rank
   characterCount?: number; // Number of characters in rank
+  rosterIndex?: number; // Index if this is a roster rank (1 for Roster I, 2 for Roster II, etc)
 }
 
 /**
@@ -22,9 +23,8 @@ interface RankClassification {
  */
 function calculateNonLinearRankProximity(rank: number): number {
   const decayRate = 0.35;
-  const normalizedRank = rank;
-  const exponentialProximity = Math.exp(-decayRate * (normalizedRank - 1));
-  return exponentialProximity;
+
+  return Math.exp(-decayRate * (rank - 1));
 }
 
 /**
@@ -143,6 +143,7 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
 
       // Calculate total unique players in guild
       const allUniqueHashes = new Set<string>();
+
       members.forEach((member) => {
         if (member.hashA) {
           allUniqueHashes.add(member.hashA);
@@ -160,16 +161,19 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
         .sort((a, b) => b.count - a.count);
 
       // The two most populated ranks are roster ranks
-      const rosterRanks = new Set<number>();
-      if (rankSizes.length >= 1) rosterRanks.add(rankSizes[0].rank);
-      if (rankSizes.length >= 2) rosterRanks.add(rankSizes[1].rank);
+      const rosterRanks = new Map<number, number>(); // rank -> rosterIndex (1, 2, etc)
+
+      if (rankSizes.length >= 1) rosterRanks.set(rankSizes[0].rank, 1);
+      if (rankSizes.length >= 2) rosterRanks.set(rankSizes[1].rank, 2);
 
       // Minimum roster rank number (highest numeric rank among roster ranks)
-      const minRosterRank = rosterRanks.size > 0 ? Math.max(...Array.from(rosterRanks)) : 999;
+      const minRosterRank =
+        rosterRanks.size > 0 ? Math.max(...Array.from(rosterRanks.keys())) : 999;
 
       numericRanks.forEach(([rank, count]) => {
         const rankNum = rank as number;
         const rankData = rankHashData.get(rankNum);
+
         if (!rankData) return;
 
         const uniqueHashCount = rankData.uniqueHashes.size;
@@ -217,6 +221,7 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
           proximityToPowerIndex: proximityIndex,
           uniqueHashCount,
           characterCount,
+          rosterIndex: rosterRanks.get(rankNum),
         };
 
         officerClassifications.set(rankNum, classification);
@@ -306,7 +311,7 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
   return (
     <div className={`px-4 py-3 rounded-lg ${rankQuality.bgColor}`}>
       <div className={`text-sm font-medium ${rankQuality.color}`}>
-        Guild Rank Allocation Block - {rankQuality.status} (
+        Guild Rank Allocation & Proximity To Power - {rankQuality.status} (
         {rankQuality.percentage}%)
       </div>
       <div className="text-xs text-foreground/60 mt-2">
@@ -328,6 +333,19 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
                 ? Math.round(classification.proximityToPowerIndex)
                 : 0;
               const uniqueHashCount = classification?.uniqueHashCount || 0;
+              const rosterIndex = classification?.rosterIndex;
+              
+              let rankLabel = "";
+              if (rank === 0) {
+                rankLabel = "GM";
+              } else if (rank === null) {
+                rankLabel = "u/r";
+              } else {
+                rankLabel = `Rank ${rank}`;
+              }
+              
+              const rosterLabel = rosterIndex ? ` [Roster ${String.fromCharCode(64 + rosterIndex)}]` : "";
+              
               const officerLabel =
                 classification?.type === "gm"
                   ? " [GM]"
@@ -344,9 +362,15 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
               return (
                 <div key={rank === null ? "unranked" : rank}>
                   <span className="font-medium text-foreground">
-                    Rank {rank === 0 ? "GM" : rank === null ? "u/r" : rank}:
+                    {rankLabel}:
                   </span>{" "}
-                  {count} member{count !== 1 ? "s" : ""} ({percentage}%) | {uniqueHashCount} unique | PTP Index: {proximityIndex}
+                  {count} member{count !== 1 ? "s" : ""} ({percentage}%) |{" "}
+                  {uniqueHashCount} unique | PTP Index: {proximityIndex}
+                  {rosterLabel && (
+                    <span className="text-foreground/60 text-xs ml-1">
+                      {rosterLabel}
+                    </span>
+                  )}
                   {officerLabel && (
                     <span className="text-foreground/60 text-xs ml-1">
                       {officerLabel}
