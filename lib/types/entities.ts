@@ -22,7 +22,6 @@ export interface CharacterPercentileData {
  * Character entity matching CharactersEntity from backend
  */
 export interface Character {
-  uuid: string;
   guid: string;
   id?: number;
   name: string;
@@ -35,7 +34,6 @@ export interface Character {
   guildRank?: number;
   hashA?: string;
   hashB?: string;
-  hashF?: string;
   race?: string;
   class?: string;
   specialization?: string;

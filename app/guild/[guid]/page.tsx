@@ -86,6 +86,7 @@ export default async function GuildPage({ params }: GuildPageProps) {
           }
           faction={factionEnum}
           member_count={memberCount}
+          members={members}
           name={guild.name}
           realm={guild.realm}
         />
