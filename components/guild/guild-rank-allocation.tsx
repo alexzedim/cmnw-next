@@ -352,9 +352,13 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
                       {" | "}
                     </>
                   )}
-                  <span className="font-medium text-foreground">
-                    {rankLabel}:
-                  </span>{" "}
+                  {(rank === null || rank === 0) && (
+                    <>
+                      <span className="font-medium text-foreground">
+                        {rankLabel}:
+                      </span>{" "}
+                    </>
+                  )}
                   {count} member{count !== 1 ? "s" : ""} ({percentage}%) |{" "}
                   {uniqueHashCount} unique | PTP Index: {proximityIndex}
                   {rosterLabel && (
