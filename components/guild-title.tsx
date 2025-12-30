@@ -1,9 +1,11 @@
 "use client";
 
 import type { Character, Faction } from "@/lib/types";
+
+import { GuildRankAllocation } from "./guild/guild-rank-allocation";
+
 import { NAMING_CONSTANTS } from "@/constants";
 import { fontJetBrains } from "@/config/fonts";
-import { GuildRankAllocation } from "./guild/guild-rank-allocation";
 
 interface GuildTitleProps {
   name: string;
