@@ -352,32 +352,30 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
               return (
                 <div
                   key={rank === null ? "unranked" : rank}
-                  className="py-0.5 leading-tight"
+                  className="py-0.5 leading-tight flex items-center gap-2"
                 >
-                  <span className="text-foreground/60">
-                    {rank && rank !== null && (
-                      <>
-                        <GuildRank guildRank={rank} />
-                        {" "}
-                      </>
+                  <span className="inline-block w-6 text-center">
+                    {rank && rank !== null ? (
+                      <GuildRank guildRank={rank} />
+                    ) : (
+                      <span className="text-foreground/60">{rankLabel}</span>
                     )}
-                    {(rank === null || rank === 0) && rankLabel}
                   </span>
-                  <span className="text-foreground/70 mx-2">│</span>
+                  <span className="text-foreground/70">│</span>
                   <span className="inline-block w-20 text-right text-foreground">
                     {memberCount}
                   </span>
-                  <span className="text-foreground/70 mx-2">│</span>
+                  <span className="text-foreground/70">│</span>
                   <span className="inline-block w-8 text-right text-foreground">
                     {uniqueCount}
                   </span>
-                  <span className="text-foreground/70 mx-2">│</span>
+                  <span className="text-foreground/70">│</span>
                   <span className="inline-block w-8 text-right text-foreground">
                     {ptpText}
                   </span>
                   {labels && (
                     <>
-                      <span className="text-foreground/70 mx-2">│</span>
+                      <span className="text-foreground/70">│</span>
                       <span className="text-foreground/60 text-xs">{labels}</span>
                     </>
                   )}
