@@ -218,7 +218,10 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
           // Officer ranks MUST be numerically lower than roster ranks
           const isValidOfficerPosition = rankNum < minRosterRank;
 
-          if (isValidOfficerPosition && proximityIndex >= PTP_THRESHOLDS.OFFICER) {
+          if (
+            isValidOfficerPosition &&
+            proximityIndex >= PTP_THRESHOLDS.OFFICER
+          ) {
             type = "officer";
             if (proximityIndex >= PTP_THRESHOLDS.HIGH_RANKING) {
               officerLevel = 4; // High Ranking Officer
