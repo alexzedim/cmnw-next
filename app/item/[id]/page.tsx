@@ -3,7 +3,7 @@ import type { itemResponse, ItemPageProps, RealmResponse } from "@/lib/types";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { ItemTitle } from "@/components/item-title";
+import { ItemTitle } from "@/components/item/item-title";
 import { ItemQuotes } from "@/components/item/item-quotes";
 import { MarketHeatmap } from "@/components/item/market-heatmap";
 import { ItemListing } from "@/components/item/item-listing";
