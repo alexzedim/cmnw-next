@@ -1,6 +1,8 @@
 "use client";
 
 import type { Character } from "@/lib/types";
+
+import { GuildRank } from "@/components/character/guild-rank";
 import {
   RANK_PROXIMITY_DECAY_RATE,
   PTP_WEIGHTS,
@@ -215,17 +217,9 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
           // Officer ranks MUST be numerically lower than roster ranks
           const isValidOfficerPosition = rankNum < minRosterRank;
 
-          if (isValidOfficerPosition && proximityIndex >= PTP_THRESHOLDS.JUNIOR) {
+          if (isValidOfficerPosition && proximityIndex >= PTP_THRESHOLDS.HIGH_RANKING) {
             type = "officer";
-            if (proximityIndex >= PTP_THRESHOLDS.HIGH_RANKING) {
-              officerLevel = 4; // High Ranking Officer
-            } else if (proximityIndex >= PTP_THRESHOLDS.SENIOR) {
-              officerLevel = 3; // Senior Officer
-            } else if (proximityIndex >= PTP_THRESHOLDS.OFFICER) {
-              officerLevel = 2; // Officer
-            } else {
-              officerLevel = 1; // Junior Officer
-            }
+            officerLevel = 4; // High Ranking Officer
           }
         }
 
@@ -258,6 +252,7 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
 
     // Count unique accounts (hashA values)
     const uniqueAccounts = new Set<string>();
+
     members.forEach((member) => {
       if (member.hashA) {
         uniqueAccounts.add(member.hashA);
@@ -267,6 +262,7 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
 
     // Get roster rank count
     let rosterCount = 0;
+
     Array.from(officerClassifications.values()).forEach((classification) => {
       if (classification.rosterIndex) {
         rosterCount++;
@@ -333,7 +329,9 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
 
               const rankLabel = getRankLabel(rank);
               const rosterLabel = getRosterLabel(classification?.rosterIndex);
-              const officerLabelObj = getOfficerLabel(classification?.officerLevel || 0);
+              const officerLabelObj = getOfficerLabel(
+                classification?.officerLevel || 0
+              );
               const officerLabel =
                 classification?.type === "gm"
                   ? officerLabelObj.displayLabel
@@ -343,6 +341,12 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
 
               return (
                 <div key={rank === null ? "unranked" : rank}>
+                  {rank && rank !== null && (
+                    <>
+                      <GuildRank guildRank={rank} />
+                      {" | "}
+                    </>
+                  )}
                   <span className="font-medium text-foreground">
                     {rankLabel}:
                   </span>{" "}
