@@ -13,7 +13,7 @@ import { Card, CardBody, Spinner } from "@heroui/react";
 import useSWR from "swr";
 
 import { DOMAINS, NAMING_CONSTANTS } from "@/constants";
-import { BadgeSection } from "@/components/shared/BadgeSection";
+import { BadgeSection } from "@/components/shared/badge-section";
 import {
   CARD_CLASS_NAMES,
   BADGE_COLORS,
