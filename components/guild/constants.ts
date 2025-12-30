@@ -10,10 +10,22 @@
  */
 export const OFFICER_LEVELS = {
   GM: { level: 5, label: "GM", displayLabel: "[GM]" },
-  HIGH_RANKING: { level: 4, label: "High Ranking Officer", displayLabel: "[High Ranking Officer]" },
-  SENIOR: { level: 3, label: "Senior Officer", displayLabel: "[Senior Officer]" },
+  HIGH_RANKING: {
+    level: 4,
+    label: "High Ranking Officer",
+    displayLabel: "[High Ranking Officer]",
+  },
+  SENIOR: {
+    level: 3,
+    label: "Senior Officer",
+    displayLabel: "[Senior Officer]",
+  },
   OFFICER: { level: 2, label: "Officer", displayLabel: "[Officer]" },
-  JUNIOR: { level: 1, label: "Junior Officer", displayLabel: "[Junior Officer]" },
+  JUNIOR: {
+    level: 1,
+    label: "Junior Officer",
+    displayLabel: "[Junior Officer]",
+  },
   MEMBER: { level: 0, label: "Member", displayLabel: "" },
 } as const;
 
@@ -134,6 +146,7 @@ export const getOfficerLabel = (
 export const getRankLabel = (rank: number | null): string => {
   if (rank === 0) return "GM";
   if (rank === null) return "u/r";
+
   return `Rank ${rank}`;
 };
 
@@ -144,6 +157,7 @@ export const getRankLabel = (rank: number | null): string => {
  */
 export const getRosterLabel = (rosterIndex?: number): string => {
   if (!rosterIndex) return "";
+
   return ` [Roster ${String.fromCharCode(64 + rosterIndex)}]`;
 };
 
