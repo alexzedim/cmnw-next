@@ -1,4 +1,4 @@
-export * from "./characterPortrait";
+export * from "./character-portrait";
 export * from "./generateFactionBackground";
 export * from "./generateItemBackground";
 export * from "./generateItemTitle";
