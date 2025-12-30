@@ -9,7 +9,7 @@ import { notFound } from "next/navigation";
 
 import { GuildTitle } from "@/components/guild-title";
 import { GuildRoster } from "@/components/guild/guild-roster";
-import { LogTable } from "@/components/log-table";
+import { LogTable } from "@/components/shared/log-table";
 import { apiClient } from "@/lib/api";
 import { stringToFaction } from "@/lib/utils/faction-converter";
 

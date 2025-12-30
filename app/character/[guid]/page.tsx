@@ -13,7 +13,7 @@ import {
   CharacterButtons,
   CharacterStats,
 } from "@/components/character";
-import { LogTable } from "@/components/log-table";
+import { LogTable } from "@/components/shared/log-table";
 import { apiClient } from "@/lib/api";
 import { stringToFaction } from "@/lib/utils/faction-converter";
 
