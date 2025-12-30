@@ -38,17 +38,17 @@ export const CONTRIBUTORS: Contributor[] = [
     value: 6,
     name: "Саске",
     discord: "Sasuke#7918",
-    character: "Sasukegodx@twisting-nether",
+    character: "sasukegodx@twisting-nether",
   },
   {
     value: 7,
     name: "Gonikon",
-    discord: "Higo#5557",
+    discord: "higo#5557",
   },
   {
     value: 8,
     name: "Dmitry Kravtsov",
-    github: "Zerovers",
+    github: "zerovers",
   },
   {
     value: 9,
@@ -58,26 +58,26 @@ export const CONTRIBUTORS: Contributor[] = [
   {
     value: 10,
     name: "Askar",
-    character: "Йондадх@gordunni",
+    character: "йондадх@gordunni",
   },
   {
     value: 11,
     name: "Йозельда",
-    character: "Докторйозя@gordunni",
+    character: "докторйозя@gordunni",
   },
   {
     value: 12,
     name: "Акула",
-    character: "Акулов@howling-fjord",
+    character: "акулов@howling-fjord",
   },
   {
     value: 13,
     name: "Uchur",
-    discord: "Uchur#0001",
+    discord: "uchur#0001",
   },
   {
     value: 14,
     name: "Reds",
-    character: "Редизтрибут@howling-fjord",
+    character: "редизтрибут@howling-fjord",
   },
 ];
