@@ -5,7 +5,7 @@ import { Card, CardBody, Spinner, Button, ButtonGroup } from "@heroui/react";
 import { LineChart } from "@tremor/react";
 
 import { useContracts } from "@/lib/api/hooks";
-import { BadgeSection } from "@/components/shared/BadgeSection";
+import { BadgeSection } from "@/components/shared/badge-section";
 import {
   CARD_CLASS_NAMES,
   BADGE_COLORS,

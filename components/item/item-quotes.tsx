@@ -14,7 +14,7 @@ import {
 } from "@heroui/react";
 
 import { useItemQuotes } from "@/lib/api/hooks";
-import { BadgeSection } from "@/components/shared/BadgeSection";
+import { BadgeSection } from "@/components/shared/badge-section";
 import {
   CARD_CLASS_NAMES,
   TABLE_CLASS_NAMES,
