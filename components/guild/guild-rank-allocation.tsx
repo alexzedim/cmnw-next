@@ -320,7 +320,7 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
           </span>{" "}
           rank{rankStats.rankCount !== 1 ? "s" : ""}
         </div>
-        <div className="space-y-2">
+        <div className="space-y-0 text-xs" style={{ fontFamily: 'monospace' }}>
           {Array.from(rankStats.rankMap.entries())
             .filter(([rank]) => rank !== 0) // Exclude GM from display
             .sort((a, b) => (a[0] ?? 999) - (b[0] ?? 999))
@@ -344,32 +344,42 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
                     ? officerLabelObj.displayLabel
                     : "";
 
+              const memberCount = `${count.toString().padStart(3)} (${percentage.toString().padStart(2)}%)`;
+              const uniqueCount = `${uniqueHashCount.toString().padStart(2)}`;
+              const ptpText = `${proximityIndex.toString().padStart(2)}`;
+              const labels = `${rosterLabel}${rosterLabel && officerLabel ? " " : ""}${officerLabel}`.trim();
+
               return (
-                <div key={rank === null ? "unranked" : rank}>
-                  {rank && rank !== null && (
+                <div
+                  key={rank === null ? "unranked" : rank}
+                  className="py-0.5 leading-tight"
+                >
+                  <span className="text-foreground/60">
+                    {rank && rank !== null && (
+                      <>
+                        <GuildRank guildRank={rank} />
+                        {" "}
+                      </>
+                    )}
+                    {(rank === null || rank === 0) && rankLabel}
+                  </span>
+                  <span className="text-foreground/70 mx-2">│</span>
+                  <span className="inline-block w-20 text-right text-foreground">
+                    {memberCount}
+                  </span>
+                  <span className="text-foreground/70 mx-2">│</span>
+                  <span className="inline-block w-8 text-right text-foreground">
+                    {uniqueCount}
+                  </span>
+                  <span className="text-foreground/70 mx-2">│</span>
+                  <span className="inline-block w-8 text-right text-foreground">
+                    {ptpText}
+                  </span>
+                  {labels && (
                     <>
-                      <GuildRank guildRank={rank} />
-                      {" | "}
+                      <span className="text-foreground/70 mx-2">│</span>
+                      <span className="text-foreground/60 text-xs">{labels}</span>
                     </>
-                  )}
-                  {(rank === null || rank === 0) && (
-                    <>
-                      <span className="font-medium text-foreground">
-                        {rankLabel}:
-                      </span>{" "}
-                    </>
-                  )}
-                  {count} member{count !== 1 ? "s" : ""} ({percentage}%) |{" "}
-                  {uniqueHashCount} unique | PTP Index: {proximityIndex}
-                  {rosterLabel && (
-                    <span className="text-foreground/60 text-xs ml-1">
-                      {rosterLabel}
-                    </span>
-                  )}
-                  {officerLabel && (
-                    <span className="text-foreground/60 text-xs ml-1">
-                      {officerLabel}
-                    </span>
                   )}
                 </div>
               );
