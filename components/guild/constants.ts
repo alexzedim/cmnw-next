@@ -13,18 +13,7 @@ export const OFFICER_LEVELS = {
   HIGH_RANKING: {
     level: 4,
     label: "High Ranking Officer",
-    displayLabel: "[High Ranking Officer]",
-  },
-  SENIOR: {
-    level: 3,
-    label: "Senior Officer",
-    displayLabel: "[Senior Officer]",
-  },
-  OFFICER: { level: 2, label: "Officer", displayLabel: "[Officer]" },
-  JUNIOR: {
-    level: 1,
-    label: "Junior Officer",
-    displayLabel: "[Junior Officer]",
+    displayLabel: "[Officer]",
   },
   MEMBER: { level: 0, label: "Member", displayLabel: "" },
 } as const;
@@ -45,11 +34,11 @@ export const GUILD_TYPE_THRESHOLDS = {
  */
 export const GUILD_TYPES = {
   BANK: {
-    status: "Special Purpose Guild | Bank Guild",
+    status: "Special Purpose | Bank Guild",
     type: "bank",
     color: "text-emerald-700",
     bgColor: "bg-emerald-950/20",
-    hexBgColor: "#6D213C" as const,
+    hexBgColor: "#496F5D" as const,
   },
   TWINK: {
     status: "Friends & Twinks Guild",
@@ -92,10 +81,7 @@ export const GUILD_TYPES = {
  * Proximity to Power Index thresholds for officer classification
  */
 export const PTP_THRESHOLDS = {
-  HIGH_RANKING: 80,
-  SENIOR: 65,
-  OFFICER: 50,
-  JUNIOR: 35,
+  HIGH_RANKING: 50,
 } as const;
 
 /**
@@ -127,12 +113,6 @@ export const getOfficerLabel = (
       return OFFICER_LEVELS.GM;
     case 4:
       return OFFICER_LEVELS.HIGH_RANKING;
-    case 3:
-      return OFFICER_LEVELS.SENIOR;
-    case 2:
-      return OFFICER_LEVELS.OFFICER;
-    case 1:
-      return OFFICER_LEVELS.JUNIOR;
     default:
       return OFFICER_LEVELS.MEMBER;
   }
@@ -158,7 +138,7 @@ export const getRankLabel = (rank: number | null): string => {
 export const getRosterLabel = (rosterIndex?: number): string => {
   if (!rosterIndex) return "";
 
-  return ` [Roster ${String.fromCharCode(64 + rosterIndex)}]`;
+  return ` [Roster ${toRomanNumeral(rosterIndex)}]`;
 };
 
 /**
