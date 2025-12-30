@@ -321,9 +321,10 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
           <span className="font-medium text-foreground">
             {rankStats.rankCount}
           </span>{" "}
-          rank{rankStats.rankCount !== 1 ? "s" : ""}
+          rank{rankStats.rankCount !== 1 ? "s" : ""} with their proximity to
+          power
         </div>
-        <div className="space-y-0 text-xs" style={{ fontFamily: 'monospace' }}>
+        <div className="space-y-0 text-xs" style={{ fontFamily: "monospace" }}>
           {Array.from(rankStats.rankMap.entries())
             .filter(([rank]) => rank !== 0) // Exclude GM from display
             .sort((a, b) => (a[0] ?? 999) - (b[0] ?? 999))
@@ -347,39 +348,44 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
                     ? officerLabelObj.displayLabel
                     : "";
 
-              const memberCount = `${count.toString().padStart(3)} (${percentage.toString().padStart(2)}%)`;
-              const uniqueCount = `${uniqueHashCount.toString().padStart(2)}`;
-              const ptpText = `${proximityIndex.toString().padStart(2)}`;
-              const labels = `${rosterLabel}${rosterLabel && officerLabel ? " " : ""}${officerLabel}`.trim();
+              const memberCount = `${count.toString().padStart(3)} characters (${percentage.toString().padStart(2)}%)`;
+              const uniqueCount = `${uniqueHashCount.toString().padStart(2)} unique`;
+              const ptpText = `${proximityIndex.toString().padStart(2)} ptp`;
+              const labels =
+                `${rosterLabel}${rosterLabel && officerLabel ? " " : ""}${officerLabel}`.trim();
 
               return (
                 <div
                   key={rank === null ? "unranked" : rank}
-                  className="py-0.5 leading-tight flex items-center gap-2"
+                  className="overflow-hidden h-6"
                 >
-                  <span className="inline-block w-6 text-center">
-                    {rank && rank !== null ? (
+                  {rank && rank !== null ? (
+                    <span className="inline-block w-16 leading-none overflow-hidden">
                       <GuildRank guildRank={rank} />
-                    ) : (
-                      <span className="text-foreground/60">{rankLabel}</span>
-                    )}
-                  </span>
-                  <span className="text-foreground/70">│</span>
-                  <span className="inline-block w-20 text-right text-foreground">
+                    </span>
+                  ) : (
+                    <span className="inline-block w-8 text-foreground/60 leading-none">
+                      {rankLabel}
+                    </span>
+                  )}
+                  <span className="text-foreground/70">{" | "}</span>
+                  <span className="inline-block w-44 text-right text-foreground">
                     {memberCount}
                   </span>
-                  <span className="text-foreground/70">│</span>
-                  <span className="inline-block w-8 text-right text-foreground">
+                  <span className="text-foreground/70">{" | "}</span>
+                  <span className="inline-block w-24 text-right text-foreground">
                     {uniqueCount}
                   </span>
-                  <span className="text-foreground/70">│</span>
-                  <span className="inline-block w-8 text-right text-foreground">
+                  <span className="text-foreground/70">{" | "}</span>
+                  <span className="inline-block w-16 text-right text-foreground">
                     {ptpText}
                   </span>
                   {labels && (
                     <>
-                      <span className="text-foreground/70">│</span>
-                      <span className="text-foreground/60 text-xs">{labels}</span>
+                      <span className="text-foreground/70">{" | "}</span>
+                      <span className="text-foreground/60 text-xs leading-none">
+                        {labels}
+                      </span>
                     </>
                   )}
                 </div>
