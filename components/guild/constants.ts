@@ -13,8 +13,9 @@ export const OFFICER_LEVELS = {
   HIGH_RANKING: {
     level: 4,
     label: "High Ranking Officer",
-    displayLabel: "[Officer]",
+    displayLabel: "[High Ranking Officer]",
   },
+  OFFICER: { level: 2, label: "Officer", displayLabel: "[Officer]" },
   MEMBER: { level: 0, label: "Member", displayLabel: "" },
 } as const;
 
@@ -81,7 +82,8 @@ export const GUILD_TYPES = {
  * Proximity to Power Index thresholds for officer classification
  */
 export const PTP_THRESHOLDS = {
-  HIGH_RANKING: 50,
+  HIGH_RANKING: 65,
+  OFFICER: 50,
 } as const;
 
 /**
@@ -113,6 +115,8 @@ export const getOfficerLabel = (
       return OFFICER_LEVELS.GM;
     case 4:
       return OFFICER_LEVELS.HIGH_RANKING;
+    case 2:
+      return OFFICER_LEVELS.OFFICER;
     default:
       return OFFICER_LEVELS.MEMBER;
   }

@@ -2,7 +2,6 @@
 
 import type { Character } from "@/lib/types";
 
-import { GuildRank } from "@/components/character/guild-rank";
 import {
   RANK_PROXIMITY_DECAY_RATE,
   PTP_WEIGHTS,
@@ -13,6 +12,8 @@ import {
   getRankLabel,
   getRosterLabel,
 } from "./constants";
+
+import { GuildRank } from "@/components/character/guild-rank";
 
 interface GuildRankAllocationProps {
   members: Character[];
@@ -217,9 +218,13 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
           // Officer ranks MUST be numerically lower than roster ranks
           const isValidOfficerPosition = rankNum < minRosterRank;
 
-          if (isValidOfficerPosition && proximityIndex >= PTP_THRESHOLDS.HIGH_RANKING) {
+          if (isValidOfficerPosition && proximityIndex >= PTP_THRESHOLDS.OFFICER) {
             type = "officer";
-            officerLevel = 4; // High Ranking Officer
+            if (proximityIndex >= PTP_THRESHOLDS.HIGH_RANKING) {
+              officerLevel = 4; // High Ranking Officer
+            } else {
+              officerLevel = 2; // Officer
+            }
           }
         }
 
