@@ -12,6 +12,7 @@ import {
   getRankLabel,
   getRosterLabel,
 } from "./constants";
+import { RaiderAxes } from "./raider-axes";
 
 import { GuildRank } from "@/components/character/guild-rank";
 
@@ -305,107 +306,113 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
 
   return (
     <div
-      className={`px-4 py-3 rounded-lg ${guildType.bgColor}`}
+      className={`relative overflow-hidden px-4 py-3 rounded-lg ${guildType.bgColor}`}
       style={
         guildType.hexBgColor
           ? { backgroundColor: `${guildType.hexBgColor}25` }
           : undefined
       }
     >
-      <div className={`text-sm font-medium ${guildType.color}`}>
-        Guild Type: {guildType.status}
-      </div>
-      <div className="text-xs text-foreground/60 mt-2">
-        <div className="mb-3">
-          Members distributed across{" "}
-          <span className="font-medium text-foreground">
-            {rankStats.rankCount}
-          </span>{" "}
-          rank{rankStats.rankCount !== 1 ? "s" : ""} with their proximity to
-          power
+      <RaiderAxes />
+      <div className="relative z-10">
+        <div className={`text-sm font-medium ${guildType.color}`}>
+          Guild Type: {guildType.status}
         </div>
-        <div className="space-y-0 text-xs" style={{ fontFamily: "monospace" }}>
-          {Array.from(rankStats.rankMap.entries())
-            .filter(([rank]) => rank !== 0) // Exclude GM from display
-            .sort((a, b) => (a[0] ?? 999) - (b[0] ?? 999))
-            .map(([rank, count]) => {
-              const percentage = Math.round((count / members.length) * 100);
-              const classification = officerClassifications.get(rank);
-              const proximityIndex = classification?.proximityToPowerIndex
-                ? Math.round(classification?.proximityToPowerIndex)
-                : 0;
-              const uniqueHashCount = classification?.uniqueHashCount || 0;
+        <div className="text-xs text-foreground/60 mt-2">
+          <div className="mb-3">
+            Members distributed across{" "}
+            <span className="font-medium text-foreground">
+              {rankStats.rankCount}
+            </span>{" "}
+            rank{rankStats.rankCount !== 1 ? "s" : ""} with their proximity to
+            power
+          </div>
+          <div
+            className="space-y-0 text-xs"
+            style={{ fontFamily: "monospace" }}
+          >
+            {Array.from(rankStats.rankMap.entries())
+              .filter(([rank]) => rank !== 0) // Exclude GM from display
+              .sort((a, b) => (a[0] ?? 999) - (b[0] ?? 999))
+              .map(([rank, count]) => {
+                const percentage = Math.round((count / members.length) * 100);
+                const classification = officerClassifications.get(rank);
+                const proximityIndex = classification?.proximityToPowerIndex
+                  ? Math.round(classification?.proximityToPowerIndex)
+                  : 0;
+                const uniqueHashCount = classification?.uniqueHashCount || 0;
 
-              const rankLabel = getRankLabel(rank);
-              const rosterLabel = getRosterLabel(classification?.rosterIndex);
-              const officerLabelObj = getOfficerLabel(
-                classification?.officerLevel || 0
-              );
-              const officerLabel =
-                classification?.type === "gm"
-                  ? officerLabelObj.displayLabel
-                  : classification?.type === "officer"
+                const rankLabel = getRankLabel(rank);
+                const rosterLabel = getRosterLabel(classification?.rosterIndex);
+                const officerLabelObj = getOfficerLabel(
+                  classification?.officerLevel || 0
+                );
+                const officerLabel =
+                  classification?.type === "gm"
                     ? officerLabelObj.displayLabel
-                    : "";
+                    : classification?.type === "officer"
+                      ? officerLabelObj.displayLabel
+                      : "";
 
-              const memberCount = `${count.toString().padStart(3)} characters (${percentage.toString().padStart(2)}%)`;
-              const uniqueCount = `${uniqueHashCount.toString().padStart(2)} unique`;
-              const ptpText = `${proximityIndex.toString().padStart(2)} ptp`;
-              const labels =
-                `${rosterLabel}${rosterLabel && officerLabel ? " " : ""}${officerLabel}`.trim();
+                const memberCount = `${count.toString().padStart(3)} characters (${percentage.toString().padStart(2)}%)`;
+                const uniqueCount = `${uniqueHashCount.toString().padStart(2)} unique`;
+                const ptpText = `${proximityIndex.toString().padStart(2)} ptp`;
+                const labels =
+                  `${rosterLabel}${rosterLabel && officerLabel ? " " : ""}${officerLabel}`.trim();
 
-              return (
-                <div
-                  key={rank === null ? "unranked" : rank}
-                  className="overflow-hidden h-6"
-                >
-                  {rank && rank !== null ? (
-                    <span className="inline-block w-16 leading-none overflow-hidden">
-                      <GuildRank guildRank={rank} />
-                    </span>
-                  ) : (
-                    <span className="inline-block w-8 text-foreground/60 leading-none">
-                      {rankLabel}
-                    </span>
-                  )}
-                  <span className="text-foreground/70">{" | "}</span>
-                  <span className="inline-block w-44 text-right text-foreground">
-                    {memberCount}
-                  </span>
-                  <span className="text-foreground/70">{" | "}</span>
-                  <span className="inline-block w-24 text-right text-foreground">
-                    {uniqueCount}
-                  </span>
-                  <span className="text-foreground/70">{" | "}</span>
-                  <span className="inline-block w-16 text-right text-foreground">
-                    {ptpText}
-                  </span>
-                  {labels && (
-                    <>
-                      <span className="text-foreground/70">{" | "}</span>
-                      <span className="text-foreground/60 text-xs leading-none">
-                        {labels}
+                return (
+                  <div
+                    key={rank === null ? "unranked" : rank}
+                    className="overflow-hidden h-6"
+                  >
+                    {rank && rank !== null ? (
+                      <span className="inline-block w-16 leading-none overflow-hidden">
+                        <GuildRank guildRank={rank} />
                       </span>
-                    </>
-                  )}
-                </div>
-              );
-            })}
-          <div className="mt-2 pt-2 border-t border-foreground/20">
-            <div>
-              <span className="font-medium text-foreground">Total:</span>{" "}
-              {members.length} members
-            </div>
-            {rankStats.rankMap.has(null) && (
-              <div className="mt-1">
-                <span className="font-medium text-foreground">u/r:</span>{" "}
-                {rankStats.rankMap.get(null)} members (
-                {Math.round(
-                  (rankStats.rankMap.get(null)! / members.length) * 100
-                )}
-                %)
+                    ) : (
+                      <span className="inline-block w-8 text-foreground/60 leading-none">
+                        {rankLabel}
+                      </span>
+                    )}
+                    <span className="text-foreground/70">{" | "}</span>
+                    <span className="inline-block w-44 text-right text-foreground">
+                      {memberCount}
+                    </span>
+                    <span className="text-foreground/70">{" | "}</span>
+                    <span className="inline-block w-24 text-right text-foreground">
+                      {uniqueCount}
+                    </span>
+                    <span className="text-foreground/70">{" | "}</span>
+                    <span className="inline-block w-16 text-right text-foreground">
+                      {ptpText}
+                    </span>
+                    {labels && (
+                      <>
+                        <span className="text-foreground/70">{" | "}</span>
+                        <span className="text-foreground/60 text-xs leading-none">
+                          {labels}
+                        </span>
+                      </>
+                    )}
+                  </div>
+                );
+              })}
+            <div className="mt-2 pt-2 border-t border-foreground/20">
+              <div>
+                <span className="font-medium text-foreground">Total:</span>{" "}
+                {members.length} members
               </div>
-            )}
+              {rankStats.rankMap.has(null) && (
+                <div className="mt-1">
+                  <span className="font-medium text-foreground">u/r:</span>{" "}
+                  {rankStats.rankMap.get(null)} members (
+                  {Math.round(
+                    (rankStats.rankMap.get(null)! / members.length) * 100
+                  )}
+                  %)
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
