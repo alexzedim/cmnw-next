@@ -199,7 +199,7 @@ export function GuildRoster({ members }: GuildRosterProps) {
               : null;
 
             return (
-              <TableRow key={`${member.uuid}-${index}`}>
+              <TableRow key={`${member.guid}-${index}`}>
                 <TableCell>
                   <Link
                     className="hover:underline font-medium transition-colors duration-200"
