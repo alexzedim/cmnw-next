@@ -56,8 +56,8 @@ LABEL org.opencontainers.image.title="cmnw-next" \
       org.opencontainers.image.source="https://github.com/alexzedim/cmnw-next" \
       org.opencontainers.image.documentation="https://github.com/alexzedim/cmnw-next"
 
-# Use dumb-init to handle signals properly
-ENTRYPOINT ["/usr/sbin/dumb-init", "--"]
+# Use dumb-init to handle signals properly (correct path for Alpine)
+ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 
 # Start application
 CMD ["node_modules/.bin/next", "start"]
