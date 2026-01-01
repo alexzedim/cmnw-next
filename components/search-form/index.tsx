@@ -219,13 +219,13 @@ export const SearchForm = () => {
   const getTypeIcon = (type?: string) => {
     switch (type) {
       case "character":
-        return "👤";
+        return ">";
       case "guild":
-        return "🛡️";
+        return "#️";
       case "item":
-        return "⚔️";
+        return "$";
       default:
-        return "🔍";
+        return "!";
     }
   };
 
