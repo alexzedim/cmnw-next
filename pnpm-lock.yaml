@@ -45,7 +45,7 @@ importers:
         specifier: 2.4.15
         version: 2.4.15(tailwindcss@3.4.16)
       '@hookform/resolvers':
-        specifier: ^5.2.2
+        specifier: 5.2.2
         version: 5.2.2(react-hook-form@7.65.0(react@19.2.0))
       '@react-aria/ssr':
         specifier: 3.9.8
@@ -54,13 +54,13 @@ importers:
         specifier: 3.8.22
         version: 3.8.22(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       '@tremor/react':
-        specifier: ^3.18.7
+        specifier: 3.18.7
         version: 3.18.7(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       clsx:
         specifier: 2.1.1
         version: 2.1.1
       dayjs:
-        specifier: ^1.11.18
+        specifier: 1.11.18
         version: 1.11.18
       framer-motion:
         specifier: 11.13.1
@@ -81,16 +81,16 @@ importers:
         specifier: 19.2.0
         version: 19.2.0(react@19.2.0)
       react-hook-form:
-        specifier: ^7.65.0
+        specifier: 7.65.0
         version: 7.65.0(react@19.2.0)
       react-markdown:
         specifier: 10.1.0
         version: 10.1.0(@types/react@18.3.3)(react@19.2.0)
       swr:
-        specifier: ^2.3.6
+        specifier: 2.3.6
         version: 2.3.6(react@19.2.0)
       yup:
-        specifier: ^1.7.1
+        specifier: 1.7.1
         version: 1.7.1
     devDependencies:
       '@eslint/compat':
@@ -109,7 +109,7 @@ importers:
         specifier: 3.29.0
         version: 3.29.0(react@19.2.0)
       '@types/lodash':
-        specifier: ^4.17.20
+        specifier: 4.17.20
         version: 4.17.20
       '@types/node':
         specifier: 22.15.3
@@ -3531,6 +3531,7 @@ packages:
   next@16.0.0:
     resolution: {integrity: sha512-nYohiNdxGu4OmBzggxy9rczmjIGI+TpR5vbKTsE1HqYwNm1B+YSiugSrFguX6omMOKnDHAmBPY4+8TNJk0Idyg==}
     engines: {node: '>=20.9.0'}
+    deprecated: This version has a security vulnerability. Please upgrade to a patched version. See https://nextjs.org/blog/CVE-2025-66478 for more details.
     hasBin: true
     peerDependencies:
       '@opentelemetry/api': ^1.1.0
