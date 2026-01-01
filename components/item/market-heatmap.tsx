@@ -321,6 +321,17 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
                           value,
                           maxValue
                         );
+                        const cellPrice = point
+                          ? parseFloat(
+                              formatPrice(
+                                data.yAxis[yIndex],
+                                point.value,
+                                point.oi
+                              )
+                            )
+                          : 0;
+                        const axisPrice = parseFloat(yLabel);
+                        const showUpArrow = cellPrice > axisPrice * 1.04;
 
                         return (
                           <div
@@ -338,6 +349,7 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
                             {value > 0 && (
                               <span style={{ color: textColor }}>
                                 {value.toLocaleString(LOCALE)}
+                                {showUpArrow && <span> +</span>}
                               </span>
                             )}
                           </div>
