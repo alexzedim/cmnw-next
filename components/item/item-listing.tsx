@@ -1,0 +1,178 @@
+"use client";
+
+import {
+  Card,
+  CardBody,
+  Table,
+  TableHeader,
+  TableColumn,
+  TableBody,
+  TableRow,
+  TableCell,
+  Spinner,
+  Pagination,
+} from "@heroui/react";
+import { useState } from "react";
+import useSWR from "swr";
+
+import { Link } from "@/components/custom-link";
+import { DOMAINS } from "@/constants";
+
+interface ItemDetails {
+  bonus_lists?: number[];
+}
+
+interface Auction {
+  id: number;
+  item_id: number;
+  item: ItemDetails;
+  connected_realm_id: number;
+  buyout?: number;
+  bid: number;
+  time_left: string;
+  last_modified: string | number;
+}
+
+interface AuctionsResponse {
+  feed: Auction[];
+}
+
+interface ItemListingProps {
+  id: number | string;
+  name: string;
+  isGold?: boolean;
+  isCommdty?: boolean;
+}
+
+const fetcher = (url: string) => fetch(url).then((r) => r.json());
+
+const timeLeftMap: Record<string, string> = {
+  SHORT: "30m",
+  MEDIUM: "30m - 2h",
+  LONG: "2h - 12h",
+  VERY_LONG: "1D - 2D",
+};
+
+export const ItemListing = ({
+  id,
+  name,
+  isGold = false,
+  isCommdty = false,
+}: ItemListingProps) => {
+  const [page, setPage] = useState(1);
+  const rowsPerPage = 25;
+
+  if (isCommdty || isGold) return null;
+
+  const { data, error, isLoading } = useSWR<AuctionsResponse>(
+    `${DOMAINS.domain}/api/dma/item/feed?id=${id}`,
+    fetcher
+  );
+
+  if (error) return null;
+  if (isLoading)
+    return (
+      <Card className="m-4 bg-background border border-divider">
+        <CardBody className="p-8 rounded-xl flex items-center justify-center min-h-[300px] bg-background">
+          <Spinner color="warning" size="lg" />
+        </CardBody>
+      </Card>
+    );
+
+  if (!data || !data.feed || data.feed.length === 0) return null;
+
+  const pages = Math.ceil(data.feed.length / rowsPerPage);
+  const items = data.feed.slice((page - 1) * rowsPerPage, page * rowsPerPage);
+
+  const columns = [
+    { key: "item", label: "Item" },
+    { key: "connected_realm_id", label: "Realm" },
+    { key: "buyout", label: "Price" },
+    { key: "time_left", label: "Expiration" },
+    { key: "last_modified", label: "Last Update" },
+  ];
+
+  const buildWowheadUrl = (auction: Auction) => {
+    let wowhead = `item=${auction.item_id}`;
+
+    if (auction.item.bonus_lists && auction.item.bonus_lists.length > 0) {
+      const bonusLists = auction.item.bonus_lists.join(":");
+
+      wowhead += `&bonus=${bonusLists}`;
+    }
+    wowhead += "&xml";
+
+    return {
+      url: `https://wowhead.com/item=${auction.item_id}`,
+      data: wowhead,
+    };
+  };
+
+  return (
+    <Card className="m-4 bg-background border border-divider">
+      <CardBody className="p-8 rounded-xl bg-background">
+        <Table
+          aria-label="Item auction listings"
+          bottomContent={
+            pages > 1 ? (
+              <div className="flex w-full justify-center">
+                <Pagination
+                  isCompact
+                  showControls
+                  showShadow
+                  color="warning"
+                  page={page}
+                  total={pages}
+                  onChange={setPage}
+                />
+              </div>
+            ) : null
+          }
+          classNames={{
+            wrapper: "p-0",
+            th: "bg-background border-b border-divider text-foreground font-semibold",
+            td: "text-muted border-b border-divider",
+          }}
+        >
+          <TableHeader columns={columns}>
+            {(column) => (
+              <TableColumn key={column.key}>{column.label}</TableColumn>
+            )}
+          </TableHeader>
+          <TableBody items={items}>
+            {(auction) => {
+              const { url, data: wowheadData } = buildWowheadUrl(auction);
+
+              return (
+                <TableRow key={auction.id}>
+                  <TableCell>
+                    <Link
+                      className="text-inherit hover:underline"
+                      data-wowhead={wowheadData}
+                      href={url}
+                      prefetch={false}
+                    >
+                      {name}
+                    </Link>
+                  </TableCell>
+                  <TableCell>{auction.connected_realm_id}</TableCell>
+                  <TableCell>
+                    {auction.buyout
+                      ? auction.buyout.toLocaleString("ru-RU")
+                      : `BID: ${auction.bid.toLocaleString("ru-RU")}`}
+                  </TableCell>
+                  <TableCell>
+                    {timeLeftMap[auction.time_left] || auction.time_left}
+                  </TableCell>
+                  <TableCell>
+                    {new Date(auction.last_modified).toLocaleString("en-GB")}
+                  </TableCell>
+                </TableRow>
+              );
+            }}
+          </TableBody>
+        </Table>
+      </CardBody>
+    </Card>
+  );
+};

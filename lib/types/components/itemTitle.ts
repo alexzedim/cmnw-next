@@ -1,0 +1,30 @@
+import { nameLocaleEmbed } from "./nameLocaleEmbed";
+
+export type itemTitle = {
+  id: number;
+  name: string;
+  names: nameLocaleEmbed;
+  quality: string;
+  itemLevel: number;
+  level: null;
+  icon: null;
+  itemClass: string;
+  itemSubClass: string;
+  purchasePrice: number;
+  purchaseQuantity: number;
+  vendorSellPrice: number;
+  isEquip: boolean;
+  isStackable: boolean;
+  inventoryType: string;
+  lootType: null;
+  hasContracts: boolean;
+  assetClass: string[];
+  expansion: string;
+  stackable: number;
+  professionClass: null;
+  ticker: null;
+  tags: null;
+  indexBy: string;
+  createdAt: string;
+  updatedAt: string;
+};
