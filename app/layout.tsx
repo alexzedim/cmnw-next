@@ -1,5 +1,6 @@
 import "@/styles/tokens.css";
 import "@/styles/globals.css";
+
 import { Metadata, Viewport } from "next";
 import { ReactNode } from "react";
 import clsx from "clsx";
@@ -10,11 +11,10 @@ import { siteConfig } from "@/config/site";
 import { fontSans, fontMono } from "@/config/fonts";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import { ENDPOINTS } from "@/constants";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
-  ),
+  metadataBase: new URL(ENDPOINTS.API),
   title: {
     default: siteConfig.name,
     template: `%s - ${siteConfig.name}`,
