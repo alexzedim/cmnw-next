@@ -9,11 +9,11 @@ import { MarketHeatmap } from "@/components/item/market-heatmap";
 import { ItemListing } from "@/components/item/item-listing";
 import { ItemContracts } from "@/components/item/item-contracts";
 import { generateItemTitle } from "@/lib";
-import { DOMAINS } from "@/constants";
+import { ENDPOINTS } from "@/constants";
 
 async function getItemData(id: string) {
   try {
-    const res = await fetch(`${DOMAINS.domain}/api/dma/item?id=${id}`, {
+    const res = await fetch(`${ENDPOINTS.API}/api/dma/item?id=${id}`, {
       next: { revalidate: 3600 }, // Revalidate every hour
     });
 

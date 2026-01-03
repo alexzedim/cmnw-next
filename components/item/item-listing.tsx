@@ -16,7 +16,7 @@ import { useState } from "react";
 import useSWR from "swr";
 
 import { Link } from "@/components/custom-link";
-import { DOMAINS } from "@/constants";
+import { ENDPOINTS } from "@/constants";
 
 interface ItemDetails {
   bonus_lists?: number[];
@@ -65,7 +65,7 @@ export const ItemListing = ({
   if (isCommdty || isGold) return null;
 
   const { data, error, isLoading } = useSWR<AuctionsResponse>(
-    `${DOMAINS.domain}/api/dma/item/feed?id=${id}`,
+    `${ENDPOINTS.API}/api/dma/item/feed?id=${id}`,
     fetcher
   );
 

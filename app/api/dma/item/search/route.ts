@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "https://api.tradewithcmnw.com";
+import { API_ORIGIN } from "@/config/api-origin";
+
+const API_BASE_URL = API_ORIGIN;
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;

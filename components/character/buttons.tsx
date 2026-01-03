@@ -3,7 +3,7 @@
 import { Avatar } from "@heroui/react";
 
 import { Link } from "@/components/custom-link";
-import { DOMAINS } from "@/constants";
+import { ENDPOINTS } from "@/constants";
 
 interface CharacterButtonsProps {
   name: string;
@@ -14,27 +14,27 @@ export const CharacterButtons = ({ name, realm }: CharacterButtonsProps) => {
   const services = [
     {
       name: "WarcraftLogs",
-      url: `${DOMAINS.warcraftLogs}/character/eu/${realm}/${name}`,
+      url: `${ENDPOINTS.WARCRAFT_LOGS}/character/eu/${realm}/${name}`,
       icon: "/external/wcl.svg",
     },
     {
       name: "RaiderIO",
-      url: `${DOMAINS.raiderIo}/characters/eu/${realm}/${name}`,
+      url: `${ENDPOINTS.RAIDER_IO}/characters/eu/${realm}/${name}`,
       icon: "/external/rio.svg",
     },
     {
       name: "WoWProgress",
-      url: `${DOMAINS.wowProgress}/character/eu/${realm}/${name}`,
+      url: `${ENDPOINTS.WOW_PROGRESS}/character/eu/${realm}/${name}`,
       icon: "/external/wp.svg",
     },
     {
       name: "BattleNet",
-      url: `${DOMAINS.battleNet}/en-gb/character/eu/${realm}/${name}`,
+      url: `${ENDPOINTS.BATTLE_NET}/en-gb/character/eu/${realm}/${name}`,
       icon: "/external/armory.svg",
     },
     {
       name: "Check PvP",
-      url: `${DOMAINS.checkPvp}/eu/${realm}/${name}`,
+      url: `${ENDPOINTS.CHECK_PVP}/eu/${realm}/${name}`,
       icon: "/external/check-pvp-1.svg",
     },
   ];

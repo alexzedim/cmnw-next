@@ -1,14 +1,14 @@
-import { DOMAINS } from "@/constants/domains";
+import { ENDPOINTS } from "@/constants/endpoints";
 
 /**
  * Centralized API client for communicating with the CMNW backend
  * Handles request formatting, error handling, and response parsing
  */
 export class ApiClient {
-  private baseUrl: string;
+  private readonly baseUrl: string;
 
   constructor() {
-    this.baseUrl = process.env.NEXT_PUBLIC_API_URL || DOMAINS.domain;
+    this.baseUrl = ENDPOINTS.API;
   }
 
   /**
