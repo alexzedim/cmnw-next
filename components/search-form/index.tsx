@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, KeyboardEvent } from "react";
 import { useRouter } from "next/navigation";
+
 import { ENDPOINTS } from "@/constants";
 
 interface SearchSuggestion {
@@ -12,6 +13,7 @@ interface SearchSuggestion {
 
 const buildSearchUrl = (query: string) => {
   const url = new URL("/api/osint/search", ENDPOINTS.API);
+
   url.searchParams.set("searchQuery", query);
 
   return url.toString();
