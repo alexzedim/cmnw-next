@@ -12,7 +12,7 @@ interface SearchSuggestion {
 }
 
 const buildSearchUrl = (query: string) => {
-  const url = new URL("/api/osint/search", ENDPOINTS.API);
+  const url = new URL("/api/app/search", ENDPOINTS.API);
 
   url.searchParams.set("searchQuery", query);
 
