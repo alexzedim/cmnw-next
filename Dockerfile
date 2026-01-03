@@ -1,6 +1,9 @@
 # Build stage
 FROM node:20-alpine AS builder
 
+ARG NEXT_PUBLIC_API_URL=https://cmnw.me
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+
 WORKDIR /app
 
 # Copy package files
@@ -17,6 +20,9 @@ RUN pnpm run build
 
 # Production stage
 FROM node:20-alpine
+
+ARG NEXT_PUBLIC_API_URL=https://api.cmnw.me
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 
 # Create non-root user
 RUN addgroup -g 1001 -S nodejs && adduser -S nextjs -u 1001

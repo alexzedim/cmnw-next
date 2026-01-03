@@ -335,6 +335,10 @@ docker build -t cmnw-next .
 docker run -p 3000:3000 cmnw-next
 ```
 
+> **Important:** The build stage needs `NEXT_PUBLIC_API_URL` so Next.js can pre-render.
+> Override the default when building if you target another backend:
+> `docker build --build-arg NEXT_PUBLIC_API_URL=https://your-api.example -t cmnw-next .`
+
 ### Static Export
 
 ```bash
