@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { DOMAINS } from "@/constants/domains";
+import { ENDPOINTS } from "@/constants/endpoints";
 
 export async function GET(
   request: NextRequest,
@@ -16,7 +16,7 @@ export async function GET(
   }
 
   try {
-    const apiUrl = new URL(`${DOMAINS.domain}/api/dma/item`);
+    const apiUrl = new URL(`${ENDPOINTS.API}/api/dma/item`);
 
     apiUrl.searchParams.set("id", id);
 

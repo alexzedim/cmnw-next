@@ -2,12 +2,20 @@
 
 import { useState, useEffect, useRef, KeyboardEvent } from "react";
 import { useRouter } from "next/navigation";
+import { ENDPOINTS } from "@/constants";
 
 interface SearchSuggestion {
   value: string;
   type?: "character" | "guild" | "item";
   label?: string;
 }
+
+const buildSearchUrl = (query: string) => {
+  const url = new URL("/api/osint/search", ENDPOINTS.API);
+  url.searchParams.set("searchQuery", query);
+
+  return url.toString();
+};
 
 export const SearchForm = () => {
   const router = useRouter();
@@ -26,7 +34,9 @@ export const SearchForm = () => {
   // Fetch suggestions when search query changes
   useEffect(() => {
     const fetchSuggestions = async () => {
-      if (searchQuery.trim().length < 2) {
+      const sanitizedQuery = searchQuery.trim();
+
+      if (sanitizedQuery.length < 2) {
         setSuggestions([]);
         setShowDropdown(false);
 
@@ -36,9 +46,7 @@ export const SearchForm = () => {
       setIsLoadingSuggestions(true);
 
       try {
-        const response = await fetch(
-          `/api/osint/search?searchQuery=${encodeURIComponent(searchQuery)}`
-        );
+        const response = await fetch(buildSearchUrl(sanitizedQuery));
 
         if (response.ok) {
           const data = await response.json();
@@ -121,9 +129,7 @@ export const SearchForm = () => {
     setShowDropdown(false);
 
     try {
-      const response = await fetch(
-        `/api/osint/search?searchQuery=${encodeURIComponent(trimmedQuery)}`
-      );
+      const response = await fetch(buildSearchUrl(trimmedQuery));
 
       if (response.ok) {
         const data = await response.json();

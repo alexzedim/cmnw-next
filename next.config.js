@@ -1,3 +1,5 @@
+const { API_ORIGIN } = require('./config/api-origin');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   turbopack: {
@@ -16,7 +18,7 @@ const nextConfig = {
       beforeFiles: [
         {
           source: '/api/:path*',
-          destination: 'http://localhost:8080/api/:path*',
+          destination: `${API_ORIGIN}/api/:path*`,
         },
       ],
     };

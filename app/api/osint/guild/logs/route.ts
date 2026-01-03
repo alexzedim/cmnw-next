@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { DOMAINS } from "@/constants/domains";
+import { ENDPOINTS } from "@/constants/endpoints";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const apiUrl = new URL(`${DOMAINS.domain}/api/osint/guild/logs`);
+    const apiUrl = new URL(`${ENDPOINTS.API}/api/osint/guild/logs`);
 
     apiUrl.searchParams.set("guid", guid);
 

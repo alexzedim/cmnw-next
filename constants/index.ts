@@ -4,7 +4,7 @@ export * from "./gradient-colors";
 export * from "./blog-posts";
 export * from "./class-colors";
 export * from "./contributors";
-export * from "./domains";
+export * from "./endpoints";
 export * from "./expansions";
 export * from "./factions";
 export * from "./hash";
