@@ -6,10 +6,12 @@ const nextConfig = {
     root: __dirname,
   },
   images: {
+    domains: ['render.worldofwarcraft.com'],
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'render.worldofwarcraft.com',
+        pathname: '/**',
       },
     ],
   },
