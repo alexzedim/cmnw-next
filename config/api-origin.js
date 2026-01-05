@@ -1,6 +1,6 @@
 const normalizeOrigin = (origin) => (origin ?? "").replace(/\/+$/, "");
 
-const DEFAULT_API_ORIGIN = normalizeOrigin("https://api.cmnw.me");
+const DEFAULT_API_ORIGIN = normalizeOrigin("https://cmnw.me");
 
 const resolveOrigin = () => {
   const normalizedEnvOrigin = normalizeOrigin(process.env.NEXT_PUBLIC_API_URL);
@@ -8,7 +8,7 @@ const resolveOrigin = () => {
   if (!normalizedEnvOrigin) {
     if (!process.env.NEXT_PUBLIC_API_URL) {
       console.warn(
-        `[config/api-origin] NEXT_PUBLIC_API_URL is not defined. Falling back to ${DEFAULT_API_ORIGIN}.`
+        `[config/api-origin] NEXT_PUBLIC_API_URL is not defined. Falling back to ${DEFAULT_API_ORIGIN} (same-origin /api routing).`
       );
     }
 
