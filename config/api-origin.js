@@ -1,10 +1,15 @@
 const normalizeOrigin = (origin) => (origin ?? "").replace(/\/+$/, "");
 
-const DEFAULT_API_ORIGIN = normalizeOrigin("http://128.0.0.255:8080");
-const API_ORIGIN = DEFAULT_API_ORIGIN;
+const INTERNAL_API_ORIGIN = normalizeOrigin("http://128.0.0.255:8080");
+const PUBLIC_API_ORIGIN = normalizeOrigin("https://cmnw.me");
+
+const isServerRuntime = () => typeof window === "undefined";
+
+const API_ORIGIN = isServerRuntime() ? INTERNAL_API_ORIGIN : PUBLIC_API_ORIGIN;
 
 module.exports = {
   API_ORIGIN,
-  DEFAULT_API_ORIGIN,
+  INTERNAL_API_ORIGIN,
+  PUBLIC_API_ORIGIN,
   normalizeOrigin,
 };
