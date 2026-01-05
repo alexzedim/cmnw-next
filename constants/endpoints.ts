@@ -2,7 +2,7 @@ import { API_ORIGIN } from "@/config/api-origin";
 
 // External service domains
 export const ENDPOINTS = {
-  API: API_ORIGIN,
+  API: API_ORIGIN || "https://cmnw.me",
   LOCALHOST: "http://localhost:8080",
   WARCRAFT_LOGS: "https://www.warcraftlogs.com",
   WOW_PROGRESS: "https://www.wowprogress.com",
