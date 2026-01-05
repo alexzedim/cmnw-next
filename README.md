@@ -117,7 +117,7 @@ This frontend connects to the [CMNW Backend API](https://github.com/alexzedim/cm
 
 - **Node.js** 18+ 
 - **pnpm** 9+ (recommended) or npm/yarn
-- Access to CMNW Backend API (or set custom `NEXT_PUBLIC_API_URL`)
+- Access to the CMNW Backend API (the frontend now targets https://cmnw.me by default)
 
 ### 🔧 Installation
 
@@ -131,7 +131,7 @@ pnpm install
 
 # Set up environment variables (optional)
 cp .env.example .env.local
-# Edit .env.local and set NEXT_PUBLIC_API_URL if needed
+# Edit .env.local to adjust caching settings (optional)
 ```
 
 ### 🏃 Development
@@ -302,8 +302,8 @@ import { LineChart } from '@tremor/react';
 ```bash
 # .env.local
 
-# Backend API URL (default: https://cmnw.me)
-NEXT_PUBLIC_API_URL=https://cmnw.me
+# Backend API cache revalidation (default: 3600 seconds)
+NEXT_PUBLIC_API_REVALIDATION=3600
 
 # Optional: Analytics, monitoring, etc.
 # NEXT_PUBLIC_GA_ID=your-google-analytics-id
@@ -335,9 +335,7 @@ docker build -t cmnw-next .
 docker run -p 3000:3000 cmnw-next
 ```
 
-> **Important:** The build stage needs `NEXT_PUBLIC_API_URL` so Next.js can pre-render.
-> Override the default when building if you target another backend:
-> `docker build --build-arg NEXT_PUBLIC_API_URL=https://your-api.example -t cmnw-next .`
+> **Note:** The frontend always targets https://cmnw.me for API calls. Override the hardcoded origin in [`config/api-origin.js`](config/api-origin.js) if you deploy the API elsewhere.
 
 ### Static Export
 
