@@ -1,17 +1,46 @@
 "use client";
 
+import type { AppHealthPayload } from "@/lib/types";
+
 import { useState, useEffect } from "react";
 import { Link } from "@heroui/link";
 
 import { Logo } from "@/components/icons";
+import { ENDPOINTS } from "@/constants/endpoints";
 import { SYMBOLS } from "@/constants/symbols";
 import { getRandomItems } from "@/utils/random";
+
+type FooterLink = {
+  label: string;
+  href?: string;
+  isExternal?: boolean;
+  isMetrics?: boolean;
+};
+
+type FooterSection = {
+  links: FooterLink[];
+};
+
+const METRICS_ENDPOINT = `${ENDPOINTS.API.replace(/\/+$/, "")}/api/app/metrics`;
+
+const toDateFromTimestamp = (timestamp: number | null | undefined) => {
+  if (typeof timestamp !== "number" || Number.isNaN(timestamp)) {
+    return null;
+  }
+
+  const isSeconds = timestamp < 1_000_000_000_000;
+  const milliseconds = isSeconds ? timestamp * 1000 : timestamp;
+
+  return Number.isFinite(milliseconds) ? new Date(milliseconds) : null;
+};
 
 export const Footer = () => {
   const [mounted, setMounted] = useState(false);
   const [symbolSet] = useState(() =>
     Math.random() > 0.5 ? SYMBOLS.BRAILLE : SYMBOLS.HEX
   );
+  const [metrics, setMetrics] = useState<AppHealthPayload | null>(null);
+  const [metricsError, setMetricsError] = useState(false);
   const generateSymbols = () => getRandomItems(Array.from(symbolSet), 7);
   const year = new Date().getFullYear();
 
@@ -19,24 +48,156 @@ export const Footer = () => {
     setMounted(true);
   }, []);
 
-  const footerSections = mounted
+  useEffect(() => {
+    const controller = new AbortController();
+    let isMounted = true;
+
+    const fetchMetrics = async () => {
+      try {
+        const response = await fetch(METRICS_ENDPOINT, {
+          signal: controller.signal,
+          cache: "no-store",
+          headers: {
+            Accept: "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch metrics: ${response.status}`);
+        }
+
+        const payload: AppHealthPayload = await response.json();
+
+        if (!isMounted) {
+          return;
+        }
+
+        setMetrics(payload);
+        setMetricsError(false);
+      } catch (error: unknown) {
+        if (!isMounted) {
+          return;
+        }
+
+        if (
+          typeof DOMException !== "undefined" &&
+          error instanceof DOMException &&
+          error.name === "AbortError"
+        ) {
+          return;
+        }
+
+        setMetricsError(true);
+      }
+    };
+
+    fetchMetrics();
+
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
+  }, []);
+
+  const metricsIndicatorState = metricsError
+    ? "error"
+    : metrics?.status === "ok"
+      ? "online"
+      : metrics
+        ? "degraded"
+        : "loading";
+
+  const metricsIndicatorClass =
+    metricsIndicatorState === "online"
+      ? "bg-emerald-500"
+      : metricsIndicatorState === "degraded"
+        ? "bg-amber-500"
+        : metricsIndicatorState === "error"
+          ? "bg-red-500"
+          : "bg-foreground/40 animate-pulse";
+
+  const uptimeLabel =
+    metrics?.uptime && !metricsError
+      ? metrics.uptime
+      : metricsIndicatorState === "error"
+        ? "Uptime unavailable"
+        : "Calculating uptime…";
+
+  const latestMarketDate = toDateFromTimestamp(
+    metrics?.metrics.latestMarketTimestamp ?? null
+  );
+
+  const latestMarketLabel =
+    latestMarketDate && !metricsError
+      ? latestMarketDate.toLocaleString()
+      : metricsIndicatorState === "error"
+        ? "No market data"
+        : "Loading market data…";
+
+  const metricsLabel =
+    metrics?.version && !metricsError
+      ? `v${metrics.version}`
+      : metricsIndicatorState === "error"
+        ? "Status unavailable"
+        : "Checking status…";
+
+  const linkBaseClasses =
+    "text-sm leading-tight relative flex w-fit items-center transition-colors duration-200 hover:text-orange-500 group after:absolute after:-bottom-px after:left-0 after:h-px after:w-0 after:bg-current after:transition-all after:duration-300 after:ease-in-out hover:after:w-full text-foreground/60";
+
+  const renderLinkContent = (link: FooterLink) =>
+    link.isMetrics ? (
+      <span className="flex w-full flex-col gap-1 text-left">
+        <span className="text-[10px] uppercase tracking-wide text-foreground/40">
+          uptime
+        </span>
+        <span className="font-mono text-xs text-foreground/80">
+          {uptimeLabel}
+        </span>
+        <span className="text-[10px] uppercase tracking-wide text-foreground/40">
+          latest market
+        </span>
+        <span className="font-mono text-xs text-foreground/80">
+          {latestMarketLabel}
+        </span>
+        <span className="flex items-center gap-2 pt-1">
+          <span
+            aria-label={
+              metricsIndicatorState === "online"
+                ? "API online"
+                : metricsIndicatorState === "degraded"
+                  ? "API degraded"
+                  : metricsIndicatorState === "error"
+                    ? "API offline"
+                    : "Checking API status"
+            }
+            className={`size-2 rounded-full transition-colors duration-200 ${metricsIndicatorClass}`}
+          />
+          <span className="text-foreground text-sm leading-tight">
+            {metricsLabel}
+          </span>
+        </span>
+      </span>
+    ) : (
+      link.label
+    );
+
+  const footerSections: FooterSection[] = mounted
     ? [
         {
           links: [
-            { label: generateSymbols(), href: "/" },
-            { label: generateSymbols(), href: "/" },
-            { label: generateSymbols(), href: "/" },
             {
               label: "GitHub",
               href: "https://github.com/alexzedim/cmnw-next",
               isExternal: true,
             },
+            { label: generateSymbols(), href: "/" },
+            { label: generateSymbols(), href: "/" },
           ],
         },
         {
           links: [
-            { label: generateSymbols(), href: "/" },
             { label: "Discord", href: "/" },
+            { label: generateSymbols(), href: "/" },
             { label: generateSymbols(), href: "/" },
           ],
         },
@@ -46,10 +207,10 @@ export const Footer = () => {
               label: "Zero Cookie Policy",
               href: "https://www.google.com/search?q=Zero+Cookie+policy",
             },
-            { label: generateSymbols(), href: "/" },
-            { label: generateSymbols(), href: "/" },
-            { label: generateSymbols(), href: "/" },
-            { label: generateSymbols(), href: "/" },
+            { label: "Uptime" },
+            { label: uptimeLabel },
+            { label: "Latest Market Data" },
+            { label: latestMarketLabel },
           ],
         },
       ]
@@ -83,18 +244,26 @@ export const Footer = () => {
             {footerSections.map((section, index) => (
               <li key={index} className="w-fit">
                 <ul className="flex flex-col gap-2.5">
-                  {section.links.map((link) => (
-                    <li key={link.label}>
-                      <Link
-                        className="text-sm leading-tight relative flex w-fit items-center transition-colors duration-200 hover:text-orange-500 group after:absolute after:-bottom-px after:left-0 after:h-px after:w-0 after:bg-current after:transition-all after:duration-300 after:ease-in-out hover:after:w-full text-foreground/60"
-                        href={link.href}
-                        {...(link.isExternal && {
-                          rel: "noopener noreferrer",
-                          target: "_blank",
-                        })}
-                      >
-                        {link.label}
-                      </Link>
+                  {section.links.map((link, linkIndex) => (
+                    <li key={`${index}-${linkIndex}`}>
+                      {link.href ? (
+                        <Link
+                          className={`${linkBaseClasses} ${link.isMetrics ? "flex-col items-start gap-1" : ""}`}
+                          href={link.href}
+                          {...(link.isExternal && {
+                            rel: "noopener noreferrer",
+                            target: "_blank",
+                          })}
+                        >
+                          {renderLinkContent(link)}
+                        </Link>
+                      ) : (
+                        <span
+                          className={`${linkBaseClasses} ${link.isMetrics ? "flex-col items-start gap-1" : ""} cursor-default`}
+                        >
+                          {renderLinkContent(link)}
+                        </span>
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -107,6 +276,23 @@ export const Footer = () => {
             {/* Copyright */}
             <p className="text-foreground text-sm leading-tight">
               © {year} CMNW. All rights reserved.
+              <span className="ml-3 inline-flex items-center gap-2 text-xs tracking-wide text-foreground/80">
+                <span
+                  aria-label={
+                    metricsIndicatorState === "online"
+                      ? "API online"
+                      : metricsIndicatorState === "degraded"
+                        ? "API degraded"
+                        : metricsIndicatorState === "error"
+                          ? "API offline"
+                          : "Checking API status"
+                  }
+                  className={`size-2 rounded-full transition-colors duration-200 ${metricsIndicatorClass}`}
+                />
+                <span className="text-foreground text-sm leading-tight">
+                  {metricsLabel}
+                </span>
+              </span>
             </p>
           </div>
         </div>
