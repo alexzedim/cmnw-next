@@ -1,12 +1,10 @@
 "use client";
 
-import type { AppHealthPayload } from "@/lib/types";
-
 import { useState, useEffect } from "react";
 import { Link } from "@heroui/link";
 
 import { Logo } from "@/components/icons";
-import { ENDPOINTS } from "@/constants/endpoints";
+import { useAppMetrics } from "@/components/providers/app-metrics-provider";
 import { SYMBOLS } from "@/constants/symbols";
 import { getRandomItems } from "@/utils/random";
 
@@ -20,8 +18,6 @@ type FooterLink = {
 type FooterSection = {
   links: FooterLink[];
 };
-
-const METRICS_ENDPOINT = `${ENDPOINTS.API.replace(/\/+$/, "")}/api/app/metrics`;
 
 const toDateFromTimestamp = (timestamp: number | null | undefined) => {
   if (typeof timestamp !== "number" || Number.isNaN(timestamp)) {
@@ -39,8 +35,11 @@ export const Footer = () => {
   const [symbolSet] = useState(() =>
     Math.random() > 0.5 ? SYMBOLS.BRAILLE : SYMBOLS.HEX
   );
-  const [metrics, setMetrics] = useState<AppHealthPayload | null>(null);
-  const [metricsError, setMetricsError] = useState(false);
+  const {
+    metrics,
+    status: metricsStatus,
+    hasError: metricsError,
+  } = useAppMetrics();
   const generateSymbols = () => getRandomItems(Array.from(symbolSet), 7);
   const year = new Date().getFullYear();
 
@@ -48,64 +47,7 @@ export const Footer = () => {
     setMounted(true);
   }, []);
 
-  useEffect(() => {
-    const controller = new AbortController();
-    let isMounted = true;
-
-    const fetchMetrics = async () => {
-      try {
-        const response = await fetch(METRICS_ENDPOINT, {
-          signal: controller.signal,
-          cache: "no-store",
-          headers: {
-            Accept: "application/json",
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error(`Failed to fetch metrics: ${response.status}`);
-        }
-
-        const payload: AppHealthPayload = await response.json();
-
-        if (!isMounted) {
-          return;
-        }
-
-        setMetrics(payload);
-        setMetricsError(false);
-      } catch (error: unknown) {
-        if (!isMounted) {
-          return;
-        }
-
-        if (
-          typeof DOMException !== "undefined" &&
-          error instanceof DOMException &&
-          error.name === "AbortError"
-        ) {
-          return;
-        }
-
-        setMetricsError(true);
-      }
-    };
-
-    fetchMetrics();
-
-    return () => {
-      isMounted = false;
-      controller.abort();
-    };
-  }, []);
-
-  const metricsIndicatorState = metricsError
-    ? "error"
-    : metrics?.status === "ok"
-      ? "online"
-      : metrics
-        ? "degraded"
-        : "loading";
+  const metricsIndicatorState = metricsError ? "error" : metricsStatus;
 
   const metricsIndicatorClass =
     metricsIndicatorState === "online"
@@ -124,7 +66,7 @@ export const Footer = () => {
         : "Calculating uptime…";
 
   const latestMarketDate = toDateFromTimestamp(
-    metrics?.metrics.latestMarketTimestamp ?? null
+    metrics?.latestMarketTimestamp ?? null
   );
 
   const latestMarketLabel =
