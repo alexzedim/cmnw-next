@@ -22,11 +22,10 @@ export const Footer = () => {
   const footerSections = mounted
     ? [
         {
-          title: generateSymbols(),
           links: [
-            { label: generateSymbols(), href: "/news" },
-            { label: generateSymbols(), href: "/docs" },
-            { label: generateSymbols(), href: "/contact" },
+            { label: generateSymbols(), href: "/" },
+            { label: generateSymbols(), href: "/" },
+            { label: generateSymbols(), href: "/" },
             {
               label: "GitHub",
               href: "https://github.com/alexzedim/cmnw-next",
@@ -35,21 +34,22 @@ export const Footer = () => {
           ],
         },
         {
-          title: generateSymbols(),
           links: [
-            { label: generateSymbols(), href: "/careers" },
-            { label: generateSymbols(), href: "/enterprise" },
-            { label: generateSymbols(), href: "/security" },
+            { label: generateSymbols(), href: "/" },
+            { label: "Discord", href: "/" },
+            { label: generateSymbols(), href: "/" },
           ],
         },
         {
-          title: generateSymbols(),
           links: [
-            { label: generateSymbols(), href: "/privacy" },
-            { label: generateSymbols(), href: "/terms" },
-            { label: generateSymbols(), href: "/sla" },
-            { label: generateSymbols(), href: "/dpa" },
-            { label: generateSymbols(), href: "/baa" },
+            {
+              label: "Zero Cookie Policy",
+              href: "https://www.google.com/search?q=Zero+Cookie+policy",
+            },
+            { label: generateSymbols(), href: "/" },
+            { label: generateSymbols(), href: "/" },
+            { label: generateSymbols(), href: "/" },
+            { label: generateSymbols(), href: "/" },
           ],
         },
       ]
@@ -80,11 +80,8 @@ export const Footer = () => {
         <div className="col-span-full flex h-full flex-col pt-28 pb-8 pl-4 lg:col-span-5 lg:col-start-8 lg:pr-4 lg:pl-0 xl:col-span-4 xl:col-start-9">
           {/* Footer Links */}
           <ul className="mb-10 flex flex-wrap gap-x-12 gap-y-8 pr-6 lg:flex-nowrap lg:justify-between lg:gap-x-4 lg:gap-y-0 2xl:max-w-[76%] 2xl:pr-0">
-            {footerSections.map((section) => (
-              <li key={section.title} className="w-fit">
-                <p className="text-foreground text-sm leading-tight mb-3.5">
-                  {section.title}
-                </p>
+            {footerSections.map((section, index) => (
+              <li key={index} className="w-fit">
                 <ul className="flex flex-col gap-2.5">
                   {section.links.map((link) => (
                     <li key={link.label}>
