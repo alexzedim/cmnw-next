@@ -5,3 +5,4 @@ export * from "./data";
 export * from "./entities";
 export * from "./icons";
 export * from "./page-props";
+export * from "./app";
