@@ -37,7 +37,25 @@ const METRIC_CARDS = [
   },
 ] as const;
 
-const SNAPSHOT_HIGHLIGHT_GROUPS = [
+type SnapshotRequest = {
+  category: AnalyticsMetricCategory;
+  metricType: AnalyticsMetricType;
+};
+
+type SnapshotHighlightMetric = SnapshotRequest & {
+  label: string;
+  valueLimit?: number;
+  sort?: "alpha";
+  getEntryColor?: (label: string) => string | undefined;
+};
+
+type SnapshotHighlightGroup = {
+  title: string;
+  disclaimer: string;
+  metrics: readonly SnapshotHighlightMetric[];
+};
+
+const SNAPSHOT_HIGHLIGHT_GROUPS: readonly SnapshotHighlightGroup[] = [
   {
     title: "Characters @ cap",
     disclaimer:
@@ -53,7 +71,7 @@ const SNAPSHOT_HIGHLIGHT_GROUPS = [
         category: AnalyticsMetricCategory.CHARACTERS,
         metricType: AnalyticsMetricType.BY_CLASS_MAX_LEVEL,
         valueLimit: Number.POSITIVE_INFINITY,
-        sort: "alpha" as const,
+        sort: "alpha",
         getEntryColor: (className: string) =>
           classColors.get(className) ?? undefined,
       },
@@ -62,7 +80,7 @@ const SNAPSHOT_HIGHLIGHT_GROUPS = [
         category: AnalyticsMetricCategory.CHARACTERS,
         metricType: AnalyticsMetricType.BY_LEVEL_MAX_LEVEL,
       },
-    ],
+    ] as const,
   },
   {
     title: "Guild structures",
@@ -84,7 +102,7 @@ const SNAPSHOT_HIGHLIGHT_GROUPS = [
         category: AnalyticsMetricCategory.GUILDS,
         metricType: AnalyticsMetricType.TOP_BY_ACHIEVEMENTS,
       },
-    ],
+    ] as const,
   },
   {
     title: "Market flow",
@@ -106,7 +124,7 @@ const SNAPSHOT_HIGHLIGHT_GROUPS = [
         category: AnalyticsMetricCategory.MARKET,
         metricType: AnalyticsMetricType.PRICE_VOLATILITY,
       },
-    ],
+    ] as const,
   },
   {
     title: "Contracts board",
@@ -128,14 +146,9 @@ const SNAPSHOT_HIGHLIGHT_GROUPS = [
         category: AnalyticsMetricCategory.CONTRACTS,
         metricType: AnalyticsMetricType.TOP_BY_AUCTIONS,
       },
-    ],
+    ] as const,
   },
 ] as const;
-
-type SnapshotRequest = {
-  category: AnalyticsMetricCategory;
-  metricType: AnalyticsMetricType;
-};
 
 const SNAPSHOT_REQUESTS: SnapshotRequest[] = [
   ...METRIC_CARDS.map(({ category, metricType }) => ({ category, metricType })),
@@ -426,8 +439,7 @@ export default function Home() {
             {snapshotHighlightGroups.map((group) => (
               <div
                 key={group.title}
-                className="rounded-2xl border border-content4/20 bg-content2/40 p-4 backdrop-blur"
-              >
+                className="rounded-2xl border border-content4/20 bg-content2/40 p-4 backdrop-blur">
                 <div>
                   <h4 className="text-lg font-semibold">{group.title}</h4>
                   <p className="text-muted mt-1 text-xs leading-relaxed">
