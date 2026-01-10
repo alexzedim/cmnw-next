@@ -1,0 +1,31 @@
+export enum AnalyticsMetricCategory {
+  CHARACTERS = "characters",
+  GUILDS = "guilds",
+  MARKET = "market",
+  CONTRACTS = "contracts",
+}
+
+export enum AnalyticsMetricType {
+  TOTAL = "total",
+  BY_FACTION = "byFaction",
+  BY_CLASS = "byClass",
+  BY_RACE = "byRace",
+  BY_LEVEL = "byLevel",
+  BY_CLASS_MAX_LEVEL = "byClassMaxLevel",
+  BY_FACTION_MAX_LEVEL = "byFactionMaxLevel",
+  BY_RACE_MAX_LEVEL = "byRaceMaxLevel",
+  BY_LEVEL_MAX_LEVEL = "byLevelMaxLevel",
+  EXTREMES = "extremes",
+  AVERAGES = "averages",
+  BY_CONNECTED_REALM = "byConnectedRealm",
+  SIZE_DISTRIBUTION = "sizeDistribution",
+  TOP_BY_MEMBERS = "topByMembers",
+  TOP_BY_ACHIEVEMENTS = "topByAchievements",
+  PRICE_RANGES = "priceRanges",
+  TOP_BY_VOLUME = "topByVolume",
+  TOP_BY_AUCTIONS = "topByAuctions",
+  BY_COMMODITIES = "byCommodities",
+  TOP_BY_QUANTITY = "topByQuantity",
+  TOP_BY_OPEN_INTEREST = "topByOpenInterest",
+  PRICE_VOLATILITY = "priceVolatility",
+}
