@@ -1,3 +1,8 @@
+import type {
+  AnalyticsMetricCategory,
+  AnalyticsMetricType,
+} from "@/constants/analytics-metrics";
+
 export interface AppHealthMetricSnapshot {
   snapshotDate: string;
   value: Record<string, unknown>;
@@ -10,9 +15,7 @@ export interface AppHealthPayload {
   latestMarketTimestamp: number | null;
 }
 
-export type AnalyticsMetricCategory = "characters" | "guilds" | "market";
-
-export type AnalyticsMetricType = "total";
+export type { AnalyticsMetricCategory, AnalyticsMetricType };
 
 export interface AnalyticsMetricSnapshotDto {
   id: string;

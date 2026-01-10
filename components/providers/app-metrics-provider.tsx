@@ -15,7 +15,7 @@ import {
 
 import { ENDPOINTS } from "@/constants/endpoints";
 
-const METRICS_ENDPOINT = `${ENDPOINTS.API.replace(/\/+$/, "")}/api/app/metrics`;
+const METRICS_ENDPOINT = ENDPOINTS.METRICS_ENDPOINT;
 
 type AppMetricsStatus = "loading" | "online" | "degraded" | "error";
 
