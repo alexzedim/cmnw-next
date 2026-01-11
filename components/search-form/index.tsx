@@ -4,6 +4,8 @@ import { useState, useEffect, useRef, KeyboardEvent } from "react";
 import { useRouter } from "next/navigation";
 
 import { ENDPOINTS } from "@/constants";
+import { NAMING_CONSTANTS } from "@/constants/naming";
+import { fontJetBrains } from "@/config/fonts";
 
 interface SearchSuggestion {
   value: string;
@@ -291,20 +293,22 @@ export const SearchForm = () => {
                   {suggestion.type === "item" && suggestion.label ? (
                     <>
                       <span className="flex-1">{suggestion.label}</span>
-                      <span className="text-xs text-[var(--text-muted)] opacity-70">
-                        {suggestion.value}
-                      </span>
                     </>
                   ) : (
                     <>
                       <span className="flex-1">{suggestion.value}</span>
-                      {suggestion.label && (
-                        <span className="text-xs text-[var(--text-muted)] opacity-70">
-                          {suggestion.label}
-                        </span>
-                      )}
                     </>
                   )}
+                  <span
+                    className="text-xs uppercase tracking-wider opacity-60"
+                    style={{ fontFamily: fontJetBrains.style.fontFamily }}
+                  >
+                    {suggestion.type === "character"
+                      ? NAMING_CONSTANTS.CHARACTER
+                      : suggestion.type === "guild"
+                        ? NAMING_CONSTANTS.GUILD
+                        : NAMING_CONSTANTS.ITEM}
+                  </span>
                 </button>
               ))}
             </div>
