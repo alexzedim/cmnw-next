@@ -7,11 +7,11 @@ import type {
 
 import { useMemo } from "react";
 import useSWR from "swr";
-import { Button } from "@heroui/button";
 
 import { useAppMetrics } from "@/components/providers/app-metrics-provider";
 import { title } from "@/components/primitives";
 import { SearchForm } from "@/components/search-form";
+import { LiveMetrics } from "@/components/home/live-metrics";
 import { ENDPOINTS } from "@/constants/endpoints";
 import {
   AnalyticsMetricCategory,
@@ -36,6 +36,13 @@ const METRIC_CARDS = [
     metricType: AnalyticsMetricType.TOTAL,
   },
 ] as const;
+
+type SnapshotKey = `${AnalyticsMetricCategory}:${AnalyticsMetricType}`;
+
+const buildSnapshotKey = (
+  category: AnalyticsMetricCategory,
+  metricType: AnalyticsMetricType
+) => `${category}:${metricType}` as SnapshotKey;
 
 type SnapshotRequest = {
   category: AnalyticsMetricCategory;
@@ -154,13 +161,6 @@ const SNAPSHOT_REQUESTS: SnapshotRequest[] = [
   ...METRIC_CARDS.map(({ category, metricType }) => ({ category, metricType })),
   ...SNAPSHOT_HIGHLIGHT_GROUPS.flatMap((group) => group.metrics),
 ];
-
-type SnapshotKey = `${AnalyticsMetricCategory}:${AnalyticsMetricType}`;
-
-const buildSnapshotKey = (
-  category: AnalyticsMetricCategory,
-  metricType: AnalyticsMetricType
-) => `${category}:${metricType}` as SnapshotKey;
 
 type MetricSnapshotRecord = Partial<
   Record<SnapshotKey, AppHealthMetricSnapshot | null>
@@ -334,79 +334,13 @@ export default function Home() {
       </section>
 
       {/* Live metrics */}
-      <section className="section section-tight-bottom container mx-auto px-6">
-        <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-foreground/40">
-              Live metrics
-            </p>
-          </div>
-          <span
-            className={`text-xs font-semibold uppercase tracking-wide ${
-              metricsError
-                ? "text-red-400"
-                : metricsStatus === "online"
-                  ? "text-emerald-400"
-                  : metricsStatus === "degraded"
-                    ? "text-amber-400"
-                    : "text-foreground/60"
-            }`}
-          >
-            {metricsError ? "API offline" : `Status: ${metricsStatus}`}
-          </span>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {metricSnapshots.map(({ category, title, snapshot, metricType }) => {
-            const snapshotDate = formatSnapshotDate(snapshot);
-            const entries = getSnapshotEntries(snapshot);
-
-            return (
-              <div
-                key={buildSnapshotKey(category, metricType)}
-                className="card-surface p-6 flex flex-col gap-4"
-              >
-                <div>
-                  <h3 className="text-xl font-semibold">{title}</h3>
-                  <p className="text-muted mt-2 text-sm">
-                    {metricCardHasError
-                      ? "Metric feed unavailable."
-                      : snapshotDate
-                        ? `Snapshot @ ${snapshotDate}`
-                        : metricSnapshotLoading
-                          ? "Loading snapshot…"
-                          : "No snapshot reported yet."}
-                  </p>
-                </div>
-                <div className="rounded-xl border border-content4/20 bg-content2/40 p-4 backdrop-blur">
-                  {entries.length ? (
-                    <dl className="space-y-2">
-                      {entries.map(([entryKey, entryValue]) => (
-                        <div
-                          key={entryKey}
-                          className="flex items-center justify-between gap-4 text-sm"
-                        >
-                          <dt className="text-foreground/60">{entryKey}</dt>
-                          <dd className="font-mono text-foreground text-right">
-                            {formatEntryValue(entryValue)}
-                          </dd>
-                        </div>
-                      ))}
-                    </dl>
-                  ) : (
-                    <p className="text-muted text-sm">
-                      {metricCardHasError
-                        ? "Unable to read metric values."
-                        : metricSnapshotLoading
-                          ? "Loading metric values…"
-                          : "Metrics responded without value payload."}
-                    </p>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </section>
+      <LiveMetrics
+        metricCardHasError={metricCardHasError}
+        metricSnapshotLoading={metricSnapshotLoading}
+        metricSnapshots={metricSnapshots}
+        metricsError={metricsError}
+        metricsStatus={metricsStatus}
+      />
 
       {/* Snapshot briefs */}
       <section className="section section-tight-top container mx-auto px-6">
@@ -426,7 +360,8 @@ export default function Home() {
             {snapshotHighlightGroups.map((group) => (
               <div
                 key={group.title}
-                className="rounded-2xl border border-content4/20 bg-content2/40 p-4 backdrop-blur">
+                className="rounded-2xl border border-content4/20 bg-content2/40 p-4 backdrop-blur"
+              >
                 <div>
                   <h4 className="text-lg font-semibold">{group.title}</h4>
                   <p className="text-muted mt-1 text-xs leading-relaxed">
