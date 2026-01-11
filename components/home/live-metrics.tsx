@@ -48,6 +48,7 @@ export function LiveMetrics({
           </p>
         </div>
         <span
+          aria-label="API Status"
           className={`text-xs font-semibold uppercase tracking-wide ${
             metricsError
               ? "text-red-400"
@@ -57,7 +58,6 @@ export function LiveMetrics({
                   ? "text-amber-400"
                   : "text-foreground/60"
           }`}
-          aria-label="API Status"
         >
           {metricsError ? "API offline" : `Status: ${metricsStatus}`}
         </span>
