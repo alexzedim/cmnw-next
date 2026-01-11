@@ -51,11 +51,11 @@ html, body {
 }
 
 .section-tight-top {
-  padding-top: clamp(32px, 5vw, 72px);
+  padding-top: clamp(8px, 1.5vw, 24px);
 }
 
 .section-tight-bottom {
-  padding-bottom: clamp(32px, 5vw, 72px);
+  padding-bottom: clamp(8px, 1.5vw, 24px);
 }
 
 .card-surface {
