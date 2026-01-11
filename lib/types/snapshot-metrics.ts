@@ -30,6 +30,8 @@ export type SnapshotHighlightMetric = SnapshotRequest & {
   sort?: "alpha";
   /** Function to get color for an entry */
   getEntryColor?: (label: string) => string | undefined;
+  /** Snapshot data for this metric */
+  snapshot?: AppHealthMetricSnapshot | null;
 };
 
 /**
