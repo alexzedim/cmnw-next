@@ -163,7 +163,7 @@ export const HashAccountTitle = ({
 
       {/* Header Title */}
       <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight mb-3">
-        {`* ${displayHash} ${showAsterisk && "*"}`}
+        {`* ${displayHash}`}
       </h1>
 
       {/* Match Quality */}
