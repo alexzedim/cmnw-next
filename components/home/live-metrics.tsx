@@ -6,6 +6,12 @@ import {
   AnalyticsMetricCategory,
   AnalyticsMetricType,
 } from "@/constants/analytics-metrics";
+import {
+  getSnapshotEntries,
+  formatSnapshotDate,
+  formatEntryValue,
+  buildSnapshotKey,
+} from "@/lib/utils/snapshot-formatters";
 
 type MetricSnapshot = {
   category: AnalyticsMetricCategory;
@@ -22,54 +28,10 @@ interface LiveMetricsProps {
   metricCardHasError: boolean;
 }
 
-const getSnapshotEntries = (
-  snapshot: AppHealthMetricSnapshot | null,
-  limit = 4
-) => {
-  if (!snapshot?.value || typeof snapshot.value !== "object") {
-    return [];
-  }
-
-  return Object.entries(snapshot.value).slice(0, limit);
-};
-
-const formatSnapshotDate = (snapshot: AppHealthMetricSnapshot | null) => {
-  if (!snapshot?.snapshotDate) {
-    return null;
-  }
-
-  const date = new Date(snapshot.snapshotDate);
-
-  return Number.isNaN(date.getTime())
-    ? snapshot.snapshotDate
-    : date.toLocaleString();
-};
-
-const formatEntryValue = (value: unknown) => {
-  if (value == null) {
-    return "—";
-  }
-
-  if (typeof value === "number") {
-    return value.toLocaleString();
-  }
-
-  if (typeof value === "string") {
-    return value;
-  }
-
-  try {
-    return JSON.stringify(value);
-  } catch {
-    return String(value);
-  }
-};
-
-const buildSnapshotKey = (
-  category: AnalyticsMetricCategory,
-  metricType: AnalyticsMetricType
-) => `${category}:${metricType}`;
-
+/**
+ * Live metrics section displaying current metric snapshots.
+ * Shows metric cards with snapshot data and status indicators.
+ */
 export function LiveMetrics({
   metricSnapshots,
   metricsStatus,
@@ -95,6 +57,7 @@ export function LiveMetrics({
                   ? "text-amber-400"
                   : "text-foreground/60"
           }`}
+          aria-label="API Status"
         >
           {metricsError ? "API offline" : `Status: ${metricsStatus}`}
         </span>
