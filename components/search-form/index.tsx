@@ -19,6 +19,8 @@ const buildSearchUrl = (query: string) => {
   return url.toString();
 };
 
+const sanitizeQueryInput = (value: string) => value.replace(/\s+/g, "-");
+
 export const SearchForm = () => {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
@@ -250,7 +252,7 @@ export const SearchForm = () => {
               placeholder='cmnw search "Thunderfury"'
               type="text"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => setSearchQuery(sanitizeQueryInput(e.target.value))}
               onFocus={() => {
                 if (suggestions.length > 0) {
                   setShowDropdown(true);
