@@ -50,6 +50,14 @@ html, body {
   padding-bottom: clamp(64px, 8vw, 120px);
 }
 
+.section-tight-top {
+  padding-top: clamp(32px, 5vw, 72px);
+}
+
+.section-tight-bottom {
+  padding-bottom: clamp(32px, 5vw, 72px);
+}
+
 .card-surface {
   background-color: var(--surface);
   border: 1px solid var(--border);

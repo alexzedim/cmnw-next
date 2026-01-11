@@ -326,19 +326,6 @@ export default function Home() {
       <section className="section flex flex-col items-center justify-center gap-8">
         <div className="inline-block max-w-3xl text-center justify-center">
           <h1 className={title()}>CMNW</h1>
-          <p className="text-muted mt-4 text-lg">
-            Commonwealth — World of Warcraft community tools
-          </p>
-        </div>
-
-        {/* CTA row */}
-        <div className="flex items-center gap-3">
-          <Button className="px-6" color="primary">
-            Get Started
-          </Button>
-          <Button className="px-6" variant="bordered">
-            Docs
-          </Button>
         </div>
 
         <div className="w-full flex justify-center px-4">
@@ -347,7 +334,7 @@ export default function Home() {
       </section>
 
       {/* Live metrics */}
-      <section className="section container mx-auto px-6">
+      <section className="section section-tight-bottom container mx-auto px-6">
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
           <div>
             <p className="text-xs uppercase tracking-[0.3em] text-foreground/40">
@@ -422,7 +409,7 @@ export default function Home() {
       </section>
 
       {/* Snapshot briefs */}
-      <section className="section container mx-auto px-6">
+      <section className="section section-tight-top container mx-auto px-6">
         <div className="card-surface p-6 flex flex-col gap-6">
           <div>
             <p className="text-xs uppercase tracking-[0.3em] text-foreground/40">
