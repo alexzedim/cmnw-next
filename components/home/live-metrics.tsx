@@ -63,55 +63,64 @@ export function LiveMetrics({
         </span>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {metricSnapshots.map(({ category, title, snapshot, metricType }) => {
-          const snapshotDate = formatSnapshotDate(snapshot);
-          const entries = getSnapshotEntries(snapshot);
+        {metricSnapshots.map(
+          ({ category, title, snapshot, metricType }, index) => {
+            const snapshotDate = formatSnapshotDate(snapshot);
+            const entries = getSnapshotEntries(snapshot);
+            const orangeColor = "rgb(249, 115, 22)";
 
-          return (
-            <div
-              key={buildSnapshotKey(category, metricType)}
-              className="card-surface p-6 flex flex-col gap-4"
-            >
-              <div>
-                <h3 className="text-xl font-semibold">{title}</h3>
-                <p className="text-muted mt-2 text-sm">
-                  {metricCardHasError
-                    ? "Metric feed unavailable."
-                    : snapshotDate
-                      ? `Snapshot @ ${snapshotDate}`
-                      : metricSnapshotLoading
-                        ? "Loading snapshot…"
-                        : "No snapshot reported yet."}
-                </p>
-              </div>
-              <div className="rounded-xl border border-content4/20 bg-content2/40 p-4 backdrop-blur">
-                {entries.length ? (
-                  <dl className="space-y-2">
-                    {entries.map(([entryKey, entryValue]) => (
-                      <div
-                        key={entryKey}
-                        className="flex items-center justify-between gap-4 text-sm"
-                      >
-                        <dt className="text-foreground/60">{entryKey}</dt>
-                        <dd className="font-mono text-foreground text-right">
-                          {formatEntryValue(entryValue)}
-                        </dd>
-                      </div>
-                    ))}
-                  </dl>
-                ) : (
-                  <p className="text-muted text-sm">
+            return (
+              <div
+                key={buildSnapshotKey(category, metricType)}
+                className="card-surface p-6 flex flex-col gap-4 border-l-4 transition-colors duration-200"
+                style={{ borderLeftColor: orangeColor }}
+              >
+                <div>
+                  <h3
+                    className="text-xl font-semibold"
+                    style={{ color: orangeColor }}
+                  >
+                    {title}
+                  </h3>
+                  <p className="text-muted mt-2 text-sm">
                     {metricCardHasError
-                      ? "Unable to read metric values."
-                      : metricSnapshotLoading
-                        ? "Loading metric values…"
-                        : "Metrics responded without value payload."}
+                      ? "Metric feed unavailable."
+                      : snapshotDate
+                        ? `Snapshot @ ${snapshotDate}`
+                        : metricSnapshotLoading
+                          ? "Loading snapshot…"
+                          : "No snapshot reported yet."}
                   </p>
-                )}
+                </div>
+                <div className="rounded-xl border border-content4/20 bg-content2/40 p-4 backdrop-blur">
+                  {entries.length ? (
+                    <dl className="space-y-2">
+                      {entries.map(([entryKey, entryValue]) => (
+                        <div
+                          key={entryKey}
+                          className="flex items-center justify-between gap-4 text-sm"
+                        >
+                          <dt className="text-foreground/60">{entryKey}</dt>
+                          <dd className="font-mono text-foreground text-right">
+                            {formatEntryValue(entryValue)}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                  ) : (
+                    <p className="text-muted text-sm">
+                      {metricCardHasError
+                        ? "Unable to read metric values."
+                        : metricSnapshotLoading
+                          ? "Loading metric values…"
+                          : "Metrics responded without value payload."}
+                    </p>
+                  )}
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          }
+        )}
       </div>
     </section>
   );
