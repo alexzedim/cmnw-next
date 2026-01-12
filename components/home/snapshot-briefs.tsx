@@ -1,6 +1,7 @@
 "use client";
 
 import type { SnapshotHighlightGroup } from "@/lib/types/snapshot-metrics";
+
 import {
   buildSnapshotKey,
   formatSnapshotDate,
@@ -38,100 +39,110 @@ export function SnapshotBriefs({
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {snapshotHighlightGroups.map((group) => (
-            <article
-              key={group.title}
-              className="rounded-2xl border border-content4/20 bg-content2/40 p-4 backdrop-blur"
-            >
-              <header>
-                <h4 className="text-lg font-semibold">{group.title}</h4>
-                <p className="text-muted mt-1 text-xs leading-relaxed">
-                  {group.disclaimer}
-                </p>
-              </header>
-              <section className="mt-4 space-y-3">
-                {group.metrics.map((metric) => {
-                  const snapshotKey = buildSnapshotKey(
-                    metric.category,
-                    metric.metricType
-                  );
-                  const entries = getSnapshotEntries(
-                    metric.snapshot ?? null,
-                    metric.valueLimit
-                  );
-                  const displayEntries =
-                    metric.sort === "alpha"
-                      ? [...entries].sort((a, b) =>
-                          a[0].localeCompare(b[0])
-                        )
-                      : entries;
-                  const snapshotDate = formatSnapshotDate(
-                    metric.snapshot ?? null
-                  );
+          {snapshotHighlightGroups.map((group, groupIndex) => {
+            const groupBorderColors = [
+              "rgb(249, 115, 22)",
+              "rgb(249, 115, 22)",
+              "rgb(249, 115, 22)",
+              "rgb(249, 115, 22)",
+            ];
+            const groupBorderColor =
+              groupBorderColors[groupIndex % groupBorderColors.length];
 
-                  return (
-                    <div
-                      key={snapshotKey}
-                      className="rounded-xl border border-content4/20 bg-content1/40 p-3"
-                    >
-                      <div className="flex items-center justify-between gap-2 text-[0.65rem] uppercase tracking-wide text-foreground/50">
-                        <span>{metric.label}</span>
-                        <span
-                          className="text-foreground/80"
-                          aria-label={`${metric.label} snapshot date`}
-                        >
-                          {metricCardHasError
-                            ? "Unavailable"
-                            : snapshotDate
-                              ? snapshotDate
-                              : metricSnapshotLoading
-                                ? "Loading…"
-                                : "No snapshot"}
-                        </span>
-                      </div>
-                      {displayEntries.length ? (
-                        <dl className="mt-2 space-y-1 text-sm">
-                          {displayEntries.map(([entryKey, entryValue]) => {
-                            const entryColor =
-                              metric.getEntryColor?.(entryKey);
+            return (
+              <article
+                key={group.title}
+                className="rounded-2xl border border-content4/20 bg-content2/40 p-4 backdrop-blur border-l-4 transition-colors duration-200"
+                style={{ borderLeftColor: groupBorderColor }}
+              >
+                <header>
+                  <h4 className="text-lg font-semibold">{group.title}</h4>
+                  <p className="text-muted mt-1 text-xs leading-relaxed">
+                    {group.disclaimer}
+                  </p>
+                </header>
+                <section className="mt-4 space-y-3">
+                  {group.metrics.map((metric, metricIndex) => {
+                    const snapshotKey = buildSnapshotKey(
+                      metric.category,
+                      metric.metricType
+                    );
+                    const entries = getSnapshotEntries(
+                      metric.snapshot ?? null,
+                      metric.valueLimit
+                    );
+                    const displayEntries =
+                      metric.sort === "alpha"
+                        ? [...entries].sort((a, b) => a[0].localeCompare(b[0]))
+                        : entries;
+                    const snapshotDate = formatSnapshotDate(
+                      metric.snapshot ?? null
+                    );
 
-                            return (
-                              <div
-                                key={entryKey}
-                                className="flex items-center justify-between gap-3 text-sm"
-                              >
-                                <dt
-                                  className="text-foreground/60 text-xs"
-                                  style={
-                                    entryColor
-                                      ? { color: entryColor }
-                                      : undefined
-                                  }
+                    return (
+                      <div
+                        key={snapshotKey}
+                        className="rounded-xl border border-content4/20 p-3 bg-content1/40 border-l-4 transition-colors duration-200"
+                      >
+                        <div className="flex items-center justify-between gap-2 text-[0.65rem] uppercase tracking-wide text-foreground/50">
+                          <span>{metric.label}</span>
+                          <span
+                            aria-label={`${metric.label} snapshot date`}
+                            className="text-foreground/80"
+                          >
+                            {metricCardHasError
+                              ? "Unavailable"
+                              : snapshotDate
+                                ? snapshotDate
+                                : metricSnapshotLoading
+                                  ? "Loading…"
+                                  : "No snapshot"}
+                          </span>
+                        </div>
+                        {displayEntries.length ? (
+                          <dl className="mt-2 space-y-1 text-sm">
+                            {displayEntries.map(([entryKey, entryValue]) => {
+                              const entryColor =
+                                metric.getEntryColor?.(entryKey);
+
+                              return (
+                                <div
+                                  key={entryKey}
+                                  className="flex items-center justify-between gap-3 text-sm"
                                 >
-                                  {entryKey}
-                                </dt>
-                                <dd className="font-mono text-right">
-                                  {formatEntryValue(entryValue)}
-                                </dd>
-                              </div>
-                            );
-                          })}
-                        </dl>
-                      ) : (
-                        <p className="mt-2 text-muted text-xs">
-                          {metricCardHasError
-                            ? "Unable to read metric values."
-                            : metricSnapshotLoading
-                              ? "Loading metric values…"
-                              : "Metrics responded without value payload."}
-                        </p>
-                      )}
-                    </div>
-                  );
-                })}
-              </section>
-            </article>
-          ))}
+                                  <dt
+                                    className="text-foreground/60 text-xs"
+                                    style={
+                                      entryColor
+                                        ? { color: entryColor }
+                                        : undefined
+                                    }
+                                  >
+                                    {entryKey}
+                                  </dt>
+                                  <dd className="font-mono text-right">
+                                    {formatEntryValue(entryValue)}
+                                  </dd>
+                                </div>
+                              );
+                            })}
+                          </dl>
+                        ) : (
+                          <p className="mt-2 text-muted text-xs">
+                            {metricCardHasError
+                              ? "Unable to read metric values."
+                              : metricSnapshotLoading
+                                ? "Loading metric values…"
+                                : "Metrics responded without value payload."}
+                          </p>
+                        )}
+                      </div>
+                    );
+                  })}
+                </section>
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>
