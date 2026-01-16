@@ -3,7 +3,9 @@
 import { useAppMetrics } from "@/components/providers/app-metrics-provider";
 import { HeroSection } from "@/components/home/hero-section";
 import { LiveMetrics } from "@/components/home/live-metrics";
-import { SnapshotBriefs } from "@/components/home/snapshot-briefs";
+import { SnapshotBriefsCharacters } from "@/components/home/snapshot-briefs-characters";
+import { SnapshotBriefsGuilds } from "@/components/home/snapshot-briefs-guilds";
+import { SnapshotBriefsMarketContracts } from "@/components/home/snapshot-briefs-market-contracts";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { useMetricSnapshots } from "@/hooks/useMetricSnapshots";
 import {
@@ -49,6 +51,11 @@ export default function Home() {
 
   const metricCardHasError = metricsError || Boolean(metricSnapshotError);
 
+  // Split snapshot highlight groups by category
+  const charactersGroups = [snapshotHighlightGroups[0]];
+  const guildsGroups = [snapshotHighlightGroups[1]];
+  const marketContractsGroups = snapshotHighlightGroups.slice(2);
+
   return (
     <ErrorBoundary>
       <HeroSection />
@@ -59,11 +66,38 @@ export default function Home() {
         metricsError={metricsError}
         metricsStatus={metricsStatus}
       />
-      <SnapshotBriefs
-        metricCardHasError={metricCardHasError}
-        metricSnapshotLoading={metricSnapshotLoading}
-        snapshotHighlightGroups={snapshotHighlightGroups}
-      />
+      <section className="section section-tight-top container mx-auto px-6">
+        <div className="card-surface p-6 flex flex-col gap-6">
+          <div>
+            <p className="text-xs uppercase tracking-[0.3em] text-foreground/40">
+              Snapshot briefs
+            </p>
+            <p className="text-muted mt-2 text-sm">
+              Combined analytics across characters, guilds, market, and
+              contracts — character & guild slices only count max-level rosters,
+              while market and contracts focus on tradable instruments with
+              verifiable liquidity.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 gap-6">
+            <SnapshotBriefsCharacters
+              metricCardHasError={metricCardHasError}
+              metricSnapshotLoading={metricSnapshotLoading}
+              snapshotHighlightGroups={charactersGroups}
+            />
+            <SnapshotBriefsGuilds
+              metricCardHasError={metricCardHasError}
+              metricSnapshotLoading={metricSnapshotLoading}
+              snapshotHighlightGroups={guildsGroups}
+            />
+          </div>
+          <SnapshotBriefsMarketContracts
+            metricCardHasError={metricCardHasError}
+            metricSnapshotLoading={metricSnapshotLoading}
+            snapshotHighlightGroups={marketContractsGroups}
+          />
+        </div>
+      </section>
     </ErrorBoundary>
   );
 }
