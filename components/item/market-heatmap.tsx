@@ -9,7 +9,7 @@ import {
   useRef,
   useEffect,
 } from "react";
-import { Card, CardBody, Spinner } from "@heroui/react";
+import { Card, Spinner } from "@heroui/react";
 import useSWR from "swr";
 
 import { ENDPOINTS, NAMING_CONSTANTS } from "@/constants";
@@ -153,12 +153,12 @@ const formatPrice = (
  */
 const MarketHeatmapLoading = memo(() => (
   <Card className={CARD_CLASS_NAMES.root}>
-    <CardBody className={CARD_CLASS_NAMES.body}>
+    <Card.Content className={CARD_CLASS_NAMES.body}>
       <BadgeSection color={BADGE_COLORS.DEFAULT} label="Market Heatmap" />
       <div className={`${CARD_CLASS_NAMES.loading} min-h-[400px]`}>
         <Spinner color="warning" size="lg" />
       </div>
-    </CardBody>
+    </Card.Content>
   </Card>
 ));
 

@@ -1,4 +1,4 @@
-const { API_ORIGIN } = require('./config/api-origin');
+const { API_ORIGIN } = require("./config/api-origin");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -6,12 +6,11 @@ const nextConfig = {
     root: __dirname,
   },
   images: {
-    domains: ['render.worldofwarcraft.com'],
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'render.worldofwarcraft.com',
-        pathname: '/**',
+        protocol: "https",
+        hostname: "render.worldofwarcraft.com",
+        pathname: "/**",
       },
     ],
   },
@@ -19,7 +18,7 @@ const nextConfig = {
     return {
       beforeFiles: [
         {
-          source: '/api/:path*',
+          source: "/api/:path*",
           destination: `${API_ORIGIN}/api/:path*`,
         },
       ],

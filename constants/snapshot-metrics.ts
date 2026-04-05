@@ -1,12 +1,13 @@
+import type {
+  SnapshotHighlightGroup,
+  SnapshotRequest,
+} from "@/lib/types/snapshot-metrics";
+
 import {
   AnalyticsMetricCategory,
   AnalyticsMetricType,
 } from "@/constants/analytics-metrics";
 import { classColors } from "@/constants/class-colors";
-import type {
-  SnapshotHighlightGroup,
-  SnapshotRequest,
-} from "@/lib/types/snapshot-metrics";
 
 /**
  * Metric cards displayed in the live metrics section.

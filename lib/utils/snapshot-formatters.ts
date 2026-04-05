@@ -18,6 +18,7 @@ export const normalizeSnapshotValue = (
   if (value && typeof value === "object" && !Array.isArray(value)) {
     return value as Record<string, unknown>;
   }
+
   return {};
 };
 
@@ -42,6 +43,7 @@ export const getSnapshotEntries = (
   if (!snapshot?.value || typeof snapshot.value !== "object") {
     return [];
   }
+
   return Object.entries(snapshot.value).slice(0, limit);
 };
 
@@ -56,6 +58,7 @@ export const formatSnapshotDate = (
     return null;
   }
   const date = new Date(snapshot.snapshotDate);
+
   return Number.isNaN(date.getTime())
     ? snapshot.snapshotDate
     : date.toLocaleString();

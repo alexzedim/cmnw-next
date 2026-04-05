@@ -3,7 +3,6 @@
 import { useMemo, memo } from "react";
 import {
   Card,
-  CardBody,
   Table,
   TableHeader,
   TableColumn,
@@ -17,7 +16,6 @@ import { useItemQuotes } from "@/lib/api/hooks";
 import { BadgeSection } from "@/components/shared/badge-section";
 import {
   CARD_CLASS_NAMES,
-  TABLE_CLASS_NAMES,
   BADGE_COLORS,
   formatNumber,
 } from "@/components/item/constants";
@@ -44,12 +42,12 @@ interface QuoteColumnDef {
  */
 const ItemQuotesLoading = memo(() => (
   <Card className={CARD_CLASS_NAMES.root}>
-    <CardBody className={CARD_CLASS_NAMES.body}>
+    <Card.Content className={CARD_CLASS_NAMES.body}>
       <BadgeSection color={BADGE_COLORS.QUOTES} label="Market Quotes" />
       <div className={`${CARD_CLASS_NAMES.loading} min-h-[300px]`}>
         <Spinner color="warning" size="lg" />
       </div>
-    </CardBody>
+    </Card.Content>
   </Card>
 ));
 
@@ -70,16 +68,18 @@ interface ItemQuotesTableProps {
 
 const ItemQuotesTable = memo(({ quotes, columns }: ItemQuotesTableProps) => (
   <Card className={CARD_CLASS_NAMES.root}>
-    <CardBody className={CARD_CLASS_NAMES.body}>
+    <Card.Content className={CARD_CLASS_NAMES.body}>
       <BadgeSection color={BADGE_COLORS.QUOTES} label="Market Quotes" />
-      <Table
-        aria-label="Item market price quotes"
-        classNames={TABLE_CLASS_NAMES}
-      >
-        <TableHeader columns={columns}>
-          {(column) => (
-            <TableColumn key={column.key}>{column.label}</TableColumn>
-          )}
+      <Table aria-label="Item market price quotes">
+        <TableHeader className="bg-background border-b border-divider">
+          {columns.map((column) => (
+            <TableColumn
+              key={column.key}
+              className="text-foreground font-semibold"
+            >
+              {column.label}
+            </TableColumn>
+          ))}
         </TableHeader>
         <TableBody items={quotes}>
           {(quote) => (
@@ -100,7 +100,7 @@ const ItemQuotesTable = memo(({ quotes, columns }: ItemQuotesTableProps) => (
           )}
         </TableBody>
       </Table>
-    </CardBody>
+    </Card.Content>
   </Card>
 ));
 

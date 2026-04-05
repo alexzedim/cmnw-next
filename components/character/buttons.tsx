@@ -59,12 +59,10 @@ export const CharacterButtons = ({ name, realm }: CharacterButtonsProps) => {
             prefetch={false}
             title={service.name}
           >
-            <Avatar
-              alt={service.name}
-              className="w-16 h-16 transition-transform duration-200 group-hover:scale-110 group-hover:shadow-lg cursor-pointer"
-              radius="sm"
-              src={service.icon}
-            />
+            <Avatar className="w-16 h-16 transition-transform duration-200 group-hover:scale-110 group-hover:shadow-lg cursor-pointer">
+              <Avatar.Image alt={service.name} src={service.icon} />
+              <Avatar.Fallback>{service.name[0]}</Avatar.Fallback>
+            </Avatar>
             <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 bg-foreground text-background text-xs px-2 py-1 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200">
               {service.name}
             </div>
