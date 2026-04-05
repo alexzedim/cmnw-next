@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardBody } from "@heroui/react";
+import { Card } from "@heroui/react";
 
 import { Link } from "@/components/custom-link";
 
@@ -21,7 +21,7 @@ export const ContributionStar = ({
 }: ContributionStarProps) => {
   return (
     <Card className="bg-transparent shadow-none border-none h-[250px]">
-      <CardBody className="flex flex-col items-center justify-start text-center gap-2 pt-8">
+      <Card.Content className="flex flex-col items-center justify-start text-center gap-2 pt-8">
         {/* Star Icon */}
         <svg
           className="w-16 h-16 text-primary mb-2"
@@ -75,7 +75,7 @@ export const ContributionStar = ({
             </Link>
           </p>
         )}
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 };

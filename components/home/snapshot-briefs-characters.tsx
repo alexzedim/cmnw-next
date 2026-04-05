@@ -25,8 +25,8 @@ export function SnapshotBriefsCharacters({
   metricSnapshotLoading,
 }: SnapshotBriefsCharactersProps) {
   return (
-  <>
-  {snapshotHighlightGroups.map((group, groupIndex) => {
+    <>
+      {snapshotHighlightGroups.map((group, groupIndex) => {
         const groupBorderColors = [
           "rgb(249, 115, 22)",
           "rgb(249, 115, 22)",
@@ -127,6 +127,6 @@ export function SnapshotBriefsCharacters({
           </article>
         );
       })}
-      </>
-      );
+    </>
+  );
 }

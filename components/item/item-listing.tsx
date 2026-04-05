@@ -2,7 +2,6 @@
 
 import {
   Card,
-  CardBody,
   Table,
   TableHeader,
   TableColumn,
@@ -10,7 +9,6 @@ import {
   TableRow,
   TableCell,
   Spinner,
-  Pagination,
 } from "@heroui/react";
 import { useState } from "react";
 import useSWR from "swr";
@@ -73,9 +71,9 @@ export const ItemListing = ({
   if (isLoading)
     return (
       <Card className="m-4 bg-background border border-divider">
-        <CardBody className="p-8 rounded-xl flex items-center justify-center min-h-[300px] bg-background">
+        <Card.Content className="p-8 rounded-xl flex items-center justify-center min-h-[300px] bg-background">
           <Spinner color="warning" size="lg" />
-        </CardBody>
+        </Card.Content>
       </Card>
     );
 
@@ -110,34 +108,17 @@ export const ItemListing = ({
 
   return (
     <Card className="m-4 bg-background border border-divider">
-      <CardBody className="p-8 rounded-xl bg-background">
-        <Table
-          aria-label="Item auction listings"
-          bottomContent={
-            pages > 1 ? (
-              <div className="flex w-full justify-center">
-                <Pagination
-                  isCompact
-                  showControls
-                  showShadow
-                  color="warning"
-                  page={page}
-                  total={pages}
-                  onChange={setPage}
-                />
-              </div>
-            ) : null
-          }
-          classNames={{
-            wrapper: "p-0",
-            th: "bg-background border-b border-divider text-foreground font-semibold",
-            td: "text-muted border-b border-divider",
-          }}
-        >
-          <TableHeader columns={columns}>
-            {(column) => (
-              <TableColumn key={column.key}>{column.label}</TableColumn>
-            )}
+      <Card.Content className="p-8 rounded-xl bg-background">
+        <Table aria-label="Item auction listings">
+          <TableHeader className="bg-background border-b border-divider">
+            {columns.map((column) => (
+              <TableColumn
+                key={column.key}
+                className="text-foreground font-semibold"
+              >
+                {column.label}
+              </TableColumn>
+            ))}
           </TableHeader>
           <TableBody items={items}>
             {(auction) => {
@@ -145,7 +126,7 @@ export const ItemListing = ({
 
               return (
                 <TableRow key={auction.id}>
-                  <TableCell>
+                  <TableCell className="text-muted border-b border-divider">
                     <Link
                       className="text-inherit hover:underline"
                       data-wowhead={wowheadData}
@@ -155,16 +136,18 @@ export const ItemListing = ({
                       {name}
                     </Link>
                   </TableCell>
-                  <TableCell>{auction.connected_realm_id}</TableCell>
-                  <TableCell>
+                  <TableCell className="text-muted border-b border-divider">
+                    {auction.connected_realm_id}
+                  </TableCell>
+                  <TableCell className="text-muted border-b border-divider">
                     {auction.buyout
                       ? auction.buyout.toLocaleString("ru-RU")
                       : `BID: ${auction.bid.toLocaleString("ru-RU")}`}
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="text-muted border-b border-divider">
                     {timeLeftMap[auction.time_left] || auction.time_left}
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="text-muted border-b border-divider">
                     {new Date(auction.last_modified).toLocaleString("en-GB")}
                   </TableCell>
                 </TableRow>
@@ -172,7 +155,61 @@ export const ItemListing = ({
             }}
           </TableBody>
         </Table>
-      </CardBody>
+        {pages > 1 && (
+          <div className="flex w-full justify-center items-center gap-2 mt-4">
+            <button
+              className="px-3 py-1 rounded border border-divider text-sm text-foreground hover:bg-background-elevated disabled:opacity-40"
+              disabled={page <= 1}
+              type="button"
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+            >
+              ←
+            </button>
+            {Array.from({ length: pages }, (_, i) => i + 1)
+              .filter(
+                (p) =>
+                  p === 1 ||
+                  p === pages ||
+                  Math.abs(p - page) <= 1
+              )
+              .reduce<number[]>((acc, p, i, arr) => {
+                if (i > 0 && p - arr[i - 1] > 1) {
+                  acc.push(-1);
+                }
+                acc.push(p);
+                return acc;
+              }, [])
+              .map((p, i) =>
+                p === -1 ? (
+                  <span key={`ellipsis-${i}`} className="px-1 text-muted">
+                    ...
+                  </span>
+                ) : (
+                  <button
+                    key={p}
+                    className={`px-3 py-1 rounded text-sm ${
+                      page === p
+                        ? "bg-orange-500 text-black font-semibold"
+                        : "border border-divider text-foreground hover:bg-background-elevated"
+                    }`}
+                    type="button"
+                    onClick={() => setPage(p)}
+                  >
+                    {p}
+                  </button>
+                )
+              )}
+            <button
+              className="px-3 py-1 rounded border border-divider text-sm text-foreground hover:bg-background-elevated disabled:opacity-40"
+              disabled={page >= pages}
+              type="button"
+              onClick={() => setPage((p) => Math.min(pages, p + 1))}
+            >
+              →
+            </button>
+          </div>
+        )}
+      </Card.Content>
     </Card>
   );
 };

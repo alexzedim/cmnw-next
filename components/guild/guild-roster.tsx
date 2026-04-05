@@ -3,21 +3,6 @@
 import type { Character } from "@/lib/types";
 
 import { useMemo, useState } from "react";
-
-// Convert hex color to pastel by blending with white (50% opacity)
-function getPastelColor(hexColor: string): string {
-  const hex = hexColor.replace("#", "");
-  const r = parseInt(hex.substring(0, 2), 16);
-  const g = parseInt(hex.substring(2, 4), 16);
-  const b = parseInt(hex.substring(4, 6), 16);
-
-  // Blend with white (255, 255, 255) at 50%
-  const pastelR = Math.round((r + 255) / 2);
-  const pastelG = Math.round((g + 255) / 2);
-  const pastelB = Math.round((b + 255) / 2);
-
-  return `rgb(${pastelR}, ${pastelG}, ${pastelB})`;
-}
 import {
   Table,
   TableHeader,
@@ -26,10 +11,10 @@ import {
   TableRow,
   TableCell,
   Chip,
-  Input,
+  SearchField,
   Select,
-  SelectItem,
-  Pagination,
+  ListBox,
+  Label,
 } from "@heroui/react";
 
 import { Link } from "@/components/custom-link";
@@ -45,6 +30,21 @@ type SortDescriptor = {
 };
 
 const ITEMS_PER_PAGE = 50;
+
+// Convert hex color to pastel by blending with white (50% opacity)
+function getPastelColor(hexColor: string): string {
+  const hex = hexColor.replace("#", "");
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+
+  // Blend with white (255, 255, 255) at 50%
+  const pastelR = Math.round((r + 255) / 2);
+  const pastelG = Math.round((g + 255) / 2);
+  const pastelB = Math.round((b + 255) / 2);
+
+  return `rgb(${pastelR}, ${pastelG}, ${pastelB})`;
+}
 
 export function GuildRoster({ members }: GuildRosterProps) {
   const [filterValue, setFilterValue] = useState("");
@@ -141,26 +141,39 @@ export function GuildRoster({ members }: GuildRosterProps) {
     <div className="space-y-4">
       {/* Filters */}
       <div className="flex flex-col md:flex-row gap-4">
-        <Input
-          isClearable
+        <SearchField
           className="w-full md:max-w-xs"
-          placeholder="Search by name..."
           value={filterValue}
-          onClear={() => setFilterValue("")}
-          onValueChange={setFilterValue}
-        />
+          onChange={setFilterValue}
+        >
+          <SearchField.Group>
+            <SearchField.SearchIcon />
+            <SearchField.Input placeholder="Search by name..." />
+            <SearchField.ClearButton />
+          </SearchField.Group>
+        </SearchField>
 
         <Select
           className="w-full md:max-w-xs"
-          label="Filter by class"
           placeholder="All classes"
-          selectedKeys={classFilter}
           selectionMode="multiple"
-          onSelectionChange={(keys) => setClassFilter(keys as Set<string>)}
+          value={Array.from(classFilter)}
+          onChange={(value) => setClassFilter(new Set(value as string[]))}
         >
-          {availableClasses.map((className) => (
-            <SelectItem key={className}>{className}</SelectItem>
-          ))}
+          <Label>Filter by class</Label>
+          <Select.Trigger>
+            <Select.Value />
+            <Select.Indicator />
+          </Select.Trigger>
+          <Select.Popover>
+            <ListBox>
+              {availableClasses.map((className) => (
+                <ListBox.Item key={className} id={className}>
+                  {className}
+                </ListBox.Item>
+              ))}
+            </ListBox>
+          </Select.Popover>
         </Select>
 
         <div className="flex items-center gap-2">
@@ -173,22 +186,29 @@ export function GuildRoster({ members }: GuildRosterProps) {
       </div>
 
       {/* Table */}
-      <Table
-        aria-label="Guild roster table"
-        classNames={{
-          wrapper: "p-0",
-          th: "bg-background border-b border-divider text-foreground font-semibold font-sans",
-          td: "text-muted border-b border-divider font-sans",
-        }}
-        sortDescriptor={sortDescriptor}
-        onSortChange={(descriptor) =>
-          setSortDescriptor(descriptor as SortDescriptor)
-        }
-      >
-        <TableHeader>
+      <Table aria-label="Guild roster table">
+        <TableHeader className="bg-background border-b border-divider">
           {columns.map((column) => (
-            <TableColumn key={column.key} allowsSorting={column.sortable}>
+            <TableColumn
+              key={column.key}
+              className="text-foreground font-semibold font-sans cursor-pointer select-none"
+              onClick={() => {
+                if (!column.sortable) return;
+                setSortDescriptor((prev) => ({
+                  column: column.key,
+                  direction:
+                    prev.column === column.key && prev.direction === "ascending"
+                      ? "descending"
+                      : "ascending",
+                }));
+              }}
+            >
               {column.label}
+              {sortDescriptor.column === column.key && (
+                <span className="ml-1">
+                  {sortDescriptor.direction === "ascending" ? "↑" : "↓"}
+                </span>
+              )}
             </TableColumn>
           ))}
         </TableHeader>
@@ -200,7 +220,7 @@ export function GuildRoster({ members }: GuildRosterProps) {
 
             return (
               <TableRow key={`${member.guid}-${index}`}>
-                <TableCell>
+                <TableCell className="text-muted border-b border-divider font-sans">
                   <Link
                     className="hover:underline font-medium transition-colors duration-200"
                     href={`/character/${member.guid}`}
@@ -211,10 +231,16 @@ export function GuildRoster({ members }: GuildRosterProps) {
                     {member.name}
                   </Link>
                 </TableCell>
-                <TableCell>{member.id || "-"}</TableCell>
-                <TableCell>{member.realmName || "-"}</TableCell>
-                <TableCell>{member.level || "-"}</TableCell>
-                <TableCell>
+                <TableCell className="text-muted border-b border-divider font-sans">
+                  {member.id || "-"}
+                </TableCell>
+                <TableCell className="text-muted border-b border-divider font-sans">
+                  {member.realmName || "-"}
+                </TableCell>
+                <TableCell className="text-muted border-b border-divider font-sans">
+                  {member.level || "-"}
+                </TableCell>
+                <TableCell className="text-muted border-b border-divider font-sans">
                   {member.class ? (
                     <Chip
                       size="sm"
@@ -224,7 +250,6 @@ export function GuildRoster({ members }: GuildRosterProps) {
                           : "inherit",
                         color: "#000",
                       }}
-                      variant="flat"
                     >
                       {member.specialization && member.class
                         ? `${member.specialization} ${member.class}`
@@ -234,13 +259,13 @@ export function GuildRoster({ members }: GuildRosterProps) {
                     "-"
                   )}
                 </TableCell>
-                <TableCell>
+                <TableCell className="text-muted border-b border-divider font-sans">
                   <span className="font-semibold">
                     {member.equippedItemLevel || "-"}
                   </span>
                 </TableCell>
-                <TableCell>
-                  <Chip size="sm" variant="bordered">
+                <TableCell className="text-muted border-b border-divider font-sans">
+                  <Chip size="sm" variant="secondary">
                     {member.guildRank !== undefined && member.guildRank !== null
                       ? member.guildRank === 0
                         ? "GM"
@@ -248,12 +273,12 @@ export function GuildRoster({ members }: GuildRosterProps) {
                       : "-"}
                   </Chip>
                 </TableCell>
-                <TableCell>
+                <TableCell className="text-muted border-b border-divider font-sans">
                   {member.achievementPoints
                     ? member.achievementPoints.toLocaleString()
                     : "-"}
                 </TableCell>
-                <TableCell>
+                <TableCell className="text-muted border-b border-divider font-sans">
                   {member.hashA ? (
                     <Link
                       className="text-xs font-mono text-orange-500 hover:text-orange-400 transition-colors font-medium"
@@ -267,7 +292,7 @@ export function GuildRoster({ members }: GuildRosterProps) {
                     </span>
                   )}
                 </TableCell>
-                <TableCell>
+                <TableCell className="text-muted border-b border-divider font-sans">
                   {member.hashB ? (
                     <Link
                       className="text-xs font-mono text-orange-500 hover:text-orange-400 transition-colors font-medium"
@@ -289,20 +314,57 @@ export function GuildRoster({ members }: GuildRosterProps) {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex justify-center">
-          <Pagination
-            isCompact
-            showControls
-            classNames={{
-              item: "text-black",
-              cursor: "bg-orange-500 text-black",
-              prev: "text-black [&_svg]:text-black",
-              next: "text-black",
-            }}
-            page={page}
-            total={totalPages}
-            onChange={setPage}
-          />
+        <div className="flex justify-center items-center gap-2">
+          <button
+            className="px-3 py-1 rounded border border-divider text-sm text-foreground hover:bg-background-elevated disabled:opacity-40"
+            disabled={page <= 1}
+            type="button"
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+          >
+            ←
+          </button>
+          {Array.from({ length: totalPages }, (_, i) => i + 1)
+            .filter(
+              (p) =>
+                p === 1 ||
+                p === totalPages ||
+                Math.abs(p - page) <= 1
+            )
+            .reduce<number[]>((acc, p, i, arr) => {
+              if (i > 0 && p - arr[i - 1] > 1) {
+                acc.push(-1);
+              }
+              acc.push(p);
+              return acc;
+            }, [])
+            .map((p, i) =>
+              p === -1 ? (
+                <span key={`ellipsis-${i}`} className="px-1 text-muted">
+                  ...
+                </span>
+              ) : (
+                <button
+                  key={p}
+                  className={`px-3 py-1 rounded text-sm ${
+                    page === p
+                      ? "bg-orange-500 text-black font-semibold"
+                      : "border border-divider text-foreground hover:bg-background-elevated"
+                  }`}
+                  type="button"
+                  onClick={() => setPage(p)}
+                >
+                  {p}
+                </button>
+              )
+            )}
+          <button
+            className="px-3 py-1 rounded border border-divider text-sm text-foreground hover:bg-background-elevated disabled:opacity-40"
+            disabled={page >= totalPages}
+            type="button"
+            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+          >
+            →
+          </button>
         </div>
       )}
     </div>

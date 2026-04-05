@@ -254,7 +254,9 @@ export const SearchForm = () => {
               placeholder='cmnw search "Thunderfury"'
               type="text"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(sanitizeQueryInput(e.target.value))}
+              onChange={(e) =>
+                setSearchQuery(sanitizeQueryInput(e.target.value))
+              }
               onFocus={() => {
                 if (suggestions.length > 0) {
                   setShowDropdown(true);

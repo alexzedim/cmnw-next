@@ -1,13 +1,12 @@
 "use client";
 
-import type {
-  AnalyticsMetricSnapshotDto,
-  AppHealthMetricSnapshot,
-} from "@/lib/types";
+import type { AnalyticsMetricSnapshotDto } from "@/lib/types";
+import type { MetricSnapshotRecord } from "@/lib/types/snapshot-metrics";
+
 import useSWR from "swr";
+
 import { ENDPOINTS } from "@/constants/endpoints";
 import { SNAPSHOT_REQUESTS } from "@/constants/snapshot-metrics";
-import type { MetricSnapshotRecord } from "@/lib/types/snapshot-metrics";
 import {
   buildSnapshotKey,
   toAppHealthSnapshot,

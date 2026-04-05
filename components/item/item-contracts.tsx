@@ -3,7 +3,6 @@
 import { useMemo, memo, useState, useCallback } from "react";
 import {
   Card,
-  CardBody,
   Table,
   TableHeader,
   TableColumn,
@@ -19,7 +18,6 @@ import { useContracts } from "@/lib/api/hooks";
 import { BadgeSection } from "@/components/shared/badge-section";
 import {
   CARD_CLASS_NAMES,
-  TABLE_CLASS_NAMES,
   BADGE_COLORS,
   formatNumber,
   LOCALE,
@@ -95,12 +93,12 @@ const formatTimestamp = (timestamp: number | string): string => {
  */
 const ItemContractsLoading = memo(() => (
   <Card className={CARD_CLASS_NAMES.root}>
-    <CardBody className={CARD_CLASS_NAMES.body}>
+    <Card.Content className={CARD_CLASS_NAMES.body}>
       <BadgeSection color={BADGE_COLORS.DEFAULT} label="Contract Data" />
       <div className={`${CARD_CLASS_NAMES.loading} min-h-[300px]`}>
         <Spinner color="warning" size="lg" />
       </div>
-    </CardBody>
+    </Card.Content>
   </Card>
 ));
 
@@ -127,10 +125,10 @@ interface ItemContractsTableProps {
 const ItemContractsTable = memo(
   ({ contracts, columns, period, onPeriodChange }: ItemContractsTableProps) => (
     <Card className={CARD_CLASS_NAMES.root}>
-      <CardBody className={CARD_CLASS_NAMES.body}>
+      <Card.Content className={CARD_CLASS_NAMES.body}>
         <div className="flex items-center justify-between mb-6">
           <BadgeSection color={BADGE_COLORS.DEFAULT} label="Contract Data" />
-          <ButtonGroup size="sm" variant="bordered">
+          <ButtonGroup size="sm" variant="outline">
             {PERIOD_OPTIONS.map((p) => (
               <Button
                 key={p}
@@ -152,11 +150,16 @@ const ItemContractsTable = memo(
             No contract data available for this period
           </div>
         ) : (
-          <Table aria-label="Item contract data" classNames={TABLE_CLASS_NAMES}>
-            <TableHeader columns={columns}>
-              {(column) => (
-                <TableColumn key={column.key}>{column.label}</TableColumn>
-              )}
+          <Table aria-label="Item contract data">
+            <TableHeader className="bg-background border-b border-divider">
+              {columns.map((column) => (
+                <TableColumn
+                  key={column.key}
+                  className="text-foreground font-semibold"
+                >
+                  {column.label}
+                </TableColumn>
+              ))}
             </TableHeader>
             <TableBody items={contracts}>
               {(contract) => (
@@ -186,7 +189,7 @@ const ItemContractsTable = memo(
             </TableBody>
           </Table>
         )}
-      </CardBody>
+      </Card.Content>
     </Card>
   )
 );
