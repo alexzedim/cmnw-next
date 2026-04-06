@@ -98,31 +98,31 @@
   --border: #d6d3d1;
   --text: #1c1917;
   --text-muted: #78716c;
-  --primary: #ee6018;
+  --primary: #9a7142;
   --primary-foreground: #ffffff;
-  --accent: #ef6f2e;
-  --accent-foreground: #ffffff;
-  --gradient-start: #ef6f2e;
-  --gradient-end: #d15010;
+  --accent: #ddb277;
+  --accent-foreground: #1c1917;
+  --gradient-start: #ddb277;
+  --gradient-end: #9a7142;
   --mix-toward: black;
   --surface-light: #f5f5f4;
   --surface-light-text: #1c1917;
   --surface-light-border: #d6d3d1;
-  --accent-warm: #a8a29e;
-  --accent-cool: #78716c;
+  --accent-warm: #a8a394;
+  --accent-cool: #acbcbf;
 
-  --tremor-brand-faint: #ffa50033;
-  --tremor-brand-muted: #ff8c0080;
-  --tremor-brand-subtle: #ff9900;
-  --tremor-brand: #ff9900;
-  --tremor-brand-emphasis: #ff6600;
+  --tremor-brand-faint: #ddb27733;
+  --tremor-brand-muted: #ddb27780;
+  --tremor-brand-subtle: #ddb277;
+  --tremor-brand: #ddb277;
+  --tremor-brand-emphasis: #9a7142;
   --tremor-brand-inverted: #1c1917;
   --tremor-bg-muted: #f5f5f4;
   --tremor-bg-subtle: #e7e5e4;
   --tremor-bg: #ffffff;
   --tremor-bg-emphasis: #1c1917;
   --tremor-border: #d6d3d1;
-  --tremor-ring: #ff9900;
+  --tremor-ring: #ddb277;
   --tremor-content-subtle: #78716c;
   --tremor-content: #292524;
   --tremor-content-emphasis: #1c1917;
@@ -160,6 +160,10 @@ body {
   box-shadow:
     0 1px 0 color-mix(in oklab, var(--mix-toward), transparent 96%) inset,
     0 8px 30px color-mix(in oklab, var(--mix-toward), transparent 65%);
+}
+
+.dark .card-surface {
+  box-shadow: none;
 }
 
 .token-border {

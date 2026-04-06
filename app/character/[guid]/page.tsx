@@ -29,6 +29,17 @@ async function getCharacterData(encodedGuid: string) {
         .catch(() => ({ logs: [] })), // Handle missing logs gracefully
     ]);
 
+    console.log("[Character] endpoint: /api/osint/character, guid:", guid);
+    console.log("[Character] response:", JSON.stringify(character, null, 2));
+    console.log(
+      "[Character Logs] endpoint: /api/osint/character/logs, guid:",
+      guid
+    );
+    console.log(
+      "[Character Logs] response:",
+      JSON.stringify(logsResponse, null, 2)
+    );
+
     return {
       character,
       logs: logsResponse.logs || [],
@@ -96,7 +107,7 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
           <div className="lg:col-span-4">
             <div className="sticky top-24">
               <div
-                className="relative w-full rounded-xl shadow-xl overflow-hidden"
+                className="relative w-full rounded-xl shadow-xl dark:shadow-none overflow-hidden"
                 style={{ minHeight: "60vh" }}
               >
                 {character.mainImage ? (
