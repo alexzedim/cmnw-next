@@ -5,7 +5,8 @@ export const title = tv({
   variants: {
     color: {
       indigoCyan: "from-[var(--gradient-start)] to-[var(--gradient-end)]",
-      foreground: "dark:from-[#ffffff] dark:to-[#b3b3b3]",
+      foreground:
+        "dark:from-[#ffffff] dark:to-[#b3b3b3] from-[#1c1917] to-[#44403c]",
     },
     size: {
       sm: "text-3xl lg:text-4xl",

@@ -9,6 +9,7 @@ import {
 import NextLink from "next/link";
 
 import { Logo } from "@/components/icons";
+import { ThemeSwitch } from "@/components/theme-switch";
 
 export const Navbar = () => {
   const pathname = usePathname();
@@ -31,6 +32,9 @@ export const Navbar = () => {
             </NextLink>
           </NavbarBrand>
         )}
+      </NavbarContent>
+      <NavbarContent className="flex basis-1/5" justify="end">
+        <ThemeSwitch />
       </NavbarContent>
     </HeroUINavbar>
   );

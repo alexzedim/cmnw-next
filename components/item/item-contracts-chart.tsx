@@ -112,7 +112,7 @@ const ItemContractsChartDisplay = memo(
         </div>
 
         {chartData.length === 0 ? (
-          <div className="text-center text-slate-400 py-8">
+          <div className="text-center text-muted py-8">
             No chart data available for this period
           </div>
         ) : (

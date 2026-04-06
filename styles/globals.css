@@ -31,7 +31,7 @@
       opacity 0.15s ease;
   }
   a:hover {
-    color: color-mix(in oklab, var(--text), white 12%);
+    color: color-mix(in oklab, var(--text), var(--mix-toward) 12%);
   }
   a:active {
     opacity: 0.8;
@@ -52,7 +52,7 @@
       opacity 0.15s ease;
   }
   .chip:hover {
-    border-color: color-mix(in oklab, var(--border), white 20%);
+    border-color: color-mix(in oklab, var(--border), var(--mix-toward) 20%);
   }
   .chip:active {
     opacity: 0.9;
@@ -85,7 +85,7 @@
     padding: 0.75rem 1rem;
   }
   .table tbody tr:hover {
-    background: color-mix(in oklab, var(--bg-elevated), white 2%);
+    background: color-mix(in oklab, var(--bg-elevated), var(--mix-toward) 2%);
   }
   .table td {
     color: var(--text-muted);
@@ -113,7 +113,7 @@
       background-color 0.2s ease;
   }
   .card-surface:hover {
-    border-color: color-mix(in oklab, var(--border), white 16%);
+    border-color: color-mix(in oklab, var(--border), var(--mix-toward) 16%);
   }
   .card-surface-light {
     background-color: var(--surface-light);
@@ -121,15 +121,19 @@
     border: 1px solid var(--surface-light-border);
     border-radius: 14px;
     box-shadow:
-      0 1px 0 rgba(255, 255, 255, 0.4) inset,
-      0 8px 30px rgba(0, 0, 0, 0.08);
+      0 1px 0 color-mix(in oklab, var(--mix-toward), transparent 60%) inset,
+      0 8px 30px color-mix(in oklab, var(--mix-toward), transparent 92%);
     transition:
       border-color 0.2s ease,
       box-shadow 0.2s ease,
       background-color 0.2s ease;
   }
   .card-surface-light:hover {
-    border-color: color-mix(in oklab, var(--surface-light-border), black 10%);
+    border-color: color-mix(
+      in oklab,
+      var(--surface-light-border),
+      var(--mix-toward) 10%
+    );
   }
 
   /* Sticky header + density */
@@ -181,7 +185,7 @@
     border-color: color-mix(in oklab, var(--primary), black 12%);
   }
   .btn-primary:hover {
-    background: color-mix(in oklab, var(--primary), white 8%);
+    background: color-mix(in oklab, var(--primary), var(--mix-toward) 8%);
   }
   .btn-primary:focus-visible {
     outline: 2px solid var(--accent);
@@ -201,7 +205,7 @@
     border-color: var(--border);
   }
   .btn-outline:hover {
-    border-color: color-mix(in oklab, var(--border), white 20%);
+    border-color: color-mix(in oklab, var(--border), var(--mix-toward) 20%);
   }
 }
 

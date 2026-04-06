@@ -109,17 +109,17 @@ export const ItemTitle = ({ item }: ItemTitleProps) => {
         {/* Properties */}
         <div className="flex flex-wrap gap-2 mb-4">
           {isEquip && (
-            <span className="px-2 py-1 text-xs bg-blue-500/20 text-blue-300 rounded-md">
+            <span className="px-2 py-1 text-xs bg-blue-500/20 text-blue-600 dark:text-blue-300 rounded-md">
               Equippable
             </span>
           )}
           {isStackable && (
-            <span className="px-2 py-1 text-xs bg-green-500/20 text-green-300 rounded-md">
+            <span className="px-2 py-1 text-xs bg-green-500/20 text-green-600 dark:text-green-300 rounded-md">
               Stackable
             </span>
           )}
           {hasContracts && (
-            <span className="px-2 py-1 text-xs bg-purple-500/20 text-purple-300 rounded-md">
+            <span className="px-2 py-1 text-xs bg-purple-500/20 text-purple-600 dark:text-purple-300 rounded-md">
               Has Contracts
             </span>
           )}
@@ -130,7 +130,7 @@ export const ItemTitle = ({ item }: ItemTitleProps) => {
           {assetClass.map((asset) => (
             <span
               key={asset}
-              className="px-3 py-1 text-xs font-medium bg-amber-500/20 text-amber-300 rounded-full border border-amber-500/30"
+              className="px-3 py-1 text-xs font-medium bg-amber-500/20 text-amber-600 dark:text-amber-300 rounded-full border border-amber-500/30"
             >
               {asset}
             </span>

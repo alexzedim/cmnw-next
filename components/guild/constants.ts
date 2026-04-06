@@ -37,7 +37,7 @@ export const GUILD_TYPES = {
   BANK: {
     status: "Special Purpose | Bank Guild",
     type: "bank",
-    color: "text-emerald-700",
+    color: "text-emerald-600 dark:text-emerald-700",
     bgColor: "bg-emerald-950/20",
     hexBgColor: "#496F5D" as const,
   },
@@ -51,14 +51,14 @@ export const GUILD_TYPES = {
   RAIDING_FULL: {
     status: "Raiding Guild (Full Structure)",
     type: "raiding",
-    color: "text-indigo-300",
+    color: "text-indigo-600 dark:text-indigo-300",
     bgColor: "bg-indigo-950/30",
     hexBgColor: "#4B0082" as const,
   },
   RAIDING: {
     status: "Raiding Guild",
     type: "raiding",
-    color: "text-purple-400",
+    color: "text-purple-600 dark:text-purple-400",
     bgColor: "bg-purple-950/30",
     hexBgColor: "#6D213C" as const,
   },

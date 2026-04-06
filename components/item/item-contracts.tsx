@@ -146,7 +146,7 @@ const ItemContractsTable = memo(
         </div>
 
         {contracts.length === 0 ? (
-          <div className="text-center text-slate-400 py-8">
+          <div className="text-center text-muted py-8">
             No contract data available for this period
           </div>
         ) : (
