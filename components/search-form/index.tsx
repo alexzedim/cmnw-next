@@ -33,8 +33,6 @@ export const SearchForm = () => {
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
   const [selectedSuggestion, setSelectedSuggestion] =
     useState<SearchSuggestion | null>(null);
-  const [mounted, setMounted] = useState(false);
-
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -102,10 +100,6 @@ export const SearchForm = () => {
   }, [searchQuery]);
 
   // Close dropdown when clicking outside
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -324,7 +318,8 @@ export const SearchForm = () => {
 
         <button
           className="btn btn-primary min-h-[56px] h-[56px] min-w-[112px]"
-          disabled={!mounted || isSubmitting || !searchQuery.trim()}
+          disabled={isSubmitting || !searchQuery.trim()}
+          suppressHydrationWarning
           type="button"
           onClick={() => handleSearch()}
         >
