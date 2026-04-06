@@ -166,17 +166,13 @@ export const ItemListing = ({
               ←
             </button>
             {Array.from({ length: pages }, (_, i) => i + 1)
-              .filter(
-                (p) =>
-                  p === 1 ||
-                  p === pages ||
-                  Math.abs(p - page) <= 1
-              )
+              .filter((p) => p === 1 || p === pages || Math.abs(p - page) <= 1)
               .reduce<number[]>((acc, p, i, arr) => {
                 if (i > 0 && p - arr[i - 1] > 1) {
                   acc.push(-1);
                 }
                 acc.push(p);
+
                 return acc;
               }, [])
               .map((p, i) =>

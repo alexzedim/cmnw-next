@@ -46,7 +46,7 @@ interface MarketHeatmapProps {
  * Uses orange color scheme for better visual hierarchy
  */
 const getHeatColor = (value: number, max: number): string => {
-  if (value === 0 || max === 0) return "rgba(30, 30, 30, 0.3)";
+  if (value === 0 || max === 0) return "var(--heatmap-empty)";
 
   const intensity = Math.min(value / max, 1);
   // Orange color gradient: from light to deep orange
@@ -257,23 +257,23 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
                 style={{
                   gridTemplateColumns: `minmax(80px, auto) repeat(${data.xAxis.length}, minmax(70px, 1fr)) minmax(80px, auto)`,
                   borderSpacing: "0",
-                  backgroundColor: "#0a0a0a",
+                  backgroundColor: "var(--heatmap-bg)",
                 }}
               >
                 {/* Date header row with Roman numerals */}
                 <div
-                  className="text-xs font-semibold text-slate-500 sticky left-0 z-20"
+                  className="text-xs font-semibold text-muted sticky left-0 z-20"
                   style={{
-                    backgroundColor: "#0a0a0a",
+                    backgroundColor: "var(--heatmap-bg)",
                     padding: "12px 8px",
                   }}
                 />
                 {data.xAxis.map((xLabel, i) => (
                   <div
                     key={`header-${i}`}
-                    className="text-xs font-semibold text-slate-400 text-center"
+                    className="text-xs font-semibold text-foreground/60 text-center"
                     style={{
-                      backgroundColor: "#0a0a0a",
+                      backgroundColor: "var(--heatmap-bg)",
                       padding: "12px 4px",
                     }}
                     title={formatTimestampHeader(xLabel)}
@@ -285,7 +285,7 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
                 <div
                   className="text-xs font-semibold text-slate-500 sticky right-0 z-20"
                   style={{
-                    backgroundColor: "#0a0a0a",
+                    backgroundColor: "var(--heatmap-bg)",
                     padding: "12px 8px",
                   }}
                 />
@@ -301,7 +301,7 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
                         key={`y-${yIndex}`}
                         className="flex items-center justify-center text-xs font-semibold text-orange-500 sticky left-0 z-10"
                         style={{
-                          backgroundColor: "#0a0a0a",
+                          backgroundColor: "var(--heatmap-bg)",
                           paddingLeft: "8px",
                           paddingRight: "8px",
                           paddingTop: "8px",
@@ -316,7 +316,9 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
                         const point = dataMap.get(`${xIndex}-${yIndex}`);
                         const value = point?.value || 0;
                         const bgColor =
-                          value > 0 ? getHeatColor(value, maxValue) : "#0a0a0a";
+                          value > 0
+                            ? getHeatColor(value, maxValue)
+                            : "var(--heatmap-bg)";
                         const textColor = getTextColorByIntensity(
                           value,
                           maxValue
@@ -360,7 +362,7 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
                       <div
                         className="flex items-center justify-center text-xs font-semibold text-orange-500 sticky right-0 z-10"
                         style={{
-                          backgroundColor: "#0a0a0a",
+                          backgroundColor: "var(--heatmap-bg)",
                           paddingLeft: "8px",
                           paddingRight: "8px",
                           paddingTop: "8px",
@@ -375,18 +377,18 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
 
                 {/* X-axis labels (timestamps) at bottom - time only */}
                 <div
-                  className="text-xs font-semibold text-slate-500 sticky left-0 z-20"
+                  className="text-xs font-semibold text-muted sticky left-0 z-20"
                   style={{
-                    backgroundColor: "#0a0a0a",
+                    backgroundColor: "var(--heatmap-bg)",
                     padding: "12px 8px",
                   }}
                 />
                 {data.xAxis.map((xLabel, i) => (
                   <div
                     key={`x-${i}`}
-                    className="text-xs font-semibold text-slate-400 text-center"
+                    className="text-xs font-semibold text-foreground/60 text-center"
                     style={{
-                      backgroundColor: "#0a0a0a",
+                      backgroundColor: "var(--heatmap-bg)",
                       padding: "12px 4px",
                     }}
                     title={formatTimestampHeader(xLabel)}
@@ -398,7 +400,7 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
                 <div
                   className="text-xs font-semibold text-slate-500 sticky right-0 z-20"
                   style={{
-                    backgroundColor: "#0a0a0a",
+                    backgroundColor: "var(--heatmap-bg)",
                     padding: "12px 8px",
                   }}
                 />
@@ -410,9 +412,9 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
         {/* Tooltip */}
         {hoveredCell && (
           <div
-            className="fixed z-50 text-orange-50 text-xs p-4 rounded-lg shadow-xl pointer-events-none max-w-xs border border-orange-500/30 backdrop-blur"
+            className="fixed z-50 text-orange-50 dark:text-orange-50 text-xs p-4 rounded-lg shadow-xl pointer-events-none max-w-xs border border-orange-500/30 backdrop-blur"
             style={{
-              backgroundColor: "#111216",
+              backgroundColor: "var(--tremor-bg)",
               left: mousePosition.x + 15,
               top: mousePosition.y + 15,
             }}
@@ -420,7 +422,7 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
             <div className="space-y-2">
               <div className="flex justify-between gap-2">
                 <span className="font-semibold text-orange-500">Date:</span>
-                <span className="text-slate-200">
+                <span className="text-foreground">
                   {formatTimestampHeader(data.xAxis[hoveredCell.x])}
                 </span>
               </div>
@@ -428,7 +430,7 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
                 <span className="font-semibold text-orange-500">
                   Time (HH:mm):
                 </span>
-                <span className="text-slate-200">
+                <span className="text-foreground">
                   {formatTimestampXAxis(data.xAxis[hoveredCell.x])}
                 </span>
               </div>
@@ -438,7 +440,7 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
                     ? "Price Avg:"
                     : "Price:"}
                 </span>
-                <span className="text-slate-200">
+                <span className="text-foreground">
                   {formatPrice(
                     data.yAxis[hoveredCell.y],
                     hoveredCell.value,
@@ -455,7 +457,7 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
               {hoveredCell.orders !== undefined && (
                 <div className="flex justify-between gap-2 pt-1 border-t border-orange-500/20">
                   <span className="font-semibold text-orange-500">Orders:</span>
-                  <span className="text-slate-200">{hoveredCell.orders}</span>
+                  <span className="text-foreground">{hoveredCell.orders}</span>
                 </div>
               )}
               {hoveredCell.oi !== undefined && (
@@ -463,7 +465,7 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
                   <span className="font-semibold text-orange-500">
                     Open Interest:
                   </span>
-                  <span className="text-slate-200">
+                  <span className="text-foreground">
                     {parseInt(String(hoveredCell.oi)).toLocaleString(LOCALE)}
                   </span>
                 </div>
@@ -474,10 +476,10 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
 
         {/* Legend section */}
         <div className="mt-8 pb-8 flex items-center justify-center gap-4 text-xs font-medium">
-          <span className="text-slate-500">Low Activity</span>
+          <span className="text-muted">Low Activity</span>
           <div
             className="flex h-5 w-40 gap-px rounded overflow-hidden"
-            style={{ borderColor: "#2e2c2b" }}
+            style={{ borderColor: "var(--border)" }}
           >
             {[0, 0.2, 0.4, 0.6, 0.8, 1].map((intensity, idx) => {
               const r = Math.floor(255 * (0.5 + intensity * 0.5));
