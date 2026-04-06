@@ -272,7 +272,7 @@ export const SearchForm = () => {
           {showDropdown && suggestions.length > 0 && (
             <div
               ref={dropdownRef}
-              className="absolute left-0 right-0 top-full mt-2 bg-[var(--bg-elevated)] border border-[var(--border)] rounded-lg shadow-lg z-50 max-h-[300px] overflow-y-auto"
+              className="absolute left-0 right-0 top-full mt-2 bg-[var(--bg-elevated)] border border-[var(--border)] rounded-lg shadow-lg dark:shadow-none z-50 max-h-[300px] overflow-y-auto"
             >
               {suggestions.map((suggestion, index) => (
                 <button
@@ -317,9 +317,9 @@ export const SearchForm = () => {
         </div>
 
         <button
+          suppressHydrationWarning
           className="btn btn-primary min-h-[56px] h-[56px] min-w-[112px]"
           disabled={isSubmitting || !searchQuery.trim()}
-          suppressHydrationWarning
           type="button"
           onClick={() => handleSearch()}
         >

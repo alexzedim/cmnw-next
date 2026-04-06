@@ -24,7 +24,7 @@ export function HashCharactersGrid({ characters }: HashCharactersGridProps) {
         return (
           <NextLink
             key={character.guid}
-            className="card-surface p-6 block hover:shadow-lg transition-shadow border-l-4"
+            className="card-surface p-6 block hover:shadow-lg dark:hover:shadow-none transition-shadow border-l-4"
             href={`/character/${character.guid}`}
             style={{
               borderLeftColor: factionColor,

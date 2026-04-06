@@ -44,7 +44,7 @@ export const CharacterButtons = ({ name, realm }: CharacterButtonsProps) => {
       {/* Section Header with Badge */}
       <div className="mb-5 flex items-center gap-3">
         <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider opacity-50">
-          <div className="size-1.5 rounded-full bg-orange-500" />
+          <div className="size-1.5 rounded-full bg-[var(--primary)]" />
           <span>External Resources</span>
         </div>
       </div>
@@ -59,7 +59,7 @@ export const CharacterButtons = ({ name, realm }: CharacterButtonsProps) => {
             prefetch={false}
             title={service.name}
           >
-            <Avatar className="w-16 h-16 transition-transform duration-200 group-hover:scale-110 group-hover:shadow-lg cursor-pointer">
+            <Avatar className="w-16 h-16 transition-transform duration-200 group-hover:scale-110 group-hover:shadow-lg dark:group-hover:shadow-none cursor-pointer">
               <Avatar.Image alt={service.name} src={service.icon} />
               <Avatar.Fallback>{service.name[0]}</Avatar.Fallback>
             </Avatar>
