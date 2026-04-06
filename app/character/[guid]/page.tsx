@@ -102,9 +102,10 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
                 {character.mainImage ? (
                   <Image
                     fill
-                    priority
                     alt={`${character.name} portrait`}
                     className="object-cover"
+                    loading="eager"
+                    sizes="(min-width: 1024px) 33vw, 100vw"
                     src={character.mainImage}
                   />
                 ) : (
