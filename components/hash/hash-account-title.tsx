@@ -5,6 +5,7 @@ import type { Character } from "@/lib/types";
 import { NAMING_CONSTANTS } from "@/constants";
 import { fontJetBrains } from "@/config/fonts";
 import { useI18n } from "@/lib/i18n/context";
+import { pluralize } from "@/dictionaries/pluralize";
 
 interface HashAccountTitleProps {
   hashQuery: string;
@@ -171,10 +172,16 @@ export const HashAccountTitle = ({
             {isPrecisionMatch
               ? h.precisionCount
                   .replace("{count}", `${characterCount}`)
-                  .replace("(s)", characterCount !== 1 ? "s" : "")
+                  .replace(
+                    "{noun}",
+                    pluralize(characterCount, h.plurals.character)
+                  )
               : h.nonPrecisionCount
                   .replace("{count}", `${characterCount}`)
-                  .replace("(s)", characterCount !== 1 ? "s" : "")}
+                  .replace(
+                    "{noun}",
+                    pluralize(characterCount, h.plurals.character)
+                  )}
           </div>
           <div>{showAsterisk && h.hashBHint}</div>
           {!isPrecisionMatch && (
@@ -196,7 +203,10 @@ export const HashAccountTitle = ({
             <div className="mb-3">
               {h.guildSpread
                 .replace("{count}", `${guildStats.guildCount}`)
-                .replace("(s)", guildStats.guildCount !== 1 ? "s" : "")}
+                .replace(
+                  "{noun}",
+                  pluralize(guildStats.guildCount, h.plurals.guild)
+                )}
             </div>
             <div className="space-y-2">
               {Array.from(guildStats.rankMap.entries()).map(
@@ -222,8 +232,7 @@ export const HashAccountTitle = ({
                                 : rank === null
                                   ? h.unranked
                                   : rank}
-                              : {count}{" "}
-                              {count !== 1 ? h.characters : h.character}
+                              : {count} {pluralize(count, h.plurals.character)}
                             </div>
                           ))}
                       </div>
