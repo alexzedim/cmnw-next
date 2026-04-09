@@ -25,13 +25,13 @@ export const STATUS_ENDPOINT_ORDER = [
   "PROFESSIONS",
 ] as const;
 
-export const ENDPOINT_LABELS: Record<EndpointName, string> = {
-  STATUS: "Status",
-  SUMMARY: "Summary",
-  MEDIA: "Media",
-  PETS: "Pets",
-  MOUNTS: "Mounts",
-  PROFESSIONS: "Professions",
+export const ENDPOINT_DICT_KEYS: Record<EndpointName, string> = {
+  STATUS: "status",
+  SUMMARY: "summary",
+  MEDIA: "media",
+  PETS: "pets",
+  MOUNTS: "mounts",
+  PROFESSIONS: "professions",
 };
 
 export function parseStatusString(status: string): EndpointStatusInfo[] {
