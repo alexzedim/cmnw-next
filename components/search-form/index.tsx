@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { ENDPOINTS } from "@/constants";
 import { NAMING_CONSTANTS } from "@/constants/naming";
 import { fontJetBrains } from "@/config/fonts";
+import { useI18n } from "@/lib/i18n/context";
 
 interface SearchSuggestion {
   value: string;
@@ -25,6 +26,7 @@ const sanitizeQueryInput = (value: string) => value.replace(/\s+/g, "-");
 
 export const SearchForm = () => {
   const router = useRouter();
+  const { dict } = useI18n();
   const [searchQuery, setSearchQuery] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([]);
@@ -36,7 +38,6 @@ export const SearchForm = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Fetch suggestions when search query changes
   useEffect(() => {
     const fetchSuggestions = async () => {
       const sanitizedQuery = searchQuery.trim();
@@ -57,7 +58,6 @@ export const SearchForm = () => {
           const data = await response.json();
           const suggestions: SearchSuggestion[] = [];
 
-          // Add characters to suggestions
           data.characters?.forEach((char: any) => {
             suggestions.push({
               value: char.guid,
@@ -66,7 +66,6 @@ export const SearchForm = () => {
             });
           });
 
-          // Add guilds to suggestions
           data.guilds?.forEach((guild: any) => {
             suggestions.push({
               value: guild.guid,
@@ -75,7 +74,6 @@ export const SearchForm = () => {
             });
           });
 
-          // Add items to suggestions
           data.items?.forEach((item: any) => {
             suggestions.push({
               value: item.id.toString(),
@@ -99,7 +97,6 @@ export const SearchForm = () => {
     return () => clearTimeout(debounceTimer);
   }, [searchQuery]);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -122,7 +119,6 @@ export const SearchForm = () => {
 
     if (!trimmedQuery) return;
 
-    // If a suggestion was explicitly chosen earlier, navigate to it
     if (selectedSuggestion) {
       navigateToSuggestion(selectedSuggestion);
 
@@ -141,7 +137,6 @@ export const SearchForm = () => {
 
         console.log("Search API Response:", data);
 
-        // Navigate to first result if available
         const firstResult =
           data.characters?.[0] || data.guilds?.[0] || data.items?.[0];
 
@@ -232,7 +227,7 @@ export const SearchForm = () => {
       case "character":
         return ">";
       case "guild":
-        return "#️";
+        return "#\uFE0F";
       case "item":
         return "$";
       default:
@@ -250,7 +245,7 @@ export const SearchForm = () => {
               ref={inputRef}
               autoComplete="off"
               className="bg-transparent ml-2 outline-none text-foreground flex-1"
-              placeholder='cmnw search "Thunderfury"'
+              placeholder={dict.searchForm.placeholder}
               type="text"
               value={searchQuery}
               onChange={(e) =>
@@ -268,7 +263,6 @@ export const SearchForm = () => {
             )}
           </div>
 
-          {/* Dropdown */}
           {showDropdown && suggestions.length > 0 && (
             <div
               ref={dropdownRef}
@@ -292,13 +286,9 @@ export const SearchForm = () => {
                     {getTypeIcon(suggestion.type)}
                   </span>
                   {suggestion.type === "item" && suggestion.label ? (
-                    <>
-                      <span className="flex-1">{suggestion.label}</span>
-                    </>
+                    <span className="flex-1">{suggestion.label}</span>
                   ) : (
-                    <>
-                      <span className="flex-1">{suggestion.value}</span>
-                    </>
+                    <span className="flex-1">{suggestion.value}</span>
                   )}
                   <span
                     className="text-xs uppercase tracking-wider opacity-60"
@@ -323,7 +313,7 @@ export const SearchForm = () => {
           type="button"
           onClick={() => handleSearch()}
         >
-          {isSubmitting ? "..." : "→"}
+          {isSubmitting ? "..." : "\u2192"}
         </button>
       </div>
     </div>

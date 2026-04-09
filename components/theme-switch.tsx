@@ -8,6 +8,7 @@ import { useIsSSR } from "@react-aria/ssr";
 import clsx from "clsx";
 
 import { SunFilledIcon, MoonFilledIcon } from "@/components/icons";
+import { useI18n } from "@/lib/i18n/context";
 
 export interface ThemeSwitchProps {
   className?: string;
@@ -20,10 +21,13 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
 }) => {
   const { theme, setTheme } = useTheme();
   const isSSR = useIsSSR();
+  const { dict } = useI18n();
 
   const onChange = useCallback(() => {
     setTheme(theme === "light" ? "dark" : "light");
   }, [theme, setTheme]);
+
+  const isLight = theme === "light" || isSSR;
 
   const {
     Component,
@@ -33,8 +37,8 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
     getInputProps,
     getWrapperProps,
   } = useSwitch({
-    isSelected: theme === "light" || isSSR,
-    "aria-label": `Switch to ${theme === "light" || isSSR ? "dark" : "light"} mode`,
+    isSelected: isLight,
+    "aria-label": isLight ? dict.themeSwitch.toDark : dict.themeSwitch.toLight,
     onChange,
   });
 
