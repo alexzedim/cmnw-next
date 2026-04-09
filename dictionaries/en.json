@@ -261,8 +261,8 @@
     "precisionMatchDescription": "This account is uniquely identified by this hash",
     "hashTooCommon": "Hash Too Common",
     "hashTooCommonDescription": "This hash value is shared by multiple accounts",
-    "precisionCount": "This account has {count} character(s)",
-    "nonPrecisionCount": "This hash value is shared by {count} characters from different accounts",
+    "precisionCount": "This account has {count} {noun}",
+    "nonPrecisionCount": "This hash value is shared by {count} {noun} from different accounts",
     "hashBHint": "Hash B******** gives more precision match",
     "noGuildData": "No Guild Data",
     "excellent": "Excellent",
@@ -272,20 +272,24 @@
     "concerning": "Concerning",
     "spreadOut": "Spread Out",
     "guildAllocationTitle": "Guild Characters Allocation Check - {status} ({percentage}%)",
-    "guildSpread": "Account spread across {count} unique guild(s)",
+    "guildSpread": "Account spread across {count} unique {noun}",
     "rank": "Rank ",
     "gm": "GM",
     "unranked": "u/r",
-    "character": "character",
-    "characters": "characters",
-    "uniqueGuild": "unique guild",
-    "uniqueGuilds": "unique guilds",
     "level": "Level {level}",
     "itemLevelLabel": "Item Level:",
     "raceLabel": "Race:",
     "specLabel": "Spec:",
     "guildLabel": "Guild: ",
-    "rankDisplay": "Rank {rank}"
+    "rankDisplay": "Rank {rank}",
+    "plurals": {
+      "character": {
+        "one": "character",
+        "few": "characters",
+        "many": "characters"
+      },
+      "guild": { "one": "guild", "few": "guilds", "many": "guilds" }
+    }
   },
   "hashSort": {
     "sortBy": "Sort by:",
