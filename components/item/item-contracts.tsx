@@ -22,6 +22,7 @@ import {
   formatNumber,
   LOCALE,
 } from "@/components/item/constants";
+import { useI18n } from "@/lib/i18n/context";
 
 interface ItemContractsProps {
   id: number | string;
@@ -55,7 +56,6 @@ const formatTimestamp = (timestamp: number | string): string => {
       ts = timestamp;
     }
 
-    // If timestamp looks like seconds (less than year 2100 in seconds), convert to milliseconds
     if (ts > 0 && ts < 4102444800) {
       ts = ts * 1000;
     }
@@ -88,25 +88,26 @@ const formatTimestamp = (timestamp: number | string): string => {
   }
 };
 
-/**
- * Loading State Component
- */
-const ItemContractsLoading = memo(() => (
-  <Card className={CARD_CLASS_NAMES.root}>
-    <Card.Content className={CARD_CLASS_NAMES.body}>
-      <BadgeSection color={BADGE_COLORS.DEFAULT} label="Contract Data" />
-      <div className={`${CARD_CLASS_NAMES.loading} min-h-[300px]`}>
-        <Spinner color="warning" size="lg" />
-      </div>
-    </Card.Content>
-  </Card>
-));
+const ItemContractsLoading = memo(() => {
+  const { dict } = useI18n();
+
+  return (
+    <Card className={CARD_CLASS_NAMES.root}>
+      <Card.Content className={CARD_CLASS_NAMES.body}>
+        <BadgeSection
+          color={BADGE_COLORS.DEFAULT}
+          label={dict.itemContracts.badge}
+        />
+        <div className={`${CARD_CLASS_NAMES.loading} min-h-[300px]`}>
+          <Spinner color="warning" size="lg" />
+        </div>
+      </Card.Content>
+    </Card>
+  );
+});
 
 ItemContractsLoading.displayName = "ItemContractsLoading";
 
-/**
- * Contract Table Component
- */
 interface ItemContractsTableProps {
   contracts: Array<{
     id: string;
@@ -123,119 +124,110 @@ interface ItemContractsTableProps {
 }
 
 const ItemContractsTable = memo(
-  ({ contracts, columns, period, onPeriodChange }: ItemContractsTableProps) => (
-    <Card className={CARD_CLASS_NAMES.root}>
-      <Card.Content className={CARD_CLASS_NAMES.body}>
-        <div className="flex items-center justify-between mb-6">
-          <BadgeSection color={BADGE_COLORS.DEFAULT} label="Contract Data" />
-          <ButtonGroup size="sm" variant="outline">
-            {PERIOD_OPTIONS.map((p) => (
-              <Button
-                key={p}
-                className={
-                  period === p
-                    ? "bg-[var(--primary)] text-[var(--primary-foreground)]"
-                    : "text-[var(--primary)] hover:bg-[color-mix(in_oklab,var(--primary),transparent_90%)]"
-                }
-                onClick={() => onPeriodChange(p)}
-              >
-                {p}
-              </Button>
-            ))}
-          </ButtonGroup>
-        </div>
+  ({ contracts, columns, period, onPeriodChange }: ItemContractsTableProps) => {
+    const { dict } = useI18n();
+    const ic = dict.itemContracts;
 
-        {contracts.length === 0 ? (
-          <div className="text-center text-muted py-8">
-            No contract data available for this period
-          </div>
-        ) : (
-          <Table aria-label="Item contract data">
-            <TableHeader className="bg-background border-b border-divider">
-              {columns.map((column) => (
-                <TableColumn
-                  key={column.key}
-                  className="py-3 text-foreground font-semibold"
+    return (
+      <Card className={CARD_CLASS_NAMES.root}>
+        <Card.Content className={CARD_CLASS_NAMES.body}>
+          <div className="flex items-center justify-between mb-6">
+            <BadgeSection color={BADGE_COLORS.DEFAULT} label={ic.badge} />
+            <ButtonGroup size="sm" variant="outline">
+              {PERIOD_OPTIONS.map((p) => (
+                <Button
+                  key={p}
+                  className={
+                    period === p
+                      ? "bg-[var(--primary)] text-[var(--primary-foreground)]"
+                      : "text-[var(--primary)] hover:bg-[color-mix(in_oklab,var(--primary),transparent_90%)]"
+                  }
+                  onClick={() => onPeriodChange(p)}
                 >
-                  {column.label}
-                </TableColumn>
+                  {p}
+                </Button>
               ))}
-            </TableHeader>
-            <TableBody items={contracts}>
-              {(contract) => (
-                <TableRow key={contract.id}>
-                  <TableCell className="text-[var(--primary)] font-medium">
-                    {formatTimestamp(contract.timestamp)}
-                  </TableCell>
-                  <TableCell className="text-[var(--primary)] font-medium">
-                    {formatNumber(contract.price)}
-                  </TableCell>
-                  <TableCell className="text-[var(--primary)] font-medium">
-                    {formatNumber(contract.priceMedian)}
-                  </TableCell>
-                  <TableCell className="text-[var(--primary)] font-medium">
-                    {formatNumber(contract.priceTop)}
-                  </TableCell>
-                  <TableCell className="text-[var(--primary)] font-medium">
-                    {formatNumber(contract.quantity)}
-                  </TableCell>
-                  <TableCell className="text-[var(--primary)] font-medium text-center">
-                    <div className="text-right inline-block tabular-nums">
-                      {formatNumber(Math.floor(contract.openInterest))}
-                    </div>
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        )}
-      </Card.Content>
-    </Card>
-  )
+            </ButtonGroup>
+          </div>
+
+          {contracts.length === 0 ? (
+            <div className="text-center text-muted py-8">{ic.noData}</div>
+          ) : (
+            <Table aria-label={ic.tableAriaLabel}>
+              <TableHeader className="bg-background border-b border-divider">
+                {columns.map((column) => (
+                  <TableColumn
+                    key={column.key}
+                    className="py-3 text-foreground font-semibold"
+                  >
+                    {column.label}
+                  </TableColumn>
+                ))}
+              </TableHeader>
+              <TableBody items={contracts}>
+                {(contract) => (
+                  <TableRow key={contract.id}>
+                    <TableCell className="text-[var(--primary)] font-medium">
+                      {formatTimestamp(contract.timestamp)}
+                    </TableCell>
+                    <TableCell className="text-[var(--primary)] font-medium">
+                      {formatNumber(contract.price)}
+                    </TableCell>
+                    <TableCell className="text-[var(--primary)] font-medium">
+                      {formatNumber(contract.priceMedian)}
+                    </TableCell>
+                    <TableCell className="text-[var(--primary)] font-medium">
+                      {formatNumber(contract.priceTop)}
+                    </TableCell>
+                    <TableCell className="text-[var(--primary)] font-medium">
+                      {formatNumber(contract.quantity)}
+                    </TableCell>
+                    <TableCell className="text-[var(--primary)] font-medium text-center">
+                      <div className="text-right inline-block tabular-nums">
+                        {formatNumber(Math.floor(contract.openInterest))}
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          )}
+        </Card.Content>
+      </Card>
+    );
+  }
 );
 
 ItemContractsTable.displayName = "ItemContractsTable";
 
-/**
- * ItemContracts Component
- *
- * Displays contract data for items with hasContracts flag.
- * Shows price levels, quantities, and open interest data.
- * Includes period selector for different time ranges.
- *
- * @example
- * <ItemContracts id="12345" />
- */
 export const ItemContracts = memo(({ id }: ItemContractsProps) => {
   const [period, setPeriod] = useState<string>("1d");
+  const { dict } = useI18n();
+  const ic = dict.itemContracts;
   const { data, error, isLoading } = useContracts(id, period);
-  // Memoize columns definition
+
   const columns = useMemo<ContractColumnDef[]>(
     () => [
-      { key: "timestamp", label: "Date/Time" },
-      { key: "price", label: "Price, ₘ₁ₙ" },
-      { key: "priceMedian", label: "Median, ⁵⁰⁄₁₀₀" },
-      { key: "priceTop", label: "Top, ⁹⁸⁄₁₀₀" },
-      { key: "quantity", label: "Quantity" },
-      { key: "openInterest", label: "Open Interest" },
+      { key: "timestamp", label: ic.columnDateTime },
+      { key: "price", label: ic.columnPrice },
+      { key: "priceMedian", label: ic.columnMedian },
+      { key: "priceTop", label: ic.columnTop },
+      { key: "quantity", label: ic.columnQuantity },
+      { key: "openInterest", label: ic.columnOpenInterest },
     ],
-    []
+    [ic]
   );
 
   const handlePeriodChange = useCallback((newPeriod: string) => {
     setPeriod(newPeriod);
   }, []);
 
-  // Error state - return null (silent failure following project pattern)
   if (error) return null;
 
-  // Loading state
   if (isLoading) return <ItemContractsLoading />;
 
-  // Empty state - no contracts available
   if (!data?.contracts?.length) return null;
 
-  // Render table with contracts
   return (
     <ItemContractsTable
       columns={columns}

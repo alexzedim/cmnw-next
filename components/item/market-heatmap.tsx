@@ -19,6 +19,7 @@ import {
   BADGE_COLORS,
   LOCALE,
 } from "@/components/item/constants";
+import { useI18n } from "@/lib/i18n/context";
 
 interface HeatmapDataPoint {
   x: number;
@@ -41,10 +42,6 @@ interface MarketHeatmapProps {
   hasContracts?: boolean;
 }
 
-/**
- * Get color intensity gradient for heatmap cells
- * Uses orange color scheme for better visual hierarchy
- */
 const getHeatColor = (value: number, max: number): string => {
   if (value === 0 || max === 0) return "var(--heatmap-empty)";
 
@@ -56,11 +53,6 @@ const getHeatColor = (value: number, max: number): string => {
   return `rgba(${r}, ${g}, ${b}, ${0.4 + intensity * 0.6})`;
 };
 
-/**
- * Get text color based on activity intensity
- * High activity (intensity > 0.5): black text
- * Low activity (intensity <= 0.5): white text
- */
 const getTextColorByIntensity = (value: number, max: number): string => {
   if (value === 0 || max === 0) return "#ffffff";
 
@@ -69,41 +61,6 @@ const getTextColorByIntensity = (value: number, max: number): string => {
   return intensity > 0.5 ? "#000000" : "#ffffff";
 };
 
-/**
- * Convert month number to Roman numeral
- */
-const toRomanNumeral = (num: number): string => {
-  const romanMap = [
-    { value: 12, numeral: "XII" },
-    { value: 11, numeral: "XI" },
-    { value: 10, numeral: "X" },
-    { value: 9, numeral: "IX" },
-    { value: 8, numeral: "VIII" },
-    { value: 7, numeral: "VII" },
-    { value: 6, numeral: "VI" },
-    { value: 5, numeral: "V" },
-    { value: 4, numeral: "IV" },
-    { value: 3, numeral: "III" },
-    { value: 2, numeral: "II" },
-    { value: 1, numeral: "I" },
-  ];
-
-  let result = "";
-  let remaining = num;
-
-  for (const { value, numeral } of romanMap) {
-    while (remaining >= value) {
-      result += numeral;
-      remaining -= value;
-    }
-  }
-
-  return result;
-};
-
-/**
- * Format timestamp header with Roman numeral month and date
- */
 const formatTimestampHeader = (value: string | number): string => {
   if (typeof value !== "number") return String(value);
 
@@ -114,9 +71,6 @@ const formatTimestampHeader = (value: string | number): string => {
   return `${day}.${month}`;
 };
 
-/**
- * Format timestamp for X-axis (time only - HH:mm)
- */
 const formatTimestampXAxis = (value: string | number): string => {
   if (typeof value !== "number") return String(value);
 
@@ -127,10 +81,6 @@ const formatTimestampXAxis = (value: string | number): string => {
   return `${hours}:${minutes}`;
 };
 
-/**
- * Format price: if oi (open interest) is available, divide oi by quantity,
- * otherwise use the priceValue as-is. Always parseFloat and toFixed(2).
- */
 const formatPrice = (
   priceValue: string | number,
   quantity?: number,
@@ -147,32 +97,26 @@ const formatPrice = (
   return price.toFixed(2);
 };
 
-/**
- * Loading State Component
- */
-const MarketHeatmapLoading = memo(() => (
-  <Card className={CARD_CLASS_NAMES.root}>
-    <Card.Content className={CARD_CLASS_NAMES.body}>
-      <BadgeSection color={BADGE_COLORS.DEFAULT} label="Market Heatmap" />
-      <div className={`${CARD_CLASS_NAMES.loading} min-h-[400px]`}>
-        <Spinner color="warning" size="lg" />
-      </div>
-    </Card.Content>
-  </Card>
-));
+const MarketHeatmapLoading = memo(() => {
+  const { dict } = useI18n();
+
+  return (
+    <Card className={CARD_CLASS_NAMES.root}>
+      <Card.Content className={CARD_CLASS_NAMES.body}>
+        <BadgeSection
+          color={BADGE_COLORS.DEFAULT}
+          label={dict.marketHeatmap.badge}
+        />
+        <div className={`${CARD_CLASS_NAMES.loading} min-h-[400px]`}>
+          <Spinner color="warning" size="lg" />
+        </div>
+      </Card.Content>
+    </Card>
+  );
+});
 
 MarketHeatmapLoading.displayName = "MarketHeatmapLoading";
 
-/**
- * MarketHeatmap Component
- *
- * Displays market data as an interactive heatmap for commodity items,
- * gold items, or items with contracts. Shows price levels (Y-axis) vs
- * timestamps (X-axis) with intensity indicating market quantity.
- *
- * @example
- * <MarketHeatmap id="12345" isCommdty={true} />
- */
 export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
   ({
     id,
@@ -185,8 +129,9 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
     );
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const { dict } = useI18n();
+    const mh = dict.marketHeatmap;
 
-    // Render heatmap for commodity items, gold items, or items with contracts
     const shouldShowChart = isCommdty || isGold || hasContracts;
 
     if (!shouldShowChart) return null;
@@ -196,7 +141,6 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
       (url: string) => fetch(url).then((r) => r.json())
     );
 
-    // Scroll to the right to show latest data
     useEffect(() => {
       if (scrollContainerRef.current && data) {
         scrollContainerRef.current.scrollLeft =
@@ -204,19 +148,14 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
       }
     }, [data]);
 
-    // Error state - return null (silent failure following project pattern)
     if (error) return null;
 
-    // Loading state
     if (isLoading) return <MarketHeatmapLoading />;
 
-    // Empty state - no data available
     if (!data || !data.dataset.length) return null;
 
-    // Calculate max value for color scaling
     const maxValue = Math.max(...data.dataset.map((d) => d.value));
 
-    // Create a map for quick data lookup
     const dataMap = new Map<string, HeatmapDataPoint>();
 
     data.dataset.forEach((point) => {
@@ -234,7 +173,6 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
 
     return (
       <>
-        {/* Badge and title section - normal container */}
         <div className="mb-6">
           <BadgeSection
             color={BADGE_COLORS.DEFAULT}
@@ -242,15 +180,12 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
           />
         </div>
 
-        {/* Full viewport width heatmap container with side margins */}
         <div className="w-screen relative left-[calc(-50vw+50%)] bg-background px-4 md:px-6 lg:px-8">
-          {/* Heatmap chart - full viewport width */}
           <div
             ref={scrollContainerRef}
             className="overflow-x-auto bg-background"
           >
             <div className="inline-block min-w-full">
-              {/* Grid Container */}
               <div
                 className="grid"
                 style={{
@@ -259,7 +194,6 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
                   backgroundColor: "var(--heatmap-bg)",
                 }}
               >
-                {/* Date header row with Roman numerals */}
                 <div
                   className="text-xs font-semibold text-muted sticky left-0 z-20"
                   style={{
@@ -280,7 +214,6 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
                     {formatTimestampHeader(xLabel)}
                   </div>
                 ))}
-                {/* Right side empty header cell */}
                 <div
                   className="text-xs font-semibold text-slate-500 sticky right-0 z-20"
                   style={{
@@ -289,13 +222,11 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
                   }}
                 />
 
-                {/* Y-axis labels and data cells (reversed for price inversion) */}
                 {[...data.yAxis].reverse().map((yLabel, reversedIndex) => {
                   const yIndex = data.yAxis.length - 1 - reversedIndex;
 
                   return (
                     <Fragment key={`row-${yIndex}`}>
-                      {/* Y-axis label (price) */}
                       <div
                         key={`y-${yIndex}`}
                         className="flex items-center justify-center text-xs font-semibold text-[var(--primary)] sticky left-0 z-10"
@@ -310,7 +241,6 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
                         {parseFloat(yLabel).toFixed(2)}
                       </div>
 
-                      {/* Data cells */}
                       {data.xAxis.map((_, xIndex) => {
                         const point = dataMap.get(`${xIndex}-${yIndex}`);
                         const value = point?.value || 0;
@@ -357,7 +287,6 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
                         );
                       })}
 
-                      {/* Right side Y-axis label (price) */}
                       <div
                         className="flex items-center justify-center text-xs font-semibold text-[var(--primary)] sticky right-0 z-10"
                         style={{
@@ -374,7 +303,6 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
                   );
                 })}
 
-                {/* X-axis labels (timestamps) at bottom - time only */}
                 <div
                   className="text-xs font-semibold text-muted sticky left-0 z-20"
                   style={{
@@ -395,7 +323,6 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
                     {formatTimestampXAxis(xLabel)}
                   </div>
                 ))}
-                {/* Right side empty bottom cell */}
                 <div
                   className="text-xs font-semibold text-slate-500 sticky right-0 z-20"
                   style={{
@@ -408,7 +335,6 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
           </div>
         </div>
 
-        {/* Tooltip */}
         {hoveredCell && (
           <div
             className="fixed z-50 text-foreground text-xs p-4 rounded-lg shadow-xl dark:shadow-none pointer-events-none max-w-xs border border-[var(--primary)]/30 backdrop-blur"
@@ -421,7 +347,7 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
             <div className="space-y-2">
               <div className="flex justify-between gap-2">
                 <span className="font-semibold text-[var(--primary)]">
-                  Date:
+                  {mh.date}
                 </span>
                 <span className="text-foreground">
                   {formatTimestampHeader(data.xAxis[hoveredCell.x])}
@@ -429,7 +355,7 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
               </div>
               <div className="flex justify-between gap-2">
                 <span className="font-semibold text-[var(--primary)]">
-                  Time (HH:mm):
+                  {mh.time}
                 </span>
                 <span className="text-foreground">
                   {formatTimestampXAxis(data.xAxis[hoveredCell.x])}
@@ -438,8 +364,8 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
               <div className="flex justify-between gap-2">
                 <span className="font-semibold text-[var(--primary)]">
                   {hoveredCell.y === data.yAxis.length - 1
-                    ? "Price Avg:"
-                    : "Price:"}
+                    ? mh.priceAvg
+                    : mh.price}
                 </span>
                 <span className="text-foreground">
                   {formatPrice(
@@ -451,7 +377,7 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
               </div>
               <div className="flex justify-between gap-2">
                 <span className="font-semibold text-[var(--primary)]">
-                  Quantity:
+                  {mh.quantity}
                 </span>
                 <span className="text-[var(--accent)] font-semibold">
                   {hoveredCell.value.toLocaleString(LOCALE)}
@@ -460,7 +386,7 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
               {hoveredCell.orders !== undefined && (
                 <div className="flex justify-between gap-2 pt-1 border-t border-[var(--primary)]/20">
                   <span className="font-semibold text-[var(--primary)]">
-                    Orders:
+                    {mh.orders}
                   </span>
                   <span className="text-foreground">{hoveredCell.orders}</span>
                 </div>
@@ -468,7 +394,7 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
               {hoveredCell.oi !== undefined && (
                 <div className="flex justify-between gap-2">
                   <span className="font-semibold text-[var(--primary)]">
-                    Open Interest:
+                    {mh.openInterest}
                   </span>
                   <span className="text-foreground">
                     {parseInt(String(hoveredCell.oi)).toLocaleString(LOCALE)}
@@ -479,9 +405,8 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
           </div>
         )}
 
-        {/* Legend section */}
         <div className="mt-8 pb-8 flex items-center justify-center gap-4 text-xs font-medium">
-          <span className="text-muted">Low Activity</span>
+          <span className="text-muted">{mh.lowActivity}</span>
           <div
             className="flex h-5 w-40 gap-px rounded overflow-hidden"
             style={{ borderColor: "var(--border)" }}
@@ -503,7 +428,7 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
             })}
           </div>
           <span className="text-[var(--primary)] font-semibold">
-            High Activity
+            {mh.highActivity}
           </span>
         </div>
       </>
