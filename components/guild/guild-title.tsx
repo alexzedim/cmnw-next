@@ -2,10 +2,13 @@
 
 import type { Character, Faction } from "@/lib/types";
 
+import dayjs from "dayjs";
+
 import { GuildRankAllocation } from "./guild-rank-allocation";
 
 import { NAMING_CONSTANTS } from "@/constants";
 import { fontJetBrains } from "@/config/fonts";
+import { useI18n } from "@/lib/i18n/context";
 
 interface GuildTitleProps {
   name: string;
@@ -18,11 +21,11 @@ interface GuildTitleProps {
 }
 
 function getFactionBorderColor(faction?: Faction): string {
-  if (!faction) return "rgb(249, 115, 22)"; // Orange fallback
+  if (!faction) return "rgb(249, 115, 22)";
 
   const factionColorMap: Record<string, string> = {
-    alliance: "rgb(0, 112, 192)", // Alliance blue
-    horde: "rgb(164, 52, 50)", // Horde red
+    alliance: "rgb(0, 112, 192)",
+    horde: "rgb(164, 52, 50)",
   };
 
   return (
@@ -39,8 +42,10 @@ export const GuildTitle = ({
   faction,
   members,
 }: GuildTitleProps) => {
+  const { dict } = useI18n();
+  const g = dict.guild;
   const borderColor = getFactionBorderColor(faction);
-  const createdDate = new Date(created_timestamp).toLocaleString("en-GB");
+  const createdDate = dayjs(created_timestamp).format("DD/MM/YYYY, HH:mm:ss");
 
   return (
     <div
@@ -49,7 +54,6 @@ export const GuildTitle = ({
         borderLeftColor: borderColor,
       }}
     >
-      {/* Guild Badge */}
       <div className="mb-5 flex items-center gap-3">
         <div
           className="inline-flex items-center gap-2 text-xs uppercase tracking-wider opacity-60"
@@ -60,36 +64,32 @@ export const GuildTitle = ({
         </div>
       </div>
 
-      {/* Guild Name */}
       <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight mb-3 font-sans">
         # {name}
       </h1>
 
-      {/* Guild Stats */}
       <div className="mb-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm lg:text-base text-foreground/70 font-sans">
         <div className="flex items-baseline gap-2">
-          <span className="text-foreground/50">Members:</span>
+          <span className="text-foreground/50">{g.membersLabel}</span>
           <span className="font-medium">{member_count.toLocaleString()}</span>
         </div>
         <div className="flex items-baseline gap-2">
-          <span className="text-foreground/50">Achievements:</span>
+          <span className="text-foreground/50">{g.achievementsLabel}</span>
           <span className="font-medium">
             {achievement_points.toLocaleString()}
           </span>
         </div>
         <div className="flex items-baseline gap-2">
-          <span className="text-foreground/50">Created:</span>
+          <span className="text-foreground/50">{g.createdLabel}</span>
           <span className="font-medium">{createdDate}</span>
         </div>
       </div>
 
-      {/* Realm */}
       <div className="flex items-baseline gap-2 text-sm lg:text-base text-foreground/70 font-sans">
         <span className="text-foreground/50">@</span>
         <span className="font-medium">{realm.toLowerCase()}</span>
       </div>
 
-      {/* Guild Rank Allocation Block */}
       {members && members.length > 0 && (
         <div className="mt-6">
           <GuildRankAllocation members={members} />
