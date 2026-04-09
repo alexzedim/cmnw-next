@@ -4,6 +4,7 @@ import type {
   GuildPageProps,
 } from "@/lib/types";
 
+import { cache } from "react";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -12,9 +13,9 @@ import { GuildRoster } from "@/components/guild/guild-roster";
 import { LogTable } from "@/components/shared/log-table";
 import { apiClient } from "@/lib/api";
 import { stringToFaction } from "@/lib/utils/faction-converter";
+import { detectLocale, getDictionary } from "@/dictionaries";
 
-async function getGuildData(decodedGuid: string) {
-  // Encode the decoded GUID before passing to API
+const getGuildData = cache(async function (decodedGuid: string) {
   const guid = decodedGuid;
 
   try {
@@ -22,7 +23,7 @@ async function getGuildData(decodedGuid: string) {
       apiClient.get<GuildResponse>("/api/osint/guild", { guid }),
       apiClient
         .get<GuildLogsResponse>("/api/osint/guild/logs", { guid })
-        .catch(() => ({ logs: [] })), // Handle missing logs gracefully
+        .catch(() => ({ logs: [] })),
     ]);
 
     console.log("[Guild] request - endpoint: /api/osint/guild, guid:", guid);
@@ -47,7 +48,7 @@ async function getGuildData(decodedGuid: string) {
 
     return null;
   }
-}
+});
 
 export async function generateMetadata({
   params,
@@ -90,11 +91,7 @@ export default async function GuildPage({ params }: GuildPageProps) {
       <div className="container mx-auto px-4">
         <GuildTitle
           achievement_points={guild.achievementPoints || 0}
-          created_timestamp={
-            guild.createdTimestamp
-              ? new Date(guild.createdTimestamp).getTime()
-              : Date.now()
-          }
+          created_timestamp={guild.createdTimestamp ?? 0}
           faction={factionEnum}
           member_count={memberCount}
           members={members}

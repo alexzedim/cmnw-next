@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { apiClient } from "@/lib/api";
 import { HashAccountTitle } from "@/components/hash/hash-account-title";
 import { HashCharactersContent } from "@/components/hash/hash-characters-content";
+import { detectLocale, getDictionary } from "@/dictionaries";
 
 interface HashPageProps {
   params: Promise<{
@@ -36,13 +37,15 @@ export async function generateMetadata({
 }: HashPageProps): Promise<Metadata> {
   const { hashQuery } = await params;
   const title = hashQuery.toUpperCase();
+  const locale = await detectLocale();
+  const dict = await getDictionary(locale);
 
   return {
     title: `CMNW: ${title}`,
-    description: "All available hash matches for dynamic hash value",
+    description: dict.hash.metadataDescription,
     openGraph: {
       title: `CMNW: ${title}`,
-      description: "Hash matches and related characters",
+      description: dict.hash.metadataOgDescription,
     },
   };
 }
@@ -58,14 +61,12 @@ export default async function HashPage({ params }: HashPageProps) {
   return (
     <main className="min-h-screen pt-20 pb-8">
       <div className="container mx-auto px-4">
-        {/* Header */}
         <HashAccountTitle
           characterCount={characters.length}
           characters={characters}
           hashQuery={hashQuery}
         />
 
-        {/* Characters Content with Sorting */}
         <HashCharactersContent characters={characters} />
       </div>
     </main>

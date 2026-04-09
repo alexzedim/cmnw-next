@@ -10,11 +10,12 @@ import { ItemListing } from "@/components/item/item-listing";
 import { ItemContracts } from "@/components/item/item-contracts";
 import { generateItemTitle } from "@/lib";
 import { ENDPOINTS } from "@/constants";
+import { detectLocale, getDictionary } from "@/dictionaries";
 
 async function getItemData(id: string) {
   try {
     const res = await fetch(`${ENDPOINTS.API}/api/dma/item?id=${id}`, {
-      next: { revalidate: 3600 }, // Revalidate every hour
+      next: { revalidate: 3600 },
     });
 
     if (!res.ok) {
@@ -39,10 +40,12 @@ export async function generateMetadata({
 }: ItemPageProps): Promise<Metadata> {
   const { id } = await params;
   const data = await getItemData(id);
+  const locale = await detectLocale();
+  const dict = await getDictionary(locale);
 
   if (!data) {
     return {
-      title: "Item Not Found",
+      title: dict.item.notFound,
     };
   }
 
@@ -51,10 +54,10 @@ export async function generateMetadata({
 
   return {
     title: `CMNW: ${itemTitle}`,
-    description: `Item details and market data for ${itemTitle}`,
+    description: dict.item.metadataDescription.replace("{title}", itemTitle),
     openGraph: {
       title: `CMNW: ${itemTitle}`,
-      description: `Item details and market data for ${itemTitle}`,
+      description: dict.item.metadataDescription.replace("{title}", itemTitle),
     },
   };
 }
