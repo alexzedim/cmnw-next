@@ -6,43 +6,49 @@ import NextLink from "next/link";
 
 import { CharacterStatusIndicator } from "@/components/character/status-indicator";
 import { InfoSection } from "@/components/character/info-section";
+import { useI18n } from "@/lib/i18n/context";
 
 interface CharacterStatsProps {
   character: Character;
 }
 
 export function CharacterStats({ character }: CharacterStatsProps) {
-  // Use global percentiles from API if available, otherwise calculate fallback
+  const { dict } = useI18n();
+  const cs = dict.characterStats;
+  const labels = cs.labels;
+
   const itemLevelPercent = character.percentiles?.global?.averageItemLevel ?? 0;
   const achievementPercent =
     character.percentiles?.global?.achievementPoints ?? 0;
 
-  // Helper to format percentile text
   const formatPercentile = (value: number | null | undefined) => {
     if (value === null || value === undefined) return null;
 
-    return `Top ${(100 - value).toFixed(1)}%`;
+    return cs.topPercent.replace("{percent}", (100 - value).toFixed(1));
   };
 
-  // Character Information Items
   const characterInfoItems = [
     {
-      label: "Level",
-      value: character.level ?? "Unknown",
+      label: labels.level,
+      value: character.level ?? labels.unknown,
     },
-    ...(character.class ? [{ label: "Class", value: character.class }] : []),
+    ...(character.class
+      ? [{ label: labels.class, value: character.class }]
+      : []),
     ...(character.specialization
-      ? [{ label: "Specialization", value: character.specialization }]
+      ? [{ label: labels.specialization, value: character.specialization }]
       : []),
-    ...(character.race ? [{ label: "Race", value: character.race }] : []),
+    ...(character.race ? [{ label: labels.race, value: character.race }] : []),
     ...(character.faction
-      ? [{ label: "Faction", value: character.faction }]
+      ? [{ label: labels.faction, value: character.faction }]
       : []),
-    ...(character.gender ? [{ label: "Gender", value: character.gender }] : []),
+    ...(character.gender
+      ? [{ label: labels.gender, value: character.gender }]
+      : []),
     ...(character.lastModified
       ? [
           {
-            label: "Last Time Active",
+            label: labels.lastTimeActive,
             value: new Date(character.lastModified).toLocaleDateString(
               "en-US",
               {
@@ -57,22 +63,21 @@ export function CharacterStats({ character }: CharacterStatsProps) {
     ...(character.status
       ? [
           {
-            label: "Status",
+            label: labels.status,
             value: <CharacterStatusIndicator status={character.status} />,
           },
         ]
       : []),
   ];
 
-  // Additional Profile Items
   const additionalProfileItems = [
     ...(character.createdBy
-      ? [{ label: "Created By", value: character.createdBy }]
+      ? [{ label: labels.createdBy, value: character.createdBy }]
       : []),
     ...(character.createdAt
       ? [
           {
-            label: "Created At",
+            label: labels.createdAt,
             value: new Date(character.createdAt).toLocaleDateString("en-US", {
               year: "numeric",
               month: "short",
@@ -83,12 +88,11 @@ export function CharacterStats({ character }: CharacterStatsProps) {
       : []),
   ];
 
-  // Hash Items (identifiers)
   const hashItems = [
     ...(character.hashA
       ? [
           {
-            label: "Hash A",
+            label: labels.hashA,
             value: (
               <NextLink
                 className="text-[var(--primary)] hover:text-[var(--accent)] transition-colors font-medium"
@@ -103,7 +107,7 @@ export function CharacterStats({ character }: CharacterStatsProps) {
     ...(character.hashB
       ? [
           {
-            label: "Hash B",
+            label: labels.hashB,
             value: (
               <NextLink
                 className="text-[var(--primary)] hover:text-[var(--accent)] transition-colors font-medium"
@@ -117,55 +121,51 @@ export function CharacterStats({ character }: CharacterStatsProps) {
       : []),
   ];
 
-  // System Items (without UUID)
   const systemItems = [
-    ...(character.guid ? [{ label: "GUID", value: character.guid }] : []),
-    ...(character.id ? [{ label: "ID", value: character.id.toString() }] : []),
+    ...(character.guid ? [{ label: labels.guid, value: character.guid }] : []),
+    ...(character.id
+      ? [{ label: labels.id, value: character.id.toString() }]
+      : []),
   ];
 
-  // Combined Metadata + System Items (without UUID)
   const combinedMetadataSystemItems = [
     ...additionalProfileItems,
     ...systemItems,
   ];
 
-  // Collections percentiles from API
   const mountsPercent = character.percentiles?.global?.mountsNumber ?? 0;
   const petsPercent = character.percentiles?.global?.petsNumber ?? 0;
 
   return (
     <div className="space-y-4 lg:space-y-5">
-      {/* Character Information */}
       {characterInfoItems.length > 0 && (
         <InfoSection
-          badge="Profile"
+          badge={cs.profile}
           items={characterInfoItems}
-          title="Character Details"
+          title={cs.characterDetails}
         />
       )}
 
-      {/* Hashes / Verification */}
       {hashItems.length > 0 && (
         <InfoSection
-          badge="Verification"
+          badge={cs.verification}
           items={hashItems}
-          title="Character Hashes"
+          title={cs.characterHashes}
         />
       )}
 
-      {/* Item Level */}
       {character.equippedItemLevel && (
         <div className="card-surface p-6 rounded-xl">
           <div className="mb-6 flex items-center gap-3">
             <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider opacity-50">
               <div className="size-1.5 rounded-full bg-[var(--primary)]" />
-              <span>Equipment</span>
+              <span>{cs.equipment}</span>
             </div>
           </div>
 
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-foreground/60">Equipped</span>
+              <span className="text-sm text-foreground/60">{cs.equipped}</span>
               <span className="text-lg font-bold text-foreground">
                 {character.equippedItemLevel}
               </span>
@@ -178,14 +178,14 @@ export function CharacterStats({ character }: CharacterStatsProps) {
             </div>
             {formatPercentile(itemLevelPercent) && (
               <div className="text-xs text-foreground/50 text-right">
-                {formatPercentile(itemLevelPercent)} globally
+                {formatPercentile(itemLevelPercent)} {cs.globally}
               </div>
             )}
           </div>
 
           {character.averageItemLevel && (
             <div className="mt-3 flex items-center justify-between">
-              <span className="text-sm text-foreground/60">Average</span>
+              <span className="text-sm text-foreground/60">{cs.average}</span>
               <span className="font-medium text-foreground">
                 {character.averageItemLevel}
               </span>
@@ -194,19 +194,20 @@ export function CharacterStats({ character }: CharacterStatsProps) {
         </div>
       )}
 
-      {/* Achievements */}
       {character.achievementPoints && (
         <div className="card-surface p-6 rounded-xl">
           <div className="mb-6 flex items-center gap-3">
             <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider opacity-50">
               <div className="size-1.5 rounded-full bg-[var(--primary)]" />
-              <span>Achievement Progress</span>
+              <span>{cs.achievementProgress}</span>
             </div>
           </div>
 
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-foreground/60">Total Points</span>
+              <span className="text-sm text-foreground/60">
+                {cs.totalPoints}
+              </span>
               <span className="text-lg font-bold text-foreground">
                 {character.achievementPoints.toLocaleString()}
               </span>
@@ -219,29 +220,29 @@ export function CharacterStats({ character }: CharacterStatsProps) {
             </div>
             {formatPercentile(achievementPercent) && (
               <div className="text-xs text-foreground/50 text-right">
-                {formatPercentile(achievementPercent)} globally
+                {formatPercentile(achievementPercent)} {cs.globally}
               </div>
             )}
           </div>
         </div>
       )}
 
-      {/* Collections */}
       {(character.mountsNumber || character.petsNumber) && (
         <div className="card-surface p-6 rounded-xl">
           <div className="mb-6 flex items-center gap-3">
             <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider opacity-50">
               <div className="size-1.5 rounded-full bg-[var(--primary)]" />
-              <span>Collections</span>
+              <span>{cs.collections}</span>
             </div>
           </div>
 
           <div className="space-y-6">
-            {/* Mounts */}
             {character.mountsNumber && (
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-foreground/60">Mounts</span>
+                  <span className="text-sm text-foreground/60">
+                    {cs.mounts}
+                  </span>
                   <span className="text-lg font-bold text-foreground">
                     {character.mountsNumber.toLocaleString()}
                   </span>
@@ -254,18 +255,17 @@ export function CharacterStats({ character }: CharacterStatsProps) {
                 </div>
                 {formatPercentile(mountsPercent) && (
                   <div className="text-xs text-foreground/50 text-right">
-                    {formatPercentile(mountsPercent)} globally
+                    {formatPercentile(mountsPercent)} {cs.globally}
                   </div>
                 )}
               </div>
             )}
 
-            {/* Battle Pets */}
             {character.petsNumber && (
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-foreground/60">
-                    Battle Pets
+                    {cs.battlePets}
                   </span>
                   <span className="text-lg font-bold text-foreground">
                     {character.petsNumber.toLocaleString()}
@@ -279,7 +279,7 @@ export function CharacterStats({ character }: CharacterStatsProps) {
                 </div>
                 {formatPercentile(petsPercent) && (
                   <div className="text-xs text-foreground/50 text-right">
-                    {formatPercentile(petsPercent)} globally
+                    {formatPercentile(petsPercent)} {cs.globally}
                   </div>
                 )}
               </div>
@@ -288,12 +288,11 @@ export function CharacterStats({ character }: CharacterStatsProps) {
         </div>
       )}
 
-      {/* Combined Metadata and System Information */}
       {combinedMetadataSystemItems.length > 0 && (
         <InfoSection
-          badge="System"
+          badge={cs.system}
           items={combinedMetadataSystemItems}
-          title="Metadata"
+          title={cs.metadata}
         />
       )}
     </div>
