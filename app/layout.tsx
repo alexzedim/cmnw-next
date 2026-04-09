@@ -1,8 +1,9 @@
 import "@/styles/tokens.css";
 import "@/styles/globals.css";
 
+import type { ReactNode } from "react";
+
 import { Metadata, Viewport } from "next";
-import { ReactNode } from "react";
 import clsx from "clsx";
 
 import { Providers } from "./providers";
@@ -12,6 +13,7 @@ import { fontSans, fontMono } from "@/config/fonts";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { ENDPOINTS } from "@/constants";
+import { detectLocale, getDictionary } from "@/dictionaries";
 
 export const metadata: Metadata = {
   metadataBase: new URL(ENDPOINTS.API),
@@ -32,9 +34,16 @@ export const viewport: Viewport = {
   ],
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  const locale = await detectLocale();
+  const dict = await getDictionary(locale);
+
   return (
-    <html suppressHydrationWarning lang="en">
+    <html suppressHydrationWarning lang={locale}>
       <head />
       <body
         className={clsx(
@@ -43,7 +52,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           fontMono.variable
         )}
       >
-        <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
+        <Providers
+          dict={dict}
+          locale={locale}
+          themeProps={{ attribute: "class", defaultTheme: "dark" }}
+        >
           <div className="relative flex flex-col min-h-screen">
             <Navbar />
             <main className="container mx-auto max-w-7xl pt-16 px-6 flex-grow">
