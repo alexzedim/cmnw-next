@@ -44,8 +44,8 @@ export const GUILD_TYPES = {
   TWINK: {
     status: "Friends & Twinks Guild",
     type: "twink",
-    color: "text-orange-600",
-    bgColor: "bg-orange-500/10",
+    color: "text-[var(--primary)]",
+    bgColor: "bg-[color-mix(in_oklab,var(--primary),transparent_90%)]",
     hexBgColor: "" as string,
   },
   RAIDING_FULL: {

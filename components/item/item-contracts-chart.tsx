@@ -100,8 +100,8 @@ const ItemContractsChartDisplay = memo(
                 key={p}
                 className={
                   period === p
-                    ? "bg-orange-500 text-white"
-                    : "text-orange-500 hover:bg-orange-500/10"
+                    ? "bg-[var(--primary)] text-[var(--primary-foreground)]"
+                    : "text-[var(--primary)] hover:bg-[color-mix(in_oklab,var(--primary),transparent_90%)]"
                 }
                 onClick={() => onPeriodChange(p)}
               >

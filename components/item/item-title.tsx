@@ -53,7 +53,7 @@ export const ItemTitle = ({ item }: ItemTitleProps) => {
           className="inline-flex items-center gap-2 text-xs uppercase tracking-wider opacity-60"
           style={{ fontFamily: fontJetBrains.style.fontFamily }}
         >
-          <div className="size-1.5 rounded-full bg-orange-500" />
+          <div className="size-1.5 rounded-full bg-[var(--primary)]" />
           <p className="inline-block">{NAMING_CONSTANTS.ITEM}</p>
         </div>
       </div>

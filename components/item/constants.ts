@@ -15,7 +15,7 @@ export const LOCALE = "ru-RU";
  */
 export const TABLE_CLASS_NAMES = {
   wrapper: "p-0",
-  th: "bg-background border-b border-divider text-foreground font-semibold",
+  th: "py-3 bg-background border-b border-divider text-foreground font-semibold",
   td: "text-muted border-b border-divider",
 } as const;
 
@@ -32,8 +32,8 @@ export const CARD_CLASS_NAMES = {
  * Badge section color variants
  */
 export const BADGE_COLORS = {
-  DEFAULT: "bg-orange-500",
-  QUOTES: "bg-orange-500",
+  DEFAULT: "bg-[var(--primary)]",
+  QUOTES: "bg-[var(--primary)]",
   VALUATIONS: "bg-amber-500",
   LISTINGS: "bg-green-500",
 } as const;
