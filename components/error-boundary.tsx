@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 
 import { Component } from "react";
+import { useI18n } from "@/lib/i18n/context";
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -14,10 +15,6 @@ interface ErrorBoundaryState {
   error: Error | null;
 }
 
-/**
- * Error boundary component that catches errors in child components
- * and displays a fallback UI instead of crashing the entire page.
- */
 export class ErrorBoundary extends Component<
   ErrorBoundaryProps,
   ErrorBoundaryState
@@ -32,7 +29,6 @@ export class ErrorBoundary extends Component<
   }
 
   componentDidCatch(error: Error, errorInfo: { componentStack: string }) {
-    // Log error for monitoring/debugging
     console.error("[ErrorBoundary] Caught error:", {
       message: error.message,
       stack: error.stack,

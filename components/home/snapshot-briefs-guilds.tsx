@@ -8,6 +8,7 @@ import {
   formatEntryValue,
   getSnapshotEntries,
 } from "@/lib/utils/snapshot-formatters";
+import { useI18n } from "@/lib/i18n/context";
 
 interface SnapshotBriefsGuildsProps {
   snapshotHighlightGroups: SnapshotHighlightGroup[];
@@ -15,15 +16,15 @@ interface SnapshotBriefsGuildsProps {
   metricSnapshotLoading: boolean;
 }
 
-/**
- * Snapshot briefs grid for guilds analytics.
- * Shows grouped metrics with snapshot data, dates, and formatted values.
- */
 export function SnapshotBriefsGuilds({
   snapshotHighlightGroups,
   metricCardHasError,
   metricSnapshotLoading,
 }: SnapshotBriefsGuildsProps) {
+  const { dict } = useI18n();
+  const sb = dict.snapshotBriefs;
+  const sm = dict.snapshotMetrics;
+
   return (
     <>
       {snapshotHighlightGroups.map((group, groupIndex) => {
@@ -35,17 +36,19 @@ export function SnapshotBriefsGuilds({
         ];
         const groupBorderColor =
           groupBorderColors[groupIndex % groupBorderColors.length];
+        const groupTitle = sm[group.titleKey as keyof typeof sm];
+        const groupDisclaimer = sm[group.disclaimerKey as keyof typeof sm];
 
         return (
           <article
-            key={group.title}
+            key={group.titleKey}
             className="rounded-2xl border border-content4/20 bg-content2/40 p-4 backdrop-blur border-l-4 transition-colors duration-200"
             style={{ borderLeftColor: groupBorderColor }}
           >
             <header>
-              <h4 className="text-lg font-semibold">{group.title}</h4>
+              <h4 className="text-lg font-semibold">{groupTitle}</h4>
               <p className="text-muted mt-1 text-xs leading-relaxed">
-                {group.disclaimer}
+                {groupDisclaimer}
               </p>
             </header>
             <section className="mt-4 space-y-3">
@@ -65,6 +68,7 @@ export function SnapshotBriefsGuilds({
                 const snapshotDate = formatSnapshotDate(
                   metric.snapshot ?? null
                 );
+                const metricLabel = sm[metric.labelKey as keyof typeof sm];
 
                 return (
                   <div
@@ -72,18 +76,21 @@ export function SnapshotBriefsGuilds({
                     className="rounded-xl border border-content4/20 p-3 bg-content1/40 border-l-4 transition-colors duration-200"
                   >
                     <div className="flex items-center justify-between gap-2 text-[0.65rem] uppercase tracking-wide text-foreground/50">
-                      <span>{metric.label}</span>
+                      <span>{metricLabel}</span>
                       <span
-                        aria-label={`${metric.label} snapshot date`}
+                        aria-label={sb.snapshotDateAriaLabel.replace(
+                          "{label}",
+                          metricLabel
+                        )}
                         className="text-foreground/80"
                       >
                         {metricCardHasError
-                          ? "Unavailable"
+                          ? sb.unavailable
                           : snapshotDate
                             ? snapshotDate
                             : metricSnapshotLoading
-                              ? "Loading…"
-                              : "No snapshot"}
+                              ? sb.loading
+                              : sb.noSnapshot}
                       </span>
                     </div>
                     {displayEntries.length ? (
@@ -114,10 +121,10 @@ export function SnapshotBriefsGuilds({
                     ) : (
                       <p className="mt-2 text-muted text-xs">
                         {metricCardHasError
-                          ? "Unable to read metric values."
+                          ? sb.unableToRead
                           : metricSnapshotLoading
-                            ? "Loading metric values…"
-                            : "Metrics responded without value payload."}
+                            ? sb.loadingValues
+                            : sb.noPayload}
                       </p>
                     )}
                   </div>

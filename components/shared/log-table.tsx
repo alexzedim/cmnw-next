@@ -3,6 +3,8 @@
 import { useMemo, useState } from "react";
 import dayjs from "dayjs";
 
+import { useI18n } from "@/lib/i18n/context";
+
 interface Log {
   _id: string;
   event: string;
@@ -40,8 +42,9 @@ export const LogTable = ({ logs }: LogTableProps) => {
     column: "t0",
     direction: "descending",
   });
+  const { dict } = useI18n();
+  const lt = dict.logTable;
 
-  // Get unique event types
   const uniqueEvents = useMemo(() => {
     const events = new Set(logs.map((log) => log.event));
 
@@ -56,16 +59,13 @@ export const LogTable = ({ logs }: LogTableProps) => {
     return dayjs(date).format("YYYY-MM-DD HH:mm");
   };
 
-  // Filter and sort logs
   const filteredLogs = useMemo(() => {
     let filtered = [...logs];
 
-    // Apply event filter
     if (eventFilter.size > 0) {
       filtered = filtered.filter((log) => eventFilter.has(log.event));
     }
 
-    // Apply sorting
     filtered.sort((a, b) => {
       const aValue = a[sortDescriptor.column as keyof Log];
       const bValue = b[sortDescriptor.column as keyof Log];
@@ -90,19 +90,19 @@ export const LogTable = ({ logs }: LogTableProps) => {
   if (!logs || logs.length === 0) return null;
 
   const columns = [
-    { key: "event", label: "Event", sortable: true },
-    { key: "action", label: "Action", sortable: true },
-    { key: "original", label: "Original", sortable: false },
-    { key: "updated", label: "Updated", sortable: false },
-    { key: "t0", label: "Timestamp", sortable: true },
+    { key: "event", label: lt.columnEvent, sortable: true },
+    { key: "action", label: lt.columnAction, sortable: true },
+    { key: "original", label: lt.columnOriginal, sortable: false },
+    { key: "updated", label: lt.columnUpdated, sortable: false },
+    { key: "t0", label: lt.columnTimestamp, sortable: true },
   ];
 
   return (
     <div className="card-surface p-6 m-4 density-compact" id="log-table-root">
       <div className="flex justify-between items-center w-full">
-        <h3 className="text-xl font-semibold">Activity Log</h3>
+        <h3 className="text-xl font-semibold">{lt.title}</h3>
         <div className="text-sm text-muted">
-          {filteredLogs.length} / {logs.length} entries
+          {filteredLogs.length} / {logs.length} {lt.entries}
         </div>
       </div>
 
@@ -133,7 +133,7 @@ export const LogTable = ({ logs }: LogTableProps) => {
               type="button"
               onClick={() => setEventFilter(new Set())}
             >
-              Clear
+              {lt.clear}
             </button>
           )}
           <span className="mx-2 text-muted">|</span>
@@ -146,7 +146,7 @@ export const LogTable = ({ logs }: LogTableProps) => {
               if (root) root.classList.toggle("density-compact");
             }}
           >
-            Compact
+            {lt.compact}
           </button>
         </div>
       )}
