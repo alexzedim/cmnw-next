@@ -15,6 +15,7 @@ import useSWR from "swr";
 
 import { Link } from "@/components/custom-link";
 import { ENDPOINTS } from "@/constants";
+import { useI18n } from "@/lib/i18n/context";
 
 interface ItemDetails {
   bonus_lists?: number[];
@@ -44,13 +45,6 @@ interface ItemListingProps {
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
-const timeLeftMap: Record<string, string> = {
-  SHORT: "30m",
-  MEDIUM: "30m - 2h",
-  LONG: "2h - 12h",
-  VERY_LONG: "1D - 2D",
-};
-
 export const ItemListing = ({
   id,
   name,
@@ -58,6 +52,8 @@ export const ItemListing = ({
   isCommdty = false,
 }: ItemListingProps) => {
   const [page, setPage] = useState(1);
+  const { dict } = useI18n();
+  const il = dict.itemListing;
   const rowsPerPage = 25;
 
   if (isCommdty || isGold) return null;
@@ -82,12 +78,19 @@ export const ItemListing = ({
   const pages = Math.ceil(data.feed.length / rowsPerPage);
   const items = data.feed.slice((page - 1) * rowsPerPage, page * rowsPerPage);
 
+  const timeLeftMap: Record<string, string> = {
+    SHORT: il.timeShort,
+    MEDIUM: il.timeMedium,
+    LONG: il.timeLong,
+    VERY_LONG: il.timeVeryLong,
+  };
+
   const columns = [
-    { key: "item", label: "Item" },
-    { key: "connected_realm_id", label: "Realm" },
-    { key: "buyout", label: "Price" },
-    { key: "time_left", label: "Expiration" },
-    { key: "last_modified", label: "Last Update" },
+    { key: "item", label: il.columnItem },
+    { key: "connected_realm_id", label: il.columnRealm },
+    { key: "buyout", label: il.columnPrice },
+    { key: "time_left", label: il.columnExpiration },
+    { key: "last_modified", label: il.columnLastUpdate },
   ];
 
   const buildWowheadUrl = (auction: Auction) => {
@@ -109,7 +112,7 @@ export const ItemListing = ({
   return (
     <Card className="m-4 bg-background border border-divider">
       <Card.Content className="p-8 rounded-xl bg-background">
-        <Table aria-label="Item auction listings">
+        <Table aria-label={il.tableAriaLabel}>
           <TableHeader className="bg-background border-b border-divider">
             {columns.map((column) => (
               <TableColumn
@@ -142,7 +145,7 @@ export const ItemListing = ({
                   <TableCell className="text-muted border-b border-divider">
                     {auction.buyout
                       ? auction.buyout.toLocaleString("ru-RU")
-                      : `BID: ${auction.bid.toLocaleString("ru-RU")}`}
+                      : `${il.bid}${auction.bid.toLocaleString("ru-RU")}`}
                   </TableCell>
                   <TableCell className="text-muted border-b border-divider">
                     {timeLeftMap[auction.time_left] || auction.time_left}
@@ -163,7 +166,7 @@ export const ItemListing = ({
               type="button"
               onClick={() => setPage((p) => Math.max(1, p - 1))}
             >
-              ←
+              {"\u2190"}
             </button>
             {Array.from({ length: pages }, (_, i) => i + 1)
               .filter((p) => p === 1 || p === pages || Math.abs(p - page) <= 1)
@@ -201,7 +204,7 @@ export const ItemListing = ({
               type="button"
               onClick={() => setPage((p) => Math.min(pages, p + 1))}
             >
-              →
+              {"\u2192"}
             </button>
           </div>
         )}
