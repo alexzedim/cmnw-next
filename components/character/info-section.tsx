@@ -27,7 +27,7 @@ export const InfoSection = ({
       <div className="mb-6 flex items-center gap-3">
         {badge && (
           <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider opacity-50">
-            <div className="size-1.5 rounded-full bg-orange-500" />
+            <div className="size-1.5 rounded-full bg-[var(--primary)]" />
             <span>{badge}</span>
           </div>
         )}
