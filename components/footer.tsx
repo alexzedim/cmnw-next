@@ -84,7 +84,7 @@ export const Footer = () => {
         : "Checking status…";
 
   const linkBaseClasses =
-    "text-sm leading-tight relative flex w-fit items-center transition-colors duration-200 hover:text-orange-500 group after:absolute after:-bottom-px after:left-0 after:h-px after:w-0 after:bg-current after:transition-all after:duration-300 after:ease-in-out hover:after:w-full text-foreground/60";
+    "text-sm leading-tight relative flex w-fit items-center transition-colors duration-200 hover:text-[var(--primary)] group after:absolute after:-bottom-px after:left-0 after:h-px after:w-0 after:bg-current after:transition-all after:duration-300 after:ease-in-out hover:after:w-full text-foreground/60";
 
   const renderLinkContent = (link: FooterLink) =>
     link.isMetrics ? (
@@ -164,7 +164,7 @@ export const Footer = () => {
         {/* Footer Badge */}
         <div className="absolute top-6 left-4 lg:top-8 lg:left-8">
           <div className="inline-flex items-center gap-3 uppercase text-xs tracking-wide opacity-60">
-            <div className="size-2 rounded-full bg-orange-500" />
+            <div className="size-2 rounded-full bg-[var(--primary)]" />
             <p className="text-xs uppercase tracking-wide">Footer</p>
           </div>
         </div>

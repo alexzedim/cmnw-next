@@ -128,8 +128,8 @@ export const HashAccountTitle = ({
       return {
         status: "Concerning",
         percentage: concentrationPercentage,
-        color: "text-orange-600",
-        bgColor: "bg-orange-500/10",
+        color: "text-[var(--primary)]",
+        bgColor: "bg-[color-mix(in_oklab,var(--primary),transparent_90%)]",
       };
     }
 
@@ -156,7 +156,7 @@ export const HashAccountTitle = ({
           className="inline-flex items-center gap-2 text-xs uppercase tracking-wider opacity-60"
           style={{ fontFamily: fontJetBrains.style.fontFamily }}
         >
-          <div className="size-1.5 rounded-full bg-orange-500" />
+          <div className="size-1.5 rounded-full bg-[var(--primary)]" />
           <p>{NAMING_CONSTANTS.CHARACTER_ACCOUNT_DETECTIVE}</p>
         </div>
       </div>
