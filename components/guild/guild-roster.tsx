@@ -5,11 +5,6 @@ import type { Character } from "@/lib/types";
 import { useMemo, useState } from "react";
 import {
   Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
   Chip,
   SearchField,
   Select,
@@ -140,9 +135,10 @@ export function GuildRoster({ members }: GuildRosterProps) {
   return (
     <div className="space-y-4">
       {/* Filters */}
-      <div className="flex flex-col md:flex-row gap-4">
+      <div className="flex flex-row flex-wrap items-center gap-4">
         <SearchField
-          className="w-full md:max-w-xs"
+          aria-label="Search by name"
+          className="w-48"
           value={filterValue}
           onChange={setFilterValue}
         >
@@ -154,11 +150,14 @@ export function GuildRoster({ members }: GuildRosterProps) {
         </SearchField>
 
         <Select
-          className="w-full md:max-w-xs"
+          aria-label="Filter by class"
+          className="w-48"
           placeholder="All classes"
+          selectedKeys={classFilter}
           selectionMode="multiple"
-          value={Array.from(classFilter)}
-          onChange={(value) => setClassFilter(new Set(value as string[]))}
+          onSelectionChange={(keys) =>
+            setClassFilter(new Set(keys as Iterable<string>))
+          }
         >
           <Label>Filter by class</Label>
           <Select.Trigger>
@@ -168,7 +167,11 @@ export function GuildRoster({ members }: GuildRosterProps) {
           <Select.Popover>
             <ListBox>
               {availableClasses.map((className) => (
-                <ListBox.Item key={className} id={className}>
+                <ListBox.Item
+                  key={className}
+                  id={className}
+                  textValue={className}
+                >
                   {className}
                 </ListBox.Item>
               ))}
@@ -186,130 +189,140 @@ export function GuildRoster({ members }: GuildRosterProps) {
       </div>
 
       {/* Table */}
-      <Table aria-label="Guild roster table">
-        <TableHeader className="bg-background border-b border-divider">
-          {columns.map((column) => (
-            <TableColumn
-              key={column.key}
-              className="text-foreground font-semibold font-sans cursor-pointer select-none"
-              onClick={() => {
-                if (!column.sortable) return;
-                setSortDescriptor((prev) => ({
-                  column: column.key,
-                  direction:
-                    prev.column === column.key && prev.direction === "ascending"
-                      ? "descending"
-                      : "ascending",
-                }));
-              }}
-            >
-              {column.label}
-              {sortDescriptor.column === column.key && (
-                <span className="ml-1">
-                  {sortDescriptor.direction === "ascending" ? "↑" : "↓"}
-                </span>
-              )}
-            </TableColumn>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {paginatedMembers.map((member, index) => {
-            const classColor = member.class
-              ? classColors.get(member.class)
-              : null;
+      <Table>
+        <Table.ScrollContainer>
+          <Table.Content aria-label="Guild roster table">
+            <Table.Header className="bg-background border-b border-divider">
+              {columns.map((column) => (
+                <Table.Column
+                  key={column.key}
+                  className="py-3 text-foreground font-semibold font-sans cursor-pointer select-none"
+                  isRowHeader={column.key === "name"}
+                  onClick={() => {
+                    if (!column.sortable) return;
+                    setSortDescriptor((prev) => ({
+                      column: column.key,
+                      direction:
+                        prev.column === column.key &&
+                        prev.direction === "ascending"
+                          ? "descending"
+                          : "ascending",
+                    }));
+                  }}
+                >
+                  {column.label}
+                  {sortDescriptor.column === column.key && (
+                    <span className="ml-1">
+                      {sortDescriptor.direction === "ascending" ? "↑" : "↓"}
+                    </span>
+                  )}
+                </Table.Column>
+              ))}
+            </Table.Header>
+            <Table.Body>
+              {paginatedMembers.map((member, index) => {
+                const classColor = member.class
+                  ? classColors.get(member.class)
+                  : null;
 
-            return (
-              <TableRow key={`${member.guid}-${index}`}>
-                <TableCell className="text-muted border-b border-divider font-sans">
-                  <Link
-                    className="hover:underline font-medium transition-colors duration-200"
-                    href={`/character/${member.guid}`}
-                    style={{
-                      color: classColor || "inherit",
-                    }}
+                return (
+                  <Table.Row
+                    key={`${member.guid}-${index}`}
+                    id={`${member.guid}-${index}`}
                   >
-                    {member.name}
-                  </Link>
-                </TableCell>
-                <TableCell className="text-muted border-b border-divider font-sans">
-                  {member.id || "-"}
-                </TableCell>
-                <TableCell className="text-muted border-b border-divider font-sans">
-                  {member.realmName || "-"}
-                </TableCell>
-                <TableCell className="text-muted border-b border-divider font-sans">
-                  {member.level || "-"}
-                </TableCell>
-                <TableCell className="text-muted border-b border-divider font-sans">
-                  {member.class ? (
-                    <Chip
-                      size="sm"
-                      style={{
-                        backgroundColor: classColor
-                          ? getPastelColor(classColor)
-                          : "inherit",
-                        color: "#000",
-                      }}
-                    >
-                      {member.specialization && member.class
-                        ? `${member.specialization} ${member.class}`
-                        : member.class}
-                    </Chip>
-                  ) : (
-                    "-"
-                  )}
-                </TableCell>
-                <TableCell className="text-muted border-b border-divider font-sans">
-                  <span className="font-semibold">
-                    {member.equippedItemLevel || "-"}
-                  </span>
-                </TableCell>
-                <TableCell className="text-muted border-b border-divider font-sans">
-                  <Chip size="sm" variant="secondary">
-                    {member.guildRank !== undefined && member.guildRank !== null
-                      ? member.guildRank === 0
-                        ? "GM"
-                        : `R${member.guildRank}`
-                      : "-"}
-                  </Chip>
-                </TableCell>
-                <TableCell className="text-muted border-b border-divider font-sans">
-                  {member.achievementPoints
-                    ? member.achievementPoints.toLocaleString()
-                    : "-"}
-                </TableCell>
-                <TableCell className="text-muted border-b border-divider font-sans">
-                  {member.hashA ? (
-                    <Link
-                      className="text-xs font-mono text-orange-500 hover:text-orange-400 transition-colors font-medium"
-                      href={`/hash/a${member.hashA}`}
-                    >
-                      {`a${member.hashA}`}
-                    </Link>
-                  ) : (
-                    <span className="text-xs font-mono text-foreground/60">
-                      -
-                    </span>
-                  )}
-                </TableCell>
-                <TableCell className="text-muted border-b border-divider font-sans">
-                  {member.hashB ? (
-                    <Link
-                      className="text-xs font-mono text-orange-500 hover:text-orange-400 transition-colors font-medium"
-                      href={`/hash/b${member.hashB}`}
-                    >
-                      {`b${member.hashB}`}
-                    </Link>
-                  ) : (
-                    <span className="text-xs font-mono text-foreground/60">
-                      -
-                    </span>
-                  )}
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
+                    <Table.Cell className="text-muted border-b border-divider font-sans">
+                      <Link
+                        className="hover:underline font-medium transition-colors duration-200"
+                        href={`/character/${member.guid}`}
+                        style={{
+                          color: classColor || "inherit",
+                        }}
+                      >
+                        {member.name}
+                      </Link>
+                    </Table.Cell>
+                    <Table.Cell className="text-muted border-b border-divider font-sans">
+                      {member.id || "-"}
+                    </Table.Cell>
+                    <Table.Cell className="text-muted border-b border-divider font-sans">
+                      {member.realmName || "-"}
+                    </Table.Cell>
+                    <Table.Cell className="text-muted border-b border-divider font-sans">
+                      {member.level || "-"}
+                    </Table.Cell>
+                    <Table.Cell className="text-muted border-b border-divider font-sans">
+                      {member.class ? (
+                        <Chip
+                          size="sm"
+                          style={{
+                            backgroundColor: classColor
+                              ? getPastelColor(classColor)
+                              : "inherit",
+                            color: "#000",
+                          }}
+                        >
+                          {member.specialization && member.class
+                            ? `${member.specialization} ${member.class}`
+                            : member.class}
+                        </Chip>
+                      ) : (
+                        "-"
+                      )}
+                    </Table.Cell>
+                    <Table.Cell className="text-muted border-b border-divider font-sans">
+                      <span className="font-semibold">
+                        {member.equippedItemLevel || "-"}
+                      </span>
+                    </Table.Cell>
+                    <Table.Cell className="text-muted border-b border-divider font-sans">
+                      <Chip size="sm" variant="secondary">
+                        {member.guildRank !== undefined &&
+                        member.guildRank !== null
+                          ? member.guildRank === 0
+                            ? "GM"
+                            : `R${member.guildRank}`
+                          : "-"}
+                      </Chip>
+                    </Table.Cell>
+                    <Table.Cell className="text-muted border-b border-divider font-sans">
+                      {member.achievementPoints
+                        ? member.achievementPoints.toLocaleString()
+                        : "-"}
+                    </Table.Cell>
+                    <Table.Cell className="text-muted border-b border-divider font-sans">
+                      {member.hashA ? (
+                        <Link
+                          className="text-xs font-mono text-[var(--primary)] hover:text-[var(--accent)] transition-colors font-medium"
+                          href={`/hash/a${member.hashA}`}
+                        >
+                          {`a${member.hashA}`}
+                        </Link>
+                      ) : (
+                        <span className="text-xs font-mono text-foreground/60">
+                          -
+                        </span>
+                      )}
+                    </Table.Cell>
+                    <Table.Cell className="text-muted border-b border-divider font-sans">
+                      {member.hashB ? (
+                        <Link
+                          className="text-xs font-mono text-[var(--primary)] hover:text-[var(--accent)] transition-colors font-medium"
+                          href={`/hash/b${member.hashB}`}
+                        >
+                          {`b${member.hashB}`}
+                        </Link>
+                      ) : (
+                        <span className="text-xs font-mono text-foreground/60">
+                          -
+                        </span>
+                      )}
+                    </Table.Cell>
+                  </Table.Row>
+                );
+              })}
+            </Table.Body>
+          </Table.Content>
+        </Table.ScrollContainer>
       </Table>
 
       {/* Pagination */}
@@ -345,7 +358,7 @@ export function GuildRoster({ members }: GuildRosterProps) {
                   key={p}
                   className={`px-3 py-1 rounded text-sm ${
                     page === p
-                      ? "bg-orange-500 text-black font-semibold"
+                      ? "bg-[var(--primary)] text-[var(--primary-foreground)] font-semibold"
                       : "border border-divider text-foreground hover:bg-background-elevated"
                   }`}
                   type="button"

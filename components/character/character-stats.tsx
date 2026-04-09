@@ -4,6 +4,7 @@ import type { Character } from "@/lib/types";
 
 import NextLink from "next/link";
 
+import { CharacterStatusIndicator } from "@/components/character/status-indicator";
 import { InfoSection } from "@/components/character/info-section";
 
 interface CharacterStatsProps {
@@ -53,6 +54,14 @@ export function CharacterStats({ character }: CharacterStatsProps) {
           },
         ]
       : []),
+    ...(character.status
+      ? [
+          {
+            label: "Status",
+            value: <CharacterStatusIndicator status={character.status} />,
+          },
+        ]
+      : []),
   ];
 
   // Additional Profile Items
@@ -82,7 +91,7 @@ export function CharacterStats({ character }: CharacterStatsProps) {
             label: "Hash A",
             value: (
               <NextLink
-                className="text-orange-500 hover:text-orange-400 transition-colors font-medium"
+                className="text-[var(--primary)] hover:text-[var(--accent)] transition-colors font-medium"
                 href={`/hash/a${character.hashA}`}
               >
                 {`a${character.hashA}`}
@@ -97,7 +106,7 @@ export function CharacterStats({ character }: CharacterStatsProps) {
             label: "Hash B",
             value: (
               <NextLink
-                className="text-orange-500 hover:text-orange-400 transition-colors font-medium"
+                className="text-[var(--primary)] hover:text-[var(--accent)] transition-colors font-medium"
                 href={`/hash/b${character.hashB}`}
               >
                 {`b${character.hashB}`}
@@ -150,7 +159,7 @@ export function CharacterStats({ character }: CharacterStatsProps) {
         <div className="card-surface p-6 rounded-xl">
           <div className="mb-6 flex items-center gap-3">
             <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider opacity-50">
-              <div className="size-1.5 rounded-full bg-orange-500" />
+              <div className="size-1.5 rounded-full bg-[var(--primary)]" />
               <span>Equipment</span>
             </div>
           </div>
@@ -191,7 +200,7 @@ export function CharacterStats({ character }: CharacterStatsProps) {
         <div className="card-surface p-6 rounded-xl">
           <div className="mb-6 flex items-center gap-3">
             <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider opacity-50">
-              <div className="size-1.5 rounded-full bg-orange-500" />
+              <div className="size-1.5 rounded-full bg-[var(--primary)]" />
               <span>Achievement Progress</span>
             </div>
           </div>
@@ -223,7 +232,7 @@ export function CharacterStats({ character }: CharacterStatsProps) {
         <div className="card-surface p-6 rounded-xl">
           <div className="mb-6 flex items-center gap-3">
             <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider opacity-50">
-              <div className="size-1.5 rounded-full bg-orange-500" />
+              <div className="size-1.5 rounded-full bg-[var(--primary)]" />
               <span>Collections</span>
             </div>
           </div>

@@ -75,7 +75,7 @@ const ItemQuotesTable = memo(({ quotes, columns }: ItemQuotesTableProps) => (
           {columns.map((column) => (
             <TableColumn
               key={column.key}
-              className="text-foreground font-semibold"
+              className="py-3 text-foreground font-semibold"
             >
               {column.label}
             </TableColumn>
@@ -84,16 +84,16 @@ const ItemQuotesTable = memo(({ quotes, columns }: ItemQuotesTableProps) => (
         <TableBody items={quotes}>
           {(quote) => (
             <TableRow key={`${quote.price}-${quote.quantity}`}>
-              <TableCell className="text-orange-500 font-medium">
+              <TableCell className="text-[var(--primary)] font-medium">
                 {formatNumber(quote.price)}
               </TableCell>
-              <TableCell className="text-orange-500 font-medium">
+              <TableCell className="text-[var(--primary)] font-medium">
                 {formatNumber(quote.quantity)}
               </TableCell>
-              <TableCell className="text-orange-500 font-medium">
+              <TableCell className="text-[var(--primary)] font-medium">
                 {formatNumber(quote.openInterest)}
               </TableCell>
-              <TableCell className="text-orange-500 font-medium">
+              <TableCell className="text-[var(--primary)] font-medium">
                 {quote.size}
               </TableCell>
             </TableRow>

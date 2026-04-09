@@ -21,7 +21,7 @@ interface BadgeSectionProps {
  */
 export const BadgeSection = ({
   label,
-  color = "bg-orange-500",
+  color = "bg-[var(--primary)]",
 }: BadgeSectionProps) => {
   return (
     <div className="mb-6 px-8 flex items-center gap-3">

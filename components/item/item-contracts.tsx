@@ -134,8 +134,8 @@ const ItemContractsTable = memo(
                 key={p}
                 className={
                   period === p
-                    ? "bg-orange-500 text-white"
-                    : "text-orange-500 hover:bg-orange-500/10"
+                    ? "bg-[var(--primary)] text-[var(--primary-foreground)]"
+                    : "text-[var(--primary)] hover:bg-[color-mix(in_oklab,var(--primary),transparent_90%)]"
                 }
                 onClick={() => onPeriodChange(p)}
               >
@@ -155,7 +155,7 @@ const ItemContractsTable = memo(
               {columns.map((column) => (
                 <TableColumn
                   key={column.key}
-                  className="text-foreground font-semibold"
+                  className="py-3 text-foreground font-semibold"
                 >
                   {column.label}
                 </TableColumn>
@@ -164,22 +164,22 @@ const ItemContractsTable = memo(
             <TableBody items={contracts}>
               {(contract) => (
                 <TableRow key={contract.id}>
-                  <TableCell className="text-orange-500 font-medium">
+                  <TableCell className="text-[var(--primary)] font-medium">
                     {formatTimestamp(contract.timestamp)}
                   </TableCell>
-                  <TableCell className="text-orange-500 font-medium">
+                  <TableCell className="text-[var(--primary)] font-medium">
                     {formatNumber(contract.price)}
                   </TableCell>
-                  <TableCell className="text-orange-500 font-medium">
+                  <TableCell className="text-[var(--primary)] font-medium">
                     {formatNumber(contract.priceMedian)}
                   </TableCell>
-                  <TableCell className="text-orange-500 font-medium">
+                  <TableCell className="text-[var(--primary)] font-medium">
                     {formatNumber(contract.priceTop)}
                   </TableCell>
-                  <TableCell className="text-orange-500 font-medium">
+                  <TableCell className="text-[var(--primary)] font-medium">
                     {formatNumber(contract.quantity)}
                   </TableCell>
-                  <TableCell className="text-orange-500 font-medium text-center">
+                  <TableCell className="text-[var(--primary)] font-medium text-center">
                     <div className="text-right inline-block tabular-nums">
                       {formatNumber(Math.floor(contract.openInterest))}
                     </div>
