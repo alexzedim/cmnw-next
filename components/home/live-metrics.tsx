@@ -12,11 +12,12 @@ import {
   formatEntryValue,
   buildSnapshotKey,
 } from "@/lib/utils/snapshot-formatters";
+import { useI18n } from "@/lib/i18n/context";
 
 type MetricSnapshot = {
   category: AnalyticsMetricCategory;
   metricType: AnalyticsMetricType;
-  title: string;
+  titleKey: string;
   snapshot: AppHealthMetricSnapshot | null;
 };
 
@@ -28,10 +29,6 @@ interface LiveMetricsProps {
   metricCardHasError: boolean;
 }
 
-/**
- * Live metrics section displaying current metric snapshots.
- * Shows metric cards with snapshot data and status indicators.
- */
 export function LiveMetrics({
   metricSnapshots,
   metricsStatus,
@@ -39,16 +36,19 @@ export function LiveMetrics({
   metricSnapshotLoading,
   metricCardHasError,
 }: LiveMetricsProps) {
+  const { dict } = useI18n();
+  const lm = dict.liveMetrics;
+
   return (
     <section className="section section-tight-bottom container mx-auto px-6">
       <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
         <div>
           <p className="text-xs uppercase tracking-[0.3em] text-foreground/40">
-            Live metrics
+            {lm.label}
           </p>
         </div>
         <span
-          aria-label="API Status"
+          aria-label={lm.apiStatusAriaLabel}
           className={`text-xs font-semibold uppercase tracking-wide ${
             metricsError
               ? "text-red-400"
@@ -59,19 +59,25 @@ export function LiveMetrics({
                   : "text-foreground/60"
           }`}
         >
-          {metricsError ? "API offline" : `Status: ${metricsStatus}`}
+          {metricsError
+            ? lm.apiOffline
+            : lm.status.replace("{status}", metricsStatus)}
         </span>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {metricSnapshots.map(
-          ({ category, title, snapshot, metricType }, index) => {
+          ({ category, titleKey, snapshot, metricType }, index) => {
             const snapshotDate = formatSnapshotDate(snapshot);
             const entries = getSnapshotEntries(snapshot);
+            const title =
+              dict.snapshotMetrics[
+                titleKey as keyof typeof dict.snapshotMetrics
+              ];
 
             return (
               <div
                 key={buildSnapshotKey(category, metricType)}
-                className="card-surface p-6 flex flex-col gap-4 border-l-4 transition-colors duration-200 border-l-[var(--primary)]"
+                className="card-surface p-6 flex flex-col gap-4 border-l-4 transition-colors duration-200 border-l-[var(--border-accent)]"
               >
                 <div>
                   <h3 className="text-xl font-semibold text-[var(--primary)]">
@@ -79,12 +85,12 @@ export function LiveMetrics({
                   </h3>
                   <p className="text-muted mt-2 text-sm">
                     {metricCardHasError
-                      ? "Metric feed unavailable."
+                      ? lm.feedUnavailable
                       : snapshotDate
-                        ? `Snapshot @ ${snapshotDate}`
+                        ? lm.snapshotAt.replace("{date}", snapshotDate)
                         : metricSnapshotLoading
-                          ? "Loading snapshot…"
-                          : "No snapshot reported yet."}
+                          ? lm.loadingSnapshot
+                          : lm.noSnapshot}
                   </p>
                 </div>
                 <div className="rounded-xl border border-content4/20 bg-content2/40 p-4 backdrop-blur">
@@ -105,10 +111,10 @@ export function LiveMetrics({
                   ) : (
                     <p className="text-muted text-sm">
                       {metricCardHasError
-                        ? "Unable to read metric values."
+                        ? lm.unableToRead
                         : metricSnapshotLoading
-                          ? "Loading metric values…"
-                          : "Metrics responded without value payload."}
+                          ? lm.loadingValues
+                          : lm.noPayload}
                     </p>
                   )}
                 </div>

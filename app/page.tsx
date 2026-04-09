@@ -13,31 +13,27 @@ import {
   SNAPSHOT_HIGHLIGHT_GROUPS,
 } from "@/constants/snapshot-metrics";
 import { buildSnapshotKey } from "@/lib/utils/snapshot-formatters";
+import { useI18n } from "@/lib/i18n/context";
 
-/**
- * Home page displaying live metrics and snapshot briefs.
- * Orchestrates data fetching and component composition.
- */
 export default function Home() {
   const { status: metricsStatus, hasError: metricsError } = useAppMetrics();
+  const { dict } = useI18n();
   const {
     data: metricSnapshotData,
     error: metricSnapshotError,
     isLoading: metricSnapshotLoading,
   } = useMetricSnapshots();
 
-  // Build metric snapshots for live metrics section
   const metricSnapshots = METRIC_CARDS.map(
-    ({ category, metricType, title }) => ({
+    ({ category, metricType, titleKey }) => ({
       category,
       metricType,
-      title,
+      titleKey,
       snapshot:
         metricSnapshotData?.[buildSnapshotKey(category, metricType)] ?? null,
     })
   );
 
-  // Build snapshot highlight groups with snapshot data
   const snapshotHighlightGroups = SNAPSHOT_HIGHLIGHT_GROUPS.map((group) => ({
     ...group,
     metrics: group.metrics.map((metric) => ({
@@ -51,7 +47,6 @@ export default function Home() {
 
   const metricCardHasError = metricsError || Boolean(metricSnapshotError);
 
-  // Split snapshot highlight groups by category
   const charactersGroups = [snapshotHighlightGroups[0]];
   const guildsGroups = [snapshotHighlightGroups[1]];
   const marketContractsGroups = snapshotHighlightGroups.slice(2);
@@ -70,13 +65,10 @@ export default function Home() {
         <div className="card-surface p-6 flex flex-col gap-6">
           <div>
             <p className="text-xs uppercase tracking-[0.3em] text-foreground/40">
-              Snapshot briefs
+              {dict.home.snapshotBriefsLabel}
             </p>
             <p className="text-muted mt-2 text-sm">
-              Combined analytics across characters, guilds, market, and
-              contracts — character & guild slices only count max-level rosters,
-              while market and contracts focus on tradable instruments with
-              verifiable liquidity.
+              {dict.home.snapshotBriefsDescription}
             </p>
           </div>
           <div className="grid grid-cols-2 gap-6">
