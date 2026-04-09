@@ -2,7 +2,7 @@
 
 import type { Character } from "@/lib/types";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Table,
   Chip,
@@ -14,6 +14,7 @@ import {
 
 import { Link } from "@/components/custom-link";
 import { classColors } from "@/constants/class-colors";
+import { useI18n } from "@/lib/i18n/context";
 
 interface GuildRosterProps {
   members: Character[];
@@ -26,14 +27,12 @@ type SortDescriptor = {
 
 const ITEMS_PER_PAGE = 50;
 
-// Convert hex color to pastel by blending with white (50% opacity)
 function getPastelColor(hexColor: string): string {
   const hex = hexColor.replace("#", "");
   const r = parseInt(hex.substring(0, 2), 16);
   const g = parseInt(hex.substring(2, 4), 16);
   const b = parseInt(hex.substring(4, 6), 16);
 
-  // Blend with white (255, 255, 255) at 50%
   const pastelR = Math.round((r + 255) / 2);
   const pastelG = Math.round((g + 255) / 2);
   const pastelB = Math.round((b + 255) / 2);
@@ -49,49 +48,43 @@ export function GuildRoster({ members }: GuildRosterProps) {
     direction: "ascending",
   });
   const [page, setPage] = useState(1);
+  const { dict } = useI18n();
+  const gr = dict.guildRoster;
 
-  // Get unique classes for filter
   const availableClasses = useMemo(() => {
     const classes = new Set(members.map((m) => m.class).filter(Boolean));
 
     return Array.from(classes);
   }, [members]);
 
-  // Filter and sort members
   const filteredMembers = useMemo(() => {
     let filtered = [...members];
 
-    // Text search filter
     if (filterValue) {
       filtered = filtered.filter((member) =>
         member.name?.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
 
-    // Class filter
     if (classFilter.size > 0) {
       filtered = filtered.filter(
         (member) => member.class && classFilter.has(member.class)
       );
     }
 
-    // Sort
     filtered.sort((a, b) => {
       let first = a[sortDescriptor.column as keyof Character];
       let second = b[sortDescriptor.column as keyof Character];
 
-      // Handle undefined/null values
       if (first === undefined || first === null) return 1;
       if (second === undefined || second === null) return -1;
 
-      // String comparison
       if (typeof first === "string" && typeof second === "string") {
         const cmp = first.localeCompare(second);
 
         return sortDescriptor.direction === "ascending" ? cmp : -cmp;
       }
 
-      // Number comparison
       if (typeof first === "number" && typeof second === "number") {
         const cmp = first - second;
 
@@ -104,7 +97,6 @@ export function GuildRoster({ members }: GuildRosterProps) {
     return filtered;
   }, [members, filterValue, classFilter, sortDescriptor]);
 
-  // Paginate filtered members
   const paginatedMembers = useMemo(() => {
     const start = (page - 1) * ITEMS_PER_PAGE;
     const end = start + ITEMS_PER_PAGE;
@@ -114,52 +106,48 @@ export function GuildRoster({ members }: GuildRosterProps) {
 
   const totalPages = Math.ceil(filteredMembers.length / ITEMS_PER_PAGE);
 
-  // Reset to first page when filters change
-  useMemo(() => {
+  useEffect(() => {
     setPage(1);
   }, [filterValue, classFilter]);
 
   const columns = [
-    { key: "name", label: "Name", sortable: true },
-    { key: "id", label: "BlizzID", sortable: true },
-    { key: "realmName", label: "Realm", sortable: true },
-    { key: "level", label: "Level", sortable: true },
-    { key: "class", label: "Specialization", sortable: true },
-    { key: "equippedItemLevel", label: "iLvl", sortable: true },
-    { key: "guildRank", label: "Rank", sortable: true },
-    { key: "achievementPoints", label: "Achievements", sortable: true },
-    { key: "hashA", label: "Hash A", sortable: false },
-    { key: "hashB", label: "Hash B", sortable: false },
+    { key: "name", label: gr.columnName, sortable: true },
+    { key: "id", label: gr.columnBlizzId, sortable: true },
+    { key: "realmName", label: gr.columnRealm, sortable: true },
+    { key: "level", label: gr.columnLevel, sortable: true },
+    { key: "class", label: gr.columnSpec, sortable: true },
+    { key: "equippedItemLevel", label: gr.columnIlvl, sortable: true },
+    { key: "guildRank", label: gr.columnRank, sortable: true },
+    { key: "achievementPoints", label: gr.columnAchievements, sortable: true },
+    { key: "hashA", label: gr.columnHashA, sortable: false },
+    { key: "hashB", label: gr.columnHashB, sortable: false },
   ];
 
   return (
     <div className="space-y-4">
-      {/* Filters */}
       <div className="flex flex-row flex-wrap items-center gap-4">
         <SearchField
-          aria-label="Search by name"
+          aria-label={gr.searchAriaLabel}
           className="w-48"
           value={filterValue}
           onChange={setFilterValue}
         >
           <SearchField.Group>
             <SearchField.SearchIcon />
-            <SearchField.Input placeholder="Search by name..." />
+            <SearchField.Input placeholder={gr.searchPlaceholder} />
             <SearchField.ClearButton />
           </SearchField.Group>
         </SearchField>
 
         <Select
-          aria-label="Filter by class"
+          aria-label={gr.filterByClass}
           className="w-48"
-          placeholder="All classes"
-          selectedKeys={classFilter}
+          placeholder={gr.allClasses}
           selectionMode="multiple"
-          onSelectionChange={(keys) =>
-            setClassFilter(new Set(keys as Iterable<string>))
-          }
+          value={Array.from(classFilter)}
+          onChange={(keys) => setClassFilter(new Set(keys as string[]))}
         >
-          <Label>Filter by class</Label>
+          <Label>{gr.filterByClass}</Label>
           <Select.Trigger>
             <Select.Value />
             <Select.Indicator />
@@ -181,17 +169,18 @@ export function GuildRoster({ members }: GuildRosterProps) {
 
         <div className="flex items-center gap-2">
           <span className="text-sm text-muted">
-            {paginatedMembers.length} / {filteredMembers.length} shown
+            {gr.shownCount
+              .replace("{shown}", String(paginatedMembers.length))
+              .replace("{total}", String(filteredMembers.length))}
             {filteredMembers.length < members.length &&
-              ` (${filteredMembers.length} / ${members.length} filtered)`}
+              ` (${filteredMembers.length} / ${members.length} ${gr.filtered})`}
           </span>
         </div>
       </div>
 
-      {/* Table */}
       <Table>
         <Table.ScrollContainer>
-          <Table.Content aria-label="Guild roster table">
+          <Table.Content aria-label={gr.tableAriaLabel}>
             <Table.Header className="bg-background border-b border-divider">
               {columns.map((column) => (
                 <Table.Column
@@ -213,7 +202,9 @@ export function GuildRoster({ members }: GuildRosterProps) {
                   {column.label}
                   {sortDescriptor.column === column.key && (
                     <span className="ml-1">
-                      {sortDescriptor.direction === "ascending" ? "↑" : "↓"}
+                      {sortDescriptor.direction === "ascending"
+                        ? "\u2191"
+                        : "\u2193"}
                     </span>
                   )}
                 </Table.Column>
@@ -325,7 +316,6 @@ export function GuildRoster({ members }: GuildRosterProps) {
         </Table.ScrollContainer>
       </Table>
 
-      {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex justify-center items-center gap-2">
           <button
@@ -334,7 +324,7 @@ export function GuildRoster({ members }: GuildRosterProps) {
             type="button"
             onClick={() => setPage((p) => Math.max(1, p - 1))}
           >
-            ←
+            {"\u2190"}
           </button>
           {Array.from({ length: totalPages }, (_, i) => i + 1)
             .filter(
@@ -374,7 +364,7 @@ export function GuildRoster({ members }: GuildRosterProps) {
             type="button"
             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
           >
-            →
+            {"\u2192"}
           </button>
         </div>
       )}

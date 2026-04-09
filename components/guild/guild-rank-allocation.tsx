@@ -15,6 +15,7 @@ import {
 import { RaiderAxes } from "./raider-axes";
 
 import { GuildRank } from "@/components/character/guild-rank";
+import { useI18n } from "@/lib/i18n/context";
 
 interface GuildRankAllocationProps {
   members: Character[];
@@ -24,25 +25,17 @@ interface RankClassification {
   rank: number | null;
   label: string;
   type: "gm" | "officer" | "member" | "unranked";
-  officerLevel: number; // 0 = not officer, 1 = junior, 2 = officer, 3 = senior, 4 = high
-  proximityToPowerIndex?: number; // Proximity to Power Index (0-100)
-  uniqueHashCount?: number; // Number of unique hash values in rank
-  characterCount?: number; // Number of characters in rank
-  rosterIndex?: number; // Index if this is a roster rank (1 for Roster I, 2 for Roster II, etc)
+  officerLevel: number;
+  proximityToPowerIndex?: number;
+  uniqueHashCount?: number;
+  characterCount?: number;
+  rosterIndex?: number;
 }
 
-/**
- * Non-linear rank proximity calculation
- * Uses exponential decay - distances from GM increase exponentially
- */
 function calculateNonLinearRankProximity(rank: number): number {
   return Math.exp(-RANK_PROXIMITY_DECAY_RATE * (rank - 1));
 }
 
-/**
- * Calculate Proximity to Power Index for a given rank
- * Higher score = more influential/officer-like
- */
 function calculateProximityToPowerIndex(
   rank: number,
   totalCharsAtRank: number,
@@ -50,26 +43,16 @@ function calculateProximityToPowerIndex(
   totalGuildMembers: number,
   totalUniquePlayers: number
 ): number {
-  // 1. Non-linear rank proximity score
   const rankProximity = calculateNonLinearRankProximity(rank);
-
-  // 2. Scarcity score (fewer characters = more exclusive)
   const scarcity = Math.max(0, 1 - totalCharsAtRank / totalGuildMembers);
-
-  // 3. Player concentration score (fewer unique players = more trusted)
   const concentration =
     uniquePlayersAtRank > 0
       ? Math.max(0, 1 - uniquePlayersAtRank / totalUniquePlayers)
       : 0;
-
-  // 4. Characters per player ratio (higher = player has more chars at this rank)
   const charsPerPlayer =
     uniquePlayersAtRank > 0 ? totalCharsAtRank / uniquePlayersAtRank : 0;
-
-  // Normalize: If a player has many chars at this rank, they're trusted with it
   const multiCharBonus = Math.min(charsPerPlayer / 10, 1.0) * 0.5;
 
-  // 5. Combined Proximity to Power Index
   return (
     (rankProximity * PTP_WEIGHTS.RANK_PROXIMITY +
       scarcity * PTP_WEIGHTS.SCARCITY +
@@ -80,7 +63,10 @@ function calculateProximityToPowerIndex(
 }
 
 export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
-  // Calculate rank security stats and detect officer hierarchy
+  const { dict } = useI18n();
+  const gc = dict.guildConstants;
+  const gra = dict.guildRankAllocation;
+
   const { rankStats, officerClassifications } = (() => {
     if (!members || members.length === 0) {
       return {
@@ -100,20 +86,17 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
       rankMap.set(rank, (rankMap.get(rank) ?? 0) + 1);
     });
 
-    // Detect officer ranks based on rarity and hierarchy
     const officerClassifications = new Map<number | null, RankClassification>();
 
-    // Get sorted ranks (excluding null/unranked)
     const numericRanks = Array.from(rankMap.entries())
       .filter(([rank]) => rank !== null && rank !== 0)
       .sort((a, b) => (a[0] ?? 0) - (b[0] ?? 0));
 
-    // Classify GM (rank 0)
     rankMap.forEach((count, rank) => {
       if (rank === 0) {
         officerClassifications.set(rank, {
           rank,
-          label: "GM",
+          label: gc.gm,
           type: "gm",
           officerLevel: 5,
         });
@@ -127,9 +110,7 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
       }
     });
 
-    // Detect officer ranks using Proximity to Power Index
     if (numericRanks.length > 0) {
-      // Calculate unique players (by hashA) for each rank
       const rankHashData = new Map<
         number | null,
         { uniqueHashes: Set<string>; characterCount: number }
@@ -153,7 +134,6 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
         });
       });
 
-      // Calculate total unique players in guild
       const allUniqueHashes = new Set<string>();
 
       members.forEach((member) => {
@@ -163,7 +143,6 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
       });
       const totalUniqueHashes = allUniqueHashes.size;
 
-      // Step 1: Identify roster ranks (2 most common ranks with highest member count)
       const rankSizes = numericRanks
         .map(([rank, count]) => ({
           rank: rank as number,
@@ -172,19 +151,15 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
         }))
         .sort((a, b) => b.count - a.count);
 
-      // The two most populated ranks are roster ranks
-      // But label them by rank proximity to 0 (lower rank = earlier in alphabet)
       const rosterCandidates = rankSizes.slice(0, 2);
-      const rosterRanks = new Map<number, number>(); // rank -> rosterIndex (1, 2, etc)
+      const rosterRanks = new Map<number, number>();
 
-      // Sort roster candidates by rank number (lower first = Roster I)
       rosterCandidates.sort((a, b) => a.rank - b.rank);
 
       rosterCandidates.forEach((candidate, index) => {
         rosterRanks.set(candidate.rank, index + 1);
       });
 
-      // Minimum roster rank number (highest numeric rank among roster ranks)
       const minRosterRank =
         rosterRanks.size > 0
           ? Math.max(...Array.from(rosterRanks.keys()))
@@ -199,7 +174,6 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
         const uniqueHashCount = rankData.uniqueHashes.size;
         const characterCount = rankData.characterCount;
 
-        // Calculate Proximity to Power Index for this rank
         const proximityIndex = calculateProximityToPowerIndex(
           rankNum,
           characterCount,
@@ -211,12 +185,10 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
         let officerLevel = 0;
         let type: "member" | "officer" = "member";
 
-        // Check if this is a roster rank
         if (rosterRanks.has(rankNum)) {
           type = "member";
           officerLevel = 0;
         } else {
-          // Officer ranks MUST be numerically lower than roster ranks
           const isValidOfficerPosition = rankNum < minRosterRank;
 
           if (
@@ -225,16 +197,16 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
           ) {
             type = "officer";
             if (proximityIndex >= PTP_THRESHOLDS.HIGH_RANKING) {
-              officerLevel = 4; // High Ranking Officer
+              officerLevel = 4;
             } else {
-              officerLevel = 2; // Officer
+              officerLevel = 2;
             }
           }
         }
 
         const classification: RankClassification = {
           rank: rankNum,
-          label: `Rank ${rankNum}`,
+          label: gc.rank.replace("{rank}", String(rankNum)),
           type,
           officerLevel,
           proximityToPowerIndex: proximityIndex,
@@ -253,13 +225,11 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
     };
   })();
 
-  // Detect guild type based on structure and characteristics
   const detectGuildType = () => {
     if (rankStats.rankCount === 0 || members.length === 0) {
       return GUILD_TYPES.UNKNOWN;
     }
 
-    // Count unique accounts (hashA values)
     const uniqueAccounts = new Set<string>();
 
     members.forEach((member) => {
@@ -269,7 +239,6 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
     });
     const uniqueAccountCount = uniqueAccounts.size;
 
-    // Get roster rank count
     let rosterCount = 0;
 
     Array.from(officerClassifications.values()).forEach((classification) => {
@@ -278,12 +247,10 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
       }
     });
 
-    // Bank Guild: <= 10 members
     if (members.length <= GUILD_TYPE_THRESHOLDS.BANK_MAX_MEMBERS) {
       return GUILD_TYPES.BANK;
     }
 
-    // Twink Guild: Very few unique accounts with many characters
     if (
       uniqueAccountCount <= GUILD_TYPE_THRESHOLDS.TWINK_MAX_UNIQUE &&
       members.length > GUILD_TYPE_THRESHOLDS.TWINK_MIN_MEMBERS
@@ -291,18 +258,17 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
       return GUILD_TYPES.TWINK;
     }
 
-    // Raiding Guild: Has roster ranks
     if (rosterCount >= GUILD_TYPE_THRESHOLDS.ROSTER_MIN_COUNT) {
       return rosterCount >= GUILD_TYPE_THRESHOLDS.FULL_ROSTER_COUNT
         ? GUILD_TYPES.RAIDING_FULL
         : GUILD_TYPES.RAIDING;
     }
 
-    // Mixed guild fallback
     return GUILD_TYPES.MIXED;
   };
 
   const guildType = detectGuildType();
+  const guildTypeStatus = gc[guildType.statusKey as keyof typeof gc];
 
   return (
     <div
@@ -316,23 +282,21 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
       <RaiderAxes />
       <div className="relative z-10">
         <div className={`text-sm font-medium ${guildType.color}`}>
-          Guild Type: {guildType.status}
+          {gra.guildType.replace("{status}", guildTypeStatus as string)}
         </div>
         <div className="text-xs text-foreground/60 mt-2">
           <div className="mb-3">
-            Members distributed across{" "}
-            <span className="font-medium text-foreground">
-              {rankStats.rankCount}
-            </span>{" "}
-            rank{rankStats.rankCount !== 1 ? "s" : ""} with their proximity to
-            power
+            {gra.membersDistributed.replace(
+              "{rankCount}",
+              String(rankStats.rankCount)
+            )}
           </div>
           <div
             className="space-y-0 text-xs"
             style={{ fontFamily: "monospace" }}
           >
             {Array.from(rankStats.rankMap.entries())
-              .filter(([rank]) => rank !== 0) // Exclude GM from display
+              .filter(([rank]) => rank !== 0)
               .sort((a, b) => (a[0] ?? 999) - (b[0] ?? 999))
               .map(([rank, count]) => {
                 const percentage = Math.round((count / members.length) * 100);
@@ -342,10 +306,14 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
                   : 0;
                 const uniqueHashCount = classification?.uniqueHashCount || 0;
 
-                const rankLabel = getRankLabel(rank);
-                const rosterLabel = getRosterLabel(classification?.rosterIndex);
+                const rankLabel = getRankLabel(rank, dict);
+                const rosterLabel = getRosterLabel(
+                  classification?.rosterIndex,
+                  dict
+                );
                 const officerLabelObj = getOfficerLabel(
-                  classification?.officerLevel || 0
+                  classification?.officerLevel || 0,
+                  dict
                 );
                 const officerLabel =
                   classification?.type === "gm"
@@ -354,9 +322,9 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
                       ? officerLabelObj.displayLabel
                       : "";
 
-                const memberCount = `${count.toString().padStart(3)} characters (${percentage.toString().padStart(2)}%)`;
-                const uniqueCount = `${uniqueHashCount.toString().padStart(2)} unique`;
-                const ptpText = `${proximityIndex.toString().padStart(2)} ptp`;
+                const memberCount = `${count.toString().padStart(3)} ${gra.characters} (${percentage.toString().padStart(2)}%)`;
+                const uniqueCount = `${uniqueHashCount.toString().padStart(2)} ${gra.unique}`;
+                const ptpText = `${proximityIndex.toString().padStart(2)} ${gra.ptp}`;
                 const labels =
                   `${rosterLabel}${rosterLabel && officerLabel ? " " : ""}${officerLabel}`.trim();
 
@@ -399,13 +367,15 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
               })}
             <div className="mt-2 pt-2 border-t border-foreground/20">
               <div>
-                <span className="font-medium text-foreground">Total:</span>{" "}
-                {members.length} members
+                <span className="font-medium text-foreground">{gra.total}</span>{" "}
+                {members.length} {gra.members}
               </div>
               {rankStats.rankMap.has(null) && (
                 <div className="mt-1">
-                  <span className="font-medium text-foreground">u/r:</span>{" "}
-                  {rankStats.rankMap.get(null)} members (
+                  <span className="font-medium text-foreground">
+                    {gra.unranked}
+                  </span>{" "}
+                  {rankStats.rankMap.get(null)} {gra.members} (
                   {Math.round(
                     (rankStats.rankMap.get(null)! / members.length) * 100
                   )}
