@@ -7,12 +7,16 @@ import NextLink from "next/link";
 import { classColors } from "@/constants/class-colors";
 import { getPastelColor, getFactionBorderColor } from "@/lib/utils/color";
 import { getGuildRankDisplay } from "@/lib/utils/guild-rank";
+import { useI18n } from "@/lib/i18n/context";
 
 interface HashCharactersGridProps {
   characters: Character[];
 }
 
 export function HashCharactersGrid({ characters }: HashCharactersGridProps) {
+  const { dict } = useI18n();
+  const h = dict.hash;
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {characters.map((character) => {
@@ -31,7 +35,6 @@ export function HashCharactersGrid({ characters }: HashCharactersGridProps) {
             }}
           >
             <div className="space-y-3">
-              {/* Character Image */}
               {character.insetImage && (
                 <div className="mb-3 rounded-lg overflow-hidden">
                   <img
@@ -42,7 +45,6 @@ export function HashCharactersGrid({ characters }: HashCharactersGridProps) {
                 </div>
               )}
 
-              {/* Character Name */}
               <div>
                 <h3
                   className="text-xl font-semibold"
@@ -57,10 +59,11 @@ export function HashCharactersGrid({ characters }: HashCharactersGridProps) {
 
               <div className="h-px bg-[var(--border)]" />
 
-              {/* Character Details */}
               <div className="flex flex-wrap gap-2">
                 {character.level && (
-                  <span className="chip">Level {character.level}</span>
+                  <span className="chip">
+                    {h.level.replace("{level}", `${character.level}`)}
+                  </span>
                 )}
                 {character.class && (
                   <span
@@ -88,11 +91,10 @@ export function HashCharactersGrid({ characters }: HashCharactersGridProps) {
                 )}
               </div>
 
-              {/* Stats */}
               <div className="space-y-1 text-sm">
                 {character.equippedItemLevel && (
                   <div className="flex justify-between">
-                    <span className="text-muted">Item Level:</span>
+                    <span className="text-muted">{h.itemLevelLabel}</span>
                     <span className="font-semibold">
                       {character.equippedItemLevel}
                     </span>
@@ -100,28 +102,28 @@ export function HashCharactersGrid({ characters }: HashCharactersGridProps) {
                 )}
                 {character.race && (
                   <div className="flex justify-between">
-                    <span className="text-muted">Race:</span>
+                    <span className="text-muted">{h.raceLabel}</span>
                     <span>{character.race}</span>
                   </div>
                 )}
                 {character.specialization && (
                   <div className="flex justify-between">
-                    <span className="text-muted">Spec:</span>
+                    <span className="text-muted">{h.specLabel}</span>
                     <span>{character.specialization}</span>
                   </div>
                 )}
               </div>
 
-              {/* Guild Info */}
               {character.guild && (
                 <>
                   <div className="h-px bg-[var(--border)]" />
                   <div className="text-sm">
-                    <span className="text-muted">Guild: </span>
+                    <span className="text-muted">{h.guildLabel}</span>
                     <span className="font-medium">{character.guild}</span>
                     {(() => {
                       const rankDisplay = getGuildRankDisplay(
-                        character.guildRank
+                        character.guildRank,
+                        dict
                       );
 
                       return rankDisplay ? (
