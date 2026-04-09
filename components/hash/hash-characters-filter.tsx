@@ -4,6 +4,8 @@ import type { Character } from "@/lib/types";
 
 import { useState, useEffect } from "react";
 
+import { useI18n } from "@/lib/i18n/context";
+
 interface HashCharactersFilterProps {
   characters: Character[];
   onFilter: (filtered: Character[]) => void;
@@ -16,8 +18,9 @@ export function HashCharactersFilter({
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedClass, setSelectedClass] = useState("");
   const [selectedFaction, setSelectedFaction] = useState("");
+  const { dict } = useI18n();
+  const hf = dict.hashFilter;
 
-  // Get unique classes and factions from characters
   const uniqueClasses = Array.from(
     new Set(characters.map((c) => c.class).filter(Boolean))
   ).sort();
@@ -47,25 +50,23 @@ export function HashCharactersFilter({
 
   return (
     <>
-      {/* Search Input */}
       <div className="w-full">
         <input
           className="w-full px-4 py-2.5 rounded-lg border border-[var(--border)] bg-[var(--bg-elevated)] text-[var(--text)] text-sm placeholder-[var(--text-muted)] transition-colors focus-visible:border-[var(--accent)]"
-          placeholder="Search by name, realm, or guild..."
+          placeholder={hf.searchPlaceholder}
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
 
-      {/* Filter Dropdowns */}
       <div className="flex gap-4 w-full flex-col sm:flex-row">
         <select
           className="flex-1 sm:flex-none px-4 py-2.5 rounded-lg border border-[var(--border)] bg-[var(--bg-elevated)] text-[var(--text)] text-sm transition-colors focus-visible:border-[var(--accent)]"
           value={selectedClass}
           onChange={(e) => setSelectedClass(e.target.value)}
         >
-          <option value="">All Classes</option>
+          <option value="">{hf.allClasses}</option>
           {uniqueClasses.map((cls) => (
             <option key={cls} value={cls}>
               {cls}
@@ -78,7 +79,7 @@ export function HashCharactersFilter({
           value={selectedFaction}
           onChange={(e) => setSelectedFaction(e.target.value)}
         >
-          <option value="">All Factions</option>
+          <option value="">{hf.allFactions}</option>
           {uniqueFactions.map((faction) => (
             <option key={faction} value={faction}>
               {faction}
@@ -87,22 +88,24 @@ export function HashCharactersFilter({
         </select>
       </div>
 
-      {/* Active Filters Display */}
       {(searchTerm || selectedClass || selectedFaction) && (
         <div className="flex flex-wrap gap-2 pt-2 border-t border-[var(--border)]">
           {searchTerm && (
             <span className="chip">
-              Search: <span className="font-semibold">{searchTerm}</span>
+              {hf.searchFilter}
+              <span className="font-semibold">{searchTerm}</span>
             </span>
           )}
           {selectedClass && (
             <span className="chip">
-              Class: <span className="font-semibold">{selectedClass}</span>
+              {hf.classFilter}
+              <span className="font-semibold">{selectedClass}</span>
             </span>
           )}
           {selectedFaction && (
             <span className="chip">
-              Faction: <span className="font-semibold">{selectedFaction}</span>
+              {hf.factionFilter}
+              <span className="font-semibold">{selectedFaction}</span>
             </span>
           )}
         </div>

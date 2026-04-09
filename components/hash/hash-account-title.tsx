@@ -4,6 +4,7 @@ import type { Character } from "@/lib/types";
 
 import { NAMING_CONSTANTS } from "@/constants";
 import { fontJetBrains } from "@/config/fonts";
+import { useI18n } from "@/lib/i18n/context";
 
 interface HashAccountTitleProps {
   hashQuery: string;
@@ -16,7 +17,9 @@ export const HashAccountTitle = ({
   characterCount,
   characters,
 }: HashAccountTitleProps) => {
-  // Calculate guild security stats
+  const { dict } = useI18n();
+  const h = dict.hash;
+
   const guildStats = (() => {
     if (!characters || characters.length === 0) {
       return {
@@ -26,7 +29,7 @@ export const HashAccountTitle = ({
     }
 
     const rankMap = new Map<string, Map<number | null, number>>();
-    let uniqueGuilds = new Set<string>();
+    const uniqueGuilds = new Set<string>();
 
     characters.forEach((char) => {
       if (char.guild) {
@@ -48,34 +51,31 @@ export const HashAccountTitle = ({
   })();
   const displayHash = hashQuery.toUpperCase();
 
-  // Determine match quality based on character count
   const isPrecisionMatch = characterCount <= 65;
   const matchQuality = isPrecisionMatch
     ? {
-        text: "Precision Match",
+        text: h.precisionMatch,
         color: "text-green-500",
         bgColor: "bg-green-500/10",
-        suggestion: "This account is uniquely identified by this hash",
+        suggestion: h.precisionMatchDescription,
       }
     : {
-        text: "Hash Too Common",
+        text: h.hashTooCommon,
         color: "text-red-500",
         bgColor: "bg-red-500/10",
-        suggestion: "This hash value is shared by multiple accounts",
+        suggestion: h.hashTooCommonDescription,
       };
 
-  // Calculate guild allocation quality based on character concentration
   const getGuildAllocationQuality = () => {
     if (guildStats.guildCount === 0 || characterCount === 0) {
       return {
-        status: "No Guild Data",
+        status: h.noGuildData,
         percentage: 0,
         color: "text-gray-600",
         bgColor: "bg-gray-500/10",
       };
     }
 
-    // Calculate concentration: find the largest guild and calculate what % of characters are there
     let maxCharactersInGuild = 0;
 
     guildStats.rankMap.forEach((ranks) => {
@@ -87,14 +87,13 @@ export const HashAccountTitle = ({
       maxCharactersInGuild = Math.max(maxCharactersInGuild, totalInGuild);
     });
 
-    // Percentage of characters in the largest guild
     const concentrationPercentage = Math.round(
       (maxCharactersInGuild / characterCount) * 100
     );
 
     if (concentrationPercentage >= 95) {
       return {
-        status: "Excellent",
+        status: h.excellent,
         percentage: concentrationPercentage,
         color: "text-emerald-600",
         bgColor: "bg-emerald-500/10",
@@ -102,7 +101,7 @@ export const HashAccountTitle = ({
     }
     if (concentrationPercentage >= 85) {
       return {
-        status: "Very Good",
+        status: h.veryGood,
         percentage: concentrationPercentage,
         color: "text-green-600",
         bgColor: "bg-green-500/10",
@@ -110,7 +109,7 @@ export const HashAccountTitle = ({
     }
     if (concentrationPercentage >= 70) {
       return {
-        status: "Good",
+        status: h.good,
         percentage: concentrationPercentage,
         color: "text-lime-600",
         bgColor: "bg-lime-500/10",
@@ -118,7 +117,7 @@ export const HashAccountTitle = ({
     }
     if (concentrationPercentage >= 50) {
       return {
-        status: "Moderate",
+        status: h.moderate,
         percentage: concentrationPercentage,
         color: "text-yellow-600",
         bgColor: "bg-yellow-500/10",
@@ -126,7 +125,7 @@ export const HashAccountTitle = ({
     }
     if (concentrationPercentage >= 30) {
       return {
-        status: "Concerning",
+        status: h.concerning,
         percentage: concentrationPercentage,
         color: "text-[var(--primary)]",
         bgColor: "bg-[color-mix(in_oklab,var(--primary),transparent_90%)]",
@@ -134,7 +133,7 @@ export const HashAccountTitle = ({
     }
 
     return {
-      status: "Spread Out",
+      status: h.spreadOut,
       percentage: concentrationPercentage,
       color: "text-red-600",
       bgColor: "bg-red-500/10",
@@ -143,14 +142,12 @@ export const HashAccountTitle = ({
 
   const guildQuality = getGuildAllocationQuality();
 
-  // Determine if hash starts with 'a' or 'b'
   const startsWithA = displayHash.toLowerCase().startsWith("a");
   const startsWithB = displayHash.toLowerCase().startsWith("b");
   const showAsterisk = startsWithA && !startsWithB;
 
   return (
     <div className="card-surface p-6 lg:p-8 rounded-xl mb-6">
-      {/* Account Badge */}
       <div className="mb-5 flex items-center gap-3">
         <div
           className="inline-flex items-center gap-2 text-xs uppercase tracking-wider opacity-60"
@@ -161,12 +158,10 @@ export const HashAccountTitle = ({
         </div>
       </div>
 
-      {/* Header Title */}
       <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight mb-3">
         {`* ${displayHash}`}
       </h1>
 
-      {/* Match Quality */}
       <div className={`mt-4 px-4 py-3 rounded-lg ${matchQuality.bgColor}`}>
         <div className={`text-sm font-medium ${matchQuality.color}`}>
           {matchQuality.text}
@@ -174,12 +169,14 @@ export const HashAccountTitle = ({
         <div className="text-xs text-foreground/60 mt-2 space-y-1">
           <div>
             {isPrecisionMatch
-              ? `This account has ${characterCount} character${characterCount !== 1 ? "s" : ""}`
-              : `This hash value is shared by ${characterCount} characters from different accounts`}
+              ? h.precisionCount
+                  .replace("{count}", `${characterCount}`)
+                  .replace("(s)", characterCount !== 1 ? "s" : "")
+              : h.nonPrecisionCount
+                  .replace("{count}", `${characterCount}`)
+                  .replace("(s)", characterCount !== 1 ? "s" : "")}
           </div>
-          <div>
-            {showAsterisk && `Hash B******** gives more precision match`}
-          </div>
+          <div>{showAsterisk && h.hashBHint}</div>
           {!isPrecisionMatch && (
             <div className="italic text-foreground/50">
               {matchQuality.suggestion}
@@ -188,20 +185,18 @@ export const HashAccountTitle = ({
         </div>
       </div>
 
-      {/* Guild Characters Allocation Check */}
       {characters && characters.length > 0 && guildStats.guildCount > 0 && (
         <div className={`mt-6 px-4 py-3 rounded-lg ${guildQuality.bgColor}`}>
           <div className={`text-sm font-medium ${guildQuality.color}`}>
-            Guild Characters Allocation Check - {guildQuality.status} (
-            {guildQuality.percentage}%)
+            {h.guildAllocationTitle
+              .replace("{status}", guildQuality.status)
+              .replace("{percentage}", `${guildQuality.percentage}`)}
           </div>
           <div className="text-xs text-foreground/60 mt-2">
             <div className="mb-3">
-              Account spread across{" "}
-              <span className="font-medium text-foreground">
-                {guildStats.guildCount}
-              </span>{" "}
-              unique guild{guildStats.guildCount !== 1 ? "s" : ""}
+              {h.guildSpread
+                .replace("{count}", `${guildStats.guildCount}`)
+                .replace("(s)", guildStats.guildCount !== 1 ? "s" : "")}
             </div>
             <div className="space-y-2">
               {Array.from(guildStats.rankMap.entries()).map(
@@ -221,9 +216,14 @@ export const HashAccountTitle = ({
                           .sort((a, b) => (a[0] ?? 999) - (b[0] ?? 999))
                           .map(([rank, count]) => (
                             <div key={rank === null ? "unranked" : rank}>
-                              Rank{" "}
-                              {rank === 0 ? "GM" : rank === null ? "u/r" : rank}
-                              : {count} character{count !== 1 ? "s" : ""}
+                              {h.rank}
+                              {rank === 0
+                                ? h.gm
+                                : rank === null
+                                  ? h.unranked
+                                  : rank}
+                              : {count}{" "}
+                              {count !== 1 ? h.characters : h.character}
                             </div>
                           ))}
                       </div>
