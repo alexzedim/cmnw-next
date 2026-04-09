@@ -11,12 +11,16 @@ import { Input } from "@heroui/input";
 import NextLink from "next/link";
 
 import { ThemeSwitch } from "@/components/theme-switch";
+import { LanguageSwitcher } from "@/components/language-switcher";
 import { SearchIcon, Logo } from "@/components/icons";
+import { useI18n } from "@/lib/i18n/context";
 
 export const Navbar = () => {
+  const { dict } = useI18n();
+
   const searchInput = (
     <Input
-      aria-label="Search"
+      aria-label={dict.navbar.searchAriaLabel}
       classNames={{
         inputWrapper: "bg-background border border-divider",
         input: "text-sm text-foreground",
@@ -27,7 +31,7 @@ export const Navbar = () => {
         </Kbd>
       }
       labelPlacement="outside"
-      placeholder="Search..."
+      placeholder={dict.navbar.searchPlaceholder}
       startContent={
         <SearchIcon className="text-base text-muted pointer-events-none flex-shrink-0" />
       }
@@ -52,6 +56,7 @@ export const Navbar = () => {
       </NavbarContent>
 
       <NavbarContent className="basis-1/3" justify="end">
+        <LanguageSwitcher />
         <ThemeSwitch />
       </NavbarContent>
 
