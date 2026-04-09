@@ -67,19 +67,14 @@ export function LiveMetrics({
           ({ category, title, snapshot, metricType }, index) => {
             const snapshotDate = formatSnapshotDate(snapshot);
             const entries = getSnapshotEntries(snapshot);
-            const orangeColor = "rgb(249, 115, 22)";
 
             return (
               <div
                 key={buildSnapshotKey(category, metricType)}
-                className="card-surface p-6 flex flex-col gap-4 border-l-4 transition-colors duration-200"
-                style={{ borderLeftColor: orangeColor }}
+                className="card-surface p-6 flex flex-col gap-4 border-l-4 transition-colors duration-200 border-l-[var(--primary)]"
               >
                 <div>
-                  <h3
-                    className="text-xl font-semibold"
-                    style={{ color: orangeColor }}
-                  >
+                  <h3 className="text-xl font-semibold text-[var(--primary)]">
                     {title}
                   </h3>
                   <p className="text-muted mt-2 text-sm">
