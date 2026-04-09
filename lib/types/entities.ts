@@ -44,6 +44,7 @@ export interface Character {
   averageItemLevel?: number;
   equippedItemLevel?: number;
   statusCode?: number;
+  status?: string;
   covenantId?: number;
   avatarImage?: string;
   insetImage?: string;
