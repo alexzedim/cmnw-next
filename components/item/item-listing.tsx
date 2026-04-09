@@ -114,7 +114,7 @@ export const ItemListing = ({
             {columns.map((column) => (
               <TableColumn
                 key={column.key}
-                className="text-foreground font-semibold"
+                className="py-3 text-foreground font-semibold"
               >
                 {column.label}
               </TableColumn>
@@ -185,7 +185,7 @@ export const ItemListing = ({
                     key={p}
                     className={`px-3 py-1 rounded text-sm ${
                       page === p
-                        ? "bg-orange-500 text-black font-semibold"
+                        ? "bg-[var(--primary)] text-[var(--primary-foreground)] font-semibold"
                         : "border border-divider text-foreground hover:bg-background-elevated"
                     }`}
                     type="button"
