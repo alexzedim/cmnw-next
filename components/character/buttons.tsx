@@ -4,6 +4,7 @@ import { Avatar } from "@heroui/react";
 
 import { Link } from "@/components/custom-link";
 import { ENDPOINTS } from "@/constants";
+import { useI18n } from "@/lib/i18n/context";
 
 interface CharacterButtonsProps {
   name: string;
@@ -11,29 +12,33 @@ interface CharacterButtonsProps {
 }
 
 export const CharacterButtons = ({ name, realm }: CharacterButtonsProps) => {
+  const { dict } = useI18n();
+  const c = dict.character;
+  const sn = c.serviceNames;
+
   const services = [
     {
-      name: "WarcraftLogs",
+      name: sn.warcraftLogs,
       url: `${ENDPOINTS.WARCRAFT_LOGS}/character/eu/${realm}/${name}`,
       icon: "/external/wcl.svg",
     },
     {
-      name: "RaiderIO",
+      name: sn.raiderIO,
       url: `${ENDPOINTS.RAIDER_IO}/characters/eu/${realm}/${name}`,
       icon: "/external/rio.svg",
     },
     {
-      name: "WoWProgress",
+      name: sn.wowProgress,
       url: `${ENDPOINTS.WOW_PROGRESS}/character/eu/${realm}/${name}`,
       icon: "/external/wp.svg",
     },
     {
-      name: "BattleNet",
+      name: sn.battleNet,
       url: `${ENDPOINTS.BATTLE_NET}/en-gb/character/eu/${realm}/${name}`,
       icon: "/external/armory.svg",
     },
     {
-      name: "Check PvP",
+      name: sn.checkPvp,
       url: `${ENDPOINTS.CHECK_PVP}/eu/${realm}/${name}`,
       icon: "/external/check-pvp-1.svg",
     },
@@ -41,15 +46,13 @@ export const CharacterButtons = ({ name, realm }: CharacterButtonsProps) => {
 
   return (
     <div className="card-surface p-6 rounded-xl mb-6">
-      {/* Section Header with Badge */}
       <div className="mb-5 flex items-center gap-3">
         <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider opacity-50">
           <div className="size-1.5 rounded-full bg-[var(--primary)]" />
-          <span>External Resources</span>
+          <span>{c.externalResources}</span>
         </div>
       </div>
 
-      {/* Service Links */}
       <div className="flex flex-row items-center justify-center gap-4 flex-wrap">
         {services.map((service) => (
           <Link

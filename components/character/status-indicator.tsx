@@ -1,9 +1,7 @@
 "use client";
 
-import {
-  ENDPOINT_LABELS,
-  parseStatusString,
-} from "@/constants/character-status";
+import { parseStatusString } from "@/constants/character-status";
+import { useI18n } from "@/lib/i18n/context";
 
 interface CharacterStatusIndicatorProps {
   status: string;
@@ -15,15 +13,18 @@ const STATE_COLORS: Record<string, string> = {
   pending: "bg-[var(--text-muted)]",
 };
 
-const STATE_LABELS: Record<string, string> = {
-  success: "Success",
-  error: "Error",
-  pending: "Pending",
-};
-
 export function CharacterStatusIndicator({
   status,
 }: CharacterStatusIndicatorProps) {
+  const { dict } = useI18n();
+  const si = dict.statusIndicator;
+
+  const stateLabels: Record<string, string> = {
+    success: si.success,
+    error: si.error,
+    pending: si.pending,
+  };
+
   const endpoints = parseStatusString(status);
 
   return (
@@ -40,15 +41,13 @@ export function CharacterStatusIndicator({
                 key={endpoint}
                 className="flex items-center justify-between gap-3"
               >
-                <span className="text-sm text-foreground/70">
-                  {ENDPOINT_LABELS[endpoint]}
-                </span>
+                <span className="text-sm text-foreground/70">{endpoint}</span>
                 <div className="flex items-center gap-2">
                   <div
                     className={`size-2 rounded-full ${STATE_COLORS[state]}`}
                   />
                   <span className="text-xs text-foreground/50">
-                    {STATE_LABELS[state]}
+                    {stateLabels[state]}
                   </span>
                 </div>
               </div>
@@ -56,10 +55,7 @@ export function CharacterStatusIndicator({
           </div>
 
           <div className="mt-3 border-t border-[var(--border)] pt-2">
-            <p className="text-[10px] text-foreground/40">
-              Uppercase = Success &middot; Lowercase = Error &middot; Dash =
-              Pending
-            </p>
+            <p className="text-[10px] text-foreground/40">{si.helpText}</p>
           </div>
         </div>
       </div>
