@@ -9,43 +9,36 @@ import {
 } from "@/constants/analytics-metrics";
 import { classColors } from "@/constants/class-colors";
 
-/**
- * Metric cards displayed in the live metrics section.
- */
 export const METRIC_CARDS = [
   {
     category: AnalyticsMetricCategory.CHARACTERS,
-    title: "Characters",
+    titleKey: "charactersTitle" as const,
     metricType: AnalyticsMetricType.TOTAL,
   },
   {
     category: AnalyticsMetricCategory.GUILDS,
-    title: "Guilds",
+    titleKey: "guildsTitle" as const,
     metricType: AnalyticsMetricType.TOTAL,
   },
   {
     category: AnalyticsMetricCategory.MARKET,
-    title: "Market",
+    titleKey: "marketTitle" as const,
     metricType: AnalyticsMetricType.TOTAL,
   },
 ] as const;
 
-/**
- * Snapshot highlight groups displayed in the snapshot briefs section.
- */
 export const SNAPSHOT_HIGHLIGHT_GROUPS: readonly SnapshotHighlightGroup[] = [
   {
-    title: "Characters @ cap",
-    disclaimer:
-      "It only tracks fully ingested max-level characters captured during the latest sync window.",
+    titleKey: "charactersAtCap" as const,
+    disclaimerKey: "charactersDisclaimer" as const,
     metrics: [
       {
-        label: "Faction split",
+        labelKey: "factionSplit" as const,
         category: AnalyticsMetricCategory.CHARACTERS,
         metricType: AnalyticsMetricType.BY_FACTION_MAX_LEVEL,
       },
       {
-        label: "Class mix",
+        labelKey: "classMix" as const,
         category: AnalyticsMetricCategory.CHARACTERS,
         metricType: AnalyticsMetricType.BY_CLASS_MAX_LEVEL,
         valueLimit: Number.POSITIVE_INFINITY,
@@ -54,73 +47,70 @@ export const SNAPSHOT_HIGHLIGHT_GROUPS: readonly SnapshotHighlightGroup[] = [
           classColors.get(className) ?? undefined,
       },
       {
-        label: "Level bracket",
+        labelKey: "levelBracket" as const,
         category: AnalyticsMetricCategory.CHARACTERS,
         metricType: AnalyticsMetricType.BY_LEVEL_MAX_LEVEL,
       },
     ] as const,
   },
   {
-    title: "Guild structures",
-    disclaimer:
-      "Roster slices only include guilds with verified activity in the past 48 hours.",
+    titleKey: "guildStructures" as const,
+    disclaimerKey: "guildDisclaimer" as const,
     metrics: [
       {
-        label: "Size distribution",
+        labelKey: "sizeDistribution" as const,
         category: AnalyticsMetricCategory.GUILDS,
         metricType: AnalyticsMetricType.SIZE_DISTRIBUTION,
       },
       {
-        label: "Top by members",
+        labelKey: "topByMembers" as const,
         category: AnalyticsMetricCategory.GUILDS,
         metricType: AnalyticsMetricType.TOP_BY_MEMBERS,
       },
       {
-        label: "Top by achievements",
+        labelKey: "topByAchievements" as const,
         category: AnalyticsMetricCategory.GUILDS,
         metricType: AnalyticsMetricType.TOP_BY_ACHIEVEMENTS,
       },
     ] as const,
   },
   {
-    title: "Market flow",
-    disclaimer:
-      "Commodity spans show only markets with validated quotes and auctions.",
+    titleKey: "marketFlow" as const,
+    disclaimerKey: "marketDisclaimer" as const,
     metrics: [
       {
-        label: "Price ranges",
+        labelKey: "priceRanges" as const,
         category: AnalyticsMetricCategory.MARKET,
         metricType: AnalyticsMetricType.PRICE_RANGES,
       },
       {
-        label: "Top by volume",
+        labelKey: "topByVolume" as const,
         category: AnalyticsMetricCategory.MARKET,
         metricType: AnalyticsMetricType.TOP_BY_VOLUME,
       },
       {
-        label: "Price volatility",
+        labelKey: "priceVolatility" as const,
         category: AnalyticsMetricCategory.MARKET,
         metricType: AnalyticsMetricType.PRICE_VOLATILITY,
       },
     ] as const,
   },
   {
-    title: "Contracts board",
-    disclaimer:
-      "Contract stats focus on max-duration instruments with verifiable liquidity.",
+    titleKey: "contractsBoard" as const,
+    disclaimerKey: "contractsDisclaimer" as const,
     metrics: [
       {
-        label: "Open interest leaders",
+        labelKey: "openInterestLeaders" as const,
         category: AnalyticsMetricCategory.CONTRACTS,
         metricType: AnalyticsMetricType.TOP_BY_OPEN_INTEREST,
       },
       {
-        label: "Quantity concentration",
+        labelKey: "quantityConcentration" as const,
         category: AnalyticsMetricCategory.CONTRACTS,
         metricType: AnalyticsMetricType.TOP_BY_QUANTITY,
       },
       {
-        label: "Auction throughput",
+        labelKey: "auctionThroughput" as const,
         category: AnalyticsMetricCategory.CONTRACTS,
         metricType: AnalyticsMetricType.TOP_BY_AUCTIONS,
       },
@@ -128,10 +118,6 @@ export const SNAPSHOT_HIGHLIGHT_GROUPS: readonly SnapshotHighlightGroup[] = [
   },
 ] as const;
 
-/**
- * All snapshot requests needed for the page.
- * Combines metric cards and snapshot highlight group metrics.
- */
 export const SNAPSHOT_REQUESTS: SnapshotRequest[] = [
   ...METRIC_CARDS.map(({ category, metricType }) => ({
     category,

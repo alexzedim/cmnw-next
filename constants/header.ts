@@ -1,26 +1,26 @@
 export const HEADER = [
   {
-    label: "Discord Bot",
+    labelKey: "discordBot" as const,
     href: "/discord",
   },
   {
-    label: "Characters",
+    labelKey: "characters" as const,
     href: { pathname: "/", query: { command: "character" } },
   },
   {
-    label: "Guilds",
+    labelKey: "guilds" as const,
     href: { pathname: "/", query: { command: "guild" } },
   },
   {
-    label: "Commdty",
+    labelKey: "commdty" as const,
     href: { pathname: "/", query: { command: "commdty" } },
   },
   {
-    label: "Who we are",
+    labelKey: "whoWeAre" as const,
     href: "/who-we-are",
   },
   {
-    label: "Login Area",
+    labelKey: "loginArea" as const,
     href: "/login-area",
   },
 ];
