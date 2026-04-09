@@ -34,9 +34,16 @@ export const InfoSection = ({
       </div>
 
       {/* Info Items */}
-      <div className="space-y-3">
+      <div>
         {items.map((item, index) => (
-          <div key={`${item.label}-${index}`}>
+          <div
+            key={`${item.label}-${index}`}
+            className={`${
+              divider && index < items.length - 1
+                ? "border-b border-border pb-3 mb-3"
+                : ""
+            }`}
+          >
             <div className="flex items-center justify-between gap-4">
               <span className="text-sm text-foreground/60">{item.label}</span>
               <div className="flex items-center gap-2">
@@ -46,9 +53,6 @@ export const InfoSection = ({
                 </span>
               </div>
             </div>
-            {divider && index < items.length - 1 && (
-              <div className="h-px bg-border mt-3" />
-            )}
           </div>
         ))}
       </div>
