@@ -25,6 +25,17 @@ async function getGuildData(decodedGuid: string) {
         .catch(() => ({ logs: [] })), // Handle missing logs gracefully
     ]);
 
+    console.log("[Guild] request - endpoint: /api/osint/guild, guid:", guid);
+    console.log("[Guild] response:", JSON.stringify(guildResponse, null, 2));
+    console.log(
+      "[Guild Logs] request - endpoint: /api/osint/guild/logs, guid:",
+      guid
+    );
+    console.log(
+      "[Guild Logs] response:",
+      JSON.stringify(logsResponse, null, 2)
+    );
+
     return {
       guild: guildResponse.guild,
       members: guildResponse.members,
