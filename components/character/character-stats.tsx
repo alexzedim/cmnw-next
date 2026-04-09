@@ -148,7 +148,6 @@ export function CharacterStats({ character }: CharacterStatsProps) {
       {hashItems.length > 0 && (
         <InfoSection
           badge="Verification"
-          divider={false}
           items={hashItems}
           title="Character Hashes"
         />
