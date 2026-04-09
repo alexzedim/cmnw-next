@@ -3,6 +3,8 @@
 import { useEffect } from "react";
 import Link from "next/link";
 
+import { useI18n } from "@/lib/i18n/context";
+
 export default function Error({
   error,
   reset,
@@ -14,6 +16,9 @@ export default function Error({
     console.error("Character page error:", error);
   }, [error]);
 
+  const { dict } = useI18n();
+  const e = dict.error;
+
   const isNotFound = error.message.includes("404");
   const isServerError =
     error.message.includes("500") || error.message.includes("503");
@@ -24,36 +29,36 @@ export default function Error({
         <div className="max-w-2xl mx-auto">
           <div className="card-surface p-8 text-center">
             <h1 className="text-4xl font-bold text-foreground">
-              {isNotFound ? "404" : "Oops!"}
+              {isNotFound ? e.title404 : e.titleOops}
             </h1>
             <h2 className="text-2xl font-bold mt-4">
               {isNotFound
-                ? "Character Not Found"
+                ? e.characterNotFound
                 : isServerError
-                  ? "Server Error"
-                  : "Something went wrong!"}
+                  ? e.serverError
+                  : e.somethingWentWrong}
             </h2>
             <p className="mt-4 mb-6 text-muted">
               {isNotFound
-                ? "The character you are looking for does not exist or has been deleted."
+                ? e.characterDeleted
                 : isServerError
-                  ? "Our servers are currently experiencing issues. Please try again later."
-                  : error.message ||
-                    "An unexpected error occurred while loading this character."}
+                  ? e.serverIssues
+                  : error.message || e.unexpectedCharacter}
             </p>
 
             <div className="flex gap-4 justify-center">
               <button className="btn btn-primary" onClick={reset}>
-                Try Again
+                {e.tryAgain}
               </button>
               <Link className="btn btn-outline" href="/">
-                Go Home
+                {e.goHome}
               </Link>
             </div>
 
             {error.digest && (
               <p className="mt-6 text-xs text-muted">
-                Error ID: {error.digest}
+                {e.errorId}
+                {error.digest}
               </p>
             )}
           </div>
