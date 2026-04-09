@@ -1,26 +1,37 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
+
 import { Separator } from "@heroui/react";
 
 import { ContributionStar } from "@/components/contribution-star";
 import { CONTRIBUTORS } from "@/constants";
+import { detectLocale, getDictionary } from "@/dictionaries";
 
-export const metadata: Metadata = {
-  title: "cmnw",
-  description: "World of Warcraft: Intelligence always wins.",
-  openGraph: {
-    title: "cmnw",
-    description: "Meet the contributors who make CMNW possible",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await detectLocale();
+  const dict = await getDictionary(locale);
+  const wwa = dict.whoWeAre;
 
-export default function WhoWeArePage() {
+  return {
+    title: wwa.metadataTitle,
+    description: wwa.metadataDescription,
+    openGraph: {
+      title: wwa.metadataTitle,
+      description: wwa.metadataOgDescription,
+    },
+  };
+}
+
+export default async function WhoWeArePage() {
+  const locale = await detectLocale();
+  const dict = await getDictionary(locale);
+
   return (
     <main className="min-h-screen pt-20 pb-8">
       <div className="container mx-auto px-4 py-8">
         <Separator className="mb-8" />
 
         <h1 className="text-4xl font-bold text-center uppercase my-8">
-          Great Many Thanks
+          {dict.whoWeAre.title}
         </h1>
 
         <Separator className="mb-8" />
