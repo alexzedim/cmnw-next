@@ -3,7 +3,6 @@
 import type { ReactNode } from "react";
 
 import { Component } from "react";
-import { useI18n } from "@/lib/i18n/context";
 
 interface ErrorBoundaryProps {
   children: ReactNode;
