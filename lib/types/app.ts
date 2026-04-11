@@ -2,10 +2,11 @@ import type {
   AnalyticsMetricCategory,
   AnalyticsMetricType,
 } from "@/constants/analytics-metrics";
+import type { PriceVolatilityData } from "@/lib/types/components";
 
 export interface AppHealthMetricSnapshot {
   snapshotDate: string;
-  value: Record<string, unknown>;
+  value: Record<string, unknown> | PriceVolatilityData;
 }
 
 export interface AppHealthPayload {
@@ -22,7 +23,7 @@ export interface AnalyticsMetricSnapshotDto {
   category: AnalyticsMetricCategory;
   metricType: AnalyticsMetricType;
   realmId: number | null;
-  value: Record<string, unknown>;
+  value: Record<string, unknown> | PriceVolatilityData;
   snapshotDate: string | null;
   createdAt: string;
   updatedAt?: string | null;

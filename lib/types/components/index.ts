@@ -27,3 +27,4 @@ export * from "./quotesResponse";
 export * from "./itemValuationsResponse";
 export * from "./itemValuations";
 export * from "./itemDetailsTable";
+export * from "./priceVolatility";

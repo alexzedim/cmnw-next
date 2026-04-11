@@ -9,6 +9,7 @@ import { ENDPOINTS } from "@/constants/endpoints";
 import { SNAPSHOT_REQUESTS } from "@/constants/snapshot-metrics";
 import {
   buildSnapshotKey,
+  isPriceVolatilityData,
   toAppHealthSnapshot,
 } from "@/lib/utils/snapshot-formatters";
 
@@ -42,7 +43,19 @@ const fetchMetricSnapshots = async (): Promise<MetricSnapshotRecord> => {
 
         const payload: AnalyticsMetricSnapshotDto = await response.json();
 
-        return [key, toAppHealthSnapshot(payload)] as const;
+        const snapshot = isPriceVolatilityData(payload)
+          ? toAppHealthSnapshot({
+              id: `synthetic-${category}-${metricType}`,
+              category,
+              metricType,
+              realmId: null,
+              value: payload,
+              snapshotDate: new Date().toISOString(),
+              createdAt: new Date().toISOString(),
+            })
+          : toAppHealthSnapshot(payload);
+
+        return [key, snapshot] as const;
       } catch (error) {
         console.warn(
           `[metrics] snapshot ${key} failed`,

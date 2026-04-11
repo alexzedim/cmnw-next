@@ -92,3 +92,39 @@ export const buildSnapshotKey = (
   category: AnalyticsMetricCategory,
   metricType: AnalyticsMetricType
 ): SnapshotKey => `${category}:${metricType}` as SnapshotKey;
+
+/**
+ * Checks if a value is a PriceVolatilityData object.
+ */
+export const isPriceVolatilityData = (
+  value: unknown
+): value is { itemId: number; stdDev: number; avgPrice: number } => {
+  if (!value || typeof value !== "object") {
+    return false;
+  }
+  const obj = value as Record<string, unknown>;
+
+  return (
+    typeof obj.itemId === "number" &&
+    typeof obj.stdDev === "number" &&
+    typeof obj.avgPrice === "number"
+  );
+};
+
+/**
+ * Extracts price volatility data from a snapshot.
+ * Returns null if the snapshot is null, undefined, or doesn't contain price volatility data.
+ */
+export const getPriceVolatilityData = (
+  snapshot: AppHealthMetricSnapshot | null
+): { itemId: number; stdDev: number; avgPrice: number } | null => {
+  if (!snapshot?.value) {
+    return null;
+  }
+
+  if (isPriceVolatilityData(snapshot.value)) {
+    return snapshot.value;
+  }
+
+  return null;
+};
