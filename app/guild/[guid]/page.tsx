@@ -13,7 +13,6 @@ import { GuildRoster } from "@/components/guild/guild-roster";
 import { LogTable } from "@/components/shared/log-table";
 import { apiClient } from "@/lib/api";
 import { stringToFaction } from "@/lib/utils/faction-converter";
-import { detectLocale, getDictionary } from "@/dictionaries";
 
 const getGuildData = cache(async function (decodedGuid: string) {
   const guid = decodedGuid;
