@@ -1,14 +1,14 @@
 {
   "site": {
     "name": "CMNW",
-    "description": "Интеллект всегда побеждает."
+    "description": "Intelligence always wins."
   },
   "navbar": {
     "searchAriaLabel": "Поиск",
     "searchPlaceholder": "Поиск..."
   },
   "searchForm": {
-    "placeholder": "cmnw поиск \"Thunderfury\""
+    "placeholder": "cmnw search \"Thunderfury\""
   },
   "footer": {
     "badge": "Footer",
@@ -37,11 +37,11 @@
   },
   "home": {
     "heroTitle": "CMNW",
-    "snapshotBriefsLabel": "Снимки аналитики",
+    "snapshotBriefsLabel": "Аналитика",
     "snapshotBriefsDescription": "Объёмная аналитика персонажей, гильдий, рынка и контрактов — срезы персонажей и гильдий учитывают только максимальный уровень, тогда как рынок и контракты фокусируются на обращаемых инструментах с проверяемой ликвидностью."
   },
   "liveMetrics": {
-    "label": "Живые метрики",
+    "label": "Метрики",
     "apiStatusAriaLabel": "Статус API",
     "apiOffline": "API оффлайн",
     "status": "Статус: {status}",
@@ -121,12 +121,12 @@
       "race": "Раса",
       "faction": "Фракция",
       "gender": "Пол",
-      "lastTimeActive": "Последний раз в игре",
+      "lastTimeActive": "Последняя активность",
       "status": "Статус",
       "createdBy": "Создан",
       "createdAt": "Дата создания",
-      "hashA": "Хэш A",
-      "hashB": "Хэш B",
+      "hashA": "Ключ A",
+      "hashB": "Ключ B",
       "guid": "GUID",
       "id": "ID"
     }
@@ -151,7 +151,7 @@
     "columnRealm": "Игровой мир",
     "columnLevel": "Уровень",
     "columnSpec": "Специализация",
-    "columnIlvl": "Иур.",
+    "columnIlvl": "Илвл.",
     "columnRank": "Ранг",
     "columnAchievements": "Достижения",
     "columnHashA": "Хэш A",
@@ -255,15 +255,15 @@
     "invalid": "Неверно"
   },
   "hash": {
-    "metadataDescription": "Все доступные совпадения хэшей",
-    "metadataOgDescription": "Совпадения хэшей и связанные персонажи",
+    "metadataDescription": "Все доступные совпадения ключей",
+    "metadataOgDescription": "Совпадения ключа и связанные персонажи",
     "precisionMatch": "Точное совпадение",
-    "precisionMatchDescription": "Этот аккаунт однозначно идентифицирован этим хэшем",
-    "hashTooCommon": "Хэш слишком частый",
-    "hashTooCommonDescription": "Это значение хэша общее для нескольких аккаунтов",
+    "precisionMatchDescription": "Этот аккаунт однозначно идентифицирован этим ключом",
+    "hashTooCommon": "Ключ слишком частый",
+    "hashTooCommonDescription": "Это значение ключа общее для нескольких аккаунтов",
     "precisionCount": "У этого аккаунта {count} {noun}",
     "nonPrecisionCount": "Это значение хэша общее для {count} {noun} с разных аккаунтов",
-    "hashBHint": "Хэш B******** даёт более точное совпадение",
+    "hashBHint": "Ключ B******** даёт более точное совпадение",
     "noGuildData": "Нет данных о гильдии",
     "excellent": "Отлично",
     "veryGood": "Очень хорошо",
@@ -274,8 +274,8 @@
     "guildAllocationTitle": "Проверка распределения персонажей по гильдиям - {status} ({percentage}%)",
     "guildSpread": "Аккаунт распределён по {count} уникальным {noun}",
     "rank": "ранг ",
-    "gm": "GM",
-    "unranked": "б/р",
+    "gm": "Гильд-мастер",
+    "unranked": "н/д",
     "level": "Уровень {level}",
     "itemLevelLabel": "Уровень предмета:",
     "raceLabel": "Раса:",
@@ -351,15 +351,15 @@
     "marketTitle": "Рынок",
     "charactersAtCap": "Персонажи @ макс.",
     "charactersDisclaimer": "Учитываются только полностью загруженные персонажи максимального уровня, полученные в ходе последнего окна синхронизации.",
-    "factionSplit": "Расклад по фракциям",
-    "classMix": "Микс классов",
-    "levelBracket": "Уровневый диапазон",
+    "factionSplit": "Распределение по фракциям",
+    "classMix": "Распределение классов",
+    "levelBracket": "Максимальный уровень",
     "guildStructures": "Структуры гильдий",
     "guildDisclaimer": "Срезы ростера включают только гильдии с подтверждённой активностью за последние 48 часов.",
     "sizeDistribution": "Распределение по размеру",
     "topByMembers": "Топ по участникам",
     "topByAchievements": "Топ по достижениям",
-    "marketFlow": "Поток рынка",
+    "marketFlow": "Рынок",
     "marketDisclaimer": "Диапазоны товаров показывают только рынки с проверенными котировками и аукционами.",
     "priceRanges": "Ценовые диапазоны",
     "topByVolume": "Топ по объёму",
