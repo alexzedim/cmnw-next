@@ -14,7 +14,7 @@ interface GuildTitleProps {
   name: string;
   realm: string;
   member_count: number;
-  created_timestamp: number | string;
+  created_timestamp: number | string | Date;
   achievement_points: number;
   faction?: Faction;
   members?: Character[];
