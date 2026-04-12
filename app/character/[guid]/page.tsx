@@ -114,6 +114,7 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
                 {character.mainImage ? (
                   <Image
                     fill
+                    unoptimized
                     alt={dict.character.portraitAlt.replace(
                       "{name}",
                       character.name
