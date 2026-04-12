@@ -45,13 +45,13 @@
     "apiStatusAriaLabel": "Статус API",
     "apiOffline": "API оффлайн",
     "status": "Статус: {status}",
-    "feedUnavailable": "Лента метрик недоступна.",
+    "feedUnavailable": "Лента недоступна.",
     "snapshotAt": "Актуально на {date}",
     "loadingSnapshot": "Загрузка снимка…",
     "noSnapshot": "Метрики ещё не были созданы.",
     "unableToRead": "Не удаётся прочитать значения метрик.",
     "loadingValues": "Загрузка значений метрик…",
-    "noPayload": "Метрики ответили без полезной нагрузки."
+    "noPayload": "Данные отсутствуют"
   },
   "snapshotBriefs": {
     "unavailable": "Недоступно",
