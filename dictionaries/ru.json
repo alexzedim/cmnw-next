@@ -46,9 +46,9 @@
     "apiOffline": "API оффлайн",
     "status": "Статус: {status}",
     "feedUnavailable": "Лента метрик недоступна.",
-    "snapshotAt": "Снимок @ {date}",
+    "snapshotAt": "Актуально на {date}",
     "loadingSnapshot": "Загрузка снимка…",
-    "noSnapshot": "Снимок ещё не был создан.",
+    "noSnapshot": "Метрики ещё не были созданы.",
     "unableToRead": "Не удаётся прочитать значения метрик.",
     "loadingValues": "Загрузка значений метрик…",
     "noPayload": "Метрики ответили без полезной нагрузки."
