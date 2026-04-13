@@ -175,8 +175,8 @@
     "unranked": "б/р:"
   },
   "guildConstants": {
-    "gm": "GM",
-    "highRankingOfficer": "Старший офицер",
+    "gm": "Гильд-мастер",
+    "highRankingOfficer": "Высокопоставленный офицер",
     "officer": "Офицер",
     "member": "Участник",
     "specialPurposeBank": "Специальное назначение | Банк-гильдия",
@@ -266,10 +266,10 @@
     "hashBHint": "Ключ B******** даёт более точное совпадение",
     "noGuildData": "Нет данных о гильдии",
     "excellent": "Отлично",
-    "veryGood": "Очень хорошо",
-    "good": "Хорошо",
-    "moderate": "Умеренно",
-    "concerning": "Тревожно",
+    "veryGood": "Высокая аллокация",
+    "good": "Хорошая аллокация",
+    "moderate": "Низкая аллокация",
+    "concerning": "Сверхнизкая аллокация",
     "spreadOut": "Разбросано",
     "guildAllocationTitle": "Проверка распределения персонажей по гильдиям - {status} ({percentage}%)",
     "guildSpread": "Аккаунт распределён по {count} уникальным {noun}",
@@ -338,7 +338,7 @@
   },
   "guildRank": {
     "unranked": "ранг б/р",
-    "guildMaster": "гильдмастер",
+    "guildMaster": "гильд-мастер",
     "rank": "ранг {rank}"
   },
   "languageSwitcher": {
