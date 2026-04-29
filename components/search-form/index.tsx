@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { ENDPOINTS } from "@/constants";
 import { NAMING_CONSTANTS } from "@/constants/naming";
 import { fontJetBrains } from "@/config/fonts";
+import { useAnimatedPlaceholder } from "@/hooks/use-animated-placeholder";
 import { useI18n } from "@/lib/i18n/context";
 
 interface SearchSuggestion {
@@ -26,7 +27,8 @@ const sanitizeQueryInput = (value: string) => value.replace(/\s+/g, "-");
 
 export const SearchForm = () => {
   const router = useRouter();
-  const { dict } = useI18n();
+
+  useI18n();
   const [searchQuery, setSearchQuery] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([]);
@@ -35,6 +37,9 @@ export const SearchForm = () => {
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
   const [selectedSuggestion, setSelectedSuggestion] =
     useState<SearchSuggestion | null>(null);
+  const [isHovered, setIsHovered] = useState(false);
+  const { placeholder: animatedPlaceholder, currentName } =
+    useAnimatedPlaceholder(searchQuery === "", isHovered);
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -239,13 +244,23 @@ export const SearchForm = () => {
     <div className="w-full max-w-3xl relative">
       <div className="flex gap-2 items-end">
         <div className="card-surface max-w-3xl w-full p-4 relative">
-          <div className="font-mono text-sm text-muted flex items-center w-full">
+          <div
+            className="font-mono text-sm text-muted flex items-center w-full cursor-pointer"
+            onClick={() => {
+              if (searchQuery === "" && currentName) {
+                setSearchQuery(currentName);
+                inputRef.current?.focus();
+              }
+            }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
             <span className="text-foreground/80">$</span>
             <input
               ref={inputRef}
               autoComplete="off"
               className="bg-transparent ml-2 outline-none text-foreground flex-1"
-              placeholder={dict.searchForm.placeholder}
+              placeholder={animatedPlaceholder}
               type="text"
               value={searchQuery}
               onChange={(e) =>
