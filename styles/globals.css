@@ -188,12 +188,16 @@
     transform: translateY(1px);
   }
   .btn-primary {
-    background: var(--primary);
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
     color: var(--primary-foreground);
     border-color: color-mix(in oklab, var(--primary), black 12%);
   }
   .btn-primary:hover {
-    background: color-mix(in oklab, var(--primary), var(--mix-toward) 8%);
+    background: linear-gradient(
+      135deg,
+      color-mix(in oklab, var(--gradient-start), var(--mix-toward) 8%),
+      color-mix(in oklab, var(--gradient-end), var(--mix-toward) 8%)
+    );
   }
   .btn-primary:focus-visible {
     outline: 2px solid var(--accent);
