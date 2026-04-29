@@ -188,3 +188,21 @@ styles/
 | Animation          | framer-motion                    |
 | Markdown Rendering | react-markdown                   |
 | Theme Switching    | next-themes                      |
+
+## Git Commit Policy
+
+Use conventional commits:
+
+```bash
+git commit -m "type(scope): description"
+```
+
+**Types**: `feat`, `fix`, `refactor`, `docs`, `style`, `test`, `chore`
+
+**Rules**:
+
+1. Commit only staged changes
+2. Split logical changes into separate commits - each commit should represent one logical change that could be reverted independently
+3. Never mix refactoring, formatting, or cleanup changes with new features or bug fixes in the same commit
+4. Order commits logically so each builds on the previous one
+5. Use short lowercased commit message, with no description body
