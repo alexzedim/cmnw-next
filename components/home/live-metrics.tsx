@@ -13,6 +13,8 @@ import {
   buildSnapshotKey,
 } from "@/lib/utils/snapshot-formatters";
 import { useI18n } from "@/lib/i18n/context";
+import { NAMING_CONSTANTS } from "@/constants/naming";
+import { fontJetBrains } from "@/config/fonts";
 
 type MetricSnapshot = {
   category: AnalyticsMetricCategory;
@@ -70,6 +72,11 @@ export function LiveMetrics({
             const snapshotDate = formatSnapshotDate(snapshot);
             const entries = getSnapshotEntries(snapshot);
             const title =
+              {
+                charactersTitle: `${NAMING_CONSTANTS.CHARACTER}S`,
+                guildsTitle: `${NAMING_CONSTANTS.GUILD}S`,
+                marketTitle: "ΛUCTIONS",
+              }[titleKey] ??
               dict.snapshotMetrics[
                 titleKey as keyof typeof dict.snapshotMetrics
               ];
@@ -80,7 +87,10 @@ export function LiveMetrics({
                 className="card-surface p-6 flex flex-col gap-4 border-l-4 transition-colors duration-200 border-l-[var(--border-accent)]"
               >
                 <div>
-                  <h3 className="text-xl font-semibold text-[var(--primary)]">
+                  <h3
+                    className="text-xl font-semibold text-[var(--primary)]"
+                    style={{ fontFamily: fontJetBrains.style.fontFamily }}
+                  >
                     {title}
                   </h3>
                   <p className="text-muted mt-2 text-sm">
