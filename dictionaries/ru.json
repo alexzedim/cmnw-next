@@ -24,10 +24,10 @@
     "apiDegraded": "API деградирован",
     "apiOffline": "API оффлайн",
     "checkingApiStatus": "Проверка статуса API",
-    "copyright": "© {year} CMNW. Все права защищены.",
+    "copyright": "© {year} | CMNW |",
     "github": "GitHub",
     "discord": "Discord",
-    "zeroCookiePolicy": "Нулевая политика Cookie",
+    "zeroCookiePolicy": "Никаких куки",
     "uptime": "Аптайм",
     "latestMarketData": "Последние данные рынка"
   },
@@ -366,8 +366,8 @@
     "priceVolatility": "Волатильность цен",
     "contractsBoard": "Доска контрактов",
     "contractsDisclaimer": "Статистика контрактов фокусируется на инструментах максимальной длительности с проверяемой ликвидностью.",
-    "openInterestLeaders": "Лидеры открытого интереса",
-    "quantityConcentration": "Концентрация количества",
+    "openInterestLeaders": "Лидер по открытому интересу",
+    "quantityConcentration": "Лидер по концентрации количества",
     "auctionThroughput": "Пропускная способность аукционов"
   }
 }
