@@ -14,4 +14,5 @@ export * from "./naming";
 export * from "./profession-colors";
 export * from "./professions";
 export * from "./realms";
+export * from "./search-placeholders";
 export * from "./wow-classes";
