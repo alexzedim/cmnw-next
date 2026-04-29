@@ -3,9 +3,7 @@
 import { useAppMetrics } from "@/components/providers/app-metrics-provider";
 import { HeroSection } from "@/components/home/hero-section";
 import { LiveMetrics } from "@/components/home/live-metrics";
-import { SnapshotBriefsCharacters } from "@/components/home/snapshot-briefs-characters";
-import { SnapshotBriefsGuilds } from "@/components/home/snapshot-briefs-guilds";
-import { SnapshotBriefsMarketContracts } from "@/components/home/snapshot-briefs-market-contracts";
+import { SnapshotBriefGroup } from "@/components/home/snapshot-brief-group";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { useMetricSnapshots } from "@/hooks/useMetricSnapshots";
 import {
@@ -47,10 +45,6 @@ export default function Home() {
 
   const metricCardHasError = metricsError || Boolean(metricSnapshotError);
 
-  const charactersGroups = [snapshotHighlightGroups[0]];
-  const guildsGroups = [snapshotHighlightGroups[1]];
-  const marketContractsGroups = snapshotHighlightGroups.slice(2);
-
   return (
     <ErrorBoundary>
       <HeroSection />
@@ -62,32 +56,20 @@ export default function Home() {
         metricsStatus={metricsStatus}
       />
       <section className="section section-tight-top container mx-auto px-6">
-        <div className="card-surface p-6 flex flex-col gap-6">
-          <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-foreground/40">
-              {dict.home.snapshotBriefsLabel}
-            </p>
-            <p className="text-muted mt-2 text-sm">
-              {dict.home.snapshotBriefsDescription}
-            </p>
-          </div>
-          <div className="grid grid-cols-2 gap-6">
-            <SnapshotBriefsCharacters
+        <div className="mb-8">
+          <p className="text-xs uppercase tracking-[0.3em] text-foreground/40">
+            {dict.home.snapshotBriefsLabel}
+          </p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {snapshotHighlightGroups.map((group) => (
+            <SnapshotBriefGroup
+              key={group.titleKey}
+              group={group}
               metricCardHasError={metricCardHasError}
               metricSnapshotLoading={metricSnapshotLoading}
-              snapshotHighlightGroups={charactersGroups}
             />
-            <SnapshotBriefsGuilds
-              metricCardHasError={metricCardHasError}
-              metricSnapshotLoading={metricSnapshotLoading}
-              snapshotHighlightGroups={guildsGroups}
-            />
-          </div>
-          <SnapshotBriefsMarketContracts
-            metricCardHasError={metricCardHasError}
-            metricSnapshotLoading={metricSnapshotLoading}
-            snapshotHighlightGroups={marketContractsGroups}
-          />
+          ))}
         </div>
       </section>
     </ErrorBoundary>
