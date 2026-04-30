@@ -365,5 +365,34 @@
     "openInterestLeaders": "Open interest leaders",
     "quantityConcentration": "Quantity concentration",
     "auctionThroughput": "Auction throughput"
+  },
+  "upload": {
+    "metadataTitle": "OSINT Upload — CMNW",
+    "pageTitle": "OSINT Data Upload",
+    "pageDescription": "Upload your CMNW OSINT addon scan file to contribute character data.",
+    "dropzoneLabel": "Drop your .lua file here or click to browse",
+    "fileNameError": "File name must contain 'cmnw-osint'",
+    "fileExtensionError": "Only .lua files are accepted",
+    "fileHeaderError": "Invalid file format — file must be a CMNW OSINT SavedVariables file",
+    "parseError": "Failed to parse the file. Ensure it is a valid CMNW OSINT export.",
+    "submit": "Upload Data",
+    "submitting": "Uploading...",
+    "success": "Data uploaded successfully!",
+    "error": "Upload failed. Please try again.",
+    "noEntries": "No entries found in file.",
+    "entryCount": "{count} entries found",
+    "shownCount": "{shown} / {total} shown",
+    "table": {
+      "name": "Name",
+      "realm": "Realm",
+      "class": "Class",
+      "race": "Race",
+      "gender": "Gender",
+      "faction": "Faction",
+      "level": "Level",
+      "guild": "Guild",
+      "guildRank": "Guild Rank",
+      "lastModified": "Last Modified"
+    }
   }
 }
