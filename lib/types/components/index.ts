@@ -28,3 +28,4 @@ export * from "./itemValuationsResponse";
 export * from "./itemValuations";
 export * from "./itemDetailsTable";
 export * from "./priceVolatility";
+export * from "./upload-table";
