@@ -369,5 +369,34 @@
     "openInterestLeaders": "Лидер по открытому интересу",
     "quantityConcentration": "Лидер по концентрации количества",
     "auctionThroughput": "Пропускная способность аукционов"
+  },
+  "upload": {
+    "metadataTitle": "Загрузка OSINT — CMNW",
+    "pageTitle": "Загрузка данных OSINT",
+    "pageDescription": "Загрузите файл сканирования аддона CMNW OSINT, чтобы внести данные о персонажах.",
+    "dropzoneLabel": "Перетащите .lua файл сюда или нажмите для выбора",
+    "fileNameError": "Имя файла должно содержать 'cmnw-osint'",
+    "fileExtensionError": "Принимаются только .lua файлы",
+    "fileHeaderError": "Неверный формат файла — файл должен быть SavedVariables CMNW OSINT",
+    "parseError": "Не удалось распарсить файл. Убедитесь, что это корректный экспорт CMNW OSINT.",
+    "submit": "Загрузить данные",
+    "submitting": "Загрузка...",
+    "success": "Данные успешно загружены!",
+    "error": "Ошибка загрузки. Пожалуйста, попробуйте снова.",
+    "noEntries": "В файле не найдено записей.",
+    "entryCount": "Найдено записей: {count}",
+    "shownCount": "{shown} / {total} показано",
+    "table": {
+      "name": "Имя",
+      "realm": "Игровой мир",
+      "class": "Класс",
+      "race": "Раса",
+      "gender": "Пол",
+      "faction": "Фракция",
+      "level": "Уровень",
+      "guild": "Гильдия",
+      "guildRank": "Ранг в гильдии",
+      "lastModified": "Последнее изменение"
+    }
   }
 }
