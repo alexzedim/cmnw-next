@@ -1,1 +1,1 @@
-export * from "./searchInput";
+export * from "./addon-scan-entry";
