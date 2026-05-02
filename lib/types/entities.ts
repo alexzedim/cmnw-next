@@ -51,6 +51,7 @@ export interface Character {
   mainImage?: string;
   mountsNumber?: number;
   petsNumber?: number;
+  professions?: string[];
   percentiles?: CharacterPercentileData;
   createdBy?: string;
   updatedBy: string;
