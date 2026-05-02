@@ -26,7 +26,7 @@ export function getGuildRankDisplay(
       };
     case 2:
       return {
-        symbol: "\u22DB",
+        symbol: "\u268C",
         text: gr.rank.replace("{rank}", "2"),
         isBold: true,
       };
