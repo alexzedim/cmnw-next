@@ -343,6 +343,17 @@
     "ru": "RU"
   },
   "snapshotMetrics": {
+    "metricEntries": {
+      "count": "Total",
+      "inGuilds": "In Guilds",
+      "notInGuilds": "Not in Guilds",
+      "avgMembers": "Avg Members",
+      "totalMembers": "Total Members",
+      "volume": "Volume",
+      "auctions": "Auctions",
+      "uniqueItemsCommdty": "Unique Commodities",
+      "uniqueItemsAuctions": "Unique Auction Items"
+    },
     "charactersTitle": "Characters",
     "guildsTitle": "Guilds",
     "marketTitle": "Market",

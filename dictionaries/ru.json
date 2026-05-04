@@ -347,6 +347,17 @@
     "ru": "RU"
   },
   "snapshotMetrics": {
+    "metricEntries": {
+      "count": "Всего",
+      "inGuilds": "В гильдиях",
+      "notInGuilds": "Без гильдии",
+      "avgMembers": "Ср. участников",
+      "totalMembers": "Всего участников",
+      "volume": "Объём",
+      "auctions": "Аукционы",
+      "uniqueItemsCommdty": "Уник. товары",
+      "uniqueItemsAuctions": "Уник. лоты"
+    },
     "charactersTitle": "Персонажи",
     "guildsTitle": "Гильдии",
     "marketTitle": "Рынок",

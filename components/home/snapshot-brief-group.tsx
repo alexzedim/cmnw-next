@@ -89,7 +89,9 @@ export function SnapshotBriefGroup({
                           className="text-foreground/60 text-xs"
                           style={entryColor ? { color: entryColor } : undefined}
                         >
-                          {entryKey}
+                          {sm.metricEntries?.[
+                            entryKey as keyof typeof sm.metricEntries
+                          ] ?? entryKey}
                         </dt>
                         <dd className="font-mono text-right">
                           {formatEntryValue(entryValue)}
