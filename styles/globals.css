@@ -3,6 +3,15 @@
 
 @config "../tailwind.config.js";
 
+@font-face {
+  font-family: "Noto Sans Runic";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/noto-sans-runic.ttf") format("truetype");
+  unicode-range: U+16A0-16FF;
+}
+
 /* Base color variables into Tailwind layers */
 @layer base {
   :root {
