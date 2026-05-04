@@ -40,6 +40,7 @@ export function LiveMetrics({
 }: LiveMetricsProps) {
   const { dict } = useI18n();
   const lm = dict.liveMetrics;
+  const sm = dict.snapshotMetrics;
 
   return (
     <section className="section section-tight-bottom container mx-auto px-6">
@@ -111,7 +112,11 @@ export function LiveMetrics({
                           key={entryKey}
                           className="flex items-center justify-between gap-4 text-sm"
                         >
-                          <dt className="text-foreground/60">{entryKey}</dt>
+                          <dt className="text-foreground/60">
+                            {sm.metricEntries?.[
+                              entryKey as keyof typeof sm.metricEntries
+                            ] ?? entryKey}
+                          </dt>
                           <dd className="font-mono text-foreground text-right">
                             {formatEntryValue(entryValue)}
                           </dd>
