@@ -406,5 +406,11 @@
       "guildRank": "Guild Rank",
       "lastModified": "Last Modified"
     }
+  },
+  "pageLock": {
+    "title": "Worthy Key",
+    "description": "Only worthy can pass",
+    "placeholder": "•",
+    "error": "Wrong key. Try again."
   }
 }
