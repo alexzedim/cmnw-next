@@ -72,15 +72,15 @@ export function LiveMetrics({
           ({ category, titleKey, snapshot, metricType }, index) => {
             const snapshotDate = formatSnapshotDate(snapshot);
             const entries = getSnapshotEntries(snapshot);
-            const title =
+            const title: string =
               {
                 charactersTitle: `${NAMING_CONSTANTS.CHARACTER}S`,
                 guildsTitle: `${NAMING_CONSTANTS.GUILD}S`,
                 marketTitle: "ΛUCTIONS",
               }[titleKey] ??
-              dict.snapshotMetrics[
+              (dict.snapshotMetrics[
                 titleKey as keyof typeof dict.snapshotMetrics
-              ];
+              ] as string);
 
             return (
               <div
