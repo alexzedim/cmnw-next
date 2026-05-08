@@ -25,7 +25,7 @@ export function SnapshotBriefGroup({
   const sb = dict.snapshotBriefs;
   const sm = dict.snapshotMetrics;
 
-  const groupTitle = sm[group.titleKey as keyof typeof sm];
+  const groupTitle = sm[group.titleKey as keyof typeof sm] as string;
 
   return (
     <article
@@ -50,7 +50,7 @@ export function SnapshotBriefGroup({
               ? [...entries].sort((a, b) => a[0].localeCompare(b[0]))
               : entries;
           const snapshotDate = formatSnapshotDate(metric.snapshot ?? null);
-          const metricLabel = sm[metric.labelKey as keyof typeof sm];
+          const metricLabel = sm[metric.labelKey as keyof typeof sm] as string;
 
           return (
             <div
