@@ -49,6 +49,7 @@ export default function Home() {
   return (
     <ErrorBoundary>
       <HeroSection />
+      <LiveFeed />
       <LiveMetrics
         metricCardHasError={metricCardHasError}
         metricSnapshotLoading={metricSnapshotLoading}
@@ -56,7 +57,6 @@ export default function Home() {
         metricsError={metricsError}
         metricsStatus={metricsStatus}
       />
-      <LiveFeed />
       <section className="section section-tight-top container mx-auto px-6">
         <div className="mb-8">
           <p className="text-xs uppercase tracking-[0.3em] text-foreground/40">

@@ -4,7 +4,6 @@ import { Fragment, useMemo } from "react";
 
 import { useLiveFeed, type LiveFeedStatus } from "@/components/providers/live-feed-provider";
 import { fontJetBrains } from "@/config/fonts";
-import { useI18n } from "@/lib/i18n/context";
 import {
   FEED_STATUS_META,
   FEED_STATUS_TEXT_COLOR,
@@ -59,22 +58,18 @@ const FeedRow = ({ event }: { event: FeedEvent }) => {
 
 export function LiveFeed() {
   const { messages, status } = useLiveFeed();
-  const { dict } = useI18n();
-  const t = dict.liveFeed;
-
-  const headerLabel = t?.label ?? "Live feed";
-  const emptyLabel = t?.feedUnavailable ?? "Feed unavailable";
-  const idleLabel = t?.noEvents ?? "Waiting for events…";
 
   const visibleMessages = useMemo(() => messages.slice(0, 12), [messages]);
 
   return (
-    <section className="section section-tight-top container mx-auto px-6">
-      <div className="mb-3 flex items-center justify-between">
-        <p className="text-xs uppercase tracking-[0.3em] text-foreground/40">
-          {headerLabel}
-        </p>
-        <div className="flex items-center gap-2">
+    <div
+      className={`${fontJetBrains.className} px-4 py-3 overflow-hidden`}
+      role="log"
+      aria-live="polite"
+      aria-label="Live feed"
+    >
+      {messages.length === 0 ? null : (
+        <div className="mb-2 flex items-center gap-2">
           <span
             className={`inline-block h-2 w-2 rounded-full ${STATUS_DOT_CLASS[status]}`}
             aria-hidden
@@ -83,26 +78,12 @@ export function LiveFeed() {
             {status}
           </span>
         </div>
-      </div>
-
-      <div
-        className={`${fontJetBrains.className} card-surface bg-transparent/40 backdrop-blur-sm overflow-hidden`}
-        role="log"
-        aria-live="polite"
-        aria-label={headerLabel}
-      >
-        {messages.length === 0 ? (
-          <div className="px-3 py-6 text-center text-xs text-foreground/40">
-            {status === "open" ? idleLabel : emptyLabel}
-          </div>
-        ) : (
-          visibleMessages.map((event) => (
-            <Fragment key={event.id}>
-              <FeedRow event={event} />
-            </Fragment>
-          ))
-        )}
-      </div>
-    </section>
+      )}
+      {visibleMessages.map((event) => (
+        <Fragment key={event.id}>
+          <FeedRow event={event} />
+        </Fragment>
+      ))}
+    </div>
   );
 }
