@@ -7,12 +7,28 @@ import type {
   AnalyticsMetricType,
 } from "@/constants/analytics-metrics";
 import type { SnapshotKey } from "@/lib/types/snapshot-metrics";
+import type { Locale } from "@/dictionaries";
+
+const LOCALE_MAP: Record<Locale, string> = {
+  en: "en_US",
+  ru: "ru_RU",
+};
 
 /**
  * Picks a human-readable label from a ranked-list element.
- * Prefers `name` (guilds/characters), falls back to `itemId` (market items).
+ * Resolution chain: locale name → en_US name → flat name → #itemId → guid.
  */
-const rankLabel = (element: Record<string, unknown>): string => {
+const rankLabel = (
+  element: Record<string, unknown>,
+  locale: Locale = "en"
+): string => {
+  if (element.names && typeof element.names === "object") {
+    const names = element.names as Record<string, string>;
+    const localeKey = LOCALE_MAP[locale] ?? "en_US";
+    if (names[localeKey]) return names[localeKey];
+    if (names.en_US) return names.en_US;
+  }
+
   if (typeof element.name === "string" && element.name.length > 0) {
     return element.name;
   }
@@ -71,7 +87,8 @@ const isRankRecord = (
  * through the same key/value rows as plain object maps.
  */
 export const normalizeSnapshotValue = (
-  value: unknown
+  value: unknown,
+  locale: Locale = "en"
 ): Record<string, unknown> => {
   if (Array.isArray(value)) {
     return Object.fromEntries(
@@ -80,7 +97,7 @@ export const normalizeSnapshotValue = (
           (element): element is Record<string, unknown> =>
             Boolean(element) && typeof element === "object"
         )
-        .map((element) => [rankLabel(element), rankValue(element)])
+        .map((element) => [rankLabel(element, locale), rankValue(element)])
     );
   }
 
@@ -95,11 +112,12 @@ export const normalizeSnapshotValue = (
  * Converts an analytics metric snapshot DTO to an app health metric snapshot.
  */
 export const toAppHealthSnapshot = (
-  snapshot: AnalyticsMetricSnapshotDto
+  snapshot: AnalyticsMetricSnapshotDto,
+  locale: Locale = "en"
 ): AppHealthMetricSnapshot => ({
   snapshotDate:
     snapshot.snapshotDate || snapshot.createdAt || new Date().toISOString(),
-  value: normalizeSnapshotValue(snapshot.value),
+  value: normalizeSnapshotValue(snapshot.value, locale),
 });
 
 /**
@@ -113,7 +131,8 @@ export const toAppHealthSnapshot = (
  */
 export const getSnapshotEntries = (
   snapshot: AppHealthMetricSnapshot | null,
-  limit = 4
+  limit = 4,
+  locale: Locale = "en"
 ): Array<[string, unknown]> => {
   if (!snapshot?.value || typeof snapshot.value !== "object") {
     return [];
@@ -123,9 +142,50 @@ export const getSnapshotEntries = (
     .slice(0, limit)
     .map(([key, entryValue]) =>
       isRankRecord(entryValue)
-        ? [rankLabel(entryValue), rankValue(entryValue)]
+        ? [rankLabel(entryValue, locale), rankValue(entryValue)]
         : [key, entryValue]
     );
+};
+
+export type SnapshotEntry = {
+  label: string;
+  value: unknown;
+  href?: string;
+};
+
+const buildEntryHref = (element: Record<string, unknown>): string | undefined => {
+  if (typeof element.guid === "string" && element.guid.length > 0) {
+    const [name, realm] = element.guid.split("@");
+    if (name && realm) return `/guild/${element.guid}`;
+  }
+  if (typeof element.itemId === "number") {
+    return `/item/${element.itemId}`;
+  }
+  return undefined;
+};
+
+export const getSnapshotEntriesRich = (
+  snapshot: AppHealthMetricSnapshot | null,
+  limit = 4,
+  locale: Locale = "en"
+): SnapshotEntry[] => {
+  if (!snapshot?.value || typeof snapshot.value !== "object") {
+    return [];
+  }
+
+  return Object.entries(snapshot.value)
+    .slice(0, limit)
+    .map(([key, entryValue]) => {
+      if (isRankRecord(entryValue)) {
+        const el = entryValue as Record<string, unknown>;
+        return {
+          label: rankLabel(el, locale),
+          value: rankValue(el),
+          href: buildEntryHref(el),
+        };
+      }
+      return { label: key, value: entryValue };
+    });
 };
 
 /**
@@ -147,14 +207,20 @@ export const formatSnapshotDate = (
 
 /**
  * How a metric value should be rendered.
- * - "number": full grouped digits (1,234,567)
- * - "gold":   WoW copper -> gold, compact (132,290,314,000 copper -> "13.23Mg")
+ * - "number": apostrophe-grouped digits (1'234'567)
+ * - "gold":   WoW copper -> gold with apostrophe grouping (1'334'200 g)
  */
 export type SnapshotValueFormat = "number" | "gold";
 
-const compactNumberFormatter = new Intl.NumberFormat("en", {
-  notation: "compact",
-  maximumFractionDigits: 2,
+const apostropheNumberFormatter = new Intl.NumberFormat("de-CH", {
+  maximumFractionDigits: 0,
+});
+
+export type GoldFormatted = { amount: string; suffix: "g" };
+
+export const formatGoldValue = (copper: number): GoldFormatted => ({
+  amount: apostropheNumberFormatter.format(Math.round(copper / 10_000)),
+  suffix: "g",
 });
 
 /**
@@ -170,12 +236,11 @@ export const formatEntryValue = (
   }
   if (typeof value === "number") {
     if (valueFormat === "gold") {
-      const gold = value / 10_000;
-
-      return `${compactNumberFormatter.format(gold)}g`;
+      const { amount, suffix } = formatGoldValue(value);
+      return `${amount} ${suffix}`;
     }
 
-    return value.toLocaleString();
+    return apostropheNumberFormatter.format(value);
   }
   if (typeof value === "string") {
     return value;
