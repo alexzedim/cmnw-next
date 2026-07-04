@@ -3,6 +3,7 @@ import type {
   AnalyticsMetricType,
 } from "@/constants/analytics-metrics";
 import type { AppHealthMetricSnapshot } from "@/lib/types";
+import type { SnapshotValueFormat } from "@/lib/utils/snapshot-formatters";
 
 export type SnapshotKey = `${AnalyticsMetricCategory}:${AnalyticsMetricType}`;
 
@@ -16,6 +17,7 @@ export type SnapshotHighlightMetric = SnapshotRequest & {
   label?: string;
   valueLimit?: number;
   sort?: "alpha";
+  valueFormat?: SnapshotValueFormat;
   getEntryColor?: (label: string) => string | undefined;
   snapshot?: AppHealthMetricSnapshot | null;
 };

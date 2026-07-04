@@ -87,6 +87,7 @@ export const SNAPSHOT_HIGHLIGHT_GROUPS: readonly SnapshotHighlightGroup[] = [
         labelKey: "topByVolume" as const,
         category: AnalyticsMetricCategory.MARKET,
         metricType: AnalyticsMetricType.TOP_BY_VOLUME,
+        valueFormat: "gold",
       },
       {
         labelKey: "priceVolatility" as const,

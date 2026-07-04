@@ -94,7 +94,7 @@ export function SnapshotBriefGroup({
                           ] ?? entryKey}
                         </dt>
                         <dd className="font-mono text-right">
-                          {formatEntryValue(entryValue)}
+                          {formatEntryValue(entryValue, metric.valueFormat)}
                         </dd>
                       </div>
                     );
