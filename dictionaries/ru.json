@@ -53,6 +53,11 @@
     "loadingValues": "Загрузка значений метрик…",
     "noPayload": "Данные отсутствуют"
   },
+  "liveFeed": {
+    "label": "Лента событий",
+    "feedUnavailable": "Лента недоступна.",
+    "noEvents": "Ожидание событий…"
+  },
   "snapshotBriefs": {
     "unavailable": "Недоступно",
     "loading": "Загрузка…",

@@ -2,6 +2,7 @@
 
 import { useAppMetrics } from "@/components/providers/app-metrics-provider";
 import { HeroSection } from "@/components/home/hero-section";
+import { LiveFeed } from "@/components/home/live-feed";
 import { LiveMetrics } from "@/components/home/live-metrics";
 import { SnapshotBriefGroup } from "@/components/home/snapshot-brief-group";
 import { ErrorBoundary } from "@/components/error-boundary";
@@ -55,6 +56,7 @@ export default function Home() {
         metricsError={metricsError}
         metricsStatus={metricsStatus}
       />
+      <LiveFeed />
       <section className="section section-tight-top container mx-auto px-6">
         <div className="mb-8">
           <p className="text-xs uppercase tracking-[0.3em] text-foreground/40">

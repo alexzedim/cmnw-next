@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 
 import { AppMetricsProvider } from "@/components/providers/app-metrics-provider";
+import { LiveFeedProvider } from "@/components/providers/live-feed-provider";
 import { I18nProvider } from "@/lib/i18n/context";
 
 export interface ProvidersProps {
@@ -38,7 +39,9 @@ export function Providers({
     <I18nProvider value={{ locale, dict }}>
       <HeroUIProvider navigate={router.push}>
         <NextThemesProvider {...themeProps}>
-          <AppMetricsProvider>{children}</AppMetricsProvider>
+          <AppMetricsProvider>
+            <LiveFeedProvider>{children}</LiveFeedProvider>
+          </AppMetricsProvider>
         </NextThemesProvider>
       </HeroUIProvider>
     </I18nProvider>

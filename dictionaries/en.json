@@ -53,6 +53,11 @@
     "loadingValues": "Loading metric values\u2026",
     "noPayload": "Metrics responded without value payload."
   },
+  "liveFeed": {
+    "label": "Live feed",
+    "feedUnavailable": "Feed unavailable.",
+    "noEvents": "Waiting for events\u2026"
+  },
   "snapshotBriefs": {
     "unavailable": "Unavailable",
     "loading": "Loading\u2026",
