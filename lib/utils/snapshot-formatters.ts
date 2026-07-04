@@ -36,7 +36,12 @@ const rankLabel = (element: Record<string, unknown>): string => {
  *  - contracts: `openInterest`, `quantity`, then `stdDev` (price volatility)
  */
 const rankValue = (element: Record<string, unknown>): unknown =>
-  element.value ?? element.volume ?? element.openInterest ?? element.quantity ?? element.stdDev ?? null;
+  element.value ??
+  element.volume ??
+  element.openInterest ??
+  element.quantity ??
+  element.stdDev ??
+  null;
 
 /**
  * Detects whether a snapshot entry value is a ranked record (the standardized
