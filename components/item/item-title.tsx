@@ -121,7 +121,7 @@ export const ItemTitle = ({ item }: ItemTitleProps) => {
         </div>
 
         <div className="flex flex-wrap gap-2 mb-4">
-          {assetClass.map((asset) => (
+          {(assetClass ?? []).map((asset) => (
             <span
               key={asset}
               className="px-3 py-1 text-xs font-medium bg-amber-500/20 text-amber-600 dark:text-amber-300 rounded-full border border-amber-500/30"
