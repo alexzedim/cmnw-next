@@ -117,7 +117,7 @@ export function SnapshotBriefGroup({
                           {entry.href ? (
                             <Link
                               href={entry.href}
-                              className="hover:text-[var(--primary)] transition-colors underline-offset-2 hover:underline"
+                              className="text-[var(--primary)]/80 hover:text-[var(--primary)] transition-colors underline underline-offset-2 decoration-[var(--primary)]/30 hover:decoration-[var(--primary)]"
                             >
                               {labelText}
                             </Link>
