@@ -1,6 +1,10 @@
 "use client";
 
-import type { IAddonScanEntry } from "@/lib/types";
+import type {
+  IAddonScanEntry,
+  IAddonScanEntryWithStatus,
+  IAddonScanGuild,
+} from "@/lib/types";
 
 import { useState, useCallback } from "react";
 
@@ -18,23 +22,42 @@ export function UploadPageClient() {
   const [entries, setEntries] = useState<IAddonScanEntry[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
+  const [result, setResult] = useState<{
+    characters: IAddonScanEntryWithStatus[];
+    guilds: IAddonScanGuild[];
+    s3Key: string;
+  } | null>(null);
 
   const handleParsed = useCallback((parsed: IAddonScanEntry[]) => {
     setEntries(parsed);
     setError(null);
-    setSuccess(false);
+    setResult(null);
   }, []);
 
   const handleSubmit = useCallback(
     async (submitEntries: IAddonScanEntry[]) => {
       setIsSubmitting(true);
       setError(null);
-      setSuccess(false);
+      setResult(null);
+
+      const seen = new Set<string>();
+      const dedupedEntries = submitEntries.filter((entry) => {
+        const key = `${entry.name.toLowerCase()}@${entry.realm.toLowerCase()}`;
+
+        if (seen.has(key)) return false;
+        seen.add(key);
+
+        return true;
+      });
 
       try {
-        await apiClient.post("/api/osint/upload", { entries: submitEntries });
-        setSuccess(true);
+        const response = await apiClient.post<{
+          characters: IAddonScanEntryWithStatus[];
+          guilds: IAddonScanGuild[];
+          s3Key: string;
+        }>("/api/osint/upload", { entries: dedupedEntries });
+
+        setResult(response);
       } catch {
         setError(uploadDict.error);
       } finally {
@@ -95,10 +118,59 @@ export function UploadPageClient() {
         </div>
       )}
 
-      {success && (
-        <div className="p-4 bg-green-500/10 border border-green-500/30 rounded-lg text-green-500 text-center">
-          {uploadDict.success}
-        </div>
+      {result && (
+        <Panel>
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center justify-between gap-2">
+              <h2 className="text-lg font-semibold text-[var(--primary)]">
+                {uploadDict.result.title}
+              </h2>
+              <span className="size-2 rounded-full bg-emerald-500" />
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="flex flex-col">
+                <span className="text-xs text-foreground/50 uppercase tracking-wider">
+                  {uploadDict.result.characters}
+                </span>
+                <span className="font-mono font-medium">
+                  {result.characters.length}
+                </span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xs text-foreground/50 uppercase tracking-wider">
+                  {uploadDict.result.newCharacters}
+                </span>
+                <span className="font-mono font-medium text-emerald-500">
+                  {result.characters.filter((c) => c.isNew).length}
+                </span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xs text-foreground/50 uppercase tracking-wider">
+                  {uploadDict.result.existingCharacters}
+                </span>
+                <span className="font-mono font-medium text-foreground/70">
+                  {result.characters.filter((c) => !c.isNew).length}
+                </span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xs text-foreground/50 uppercase tracking-wider">
+                  {uploadDict.result.guilds}
+                </span>
+                <span className="font-mono font-medium">
+                  {result.guilds.length}
+                </span>
+              </div>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xs text-foreground/50 uppercase tracking-wider">
+                {uploadDict.result.s3Key}
+              </span>
+              <code className="font-mono text-sm text-foreground/80 break-all">
+                {result.s3Key}
+              </code>
+            </div>
+          </div>
+        </Panel>
       )}
 
       {entries.length > 0 && <UploadTable dict={tableDict} entries={entries} />}

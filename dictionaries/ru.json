@@ -411,6 +411,14 @@
     "noEntries": "В файле не найдено записей.",
     "entryCount": "Найдено записей: {count}",
     "shownCount": "{shown} / {total} показано",
+    "result": {
+      "title": "Загрузка завершена",
+      "characters": "Персонажи",
+      "newCharacters": "Новые",
+      "existingCharacters": "Существующие",
+      "guilds": "Гильдии",
+      "s3Key": "Ключ S3"
+    },
     "table": {
       "name": "Имя",
       "realm": "Игровой мир",

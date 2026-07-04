@@ -407,6 +407,14 @@
     "noEntries": "No entries found in file.",
     "entryCount": "{count} entries found",
     "shownCount": "{shown} / {total} shown",
+    "result": {
+      "title": "Upload complete",
+      "characters": "Characters",
+      "newCharacters": "New",
+      "existingCharacters": "Existing",
+      "guilds": "Guilds",
+      "s3Key": "S3 key"
+    },
     "table": {
       "name": "Name",
       "realm": "Realm",

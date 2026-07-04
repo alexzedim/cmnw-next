@@ -16,3 +16,13 @@ export interface IAddonScanEntry {
   createdBy?: string;
   updatedBy?: string;
 }
+
+export interface IAddonScanEntryWithStatus extends IAddonScanEntry {
+  isNew: boolean;
+}
+
+export interface IAddonScanGuild {
+  guildGuid: string;
+  guild: string;
+  realm: string;
+}
