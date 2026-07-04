@@ -104,6 +104,7 @@ export const SNAPSHOT_HIGHLIGHT_GROUPS: readonly SnapshotHighlightGroup[] = [
         labelKey: "openInterestLeaders" as const,
         category: AnalyticsMetricCategory.CONTRACTS,
         metricType: AnalyticsMetricType.TOP_BY_OPEN_INTEREST,
+        valueFormat: "gold",
       },
       {
         labelKey: "quantityConcentration" as const,

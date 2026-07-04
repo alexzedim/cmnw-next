@@ -15,6 +15,9 @@ import {
 import { useI18n } from "@/lib/i18n/context";
 import { NAMING_CONSTANTS } from "@/constants/naming";
 import { fontJetBrains } from "@/config/fonts";
+import { GoldValue } from "@/components/home/gold-value";
+
+const GOLD_ENTRY_KEYS = new Set(["volume", "openInterest"]);
 
 type MetricSnapshot = {
   category: AnalyticsMetricCategory;
@@ -38,7 +41,7 @@ export function LiveMetrics({
   metricSnapshotLoading,
   metricCardHasError,
 }: LiveMetricsProps) {
-  const { dict } = useI18n();
+  const { dict, locale } = useI18n();
   const lm = dict.liveMetrics;
   const sm = dict.snapshotMetrics;
 
@@ -71,7 +74,7 @@ export function LiveMetrics({
         {metricSnapshots.map(
           ({ category, titleKey, snapshot, metricType }, index) => {
             const snapshotDate = formatSnapshotDate(snapshot);
-            const entries = getSnapshotEntries(snapshot);
+            const entries = getSnapshotEntries(snapshot, 4, locale);
             const title: string =
               {
                 charactersTitle: `${NAMING_CONSTANTS.CHARACTER}S`,
@@ -118,7 +121,12 @@ export function LiveMetrics({
                             ] ?? entryKey}
                           </dt>
                           <dd className="font-mono text-foreground text-right">
-                            {formatEntryValue(entryValue)}
+                            {GOLD_ENTRY_KEYS.has(entryKey) &&
+                            typeof entryValue === "number" ? (
+                              <GoldValue copper={entryValue} />
+                            ) : (
+                              formatEntryValue(entryValue)
+                            )}
                           </dd>
                         </div>
                       ))}
