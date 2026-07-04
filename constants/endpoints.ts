@@ -14,13 +14,10 @@ export const ENDPOINTS = {
   CHECK_PVP: "https://check-pvp.fr",
 };
 
-// Resolve the WS feed URL on the client (derives ws/wss from current origin so
-// it works in any deployment without a separate env var).
+// Resolve the WS feed URL. Always targets the API origin (ENDPOINTS.API),
+// upgrading http(s):// to ws(s)://. Works in any deployment without an env var.
+const toWsOrigin = (origin: string): string => origin.replace(/^http/i, "ws");
+
 export const getWsFeedUrl = (): string => {
-  if (typeof window === "undefined") {
-    return `${ENDPOINTS.API.replace(/^http/, "ws")}${ENDPOINTS.WS_FEED_PATH}`;
-  }
-  const { protocol, host } = window.location;
-  const wsProtocol = protocol === "https:" ? "wss:" : "ws:";
-  return `${wsProtocol}//${host}${ENDPOINTS.WS_FEED_PATH}`;
+  return `${toWsOrigin(ENDPOINTS.API)}${ENDPOINTS.WS_FEED_PATH}`;
 };
