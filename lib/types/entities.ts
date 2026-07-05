@@ -102,18 +102,38 @@ export interface Realm {
 }
 
 /**
- * Character/Guild log entry
+ * Mirrors the ACTION_LOG enum from @app/resources.
+ * Kept in sync manually to keep cmnw-next decoupled from the Nest backend.
+ */
+export enum ACTION_LOG {
+  PROMOTE = "PROMOTE",
+  DEMOTE = "DEMOTE",
+  JOIN = "JOIN",
+  LEAVE = "LEAVE",
+  GUILD_TRANSIT = "GUILD_TRANSIT",
+  GUILD_INHERIT = "GUILD_INHERIT",
+  GUILD_OWNERSHIP = "GUILD_OWNERSHIP",
+  TITLE = "TITLE",
+  NAME = "NAME",
+  TRANSFER = "TRANSFER",
+  RACE = "RACE",
+  GENDER = "GENDER",
+  FACTION = "FACTION",
+}
+
+/**
+ * Character/Guild log entry.
+ * Mirrors CharactersGuildsLogsEntity from @app/pg.
  */
 export interface CharacterGuildLog {
   uuid: string;
   characterGuid?: string;
   guildGuid?: string;
-  event: string;
-  action: string;
-  original?: string | number;
-  updated?: string | number;
-  timestamp?: string | Date;
-  createdAt?: string | Date;
+  original?: string;
+  updated?: string;
+  action: ACTION_LOG;
+  scannedAt?: string;
+  createdAt?: string;
 }
 
 /**

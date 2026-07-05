@@ -107,7 +107,7 @@ export default async function GuildPage({ params }: GuildPageProps) {
           </>
         )}
 
-        {logs && logs.length > 0 && <LogTable logs={logs as any} />}
+        {logs && logs.length > 0 && <LogTable logs={logs} />}
       </div>
     </main>
   );

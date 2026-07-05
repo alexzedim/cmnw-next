@@ -144,7 +144,7 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
 
         {logs && logs.length > 0 && (
           <div className="mt-10 lg:mt-12">
-            <LogTable logs={logs as any} />
+            <LogTable logs={logs} />
           </div>
         )}
       </div>
