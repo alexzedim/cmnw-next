@@ -44,3 +44,6 @@ WARP.md
 
 # KDE Rules
 .kilo/
+
+# Playwright MCP artifacts (console logs, page snapshots)
+.playwright-mcp/
