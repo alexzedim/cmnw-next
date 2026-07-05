@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, memo, useState, useCallback } from "react";
-import { Card, Spinner, Button, ButtonGroup } from "@heroui/react";
+import { Card, CardContent, Spinner, Button, ButtonGroup } from "@heroui/react";
 import { LineChart } from "@tremor/react";
 
 import { useContracts } from "@/lib/api/hooks";
@@ -63,12 +63,12 @@ const formatTimestamp = (timestamp: number | string): string => {
  */
 const ItemContractsChartLoading = memo(() => (
   <Card className={CARD_CLASS_NAMES.root}>
-    <Card.Content className={CARD_CLASS_NAMES.body}>
+    <CardContent className={CARD_CLASS_NAMES.body}>
       <BadgeSection color={BADGE_COLORS.DEFAULT} label="Price Chart" />
       <div className={`${CARD_CLASS_NAMES.loading} min-h-[300px]`}>
         <Spinner color="warning" size="lg" />
       </div>
-    </Card.Content>
+    </CardContent>
   </Card>
 ));
 
@@ -91,7 +91,7 @@ interface ItemContractsChartDisplayProps {
 const ItemContractsChartDisplay = memo(
   ({ chartData, period, onPeriodChange }: ItemContractsChartDisplayProps) => (
     <Card className={CARD_CLASS_NAMES.root}>
-      <Card.Content className={CARD_CLASS_NAMES.body}>
+      <CardContent className={CARD_CLASS_NAMES.body}>
         <div className="flex items-center justify-between mb-6">
           <BadgeSection color={BADGE_COLORS.DEFAULT} label="Price Chart" />
           <ButtonGroup size="sm" variant="outline">
@@ -131,7 +131,7 @@ const ItemContractsChartDisplay = memo(
             yAxisWidth={65}
           />
         )}
-      </Card.Content>
+      </CardContent>
     </Card>
   )
 );
