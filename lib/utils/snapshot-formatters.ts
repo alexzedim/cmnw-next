@@ -48,12 +48,13 @@ const rankLabel = (
  * Picks the primary metric value from a ranked-list element.
  * Order reflects relevance per metric family:
  *  - guild rankings: `value` (members_count / achievement_points)
- *  - market items: `volume` (gold) then `auctions` (count)
+ *  - market items: `volume` (gold), then `auctions` (count)
  *  - contracts: `openInterest`, `quantity`, then `stdDev` (price volatility)
  */
 const rankValue = (element: Record<string, unknown>): unknown =>
   element.value ??
   element.volume ??
+  element.auctions ??
   element.openInterest ??
   element.quantity ??
   element.stdDev ??
@@ -72,6 +73,7 @@ const isRankRecord = (
   !Array.isArray(entryValue) &&
   ("value" in (entryValue as Record<string, unknown>) ||
     "volume" in (entryValue as Record<string, unknown>) ||
+    "auctions" in (entryValue as Record<string, unknown>) ||
     "openInterest" in (entryValue as Record<string, unknown>) ||
     "stdDev" in (entryValue as Record<string, unknown>));
 
@@ -175,6 +177,20 @@ export const getSnapshotEntriesRich = (
 
   const snapshotValue = snapshot.value as Record<string, unknown>;
 
+  // Price volatility payloads ({ itemId, stdDev, avgPrice }) are preformatted
+  // to a single string showing both σ and avg in gold, since neither figure is
+  // meaningful as a bare count.
+  if (
+    typeof snapshotValue.itemId === "number" &&
+    typeof snapshotValue.stdDev === "number"
+  ) {
+    return [{
+      label: rankLabel(snapshotValue, locale),
+      value: formatPriceVolatility(snapshotValue.stdDev),
+      href: buildEntryHref(snapshotValue),
+    }];
+  }
+
   // If the snapshot value itself is a single rank record (has itemId/guid at top
   // level rather than being a map of records), treat it as a single entry.
   if (isRankRecord(snapshotValue) || typeof snapshotValue.itemId === "number" || typeof snapshotValue.guid === "string") {
@@ -220,8 +236,8 @@ export const formatSnapshotDate = (
 
 /**
  * How a metric value should be rendered.
- * - "number": apostrophe-grouped digits (1'234'567)
  * - "gold":   WoW copper -> gold with apostrophe grouping (1'334'200 g)
+ * - "number": count with space grouping (1 000 000)
  */
 export type SnapshotValueFormat = "number" | "gold";
 
@@ -235,6 +251,36 @@ export const formatGoldValue = (copper: number): GoldFormatted => ({
   amount: apostropheNumberFormatter.format(Math.round(copper / 10_000)),
   suffix: "g",
 });
+
+/**
+ * Formats a count with space-separated thousands (1 000 000), used for
+ * non-gold metrics (character/guild/auction counts, price-range tallies, ...).
+ */
+const formatPlainNumber = (value: number): string =>
+  apostropheNumberFormatter.format(value).replace(/'/g, " ");
+
+/**
+ * Formats a price-volatility stdDev (in copper) as a gold/silver/copper
+ * breakdown prefixed with sigma, e.g. 2549 -> "σ 0 g 25 s 49 c".
+ * Returns "—" if stdDev is missing or non-finite.
+ */
+export const formatPriceVolatility = (stdDev: unknown): string => {
+  if (typeof stdDev !== "number" || !Number.isFinite(stdDev)) {
+    return "—";
+  }
+  return `σ ${formatCopperBreakdown(stdDev)}`;
+};
+
+/**
+ * Breaks a copper amount into gold/silver/copper and renders the non-zero
+ * components, e.g. 2550 -> "0 g 25 s 50 c", 10000 -> "1 g", 50 -> "50 c".
+ */
+const formatCopperBreakdown = (copper: number): string => {
+  const g = Math.floor(copper / 10000);
+  const s = Math.floor((copper % 10000) / 100);
+  const c = Math.floor(copper % 100);
+  return `${g} g ${s} s ${c} c`;
+};
 
 /**
  * Formats a value for display.
@@ -253,7 +299,7 @@ export const formatEntryValue = (
       return `${amount} ${suffix}`;
     }
 
-    return apostropheNumberFormatter.format(value);
+    return formatPlainNumber(value);
   }
   if (typeof value === "string") {
     return value;
@@ -272,6 +318,28 @@ export const buildSnapshotKey = (
   category: AnalyticsMetricCategory,
   metricType: AnalyticsMetricType
 ): SnapshotKey => `${category}:${metricType}` as SnapshotKey;
+
+/**
+ * Canonical low-to-high ordering for price-range buckets. Keys are the stable
+ * snapshot entry keys (shared across locales); the dictionary value is a
+ * localized label such as "1k ⋯ 10k g".
+ */
+export const PRICE_RANGE_ORDER = [
+  "under1k",
+  "1k-10k",
+  "10k-100k",
+  "100k-1m",
+  "over1m",
+] as const;
+
+/**
+ * Returns the rank (0-based) of a price-range bucket key within
+ * PRICE_RANGE_ORDER. Unknown keys sort last, preserving their relative order.
+ */
+export const priceRangeRank = (key: string): number => {
+  const index = PRICE_RANGE_ORDER.indexOf(key as (typeof PRICE_RANGE_ORDER)[number]);
+  return index === -1 ? PRICE_RANGE_ORDER.length : index;
+};
 
 /**
  * Checks if a value is a PriceVolatilityData object.

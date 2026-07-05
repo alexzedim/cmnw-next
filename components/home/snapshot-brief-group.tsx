@@ -8,6 +8,7 @@ import {
   formatSnapshotDate,
   formatEntryValue,
   getSnapshotEntriesRich,
+  priceRangeRank,
 } from "@/lib/utils/snapshot-formatters";
 import { useI18n } from "@/lib/i18n/context";
 import { GoldValue } from "@/components/home/gold-value";
@@ -51,7 +52,11 @@ export function SnapshotBriefGroup({
           const displayEntries =
             metric.sort === "alpha"
               ? [...entries].sort((a, b) => a.label.localeCompare(b.label))
-              : entries;
+              : metric.sort === "priceRange"
+                ? [...entries].sort(
+                    (a, b) => priceRangeRank(a.label) - priceRangeRank(b.label)
+                  )
+                : entries;
           const snapshotDate = formatSnapshotDate(metric.snapshot ?? null);
           const metricLabel = sm[metric.labelKey as keyof typeof sm] as string;
 
