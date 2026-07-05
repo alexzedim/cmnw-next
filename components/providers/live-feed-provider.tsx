@@ -14,6 +14,7 @@ import {
 } from "react";
 
 import { getWsFeedUrl } from "@/constants/endpoints";
+import { getClientSessionId } from "@/lib/session/client-session";
 import { isFeedEvent } from "@/types/feed";
 
 const MAX_MESSAGES = 50;
@@ -56,7 +57,7 @@ export const LiveFeedProvider = ({ children }: { children: ReactNode }) => {
     let socket: WebSocket;
 
     try {
-      socket = new WebSocket(getWsFeedUrl());
+      socket = new WebSocket(getWsFeedUrl(getClientSessionId()));
     } catch {
       scheduleReconnect();
 

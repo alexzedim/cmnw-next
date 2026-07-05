@@ -99,6 +99,22 @@
       "wowProgress": "WoWProgress",
       "battleNet": "BattleNet",
       "checkPvp": "Check PvP"
+    },
+    "refresh": {
+      "button": "Refresh",
+      "refreshing": "Refreshing…",
+      "started": "Refresh started",
+      "finished": "Refresh complete",
+      "skipped": "Already up to date",
+      "error": "Refresh failed",
+      "endpoints": {
+        "status": "Status",
+        "summary": "Summary",
+        "media": "Media",
+        "pets": "Pets",
+        "mounts": "Mounts",
+        "professions": "Professions"
+      }
     }
   },
   "characterStats": {

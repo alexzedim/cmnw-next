@@ -78,3 +78,89 @@ export const isFeedEvent = (value: unknown): value is FeedEvent => {
     typeof event.message === "string"
   );
 };
+
+// --- Client-driven character refresh (session-routed events) ---------------
+
+// Mirrors cmnw/libs/resources/src/constants/status.constants.ts
+// Order is significant: STATUS_ENDPOINT_ORDER positions in the 6-char status string.
+export const STATUS_ENDPOINT_ORDER = [
+  "STATUS",
+  "SUMMARY",
+  "MEDIA",
+  "PETS",
+  "MOUNTS",
+  "PROFESSIONS",
+] as const;
+
+export type RefreshEndpoint = (typeof STATUS_ENDPOINT_ORDER)[number];
+
+// Per-endpoint letter codes in the status string.
+// Mirrors CHARACTER_STATUS_CODES. Uppercase = success, lowercase = error, '-' = pending.
+export const CHARACTER_STATUS_CODES: Record<
+  RefreshEndpoint,
+  { success: string; error: string; pending: string }
+> = {
+  STATUS: { success: "S", error: "s", pending: "-" },
+  SUMMARY: { success: "U", error: "u", pending: "-" },
+  MEDIA: { success: "V", error: "v", pending: "-" },
+  PETS: { success: "P", error: "p", pending: "-" },
+  MOUNTS: { success: "M", error: "m", pending: "-" },
+  PROFESSIONS: { success: "R", error: "r", pending: "-" },
+};
+
+export type EndpointState = "pending" | "success" | "error";
+
+/**
+ * Decodes the 6-char status string (e.g. "SUVPMR", "s--PM-") into a per-endpoint
+ * state map, honoring STATUS_ENDPOINT_ORDER positions and CHARACTER_STATUS_CODES.
+ */
+export const decodeStatusString = (
+  status: string,
+): Record<RefreshEndpoint, EndpointState> => {
+  const result = {} as Record<RefreshEndpoint, EndpointState>;
+  for (const endpoint of STATUS_ENDPOINT_ORDER) {
+    const index = STATUS_ENDPOINT_ORDER.indexOf(endpoint);
+    const char = status[index] ?? "-";
+    const codes = CHARACTER_STATUS_CODES[endpoint];
+    if (char === codes.success) result[endpoint] = "success";
+    else if (char === codes.error) result[endpoint] = "error";
+    else result[endpoint] = "pending";
+  }
+  return result;
+};
+
+export type RefreshPhase =
+  | "started"
+  | "endpoint"
+  | "finished"
+  | "skipped"
+  | "error";
+
+export interface CharacterRefreshMeta {
+  sessionId: string;
+  guid?: string;
+  requestId?: string;
+  endpoint?: RefreshEndpoint;
+  phase?: RefreshPhase;
+  durationMs?: number;
+  reason?: string;
+  status?: string;
+  error?: string;
+}
+
+/**
+ * True when the event is a refresh-progress notification for the given session
+ * (and, if provided, the given guid). Backend refresh emits always carry
+ * source = 'osint.characters.refresh' and meta.sessionId.
+ */
+export const isCharacterRefreshEvent = (
+  event: FeedEvent,
+  ctx: { sessionId: string; guid?: string },
+): boolean => {
+  if (event.category !== FeedEventCategory.CHARACTER) return false;
+  if (event.source !== "osint.characters.refresh") return false;
+  const meta = event.meta as Partial<CharacterRefreshMeta> | undefined;
+  if (!meta || meta.sessionId !== ctx.sessionId) return false;
+  if (ctx.guid !== undefined && meta.guid !== ctx.guid) return false;
+  return true;
+};

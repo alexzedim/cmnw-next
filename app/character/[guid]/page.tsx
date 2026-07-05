@@ -136,7 +136,11 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
           </div>
 
           <div className="lg:col-span-8">
-            <CharacterButtons name={character.name} realm={character.realm} />
+            <CharacterButtons
+              guid={guid}
+              name={character.name}
+              realm={character.realm}
+            />
 
             <CharacterStats character={character} />
           </div>

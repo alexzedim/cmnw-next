@@ -6,6 +6,7 @@ export const ENDPOINTS = {
   METRICS_ENDPOINT: `${API_ORIGIN}/api/app/metrics`,
   METRIC_SNAPSHOT_ENDPOINT: `${API_ORIGIN}/api/app/metrics/snapshot`,
   WS_FEED_PATH: "/api/ws/feed",
+  OSINT_CHARACTER_REFRESH: "/api/osint/character/refresh",
   LOCALHOST: "http://localhost:8081",
   WARCRAFT_LOGS: "https://www.warcraftlogs.com",
   WOW_PROGRESS: "https://wowprogress.com",
@@ -16,8 +17,12 @@ export const ENDPOINTS = {
 
 // Resolve the WS feed URL. Always targets the API origin (ENDPOINTS.API),
 // upgrading http(s):// to ws(s)://. Works in any deployment without an env var.
+// When sessionId is provided, it is sent as ?session=<id> so the backend can
+// route client-driven refresh events back to this browser only.
 const toWsOrigin = (origin: string): string => origin.replace(/^http/i, "ws");
 
-export const getWsFeedUrl = (): string => {
-  return `${toWsOrigin(ENDPOINTS.API)}${ENDPOINTS.WS_FEED_PATH}`;
+export const getWsFeedUrl = (sessionId?: string): string => {
+  const base = `${toWsOrigin(ENDPOINTS.API)}${ENDPOINTS.WS_FEED_PATH}`;
+  if (!sessionId) return base;
+  return `${base}?session=${encodeURIComponent(sessionId)}`;
 };

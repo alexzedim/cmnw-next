@@ -99,6 +99,22 @@
       "wowProgress": "WoWProgress",
       "battleNet": "BattleNet",
       "checkPvp": "Check PvP"
+    },
+    "refresh": {
+      "button": "Обновить",
+      "refreshing": "Обновление…",
+      "started": "Обновление запущено",
+      "finished": "Обновление завершено",
+      "skipped": "Уже актуально",
+      "error": "Не удалось обновить",
+      "endpoints": {
+        "status": "Статус",
+        "summary": "Сводка",
+        "media": "Медиа",
+        "pets": "Питомцы",
+        "mounts": "Транспорт",
+        "professions": "Профессии"
+      }
     }
   },
   "characterStats": {
