@@ -3,6 +3,7 @@
 import type { SnapshotHighlightGroup } from "@/lib/types/snapshot-metrics";
 
 import Link from "next/link";
+
 import {
   buildSnapshotKey,
   formatSnapshotDate,
@@ -11,6 +12,7 @@ import {
   priceRangeRank,
 } from "@/lib/utils/snapshot-formatters";
 import { useI18n } from "@/lib/i18n/context";
+import { fontJetBrains } from "@/config/fonts";
 import { GoldValue } from "@/components/home/gold-value";
 
 interface SnapshotBriefGroupProps {
@@ -35,7 +37,10 @@ export function SnapshotBriefGroup({
       key={group.titleKey}
       className="card-surface p-6 flex flex-col gap-4 border-l-4 border-l-[var(--border-accent)]"
     >
-      <h3 className="text-xl font-semibold text-[var(--primary)]">
+      <h3
+        className="text-xl font-semibold text-[var(--primary)]"
+        style={{ fontFamily: fontJetBrains.style.fontFamily }}
+      >
         {groupTitle}
       </h3>
       <section className="space-y-3">
@@ -92,9 +97,9 @@ export function SnapshotBriefGroup({
                       ? entry.label
                       : undefined;
                     const dictLabel = entryKey
-                      ? (sm.metricEntries?.[
+                      ? ((sm.metricEntries?.[
                           entryKey as keyof typeof sm.metricEntries
-                        ] as string) ?? entry.label
+                        ] as string) ?? entry.label)
                       : entry.label;
                     const entryColor = metric.getEntryColor?.(entry.label);
 
@@ -107,6 +112,7 @@ export function SnapshotBriefGroup({
                           </>
                         );
                       }
+
                       return dictLabel;
                     })();
 
@@ -121,8 +127,8 @@ export function SnapshotBriefGroup({
                         >
                           {entry.href ? (
                             <Link
-                              href={entry.href}
                               className="text-[var(--primary)]/80 hover:text-[var(--primary)] transition-colors underline underline-offset-2 decoration-[var(--primary)]/30 hover:decoration-[var(--primary)]"
+                              href={entry.href}
                             >
                               {labelText}
                             </Link>
