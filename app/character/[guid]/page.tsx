@@ -11,6 +11,7 @@ import Image from "next/image";
 import {
   CharacterTitle,
   CharacterButtons,
+  CharacterRefresh,
   CharacterStats,
 } from "@/components/character";
 import { LogTable } from "@/components/shared/log-table";
@@ -96,6 +97,7 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
     <main className="min-h-screen pt-16 pb-12 lg:pt-20 lg:pb-16">
       <div className="container mx-auto px-4 max-w-7xl">
         <CharacterTitle
+          actions={<CharacterRefresh guid={guid} />}
           faction={factionEnum}
           guild={character.guild}
           guildId={character.guildGuid}
@@ -136,11 +138,7 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
           </div>
 
           <div className="lg:col-span-8">
-            <CharacterButtons
-              guid={guid}
-              name={character.name}
-              realm={character.realm}
-            />
+            <CharacterButtons name={character.name} realm={character.realm} />
 
             <CharacterStats character={character} />
           </div>

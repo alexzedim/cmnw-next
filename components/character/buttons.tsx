@@ -3,17 +3,15 @@
 import { Avatar } from "@heroui/react";
 
 import { Link } from "@/components/custom-link";
-import { CharacterRefresh } from "@/components/character/refresh-button";
 import { ENDPOINTS } from "@/constants";
 import { useI18n } from "@/lib/i18n/context";
 
 interface CharacterButtonsProps {
   name: string;
   realm: string;
-  guid: string;
 }
 
-export const CharacterButtons = ({ guid, name, realm }: CharacterButtonsProps) => {
+export const CharacterButtons = ({ name, realm }: CharacterButtonsProps) => {
   const { dict } = useI18n();
   const c = dict.character;
   const sn = c.serviceNames;
@@ -48,10 +46,6 @@ export const CharacterButtons = ({ guid, name, realm }: CharacterButtonsProps) =
 
   return (
     <div className="card-surface p-6 rounded-xl mb-6">
-      <div className="mb-5">
-        <CharacterRefresh guid={guid} />
-      </div>
-
       <div className="mb-5 flex items-center gap-3">
         <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider opacity-50">
           <div className="size-1.5 rounded-full bg-[var(--primary)]" />

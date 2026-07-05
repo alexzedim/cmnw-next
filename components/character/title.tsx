@@ -1,5 +1,7 @@
 "use client";
 
+import type { ReactNode } from "react";
+
 import { Link } from "@/components/custom-link";
 import { GuildRank } from "@/components/character/guild-rank";
 import { Faction } from "@/lib/types";
@@ -13,6 +15,7 @@ interface CharacterTitleProps {
   guildId?: string;
   guildRank?: number;
   faction?: Faction;
+  actions?: ReactNode;
 }
 
 function getFactionBorderColor(faction?: Faction): string {
@@ -35,6 +38,7 @@ export const CharacterTitle = ({
   guildId,
   guildRank,
   faction,
+  actions,
 }: CharacterTitleProps) => {
   const borderColor = getFactionBorderColor(faction);
 
@@ -45,8 +49,8 @@ export const CharacterTitle = ({
         borderLeftColor: borderColor,
       }}
     >
-      {/* Character Badge */}
-      <div className="mb-5 flex items-center gap-3">
+      {/* Character Badge + Actions */}
+      <div className="mb-5 flex items-center justify-between gap-3">
         <div
           className="inline-flex items-center gap-2 text-xs uppercase tracking-wider opacity-60"
           style={{ fontFamily: fontJetBrains.style.fontFamily }}
@@ -54,6 +58,7 @@ export const CharacterTitle = ({
           <div className="size-1.5 rounded-full bg-[var(--primary)]" />
           <p className="inline-block">{NAMING_CONSTANTS.CHARACTER}</p>
         </div>
+        {actions && <div className="flex items-center gap-3">{actions}</div>}
       </div>
 
       {/* Character Name - Using Geist Sans */}
