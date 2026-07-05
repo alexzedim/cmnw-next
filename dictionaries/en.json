@@ -363,11 +363,11 @@
       "medium": "Medium",
       "large": "Large",
       "massive": "Massive",
-      "under1k": "Under 1k g",
+      "under1k": "<1k g",
       "1k-10k": "1k ⋯ 10k g",
       "10k-100k": "10k ⋯ 100k g",
       "100k-1m": "100k ⋯ 1M g",
-      "over1m": "Over 1M g",
+      "over1m": "1M+ g",
       "itemId": "Item",
       "quantity": "Quantity",
       "openInterest": "Open Interest"
@@ -392,9 +392,9 @@
     "priceVolatility": "Price volatility",
     "contractsBoard": "Contracts board",
     "contractsDisclaimer": "Contract stats focus on max-duration instruments with verifiable liquidity.",
-    "openInterestLeaders": "Open interest leaders",
+    "openInterestLeaders": "Open interest in gold value",
     "quantityConcentration": "Max quantity concentration",
-    "auctionThroughput": "Auction throughput"
+    "topByAuctions": "Top by auction orders"
   },
   "upload": {
     "metadataTitle": "OSINT Upload — CMNW",

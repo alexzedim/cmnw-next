@@ -367,11 +367,11 @@
       "medium": "Средние",
       "large": "Крупные",
       "massive": "Огромные",
-      "under1k": "До 1к g",
+      "under1k": "<1к g",
       "1k-10k": "1к ⋯ 10к g",
       "10k-100k": "10к ⋯ 100к g",
       "100k-1m": "100к ⋯ 1М g",
-      "over1m": "Свыше 1М g",
+      "over1m": "1М+ g",
       "itemId": "Предмет",
       "quantity": "Количество",
       "openInterest": "Открытый интерес"
@@ -396,9 +396,9 @@
     "priceVolatility": "Волатильность цен",
     "contractsBoard": "Доска контрактов",
     "contractsDisclaimer": "Статистика контрактов фокусируется на инструментах максимальной длительности с проверяемой ликвидностью.",
-    "openInterestLeaders": "Лидер по открытому интересу",
+    "openInterestLeaders": "Открытый интерес в золоте",
     "quantityConcentration": "Макс. концентрация количества",
-    "auctionThroughput": "Пропускная способность аукционов"
+    "topByAuctions": "Топ по ордерам аукциона"
   },
   "upload": {
     "metadataTitle": "Загрузка OSINT — CMNW",
