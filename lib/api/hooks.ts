@@ -302,6 +302,9 @@ export function useContracts(
  * const { data, error, isLoading } = useItemQuotes('12345');
  */
 export function useItemQuotes(id: string | number | null) {
+  // The backend DTO (`ItemQuotesResponseDto.remapQuotes`) already returns
+  // camelCase field names with `quantity`/`size`/`openInterest` coerced to
+  // real numbers, so we can use the response shape directly.
   interface Quote {
     price: number;
     quantity: number;
@@ -313,35 +316,11 @@ export function useItemQuotes(id: string | number | null) {
     quotes: Quote[];
   }
 
-  interface QuoteCamelCase {
-    price: number;
-    quantity: number;
-    openInterest: number;
-    size: number;
-  }
-
-  interface QuotesResponseCamelCase {
-    quotes: QuoteCamelCase[];
-  }
-
-  return useSWR<QuotesResponseCamelCase>(
+  return useSWR<QuotesResponse>(
     id ? `/api/dma/item/quotes?id=${id}` : null,
     id
-      ? async () => {
-          const data = await apiClient.get<QuotesResponse>(
-            "/api/dma/item/quotes",
-            { id }
-          );
-
-          return {
-            quotes: data.quotes.map((quote) => ({
-              price: quote.price,
-              quantity: quote.quantity,
-              openInterest: quote.openInterest,
-              size: quote.size,
-            })),
-          };
-        }
+      ? async () =>
+          apiClient.get<QuotesResponse>("/api/dma/item/quotes", { id })
       : null,
     defaultConfig
   );

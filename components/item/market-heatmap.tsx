@@ -9,7 +9,7 @@ import {
   useRef,
   useEffect,
 } from "react";
-import { Card, Spinner } from "@heroui/react";
+import { Card, CardContent, Spinner } from "@heroui/react";
 import useSWR from "swr";
 
 import { ENDPOINTS, NAMING_CONSTANTS } from "@/constants";
@@ -25,6 +25,7 @@ interface HeatmapDataPoint {
   x: number;
   y: number;
   value: number;
+  price?: number;
   orders?: number;
   oi?: number;
 }
@@ -61,6 +62,24 @@ const getTextColorByIntensity = (value: number, max: number): string => {
   return intensity > 0.5 ? "#000000" : "#ffffff";
 };
 
+/**
+ * Percentile of a numeric sample via linear interpolation.
+ * Used for robust color normalization (95th pct instead of raw max) so one
+ * outlier cell doesn't flatten the rest of the heatmap.
+ */
+const getPercentile = (values: number[], pct: number): number => {
+  if (!values.length) return 0;
+
+  const sorted = [...values].sort((a, b) => a - b);
+  const idx = (sorted.length - 1) * pct;
+  const lo = Math.floor(idx);
+  const hi = Math.ceil(idx);
+
+  if (lo === hi) return sorted[lo];
+
+  return sorted[lo] + (sorted[hi] - sorted[lo]) * (idx - lo);
+};
+
 const formatTimestampHeader = (value: string | number): string => {
   if (typeof value !== "number") return String(value);
 
@@ -81,28 +100,12 @@ const formatTimestampXAxis = (value: string | number): string => {
   return `${hours}:${minutes}`;
 };
 
-const formatPrice = (
-  priceValue: string | number,
-  quantity?: number,
-  oi?: number
-): string => {
-  let price: number;
-
-  if (oi !== undefined && oi > 0 && quantity !== undefined && quantity > 0) {
-    price = oi / quantity;
-  } else {
-    price = parseFloat(String(priceValue));
-  }
-
-  return price.toFixed(2);
-};
-
 const MarketHeatmapLoading = memo(() => {
   const { dict } = useI18n();
 
   return (
     <Card className={CARD_CLASS_NAMES.root}>
-      <Card.Content className={CARD_CLASS_NAMES.body}>
+      <CardContent className={CARD_CLASS_NAMES.body}>
         <BadgeSection
           color={BADGE_COLORS.DEFAULT}
           label={dict.marketHeatmap.badge}
@@ -110,7 +113,7 @@ const MarketHeatmapLoading = memo(() => {
         <div className={`${CARD_CLASS_NAMES.loading} min-h-[400px]`}>
           <Spinner color="warning" size="lg" />
         </div>
-      </Card.Content>
+      </CardContent>
     </Card>
   );
 });
@@ -154,7 +157,13 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
 
     if (!data || !data.dataset.length) return null;
 
-    const maxValue = Math.max(...data.dataset.map((d) => d.value));
+    // Normalize cell colors against the 95th-percentile value (not the raw
+    // max), so a single outlier cell doesn't crush the rest of the heatmap
+    // into minimum intensity. Cells above the 95th still render at full color.
+    const maxValue = getPercentile(
+      data.dataset.map((d) => d.value).filter((v) => v > 0),
+      0.95
+    );
 
     const dataMap = new Map<string, HeatmapDataPoint>();
 
@@ -252,17 +261,6 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
                           value,
                           maxValue
                         );
-                        const cellPrice = point
-                          ? parseFloat(
-                              formatPrice(
-                                data.yAxis[yIndex],
-                                point.value,
-                                point.oi
-                              )
-                            )
-                          : 0;
-                        const axisPrice = parseFloat(yLabel);
-                        const showUpArrow = cellPrice > axisPrice * 1.04;
 
                         return (
                           <div
@@ -280,7 +278,6 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
                             {value > 0 && (
                               <span style={{ color: textColor }}>
                                 {value.toLocaleString(LOCALE)}
-                                {showUpArrow && <span> +</span>}
                               </span>
                             )}
                           </div>
@@ -368,11 +365,9 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
                     : mh.price}
                 </span>
                 <span className="text-foreground">
-                  {formatPrice(
-                    data.yAxis[hoveredCell.y],
-                    hoveredCell.value,
-                    hoveredCell.oi
-                  )}
+                  {hoveredCell.price !== undefined
+                    ? hoveredCell.price.toFixed(2)
+                    : parseFloat(data.yAxis[hoveredCell.y]).toFixed(2)}
                 </span>
               </div>
               <div className="flex justify-between gap-2">
@@ -397,7 +392,9 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
                     {mh.openInterest}
                   </span>
                   <span className="text-foreground">
-                    {parseInt(String(hoveredCell.oi)).toLocaleString(LOCALE)}
+                    {Number(hoveredCell.oi).toLocaleString(LOCALE, {
+                      maximumFractionDigits: 2,
+                    })}
                   </span>
                 </div>
               )}
