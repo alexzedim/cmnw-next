@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useMemo, useState, type CSSProperties } from "react";
 import dayjs from "dayjs";
 
 import { useI18n } from "@/lib/i18n/context";
@@ -43,7 +43,7 @@ const actionTint: Record<ACTION_LOG, string> = {
   [ACTION_LOG.TITLE]: "#f59e0b",
 };
 
-const chipStyle = (action: ACTION_LOG): React.CSSProperties => {
+const chipStyle = (action: ACTION_LOG): CSSProperties => {
   const tint = actionTint[action] ?? "var(--accent)";
 
   return {
@@ -207,13 +207,10 @@ export const LogTable = ({ logs }: LogTableProps) => {
       if (aValue === undefined) return 1;
       if (bValue === undefined) return -1;
 
-      let cmp = 0;
-
-      if (sortDescriptor.column === "createdAt") {
-        cmp = dayjs(aValue).valueOf() - dayjs(bValue).valueOf();
-      } else {
-        cmp = String(aValue).localeCompare(String(bValue));
-      }
+      const cmp =
+        sortDescriptor.column === "createdAt"
+          ? dayjs(aValue).valueOf() - dayjs(bValue).valueOf()
+          : String(aValue).localeCompare(String(bValue));
 
       return sortDescriptor.direction === "ascending" ? cmp : -cmp;
     });
