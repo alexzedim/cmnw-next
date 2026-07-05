@@ -6,7 +6,7 @@ export const ENDPOINTS = {
   METRICS_ENDPOINT: `${API_ORIGIN}/api/app/metrics`,
   METRIC_SNAPSHOT_ENDPOINT: `${API_ORIGIN}/api/app/metrics/snapshot`,
   WS_FEED_PATH: "/api/ws/feed",
-  LOCALHOST: "http://localhost:8080",
+  LOCALHOST: "http://localhost:8081",
   WARCRAFT_LOGS: "https://www.warcraftlogs.com",
   WOW_PROGRESS: "https://www.wowprogress.com",
   RAIDER_IO: "https://raider.io",
