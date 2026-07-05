@@ -229,7 +229,21 @@
     "columnQuantity": "Количество",
     "columnOpenInterest": "Открытый интерес",
     "tableAriaLabel": "Данные контрактов предмета",
-    "invalidDate": "Неверная дата"
+    "invalidDate": "Неверная дата",
+    "periodIntraday": "Внутридневной",
+    "period1w": "1Н",
+    "period1m": "1М",
+    "viewBar": "Столбцы",
+    "viewArea": "Область",
+    "viewChart": "График",
+    "viewTable": "Таблица",
+    "viewLabel": "Вид",
+    "columnDay": "День",
+    "columnOpen": "Открытие",
+    "columnClose": "Закрытие",
+    "columnMin": "Мин.",
+    "columnMax": "Макс.",
+    "columnVolume": "Объём"
   },
   "itemQuotes": {
     "badge": "Рыночные котировки",

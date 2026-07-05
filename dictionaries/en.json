@@ -229,7 +229,21 @@
     "columnQuantity": "Quantity",
     "columnOpenInterest": "Open Interest",
     "tableAriaLabel": "Item contract data",
-    "invalidDate": "Invalid Date"
+    "invalidDate": "Invalid Date",
+    "periodIntraday": "Intraday",
+    "period1w": "1W",
+    "period1m": "1M",
+    "viewBar": "Bar",
+    "viewArea": "Area",
+    "viewChart": "Chart",
+    "viewTable": "Table",
+    "viewLabel": "View",
+    "columnDay": "Day",
+    "columnOpen": "Open",
+    "columnClose": "Close",
+    "columnMin": "Min",
+    "columnMax": "Max",
+    "columnVolume": "Volume"
   },
   "itemQuotes": {
     "badge": "Market Quotes",
