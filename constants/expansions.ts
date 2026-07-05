@@ -84,6 +84,20 @@ export const EXPANSIONS: Expansion[] = [
     color: "rgb(63, 81, 181)", // Indigo Blue
     accentColor: "rgb(129, 199, 243)", // Light Blue
   },
+  {
+    value: "mdnt",
+    label: "MDNT",
+    fullName: "Midnight",
+    color: "rgb(102, 51, 153)", // Deep Purple (Aerie Peak twilight)
+    accentColor: "rgb(192, 192, 192)", // Silver
+  },
+  {
+    value: "titan",
+    label: "TITAN",
+    fullName: "The Last Titan",
+    color: "rgb(184, 134, 11)", // Dark Goldenrod (Titanic bronze)
+    accentColor: "rgb(205, 149, 12)", // Bronze
+  },
 ];
 
 export const getExpansionColor = (value: string): string => {
@@ -96,4 +110,15 @@ export const getExpansionFullName = (value: string): string => {
   const expansion = EXPANSIONS.find((exp) => exp.value === value);
 
   return expansion?.fullName ?? value.toUpperCase();
+};
+
+/**
+ * Returns the chronological index of an expansion ticker within {@link EXPANSIONS}.
+ * Unknown tickers sort last (returns Infinity), so newly added expansions keep
+ * their release order without touching call-sites.
+ */
+export const getExpansionOrderIndex = (value: string): number => {
+  const index = EXPANSIONS.findIndex((exp) => exp.value === value);
+
+  return index === -1 ? Infinity : index;
 };
