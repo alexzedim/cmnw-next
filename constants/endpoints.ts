@@ -8,7 +8,7 @@ export const ENDPOINTS = {
   WS_FEED_PATH: "/api/ws/feed",
   LOCALHOST: "http://localhost:8081",
   WARCRAFT_LOGS: "https://www.warcraftlogs.com",
-  WOW_PROGRESS: "https://www.wowprogress.com",
+  WOW_PROGRESS: "https://wowprogress.com",
   RAIDER_IO: "https://raider.io",
   BATTLE_NET: "https://worldofwarcraft.com",
   CHECK_PVP: "https://check-pvp.fr",
