@@ -2,6 +2,7 @@
 
 import {
   Card,
+  CardContent,
   Table,
   TableHeader,
   TableColumn,
@@ -17,19 +18,19 @@ import { Link } from "@/components/custom-link";
 import { ENDPOINTS } from "@/constants";
 import { useI18n } from "@/lib/i18n/context";
 
-interface ItemDetails {
-  bonus_lists?: number[];
-}
-
 interface Auction {
-  id: number;
-  item_id: number;
-  item: ItemDetails;
-  connected_realm_id: number;
-  buyout?: number;
-  bid: number;
-  time_left: string;
-  last_modified: string | number;
+  id: string;
+  uuid: string;
+  orderId?: string;
+  itemId: number;
+  connectedRealmId: number;
+  bonusList?: number[] | null;
+  price?: number | null;
+  bid?: number | null;
+  quantity?: number;
+  value?: number;
+  timeLeft: string;
+  timestamp: string | number;
 }
 
 interface AuctionsResponse {
@@ -67,16 +68,18 @@ export const ItemListing = ({
   if (isLoading)
     return (
       <Card className="m-4 bg-background border border-divider">
-        <Card.Content className="p-8 rounded-xl flex items-center justify-center min-h-[300px] bg-background">
+        <CardContent className="p-8 rounded-xl flex items-center justify-center min-h-[300px] bg-background">
           <Spinner color="warning" size="lg" />
-        </Card.Content>
+        </CardContent>
       </Card>
     );
 
   if (!data || !data.feed || data.feed.length === 0) return null;
 
   const pages = Math.ceil(data.feed.length / rowsPerPage);
-  const items = data.feed.slice((page - 1) * rowsPerPage, page * rowsPerPage);
+  const items = data.feed
+    .slice((page - 1) * rowsPerPage, page * rowsPerPage)
+    .map((auction) => ({ ...auction, id: auction.uuid }));
 
   const timeLeftMap: Record<string, string> = {
     SHORT: il.timeShort,
@@ -87,76 +90,82 @@ export const ItemListing = ({
 
   const columns = [
     { key: "item", label: il.columnItem },
-    { key: "connected_realm_id", label: il.columnRealm },
-    { key: "buyout", label: il.columnPrice },
-    { key: "time_left", label: il.columnExpiration },
-    { key: "last_modified", label: il.columnLastUpdate },
+    { key: "connectedRealmId", label: il.columnRealm },
+    { key: "price", label: il.columnPrice },
+    { key: "timeLeft", label: il.columnExpiration },
+    { key: "timestamp", label: il.columnLastUpdate },
   ];
 
   const buildWowheadUrl = (auction: Auction) => {
-    let wowhead = `item=${auction.item_id}`;
+    let wowhead = `item=${auction.itemId}`;
 
-    if (auction.item.bonus_lists && auction.item.bonus_lists.length > 0) {
-      const bonusLists = auction.item.bonus_lists.join(":");
+    if (auction.bonusList && auction.bonusList.length > 0) {
+      const bonusLists = auction.bonusList.join(":");
 
       wowhead += `&bonus=${bonusLists}`;
     }
     wowhead += "&xml";
 
     return {
-      url: `https://wowhead.com/item=${auction.item_id}`,
+      url: `https://wowhead.com/item=${auction.itemId}`,
       data: wowhead,
     };
   };
 
   return (
     <Card className="m-4 bg-background border border-divider">
-      <Card.Content className="p-8 rounded-xl bg-background">
-        <Table aria-label={il.tableAriaLabel}>
-          <TableHeader className="bg-background border-b border-divider">
-            {columns.map((column) => (
-              <TableColumn
-                key={column.key}
-                className="py-3 text-foreground font-semibold"
-              >
-                {column.label}
-              </TableColumn>
-            ))}
-          </TableHeader>
-          <TableBody items={items}>
-            {(auction) => {
-              const { url, data: wowheadData } = buildWowheadUrl(auction);
+      <CardContent className="p-8 rounded-xl bg-background">
+        <Table>
+          <Table.ScrollContainer>
+            <Table.Content aria-label={il.tableAriaLabel}>
+              <TableHeader className="bg-background border-b border-divider">
+                {columns.map((column) => (
+                  <TableColumn
+                    key={column.key}
+                    className="py-3 text-foreground font-semibold"
+                    id={column.key}
+                  >
+                    {column.label}
+                  </TableColumn>
+                ))}
+              </TableHeader>
+              <TableBody items={items}>
+                {(auction) => {
+                  const { url, data: wowheadData } = buildWowheadUrl(auction);
+                  const price = auction.price ?? auction.bid;
 
-              return (
-                <TableRow key={auction.id}>
-                  <TableCell className="text-muted border-b border-divider">
-                    <Link
-                      className="text-inherit hover:underline"
-                      data-wowhead={wowheadData}
-                      href={url}
-                      prefetch={false}
-                    >
-                      {name}
-                    </Link>
-                  </TableCell>
-                  <TableCell className="text-muted border-b border-divider">
-                    {auction.connected_realm_id}
-                  </TableCell>
-                  <TableCell className="text-muted border-b border-divider">
-                    {auction.buyout
-                      ? auction.buyout.toLocaleString("ru-RU")
-                      : `${il.bid}${auction.bid.toLocaleString("ru-RU")}`}
-                  </TableCell>
-                  <TableCell className="text-muted border-b border-divider">
-                    {timeLeftMap[auction.time_left] || auction.time_left}
-                  </TableCell>
-                  <TableCell className="text-muted border-b border-divider">
-                    {new Date(auction.last_modified).toLocaleString("en-GB")}
-                  </TableCell>
-                </TableRow>
-              );
-            }}
-          </TableBody>
+                  return (
+                    <TableRow id={auction.uuid}>
+                      <TableCell className="text-muted border-b border-divider">
+                        <Link
+                          className="text-inherit hover:underline"
+                          data-wowhead={wowheadData}
+                          href={url}
+                          prefetch={false}
+                        >
+                          {name}
+                        </Link>
+                      </TableCell>
+                      <TableCell className="text-muted border-b border-divider">
+                        {auction.connectedRealmId}
+                      </TableCell>
+                      <TableCell className="text-muted border-b border-divider">
+                        {price != null ? price.toLocaleString("ru-RU") : il.bid}
+                      </TableCell>
+                      <TableCell className="text-muted border-b border-divider">
+                        {timeLeftMap[auction.timeLeft] || auction.timeLeft}
+                      </TableCell>
+                      <TableCell className="text-muted border-b border-divider">
+                        {new Date(Number(auction.timestamp)).toLocaleString(
+                          "en-GB"
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  );
+                }}
+              </TableBody>
+            </Table.Content>
+          </Table.ScrollContainer>
         </Table>
         {pages > 1 && (
           <div className="flex w-full justify-center items-center gap-2 mt-4">
@@ -208,7 +217,7 @@ export const ItemListing = ({
             </button>
           </div>
         )}
-      </Card.Content>
+      </CardContent>
     </Card>
   );
 };

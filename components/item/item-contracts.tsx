@@ -3,6 +3,7 @@
 import { useMemo, memo, useState, useCallback } from "react";
 import {
   Card,
+  CardContent,
   Table,
   TableHeader,
   TableColumn,
@@ -93,7 +94,7 @@ const ItemContractsLoading = memo(() => {
 
   return (
     <Card className={CARD_CLASS_NAMES.root}>
-      <Card.Content className={CARD_CLASS_NAMES.body}>
+      <CardContent className={CARD_CLASS_NAMES.body}>
         <BadgeSection
           color={BADGE_COLORS.DEFAULT}
           label={dict.itemContracts.badge}
@@ -101,7 +102,7 @@ const ItemContractsLoading = memo(() => {
         <div className={`${CARD_CLASS_NAMES.loading} min-h-[300px]`}>
           <Spinner color="warning" size="lg" />
         </div>
-      </Card.Content>
+      </CardContent>
     </Card>
   );
 });
@@ -130,7 +131,7 @@ const ItemContractsTable = memo(
 
     return (
       <Card className={CARD_CLASS_NAMES.root}>
-        <Card.Content className={CARD_CLASS_NAMES.body}>
+        <CardContent className={CARD_CLASS_NAMES.body}>
           <div className="flex items-center justify-between mb-6">
             <BadgeSection color={BADGE_COLORS.DEFAULT} label={ic.badge} />
             <ButtonGroup size="sm" variant="outline">
@@ -153,46 +154,51 @@ const ItemContractsTable = memo(
           {contracts.length === 0 ? (
             <div className="text-center text-muted py-8">{ic.noData}</div>
           ) : (
-            <Table aria-label={ic.tableAriaLabel}>
-              <TableHeader className="bg-background border-b border-divider">
-                {columns.map((column) => (
-                  <TableColumn
-                    key={column.key}
-                    className="py-3 text-foreground font-semibold"
-                  >
-                    {column.label}
-                  </TableColumn>
-                ))}
-              </TableHeader>
-              <TableBody items={contracts}>
-                {(contract) => (
-                  <TableRow key={contract.id}>
-                    <TableCell className="text-[var(--primary)] font-medium">
-                      {formatTimestamp(contract.timestamp)}
-                    </TableCell>
-                    <TableCell className="text-[var(--primary)] font-medium">
-                      {formatNumber(contract.price)}
-                    </TableCell>
-                    <TableCell className="text-[var(--primary)] font-medium">
-                      {formatNumber(contract.priceMedian)}
-                    </TableCell>
-                    <TableCell className="text-[var(--primary)] font-medium">
-                      {formatNumber(contract.priceTop)}
-                    </TableCell>
-                    <TableCell className="text-[var(--primary)] font-medium">
-                      {formatNumber(contract.quantity)}
-                    </TableCell>
-                    <TableCell className="text-[var(--primary)] font-medium text-center">
-                      <div className="text-right inline-block tabular-nums">
-                        {formatNumber(Math.floor(contract.openInterest))}
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
+            <Table>
+              <Table.ScrollContainer>
+                <Table.Content aria-label={ic.tableAriaLabel}>
+                  <TableHeader className="bg-background border-b border-divider">
+                    {columns.map((column) => (
+                      <TableColumn
+                        key={column.key}
+                        className="py-3 text-foreground font-semibold"
+                        id={column.key}
+                      >
+                        {column.label}
+                      </TableColumn>
+                    ))}
+                  </TableHeader>
+                  <TableBody items={contracts}>
+                    {(contract) => (
+                      <TableRow id={contract.id}>
+                        <TableCell className="text-[var(--primary)] font-medium">
+                          {formatTimestamp(contract.timestamp)}
+                        </TableCell>
+                        <TableCell className="text-[var(--primary)] font-medium">
+                          {formatNumber(contract.price)}
+                        </TableCell>
+                        <TableCell className="text-[var(--primary)] font-medium">
+                          {formatNumber(contract.priceMedian)}
+                        </TableCell>
+                        <TableCell className="text-[var(--primary)] font-medium">
+                          {formatNumber(contract.priceTop)}
+                        </TableCell>
+                        <TableCell className="text-[var(--primary)] font-medium">
+                          {formatNumber(contract.quantity)}
+                        </TableCell>
+                        <TableCell className="text-[var(--primary)] font-medium text-center">
+                          <div className="text-right inline-block tabular-nums">
+                            {formatNumber(Math.floor(contract.openInterest))}
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table.Content>
+              </Table.ScrollContainer>
             </Table>
           )}
-        </Card.Content>
+        </CardContent>
       </Card>
     );
   }

@@ -3,6 +3,7 @@
 import { useMemo, memo } from "react";
 import {
   Card,
+  CardContent,
   Table,
   TableHeader,
   TableColumn,
@@ -18,6 +19,8 @@ import {
   CARD_CLASS_NAMES,
   BADGE_COLORS,
   formatNumber,
+  formatOpenInterest,
+  formatQuantity,
 } from "@/components/item/constants";
 import { useI18n } from "@/lib/i18n/context";
 
@@ -38,7 +41,7 @@ const ItemQuotesLoading = memo(() => {
 
   return (
     <Card className={CARD_CLASS_NAMES.root}>
-      <Card.Content className={CARD_CLASS_NAMES.body}>
+      <CardContent className={CARD_CLASS_NAMES.body}>
         <BadgeSection
           color={BADGE_COLORS.QUOTES}
           label={dict.itemQuotes.badge}
@@ -46,7 +49,7 @@ const ItemQuotesLoading = memo(() => {
         <div className={`${CARD_CLASS_NAMES.loading} min-h-[300px]`}>
           <Spinner color="warning" size="lg" />
         </div>
-      </Card.Content>
+      </CardContent>
     </Card>
   );
 });
@@ -69,39 +72,44 @@ const ItemQuotesTable = memo(({ quotes, columns }: ItemQuotesTableProps) => {
 
   return (
     <Card className={CARD_CLASS_NAMES.root}>
-      <Card.Content className={CARD_CLASS_NAMES.body}>
+      <CardContent className={CARD_CLASS_NAMES.body}>
         <BadgeSection color={BADGE_COLORS.QUOTES} label={iq.badge} />
-        <Table aria-label={iq.tableAriaLabel}>
-          <TableHeader className="bg-background border-b border-divider">
-            {columns.map((column) => (
-              <TableColumn
-                key={column.key}
-                className="py-3 text-foreground font-semibold"
-              >
-                {column.label}
-              </TableColumn>
-            ))}
-          </TableHeader>
-          <TableBody items={quotes}>
-            {(quote) => (
-              <TableRow key={`${quote.price}-${quote.quantity}`}>
-                <TableCell className="text-[var(--primary)] font-medium">
-                  {formatNumber(quote.price)}
-                </TableCell>
-                <TableCell className="text-[var(--primary)] font-medium">
-                  {formatNumber(quote.quantity)}
-                </TableCell>
-                <TableCell className="text-[var(--primary)] font-medium">
-                  {formatNumber(quote.openInterest)}
-                </TableCell>
-                <TableCell className="text-[var(--primary)] font-medium">
-                  {quote.size}
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
+        <Table>
+          <Table.ScrollContainer>
+            <Table.Content aria-label={iq.tableAriaLabel}>
+              <TableHeader className="bg-background border-b border-divider">
+                {columns.map((column) => (
+                  <TableColumn
+                    key={column.key}
+                    className="py-3 text-foreground font-semibold"
+                    id={column.key}
+                  >
+                    {column.label}
+                  </TableColumn>
+                ))}
+              </TableHeader>
+              <TableBody items={quotes}>
+                {(quote) => (
+                  <TableRow id={`${quote.price}-${quote.quantity}`}>
+                    <TableCell className="text-[var(--primary)] font-medium">
+                      {formatNumber(quote.price)}
+                    </TableCell>
+                    <TableCell className="text-[var(--primary)] font-medium">
+                      {formatQuantity(quote.quantity)}
+                    </TableCell>
+                    <TableCell className="text-[var(--primary)] font-medium">
+                      {formatOpenInterest(quote.openInterest)}
+                    </TableCell>
+                    <TableCell className="text-[var(--primary)] font-medium">
+                      {quote.size}
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table.Content>
+          </Table.ScrollContainer>
         </Table>
-      </Card.Content>
+      </CardContent>
     </Card>
   );
 });
