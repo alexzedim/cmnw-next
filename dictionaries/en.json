@@ -393,7 +393,7 @@
     "contractsBoard": "Contracts board",
     "contractsDisclaimer": "Contract stats focus on max-duration instruments with verifiable liquidity.",
     "openInterestLeaders": "Open interest leaders",
-    "quantityConcentration": "Quantity concentration",
+    "quantityConcentration": "Max quantity concentration",
     "auctionThroughput": "Auction throughput"
   },
   "upload": {
