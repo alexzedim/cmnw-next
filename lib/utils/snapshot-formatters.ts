@@ -97,7 +97,7 @@ export const normalizeSnapshotValue = (
           (element): element is Record<string, unknown> =>
             Boolean(element) && typeof element === "object"
         )
-        .map((element) => [rankLabel(element, locale), rankValue(element)])
+        .map((element) => [rankLabel(element, locale), element])
     );
   }
 
@@ -173,7 +173,20 @@ export const getSnapshotEntriesRich = (
     return [];
   }
 
-  return Object.entries(snapshot.value)
+  const snapshotValue = snapshot.value as Record<string, unknown>;
+
+  // If the snapshot value itself is a single rank record (has itemId/guid at top
+  // level rather than being a map of records), treat it as a single entry.
+  if (isRankRecord(snapshotValue) || typeof snapshotValue.itemId === "number" || typeof snapshotValue.guid === "string") {
+    const el = snapshotValue as Record<string, unknown>;
+    return [{
+      label: rankLabel(el, locale),
+      value: rankValue(el),
+      href: buildEntryHref(el),
+    }];
+  }
+
+  return Object.entries(snapshotValue)
     .slice(0, limit)
     .map(([key, entryValue]) => {
       if (isRankRecord(entryValue)) {
