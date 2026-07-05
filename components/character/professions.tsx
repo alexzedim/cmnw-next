@@ -56,7 +56,8 @@ export function CharacterProfessions({
 
       <div className="space-y-6">
         {sortedGroups.map(([name, entries]) => {
-          const isOpen = !collapsed[name];
+          // Hidden by default — only groups the user expands stay open.
+          const isOpen = collapsed[name] === true;
           const panelId = `profession-panel-${name}`;
           const sortedEntries = [...entries].sort(
             (a, b) =>
