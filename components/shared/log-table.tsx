@@ -1,7 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState, type CSSProperties } from "react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+  type RefObject,
+} from "react";
 import dayjs from "dayjs";
 
 import { useI18n } from "@/lib/i18n/context";
@@ -80,10 +87,58 @@ const isCharacterGuid = (value: unknown): value is string =>
   typeof value === "string" && GUID_RE.test(value);
 
 /**
+ * Tooltip overlay rendered into a portal at the document body so it escapes
+ * any scroll/overflow container the chip lives in (e.g. the log table's
+ * horizontal-scroll wrapper). Positioned under the chip via getBoundingClientRect.
+ */
+function ActionChipTooltip({
+  chipRef,
+  label,
+  description,
+}: {
+  chipRef: RefObject<HTMLSpanElement | null>;
+  label: string;
+  description: string;
+}) {
+  const [coords, setCoords] = useState<{
+    left: number;
+    top: number;
+  } | null>(null);
+
+  useEffect(() => {
+    const el = chipRef.current;
+
+    if (!el) return;
+
+    const rect = el.getBoundingClientRect();
+
+    setCoords({ left: rect.left, top: rect.bottom + 8 });
+  }, [chipRef]);
+
+  const style: CSSProperties = coords
+    ? { left: coords.left, top: coords.top }
+    : { visibility: "hidden" };
+
+  return (
+    <div
+      className="card-surface fixed z-50 w-56 rounded-xl p-3 shadow-lg"
+      style={style}
+    >
+      <p className="text-xs leading-snug text-foreground/70">
+        <strong className="font-bold text-foreground">{label}</strong>
+        {" — "}
+        {description}
+      </p>
+    </div>
+  );
+}
+
+/**
  * Chip with a hover/focus tooltip showing "label — description", where the
- * label is bolded inside the description. Uses the same Tailwind
- * `group` + `group-hover:block hidden` pattern as CharacterStatusIndicator.
- * A native `title` is also set as a fallback for touch / no-CSS contexts.
+ * label is bolded inside the description. The tooltip is rendered through a
+ * portal (fixed-position overlay) so it is not clipped by the table's
+ * horizontal-scroll container. A native `title` is also set as a fallback
+ * for touch / no-CSS contexts.
  */
 function ActionChip({
   action,
@@ -94,26 +149,30 @@ function ActionChip({
   label: string;
   description?: string;
 }) {
+  const [hovered, setHovered] = useState(false);
+  const chipRef = useRef<HTMLSpanElement>(null);
   const fallback = description ? `${label} — ${description}` : undefined;
 
   return (
-    <div className="group relative inline-block">
-      <span className="chip" style={chipStyle(action)}>
+    <span
+      className="group relative inline-block"
+      onBlur={() => setHovered(false)}
+      onFocus={() => description && setHovered(true)}
+      onMouseEnter={() => description && setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <span ref={chipRef} className="chip" style={chipStyle(action)}>
         {label}
       </span>
-      {description && (
-        <div className="absolute left-0 top-full z-20 mt-2 hidden w-56 group-hover:block">
-          <div className="card-surface rounded-xl p-3 shadow-lg">
-            <p className="text-xs leading-snug text-foreground/70">
-              <strong className="font-bold text-foreground">{label}</strong>
-              {" — "}
-              {description}
-            </p>
-          </div>
-        </div>
+      {hovered && description && typeof document !== "undefined" && (
+        <ActionChipTooltip
+          chipRef={chipRef}
+          description={description}
+          label={label}
+        />
       )}
       {fallback && <span className="sr-only">{fallback}</span>}
-    </div>
+    </span>
   );
 }
 
@@ -234,7 +293,10 @@ export const LogTable = ({ logs }: LogTableProps) => {
   return (
     <div className="card-surface p-6 m-4 density-compact" id="log-table-root">
       <div className="flex justify-between items-center w-full">
-        <h3 className="text-xl font-semibold">{lt.title}</h3>
+        <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider opacity-50">
+          <div className="size-1.5 rounded-full bg-[var(--primary)]" />
+          <span>{lt.title}</span>
+        </div>
         <div className="text-sm text-muted">
           {filteredLogs.length} / {logs.length} {lt.entries}
         </div>
