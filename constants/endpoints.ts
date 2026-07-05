@@ -23,6 +23,8 @@ const toWsOrigin = (origin: string): string => origin.replace(/^http/i, "ws");
 
 export const getWsFeedUrl = (sessionId?: string): string => {
   const base = `${toWsOrigin(ENDPOINTS.API)}${ENDPOINTS.WS_FEED_PATH}`;
+
   if (!sessionId) return base;
+
   return `${base}?session=${encodeURIComponent(sessionId)}`;
 };

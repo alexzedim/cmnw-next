@@ -52,9 +52,8 @@ export const CharacterRefresh = ({ guid }: CharacterRefreshProps) => {
   const { messages } = useLiveFeed();
 
   const [phase, setPhase] = useState<Phase>("idle");
-  const [endpoints, setEndpoints] = useState<Record<RefreshEndpoint, EndpointState>>(
-    PENDING_ENDPOINTS,
-  );
+  const [endpoints, setEndpoints] =
+    useState<Record<RefreshEndpoint, EndpointState>>(PENDING_ENDPOINTS);
   const [statusText, setStatusText] = useState<string>("");
 
   // Track the active request so we only react to events for our latest click.
@@ -98,13 +97,16 @@ export const CharacterRefresh = ({ guid }: CharacterRefreshProps) => {
   // Subscribe to the live feed and fold matching refresh events into state.
   useEffect(() => {
     const requestId = activeRequestId.current;
+
     if (!requestId) return;
 
     const matching = messages.filter((e) => {
       if (!isCharacterRefreshEvent(e, { sessionId, guid })) return false;
       const meta = e.meta as Partial<CharacterRefreshMeta> | undefined;
+
       return meta?.requestId === requestId;
     });
+
     if (matching.length === 0) return;
 
     let terminalReached = false;
@@ -128,6 +130,7 @@ export const CharacterRefresh = ({ guid }: CharacterRefreshProps) => {
           // (e.g. "SUVPMR", "s--PM-") into per-endpoint success/error/pending.
           if (typeof meta.status === "string" && meta.status.length > 0) {
             const decoded = decodeStatusString(meta.status);
+
             for (const ep of STATUS_ENDPOINT_ORDER) {
               next[ep] = decoded[ep];
             }
@@ -148,6 +151,7 @@ export const CharacterRefresh = ({ guid }: CharacterRefreshProps) => {
     if (terminalReached && !refreshedRef.current) {
       refreshedRef.current = true;
       const isOk = terminalStatus !== FeedStatus.ERROR;
+
       setPhase(isOk ? "done" : "error");
 
       // On a successful/skipped finish, re-render the server component so the
@@ -168,6 +172,7 @@ export const CharacterRefresh = ({ guid }: CharacterRefreshProps) => {
   useEffect(() => {
     if (phase === "idle" || phase === "refreshing") return;
     const timer = window.setTimeout(() => setPhase("idle"), 6000);
+
     return () => window.clearTimeout(timer);
   }, [phase]);
 
@@ -193,6 +198,7 @@ export const CharacterRefresh = ({ guid }: CharacterRefreshProps) => {
     if (phase === "done") {
       return "bg-[var(--success)] text-[var(--success-foreground)]";
     }
+
     return "bg-[var(--primary)] text-[var(--primary-foreground)] hover:bg-[color-mix(in_oklab,var(--primary),transparent_90%)]";
   })();
 
@@ -204,12 +210,12 @@ export const CharacterRefresh = ({ guid }: CharacterRefreshProps) => {
         <Button
           className={buttonClassName}
           isDisabled={isRefreshing}
-          onPress={triggerRefresh}
           size="sm"
           variant="ghost"
+          onPress={triggerRefresh}
         >
           {isRefreshing ? (
-            <Spinner size="sm" color="current" />
+            <Spinner color="current" size="sm" />
           ) : (
             <span aria-hidden>↻</span>
           )}
@@ -241,7 +247,9 @@ export const CharacterRefresh = ({ guid }: CharacterRefreshProps) => {
                   )}
                 </span>
                 <span
-                  className={state === "pending" && !isRefreshing ? "opacity-40" : ""}
+                  className={
+                    state === "pending" && !isRefreshing ? "opacity-40" : ""
+                  }
                 >
                   {label}
                 </span>

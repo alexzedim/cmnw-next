@@ -115,17 +115,20 @@ export type EndpointState = "pending" | "success" | "error";
  * state map, honoring STATUS_ENDPOINT_ORDER positions and CHARACTER_STATUS_CODES.
  */
 export const decodeStatusString = (
-  status: string,
+  status: string
 ): Record<RefreshEndpoint, EndpointState> => {
   const result = {} as Record<RefreshEndpoint, EndpointState>;
+
   for (const endpoint of STATUS_ENDPOINT_ORDER) {
     const index = STATUS_ENDPOINT_ORDER.indexOf(endpoint);
     const char = status[index] ?? "-";
     const codes = CHARACTER_STATUS_CODES[endpoint];
+
     if (char === codes.success) result[endpoint] = "success";
     else if (char === codes.error) result[endpoint] = "error";
     else result[endpoint] = "pending";
   }
+
   return result;
 };
 
@@ -155,12 +158,14 @@ export interface CharacterRefreshMeta {
  */
 export const isCharacterRefreshEvent = (
   event: FeedEvent,
-  ctx: { sessionId: string; guid?: string },
+  ctx: { sessionId: string; guid?: string }
 ): boolean => {
   if (event.category !== FeedEventCategory.CHARACTER) return false;
   if (event.source !== "osint.characters.refresh") return false;
   const meta = event.meta as Partial<CharacterRefreshMeta> | undefined;
+
   if (!meta || meta.sessionId !== ctx.sessionId) return false;
   if (ctx.guid !== undefined && meta.guid !== ctx.guid) return false;
+
   return true;
 };
