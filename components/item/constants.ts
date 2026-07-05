@@ -11,6 +11,15 @@
 export const LOCALE = "ru-RU";
 
 /**
+ * Swiss locale uses apostrophe as the thousands separator (1'000'000),
+ * which we post-process into either spaces or keep as-is depending on the
+ * metric being rendered. Kept as a shared instance to avoid per-call allocation.
+ */
+const apostropheNumberFormatter = new Intl.NumberFormat("de-CH", {
+  maximumFractionDigits: 0,
+});
+
+/**
  * Table styling classes used across item components
  */
 export const TABLE_CLASS_NAMES = {
@@ -51,6 +60,39 @@ export const formatNumber = (
   if (value === null || value === undefined) return "-";
 
   return value.toLocaleString(locale);
+};
+
+/**
+ * Formats a count with regular spaces between each thousand group
+ * (e.g. `1 234 567`). Used for plain quantity columns where apostrophe
+ * grouping would feel too "money-like".
+ */
+export const formatQuantity = (value?: number | null): string => {
+  if (value === null || value === undefined) return "-";
+
+  return apostropheNumberFormatter.format(value).replace(/'/g, " ");
+};
+
+/**
+ * Formats an Open Interest value (already in gold) as a gold/silver
+ * breakdown with apostrophe thousands grouping, e.g. `14'000 g 00 s`.
+ *
+ * - Whole part is apostrophe-grouped gold.
+ * - Fractional part (0.01 g = 1 s) becomes a two-digit silver component.
+ *
+ * Note: `openInterest` from `/api/dma/item/quotes` is denominated in gold,
+ * not copper — see `market-heatmap.tsx` where `price = oi / quantity`.
+ */
+export const formatOpenInterest = (value?: number | null): string => {
+  if (value === null || value === undefined) return "-";
+
+  const gold = Math.floor(value);
+  const silver = Math.floor((value - gold) * 100);
+
+  const goldStr = apostropheNumberFormatter.format(gold);
+  const silverStr = silver.toString().padStart(2, "0");
+
+  return `${goldStr} g ${silverStr} s`;
 };
 
 /**
