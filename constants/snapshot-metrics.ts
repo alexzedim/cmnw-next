@@ -84,6 +84,8 @@ export const SNAPSHOT_HIGHLIGHT_GROUPS: readonly SnapshotHighlightGroup[] = [
         labelKey: "priceRanges" as const,
         category: AnalyticsMetricCategory.MARKET,
         metricType: AnalyticsMetricType.PRICE_RANGES,
+        valueLimit: Number.POSITIVE_INFINITY,
+        sort: "priceRange",
       },
       {
         labelKey: "topByVolume" as const,
@@ -92,9 +94,9 @@ export const SNAPSHOT_HIGHLIGHT_GROUPS: readonly SnapshotHighlightGroup[] = [
         valueFormat: "gold",
       },
       {
-        labelKey: "priceVolatility" as const,
+        labelKey: "topByAuctions" as const,
         category: AnalyticsMetricCategory.MARKET,
-        metricType: AnalyticsMetricType.PRICE_VOLATILITY,
+        metricType: AnalyticsMetricType.TOP_BY_AUCTIONS,
       },
     ] as const,
   },
@@ -116,9 +118,9 @@ export const SNAPSHOT_HIGHLIGHT_GROUPS: readonly SnapshotHighlightGroup[] = [
         valueLimit: 1,
       },
       {
-        labelKey: "auctionThroughput" as const,
+        labelKey: "priceVolatility" as const,
         category: AnalyticsMetricCategory.CONTRACTS,
-        metricType: AnalyticsMetricType.TOP_BY_AUCTIONS,
+        metricType: AnalyticsMetricType.PRICE_VOLATILITY,
       },
     ] as const,
   },
