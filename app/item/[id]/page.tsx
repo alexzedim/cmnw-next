@@ -77,34 +77,37 @@ export default async function ItemPage({ params }: ItemPageProps) {
 
   return (
     <main className="min-h-screen pt-20 pb-8">
-      <div className="container mx-auto px-4">
+      {/* Title block — bounded, matches other pages */}
+      <div className="container mx-auto px-4 max-w-7xl">
         <ItemTitle item={item} />
+      </div>
 
-        <div className="my-8 h-px bg-[var(--border)]" />
-
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mt-4">
-          <div className="md:col-span-5">
+      {/*
+        Data sections — full-bleed. The wrapper breaks out of the container
+        using the same `w-screen` + negative-left trick MarketHeatmap uses
+        internally, so Quotes/Contracts/Listings align flush with the
+        viewport edges (and with the heatmap) rather than stopping at the
+        container width. On mobile this is a no-op (already full width).
+      */}
+      <div className="relative left-[calc(-50vw+50%)] w-screen px-6 md:px-8 lg:px-12">
+        {/* Top row: Quotes 40% / Contracts 60% on lg+, equal-height, stacked below lg */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 items-stretch">
+          <div className="lg:col-span-2 flex">
             <ItemQuotes id={id} isGold={isGold} />
           </div>
-          <div className="md:col-span-7">
-            {/** <ItemContractsChart id={id} /> **/}
+          <div className="lg:col-span-3 flex">
+            <ItemContracts id={id} />
           </div>
         </div>
 
-        <div className="my-8 h-px bg-[var(--border)]" />
-
-        <ItemContracts id={id} />
-
-        <div className="my-8 h-px bg-[var(--border)]" />
-
-        <MarketHeatmap
-          hasContracts={item.hasContracts}
-          id={id}
-          isCommdty={isCommdty}
-          isGold={isGold}
-        />
-
-        <div className="my-8 h-px bg-[var(--border)]" />
+        <div className="mt-12">
+          <MarketHeatmap
+            hasContracts={item.hasContracts}
+            id={id}
+            isCommdty={isCommdty}
+            isGold={isGold}
+          />
+        </div>
 
         <ItemListing
           id={id}
