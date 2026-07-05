@@ -26,7 +26,9 @@ type LiveFeedContextValue = {
   clear: () => void;
 };
 
-const LiveFeedContext = createContext<LiveFeedContextValue | undefined>(undefined);
+const LiveFeedContext = createContext<LiveFeedContextValue | undefined>(
+  undefined
+);
 
 const RECONNECT_BASE_MS = 1000;
 const RECONNECT_MAX_MS = 30000;
@@ -52,10 +54,12 @@ export const LiveFeedProvider = ({ children }: { children: ReactNode }) => {
 
     manualCloseRef.current = false;
     let socket: WebSocket;
+
     try {
       socket = new WebSocket(getWsFeedUrl());
     } catch {
       scheduleReconnect();
+
       return;
     }
 
@@ -70,10 +74,14 @@ export const LiveFeedProvider = ({ children }: { children: ReactNode }) => {
     socket.onmessage = (event) => {
       try {
         const parsed = JSON.parse(event.data);
+
         if (!isFeedEvent(parsed)) return;
         setMessages((prev) => {
           const next = [parsed, ...prev];
-          return next.length > MAX_MESSAGES ? next.slice(0, MAX_MESSAGES) : next;
+
+          return next.length > MAX_MESSAGES
+            ? next.slice(0, MAX_MESSAGES)
+            : next;
         });
       } catch {
         // ignore malformed payloads
@@ -96,8 +104,13 @@ export const LiveFeedProvider = ({ children }: { children: ReactNode }) => {
   const scheduleReconnect = useCallback(() => {
     clearReconnectTimer();
     const attempt = reconnectAttemptRef.current + 1;
+
     reconnectAttemptRef.current = attempt;
-    const delay = Math.min(RECONNECT_BASE_MS * 2 ** (attempt - 1), RECONNECT_MAX_MS);
+    const delay = Math.min(
+      RECONNECT_BASE_MS * 2 ** (attempt - 1),
+      RECONNECT_MAX_MS
+    );
+
     reconnectTimerRef.current = setTimeout(() => {
       connect();
     }, delay);
@@ -110,6 +123,7 @@ export const LiveFeedProvider = ({ children }: { children: ReactNode }) => {
       manualCloseRef.current = true;
       clearReconnectTimer();
       const socket = socketRef.current;
+
       if (socket && socket.readyState !== WebSocket.CLOSED) {
         socket.close();
       }
@@ -124,18 +138,22 @@ export const LiveFeedProvider = ({ children }: { children: ReactNode }) => {
 
   const value = useMemo(
     () => ({ messages, status, clear }),
-    [clear, messages, status],
+    [clear, messages, status]
   );
 
   return (
-    <LiveFeedContext.Provider value={value}>{children}</LiveFeedContext.Provider>
+    <LiveFeedContext.Provider value={value}>
+      {children}
+    </LiveFeedContext.Provider>
   );
 };
 
 export const useLiveFeed = (): LiveFeedContextValue => {
   const context = useContext(LiveFeedContext);
+
   if (!context) {
     throw new Error("useLiveFeed must be used within a LiveFeedProvider");
   }
+
   return context;
 };

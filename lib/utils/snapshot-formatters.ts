@@ -25,6 +25,7 @@ const rankLabel = (
   if (element.names && typeof element.names === "object") {
     const names = element.names as Record<string, string>;
     const localeKey = LOCALE_MAP[locale] ?? "en_US";
+
     if (names[localeKey]) return names[localeKey];
     if (names.en_US) return names.en_US;
   }
@@ -155,14 +156,18 @@ export type SnapshotEntry = {
   href?: string;
 };
 
-const buildEntryHref = (element: Record<string, unknown>): string | undefined => {
+const buildEntryHref = (
+  element: Record<string, unknown>
+): string | undefined => {
   if (typeof element.guid === "string" && element.guid.length > 0) {
     const [name, realm] = element.guid.split("@");
+
     if (name && realm) return `/guild/${element.guid}`;
   }
   if (typeof element.itemId === "number") {
     return `/item/${element.itemId}`;
   }
+
   return undefined;
 };
 
@@ -184,22 +189,31 @@ export const getSnapshotEntriesRich = (
     typeof snapshotValue.itemId === "number" &&
     typeof snapshotValue.stdDev === "number"
   ) {
-    return [{
-      label: rankLabel(snapshotValue, locale),
-      value: formatPriceVolatility(snapshotValue.stdDev),
-      href: buildEntryHref(snapshotValue),
-    }];
+    return [
+      {
+        label: rankLabel(snapshotValue, locale),
+        value: formatPriceVolatility(snapshotValue.stdDev),
+        href: buildEntryHref(snapshotValue),
+      },
+    ];
   }
 
   // If the snapshot value itself is a single rank record (has itemId/guid at top
   // level rather than being a map of records), treat it as a single entry.
-  if (isRankRecord(snapshotValue) || typeof snapshotValue.itemId === "number" || typeof snapshotValue.guid === "string") {
+  if (
+    isRankRecord(snapshotValue) ||
+    typeof snapshotValue.itemId === "number" ||
+    typeof snapshotValue.guid === "string"
+  ) {
     const el = snapshotValue as Record<string, unknown>;
-    return [{
-      label: rankLabel(el, locale),
-      value: rankValue(el),
-      href: buildEntryHref(el),
-    }];
+
+    return [
+      {
+        label: rankLabel(el, locale),
+        value: rankValue(el),
+        href: buildEntryHref(el),
+      },
+    ];
   }
 
   return Object.entries(snapshotValue)
@@ -207,12 +221,14 @@ export const getSnapshotEntriesRich = (
     .map(([key, entryValue]) => {
       if (isRankRecord(entryValue)) {
         const el = entryValue as Record<string, unknown>;
+
         return {
           label: rankLabel(el, locale),
           value: rankValue(el),
           href: buildEntryHref(el),
         };
       }
+
       return { label: key, value: entryValue };
     });
 };
@@ -268,6 +284,7 @@ export const formatPriceVolatility = (stdDev: unknown): string => {
   if (typeof stdDev !== "number" || !Number.isFinite(stdDev)) {
     return "—";
   }
+
   return `σ ${formatCopperBreakdown(stdDev)}`;
 };
 
@@ -279,6 +296,7 @@ const formatCopperBreakdown = (copper: number): string => {
   const g = Math.floor(copper / 10000);
   const s = Math.floor((copper % 10000) / 100);
   const c = Math.floor(copper % 100);
+
   return `${g} g ${s} s ${c} c`;
 };
 
@@ -296,6 +314,7 @@ export const formatEntryValue = (
   if (typeof value === "number") {
     if (valueFormat === "gold") {
       const { amount, suffix } = formatGoldValue(value);
+
       return `${amount} ${suffix}`;
     }
 
@@ -337,7 +356,10 @@ export const PRICE_RANGE_ORDER = [
  * PRICE_RANGE_ORDER. Unknown keys sort last, preserving their relative order.
  */
 export const priceRangeRank = (key: string): number => {
-  const index = PRICE_RANGE_ORDER.indexOf(key as (typeof PRICE_RANGE_ORDER)[number]);
+  const index = PRICE_RANGE_ORDER.indexOf(
+    key as (typeof PRICE_RANGE_ORDER)[number]
+  );
+
   return index === -1 ? PRICE_RANGE_ORDER.length : index;
 };
 

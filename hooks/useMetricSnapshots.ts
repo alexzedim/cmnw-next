@@ -44,6 +44,7 @@ const fetchMetricSnapshots = async (): Promise<MetricSnapshotRecord> => {
         // Backend returns null (empty body) when no snapshot row exists yet.
         // Treat that as "no snapshot" instead of crashing on JSON.parse("").
         const text = await response.text();
+
         if (!text) {
           return [key, null] as const;
         }

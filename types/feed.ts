@@ -21,7 +21,13 @@ export enum FeedStatus {
   ERROR = "error",
 }
 
-export type FeedStatusColor = "green" | "yellow" | "blue" | "cyan" | "red" | "magenta";
+export type FeedStatusColor =
+  | "green"
+  | "yellow"
+  | "blue"
+  | "cyan"
+  | "red"
+  | "magenta";
 
 export interface FeedStatusMeta {
   icon: string;
@@ -63,6 +69,7 @@ export interface FeedEvent {
 export const isFeedEvent = (value: unknown): value is FeedEvent => {
   if (typeof value !== "object" || value === null) return false;
   const event = value as Record<string, unknown>;
+
   return (
     typeof event.id === "string" &&
     typeof event.timestamp === "string" &&
