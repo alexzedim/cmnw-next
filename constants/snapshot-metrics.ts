@@ -66,11 +66,13 @@ export const SNAPSHOT_HIGHLIGHT_GROUPS: readonly SnapshotHighlightGroup[] = [
         labelKey: "topByMembers" as const,
         category: AnalyticsMetricCategory.GUILDS,
         metricType: AnalyticsMetricType.TOP_BY_MEMBERS,
+        valueLimit: 1,
       },
       {
         labelKey: "topByAchievements" as const,
         category: AnalyticsMetricCategory.GUILDS,
         metricType: AnalyticsMetricType.TOP_BY_ACHIEVEMENTS,
+        valueLimit: 1,
       },
     ] as const,
   },
@@ -105,11 +107,13 @@ export const SNAPSHOT_HIGHLIGHT_GROUPS: readonly SnapshotHighlightGroup[] = [
         category: AnalyticsMetricCategory.CONTRACTS,
         metricType: AnalyticsMetricType.TOP_BY_OPEN_INTEREST,
         valueFormat: "gold",
+        valueLimit: 1,
       },
       {
         labelKey: "quantityConcentration" as const,
         category: AnalyticsMetricCategory.CONTRACTS,
         metricType: AnalyticsMetricType.TOP_BY_QUANTITY,
+        valueLimit: 1,
       },
       {
         labelKey: "auctionThroughput" as const,
