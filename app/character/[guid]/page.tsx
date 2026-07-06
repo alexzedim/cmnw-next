@@ -82,6 +82,7 @@ export async function generateMetadata({
 
 export default async function CharacterPage({ params }: CharacterPageProps) {
   const { guid } = await params;
+  const decodedGuid = decodeURIComponent(guid);
   const data = await getCharacterData(guid);
 
   if (!data) {
@@ -97,7 +98,7 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
     <main className="min-h-screen pt-16 pb-12 lg:pt-20 lg:pb-16">
       <div className="container mx-auto px-4 max-w-7xl">
         <CharacterTitle
-          actions={<CharacterRefresh guid={guid} />}
+          actions={<CharacterRefresh guid={decodedGuid} />}
           faction={factionEnum}
           guild={character.guild}
           guildId={character.guildGuid}
