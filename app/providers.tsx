@@ -5,6 +5,7 @@ import type { Dictionary, Locale } from "@/dictionaries";
 
 import * as React from "react";
 import { HeroUIProvider } from "@heroui/system";
+import { ToastViewport } from "@/lib/toast";
 import { useRouter } from "next/navigation";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 
@@ -42,6 +43,7 @@ export function Providers({
           <AppMetricsProvider>
             <LiveFeedProvider>{children}</LiveFeedProvider>
           </AppMetricsProvider>
+          <ToastViewport maxVisible={4} />
         </NextThemesProvider>
       </HeroUIProvider>
     </I18nProvider>

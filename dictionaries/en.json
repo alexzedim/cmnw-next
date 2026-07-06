@@ -87,6 +87,28 @@
     "genericTryAgain": "Try again",
     "boundaryDescription": "An unexpected error occurred. Please try refreshing the page."
   },
+  "toast": {
+    "network": {
+      "title": "Connection error",
+      "description": "Could not reach the server. Check your connection and try again."
+    },
+    "server": {
+      "title": "Server unavailable",
+      "description": "The server is busy or temporarily unavailable. Please try again shortly."
+    },
+    "notFound": {
+      "title": "Not found",
+      "description": "The requested data could not be found."
+    },
+    "forbidden": {
+      "title": "Access denied",
+      "description": "You don't have permission to perform this action."
+    },
+    "generic": {
+      "title": "Something went wrong",
+      "description": "An unexpected error occurred. Please try again."
+    }
+  },
   "character": {
     "notFound": "Character Not Found",
     "metadataDescription": "Character profile and statistics",

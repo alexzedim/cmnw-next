@@ -6,7 +6,9 @@ import { Button, Spinner } from "@heroui/react";
 
 import { apiClient, ApiError } from "@/lib/api";
 import { useI18n } from "@/lib/i18n/context";
+import { resolveApiError } from "@/lib/notify";
 import { getClientSessionId } from "@/lib/session/client-session";
+import { toast } from "@/lib/toast";
 import { ENDPOINTS } from "@/constants";
 import { useLiveFeed } from "@/components/providers/live-feed-provider";
 import {
@@ -83,6 +85,17 @@ export const CharacterRefresh = ({ guid }: CharacterRefreshProps) => {
   const { dict } = useI18n();
   const t = dict.character.refresh;
 
+  // Defensive: the dynamic route param may arrive URL-encoded (e.g.
+  // "diss%40silvermoon"). Normalize once so every downstream use (POST body,
+  // WS event matching, cooldown key) sees the real guid.
+  const normalizedGuid = useMemo(() => {
+    try {
+      return decodeURIComponent(guid);
+    } catch {
+      return guid;
+    }
+  }, [guid]);
+
   const sessionId = useMemo(() => getClientSessionId(), []);
   const { messages } = useLiveFeed();
 
@@ -121,23 +134,21 @@ export const CharacterRefresh = ({ guid }: CharacterRefreshProps) => {
 
     try {
       await apiClient.post(ENDPOINTS.OSINT_CHARACTER_REFRESH, {
-        guid,
+        guid: normalizedGuid,
         requestId,
         sessionId,
       });
       // Progress now arrives over the websocket (see effect below).
       // Stamp the cooldown only after the trigger was accepted.
-      setCooldownStart(sessionId, guid, Date.now());
+      setCooldownStart(sessionId, normalizedGuid, Date.now());
     } catch (error) {
       activeRequestId.current = null;
       setPhase("error");
-      setStatusText(
-        error instanceof ApiError
-          ? `${error.statusCode}${error.details ? `: ${error.details}` : ""}`
-          : ""
-      );
+      // Surface a translated, human-readable toast (no raw status codes).
+      const resolved = resolveApiError(dict.toast, error);
+      toast(resolved);
     }
-  }, [guid, isRefreshing, resetEndpoints, sessionId]);
+  }, [dict.toast, normalizedGuid, isRefreshing, resetEndpoints, sessionId]);
 
   // Watchdog: if no terminal websocket event arrives within WATCHDOG_MS,
   // surface an error instead of hanging on the spinner forever.
@@ -150,14 +161,17 @@ export const CharacterRefresh = ({ guid }: CharacterRefreshProps) => {
         activeRequestId.current = null;
         setPhase("error");
         setStatusText(t.timeout);
+        // Treat a missing server response like a server-side failure.
+        const resolved = resolveApiError(dict.toast, new ApiError("timeout", 503, t.timeout));
+        toast(resolved);
       }
     }, WATCHDOG_MS);
 
     return () => window.clearTimeout(timer);
-  }, [phase, t.timeout]);
+  }, [dict.toast, phase, t.timeout]);
 
   // Cooldown: tick `now` every minute while locked so the countdown updates.
-  const cooldownStart = sessionId ? getCooldownStart(sessionId, guid) : null;
+  const cooldownStart = sessionId ? getCooldownStart(sessionId, normalizedGuid) : null;
   const cooldownEnd = cooldownStart ? cooldownStart + COOLDOWN_MS : null;
   const cooldownRemaining = cooldownEnd ? cooldownEnd - now : 0;
   const inCooldown = !isRefreshing && phase !== "done" && cooldownRemaining > 0;
@@ -177,7 +191,7 @@ export const CharacterRefresh = ({ guid }: CharacterRefreshProps) => {
     if (!requestId) return;
 
     const matching = messages.filter((e) => {
-      if (!isCharacterRefreshEvent(e, { sessionId, guid })) return false;
+      if (!isCharacterRefreshEvent(e, { sessionId, guid: normalizedGuid })) return false;
       const meta = e.meta as Partial<CharacterRefreshMeta> | undefined;
 
       return meta?.requestId === requestId;
@@ -242,7 +256,7 @@ export const CharacterRefresh = ({ guid }: CharacterRefreshProps) => {
         activeRequestId.current = null;
       }, 250);
     }
-  }, [messages, guid, router, sessionId]);
+  }, [messages, normalizedGuid, router, sessionId]);
 
   // Auto-reset the button back to idle a few seconds after a terminal state.
   useEffect(() => {
