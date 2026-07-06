@@ -12,11 +12,12 @@ import { siteConfig } from "@/config/site";
 import { fontSans, fontMono } from "@/config/fonts";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
-import { ENDPOINTS } from "@/constants";
 import { detectLocale, getDictionary } from "@/dictionaries";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(ENDPOINTS.API),
+  // metadataBase omitted: Next.js resolves relative metadata URLs against the
+  // request origin automatically, which is correct for a multi-domain site
+  // (cmnw.me, cmnw.ru, cmnw.xyz).
   title: {
     default: siteConfig.name,
     template: `%s - ${siteConfig.name}`,
