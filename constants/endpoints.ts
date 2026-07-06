@@ -1,30 +1,30 @@
-import { API_ORIGIN } from "@/config/api-origin";
+/**
+ * API endpoint paths.
+ *
+ * All paths are relative (same-origin). The browser calls /api/* on whatever
+ * domain it loaded the page from (cmnw.me, cmnw.ru, cmnw.xyz), and nginx
+ * proxies each to the backend. Cross-domain fallback on network failure is
+ * handled transparently by clientFetch() in lib/api/origins.ts.
+ */
 
-// External service domains
 export const ENDPOINTS = {
-  API: API_ORIGIN || "https://cmnw.me",
-  METRICS_ENDPOINT: `${API_ORIGIN}/api/app/metrics`,
-  METRIC_SNAPSHOT_ENDPOINT: `${API_ORIGIN}/api/app/metrics/snapshot`,
+  // Base is empty — same-origin relative URLs. Use clientFetch()/serverFetch()
+  // from lib/api/origins.ts to get automatic fallback support.
+  API: "",
+
+  // API paths (relative)
+  METRICS_PATH: "/api/app/metrics",
+  METRIC_SNAPSHOT_PATH: "/api/app/metrics/snapshot",
   WS_FEED_PATH: "/api/ws/feed",
   OSINT_CHARACTER_REFRESH: "/api/osint/character/refresh",
+
+  // Local dev reference (not used in production routing)
   LOCALHOST: "http://localhost:8081",
+
+  // External service domains
   WARCRAFT_LOGS: "https://www.warcraftlogs.com",
   WOW_PROGRESS: "https://wowprogress.com",
   RAIDER_IO: "https://raider.io",
   BATTLE_NET: "https://worldofwarcraft.com",
-  CHECK_PVP: "https://check-pvp.fr",
-};
-
-// Resolve the WS feed URL. Always targets the API origin (ENDPOINTS.API),
-// upgrading http(s):// to ws(s)://. Works in any deployment without an env var.
-// When sessionId is provided, it is sent as ?session=<id> so the backend can
-// route client-driven refresh events back to this browser only.
-const toWsOrigin = (origin: string): string => origin.replace(/^http/i, "ws");
-
-export const getWsFeedUrl = (sessionId?: string): string => {
-  const base = `${toWsOrigin(ENDPOINTS.API)}${ENDPOINTS.WS_FEED_PATH}`;
-
-  if (!sessionId) return base;
-
-  return `${base}?session=${encodeURIComponent(sessionId)}`;
+  CHECK_PVP: "https://checkpvp.fr",
 };
