@@ -200,10 +200,13 @@ export const getSnapshotEntriesRich = (
 
   // If the snapshot value itself is a single rank record (has itemId/guid at top
   // level rather than being a map of records), treat it as a single entry.
+  // Property checks come first: isRankRecord asserts the same type snapshotValue
+  // already has, so its false branch would narrow it to `never` and break the
+  // later property accesses in the same || chain.
   if (
-    isRankRecord(snapshotValue) ||
     typeof snapshotValue.itemId === "number" ||
-    typeof snapshotValue.guid === "string"
+    typeof snapshotValue.guid === "string" ||
+    isRankRecord(snapshotValue)
   ) {
     const el = snapshotValue as Record<string, unknown>;
 
