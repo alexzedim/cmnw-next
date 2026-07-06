@@ -3,6 +3,8 @@
 import { useState } from "react";
 import clsx from "clsx";
 
+import { ProfessionIcon } from "./profession-icon";
+
 import {
   getExpansionColor,
   getExpansionOrderIndex,
@@ -90,6 +92,10 @@ export function CharacterProfessions({
                     strokeLinejoin="round"
                   />
                 </svg>
+                <ProfessionIcon
+                  className="size-4 shrink-0 text-[var(--primary)]"
+                  profession={name}
+                />
                 <span className="font-medium text-foreground">{name}</span>
               </button>
 
