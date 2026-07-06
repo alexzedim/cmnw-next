@@ -107,6 +107,8 @@
       "finished": "Refresh complete",
       "skipped": "Already up to date",
       "error": "Refresh failed",
+      "cooldown": "Refresh · {minutes}m left",
+      "timeout": "No response from server",
       "endpoints": {
         "status": "Status",
         "summary": "Summary",

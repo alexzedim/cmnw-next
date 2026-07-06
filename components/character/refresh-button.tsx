@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Spinner } from "@heroui/react";
 
-import { apiClient } from "@/lib/api";
+import { apiClient, ApiError } from "@/lib/api";
 import { useI18n } from "@/lib/i18n/context";
 import { getClientSessionId } from "@/lib/session/client-session";
 import { ENDPOINTS } from "@/constants";
@@ -43,6 +43,41 @@ const PENDING_ENDPOINTS: Record<RefreshEndpoint, EndpointState> = {
   PROFESSIONS: "pending",
 };
 
+/**
+ * Client-side per-(session, guid) refresh cooldown. The UI locks immediately on
+ * a successful trigger and shows a countdown; the backend keeps its own
+ * authoritative updatedAt-based lock regardless of caller.
+ */
+const COOLDOWN_MS = 60 * 60 * 1000; // 1 hour
+
+/** Flip to "error" if no terminal websocket event arrives in this window. */
+const WATCHDOG_MS = 30_000;
+
+const cooldownKey = (sessionId: string, guid: string) =>
+  `cmnw:refresh:${sessionId}:${guid}`;
+
+const getCooldownStart = (sessionId: string, guid: string): number | null => {
+  if (typeof window === "undefined") return null;
+
+  try {
+    const raw = window.localStorage.getItem(cooldownKey(sessionId, guid));
+
+    return raw ? Number(raw) : null;
+  } catch {
+    return null;
+  }
+};
+
+const setCooldownStart = (sessionId: string, guid: string, ts: number) => {
+  if (typeof window === "undefined") return;
+
+  try {
+    window.localStorage.setItem(cooldownKey(sessionId, guid), String(ts));
+  } catch {
+    // localStorage unavailable (private mode) — backend lock still applies.
+  }
+};
+
 export const CharacterRefresh = ({ guid }: CharacterRefreshProps) => {
   const router = useRouter();
   const { dict } = useI18n();
@@ -55,6 +90,9 @@ export const CharacterRefresh = ({ guid }: CharacterRefreshProps) => {
   const [endpoints, setEndpoints] =
     useState<Record<RefreshEndpoint, EndpointState>>(PENDING_ENDPOINTS);
   const [statusText, setStatusText] = useState<string>("");
+
+  // Cooldown countdown — ticks every minute so the locked label stays fresh.
+  const [now, setNow] = useState(() => Date.now());
 
   // Track the active request so we only react to events for our latest click.
   const activeRequestId = useRef<string | null>(null);
@@ -84,15 +122,53 @@ export const CharacterRefresh = ({ guid }: CharacterRefreshProps) => {
     try {
       await apiClient.post(ENDPOINTS.OSINT_CHARACTER_REFRESH, {
         guid,
-        sessionId,
         requestId,
+        sessionId,
       });
       // Progress now arrives over the websocket (see effect below).
-    } catch {
+      // Stamp the cooldown only after the trigger was accepted.
+      setCooldownStart(sessionId, guid, Date.now());
+    } catch (error) {
       activeRequestId.current = null;
       setPhase("error");
+      setStatusText(
+        error instanceof ApiError
+          ? `${error.statusCode}${error.details ? `: ${error.details}` : ""}`
+          : ""
+      );
     }
   }, [guid, isRefreshing, resetEndpoints, sessionId]);
+
+  // Watchdog: if no terminal websocket event arrives within WATCHDOG_MS,
+  // surface an error instead of hanging on the spinner forever.
+  useEffect(() => {
+    if (phase !== "refreshing") return;
+
+    const timer = window.setTimeout(() => {
+      // Only time out if we're still waiting (no terminal event cleared the id).
+      if (activeRequestId.current) {
+        activeRequestId.current = null;
+        setPhase("error");
+        setStatusText(t.timeout);
+      }
+    }, WATCHDOG_MS);
+
+    return () => window.clearTimeout(timer);
+  }, [phase, t.timeout]);
+
+  // Cooldown: tick `now` every minute while locked so the countdown updates.
+  const cooldownStart = sessionId ? getCooldownStart(sessionId, guid) : null;
+  const cooldownEnd = cooldownStart ? cooldownStart + COOLDOWN_MS : null;
+  const cooldownRemaining = cooldownEnd ? cooldownEnd - now : 0;
+  const inCooldown = !isRefreshing && phase !== "done" && cooldownRemaining > 0;
+
+  useEffect(() => {
+    if (!inCooldown) return;
+
+    const timer = window.setInterval(() => setNow(Date.now()), 60_000);
+
+    return () => window.clearInterval(timer);
+  }, [inCooldown]);
 
   // Subscribe to the live feed and fold matching refresh events into state.
   useEffect(() => {
@@ -177,6 +253,12 @@ export const CharacterRefresh = ({ guid }: CharacterRefreshProps) => {
   }, [phase]);
 
   const buttonLabel = (() => {
+    if (inCooldown) {
+      return t.cooldown.replace(
+        "{minutes}",
+        String(Math.ceil(cooldownRemaining / 60_000))
+      );
+    }
     switch (phase) {
       case "refreshing":
         return t.refreshing;
@@ -209,7 +291,7 @@ export const CharacterRefresh = ({ guid }: CharacterRefreshProps) => {
       <div className="flex items-center gap-3">
         <Button
           className={buttonClassName}
-          isDisabled={isRefreshing}
+          isDisabled={isRefreshing || inCooldown}
           size="sm"
           variant="ghost"
           onPress={triggerRefresh}
