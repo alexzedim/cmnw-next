@@ -85,7 +85,12 @@ export class ApiClient {
   }
 
   /**
-   * Make a POST request to the API (for future use)
+   * Make a POST request to the API.
+   *
+   * Always targets the absolute API origin (this.baseUrl), matching the
+   * behavior of get(). The backend has CORS configured for the browser
+   * origin, so cross-origin POSTs (including the Content-Type preflight)
+   * are handled directly — no Next.js rewrite proxy needed.
    */
   async post<T>(
     endpoint: string,
@@ -115,7 +120,23 @@ export class ApiClient {
         );
       }
 
-      return response.json();
+      // Tolerate empty bodies (204 No Content, or 200 with empty payload) —
+      // common for fire-and-forget triggers. Parsing such a body as JSON
+      // would throw, so return undefined in that case.
+      if (
+        response.status === 204 ||
+        response.headers.get("Content-Length") === "0"
+      ) {
+        return undefined as T;
+      }
+
+      const text = await response.text();
+
+      if (!text) {
+        return undefined as T;
+      }
+
+      return JSON.parse(text) as T;
     } catch (error) {
       if (error instanceof ApiError) {
         throw error;
