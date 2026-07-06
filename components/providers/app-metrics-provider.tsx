@@ -14,8 +14,7 @@ import {
 } from "react";
 
 import { ENDPOINTS } from "@/constants/endpoints";
-
-const METRICS_ENDPOINT = ENDPOINTS.METRICS_ENDPOINT;
+import { clientFetch } from "@/lib/api/origins";
 
 type AppMetricsStatus = "loading" | "online" | "degraded" | "error";
 
@@ -54,7 +53,7 @@ export const AppMetricsProvider = ({ children }: { children: ReactNode }) => {
         setIsLoading(true);
       }
 
-      const response = await fetch(METRICS_ENDPOINT, {
+      const response = await clientFetch(ENDPOINTS.METRICS_PATH, {
         signal,
         cache: "no-store",
         headers: {

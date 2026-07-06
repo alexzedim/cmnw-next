@@ -9,12 +9,12 @@ import { MarketHeatmap } from "@/components/item/market-heatmap";
 import { ItemListing } from "@/components/item/item-listing";
 import { ItemContracts } from "@/components/item/item-contracts";
 import { generateItemTitle } from "@/lib";
-import { ENDPOINTS } from "@/constants";
+import { serverFetch } from "@/lib/api/origins";
 import { detectLocale, getDictionary } from "@/dictionaries";
 
 async function getItemData(id: string) {
   try {
-    const res = await fetch(`${ENDPOINTS.API}/api/dma/item?id=${id}`, {
+    const res = await serverFetch(`/api/dma/item?id=${id}`, {
       next: { revalidate: 3600 },
     });
 
@@ -28,9 +28,7 @@ async function getItemData(id: string) {
     };
 
     return data;
-  } catch (error) {
-    console.error("Error fetching item data:", error);
-
+  } catch {
     return null;
   }
 }

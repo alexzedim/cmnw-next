@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { ENDPOINTS } from "@/constants/endpoints";
+import { serverFetch } from "@/lib/api/origins";
 
 export async function GET(
   request: NextRequest,
@@ -16,11 +16,9 @@ export async function GET(
   }
 
   try {
-    const apiUrl = new URL(`${ENDPOINTS.API}/api/dma/item`);
+    const searchParams = new URLSearchParams({ id });
 
-    apiUrl.searchParams.set("id", id);
-
-    const response = await fetch(apiUrl.toString(), {
+    const response = await serverFetch(`/api/dma/item?${searchParams}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -40,9 +38,7 @@ export async function GET(
     const data = await response.json();
 
     return NextResponse.json(data);
-  } catch (error) {
-    console.error("Error fetching item:", error);
-
+  } catch {
     return NextResponse.json(
       { error: "Internal server error while fetching item" },
       { status: 500 }

@@ -12,8 +12,9 @@ import {
 import { Card, CardContent, Spinner } from "@heroui/react";
 import useSWR from "swr";
 
-import { ENDPOINTS, NAMING_CONSTANTS } from "@/constants";
+import { NAMING_CONSTANTS } from "@/constants";
 import { BadgeSection } from "@/components/shared/badge-section";
+import { clientFetch } from "@/lib/api/origins";
 import {
   CARD_CLASS_NAMES,
   BADGE_COLORS,
@@ -140,8 +141,8 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
     if (!shouldShowChart) return null;
 
     const { data, error, isLoading } = useSWR<HeatmapResponse>(
-      `${ENDPOINTS.API}/api/dma/item/chart?id=${id}`,
-      (url: string) => fetch(url).then((r) => r.json())
+      `/api/dma/item/chart?id=${id}`,
+      (url: string) => clientFetch(url).then((r) => r.json())
     );
 
     useEffect(() => {

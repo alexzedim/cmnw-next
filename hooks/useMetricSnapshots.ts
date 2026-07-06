@@ -6,14 +6,13 @@ import type { MetricSnapshotRecord } from "@/lib/types/snapshot-metrics";
 import useSWR from "swr";
 
 import { ENDPOINTS } from "@/constants/endpoints";
+import { clientFetch } from "@/lib/api/origins";
 import { SNAPSHOT_REQUESTS } from "@/constants/snapshot-metrics";
 import {
   buildSnapshotKey,
   isPriceVolatilityData,
   toAppHealthSnapshot,
 } from "@/lib/utils/snapshot-formatters";
-
-const METRIC_SNAPSHOT_ENDPOINT = ENDPOINTS.METRIC_SNAPSHOT_ENDPOINT;
 
 /**
  * Fetches metric snapshots for all configured snapshot requests.
@@ -23,14 +22,17 @@ const METRIC_SNAPSHOT_ENDPOINT = ENDPOINTS.METRIC_SNAPSHOT_ENDPOINT;
 const fetchMetricSnapshots = async (): Promise<MetricSnapshotRecord> => {
   const entries = await Promise.all(
     SNAPSHOT_REQUESTS.map(async ({ category, metricType }) => {
-      const url = new URL(METRIC_SNAPSHOT_ENDPOINT);
+      const url = new URL(ENDPOINTS.METRIC_SNAPSHOT_PATH, "http://localhost");
       const key = buildSnapshotKey(category, metricType);
 
       url.searchParams.set("category", category);
       url.searchParams.set("metricType", metricType);
 
+      // Extract path + query (without origin) for clientFetch.
+      const pathWithQuery = `${url.pathname}${url.search}`;
+
       try {
-        const response = await fetch(url.toString(), {
+        const response = await clientFetch(pathWithQuery, {
           headers: { Accept: "application/json" },
           cache: "no-store",
         });
@@ -64,12 +66,7 @@ const fetchMetricSnapshots = async (): Promise<MetricSnapshotRecord> => {
           : toAppHealthSnapshot(payload);
 
         return [key, snapshot] as const;
-      } catch (error) {
-        console.warn(
-          `[metrics] snapshot ${key} failed`,
-          error instanceof Error ? error : new Error(String(error))
-        );
-
+      } catch {
         return [key, null] as const;
       }
     })

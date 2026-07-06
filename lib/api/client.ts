@@ -1,16 +1,13 @@
 import { ENDPOINTS } from "@/constants/endpoints";
+import { clientFetch } from "@/lib/api/origins";
 
 /**
  * Centralized API client for communicating with the CMNW backend
- * Handles request formatting, error handling, and response parsing
+ * Handles request formatting, error handling, and response parsing.
+ *
+ * Uses clientFetch() for automatic same-origin + cross-domain fallback.
  */
 export class ApiClient {
-  private readonly baseUrl: string;
-
-  constructor() {
-    this.baseUrl = ENDPOINTS.API;
-  }
-
   /**
    * Make a GET request to the API
    * @param endpoint - API endpoint path (e.g., '/api/osint/character')
@@ -22,7 +19,8 @@ export class ApiClient {
     params?: Record<string, any>,
     options?: RequestInit
   ): Promise<T> {
-    const url = new URL(`${this.baseUrl}${endpoint}`);
+    // Build the path with query params, then let clientFetch resolve the origin.
+    const url = new URL(endpoint, ENDPOINTS.API || "http://localhost");
 
     // Add query parameters
     if (params) {
@@ -42,8 +40,11 @@ export class ApiClient {
       });
     }
 
+    // Extract the path + search (without origin) for clientFetch.
+    const pathWithQuery = `${url.pathname}${url.search}`;
+
     try {
-      const response = await fetch(url.toString(), {
+      const response = await clientFetch(pathWithQuery, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -76,31 +77,20 @@ export class ApiClient {
     }
   }
 
-  private logError(error: ApiError | Error, context: string) {
-    console.error(`API Error in ${context}:`, error.message);
-    if (error instanceof ApiError) {
-      console.error("Status Code:", error.statusCode);
-      console.error("Details:", error.details);
-    }
-  }
-
   /**
    * Make a POST request to the API.
    *
-   * Always targets the absolute API origin (this.baseUrl), matching the
-   * behavior of get(). The backend has CORS configured for the browser
-   * origin, so cross-origin POSTs (including the Content-Type preflight)
-   * are handled directly — no Next.js rewrite proxy needed.
+   * Uses clientFetch() for automatic fallback. The backend has CORS configured
+   * to reflect the browser origin, so cross-origin POSTs (including the
+   * Content-Type preflight) are handled directly.
    */
   async post<T>(
     endpoint: string,
     body?: any,
     options?: RequestInit
   ): Promise<T> {
-    const url = `${this.baseUrl}${endpoint}`;
-
     try {
-      const response = await fetch(url, {
+      const response = await clientFetch(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { API_ORIGIN } from "@/config/api-origin";
-
-const API_BASE_URL = API_ORIGIN;
+import { serverFetch } from "@/lib/api/origins";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -17,12 +15,9 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const url = new URL(`${API_BASE_URL}/api/dma/item/search`);
+    const params = new URLSearchParams({ q: query, limit });
 
-    url.searchParams.set("q", query);
-    url.searchParams.set("limit", limit);
-
-    const response = await fetch(url.toString(), {
+    const response = await serverFetch(`/api/dma/item/search?${params}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -42,9 +37,7 @@ export async function GET(request: NextRequest) {
     const data = await response.json();
 
     return NextResponse.json(data);
-  } catch (error) {
-    console.error("Error searching items:", error);
-
+  } catch {
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

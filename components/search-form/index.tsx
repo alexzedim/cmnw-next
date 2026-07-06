@@ -3,11 +3,11 @@
 import { useState, useEffect, useRef, KeyboardEvent } from "react";
 import { useRouter } from "next/navigation";
 
-import { ENDPOINTS } from "@/constants";
 import { NAMING_CONSTANTS } from "@/constants/naming";
 import { fontJetBrains } from "@/config/fonts";
 import { useAnimatedPlaceholder } from "@/hooks/use-animated-placeholder";
 import { useI18n } from "@/lib/i18n/context";
+import { clientFetch } from "@/lib/api/origins";
 
 interface SearchSuggestion {
   value: string;
@@ -15,12 +15,10 @@ interface SearchSuggestion {
   label?: string;
 }
 
-const buildSearchUrl = (query: string) => {
-  const url = new URL("/api/app/search", ENDPOINTS.API);
+const buildSearchPath = (query: string) => {
+  const params = new URLSearchParams({ searchQuery: query });
 
-  url.searchParams.set("searchQuery", query);
-
-  return url.toString();
+  return `/api/app/search?${params.toString()}`;
 };
 
 const sanitizeQueryInput = (value: string) => value.replace(/\s+/g, "-");
@@ -57,7 +55,7 @@ export const SearchForm = () => {
       setIsLoadingSuggestions(true);
 
       try {
-        const response = await fetch(buildSearchUrl(sanitizedQuery));
+        const response = await clientFetch(buildSearchPath(sanitizedQuery));
 
         if (response.ok) {
           const data = await response.json();
@@ -90,8 +88,8 @@ export const SearchForm = () => {
           setSuggestions(suggestions.slice(0, 10));
           setShowDropdown(suggestions.length > 0);
         }
-      } catch (error) {
-        console.error("Error fetching suggestions:", error);
+      } catch {
+        // suggestions are optional — fail silently
       } finally {
         setIsLoadingSuggestions(false);
       }
@@ -130,17 +128,14 @@ export const SearchForm = () => {
       return;
     }
 
-    console.log(trimmedQuery);
     setIsSubmitting(true);
     setShowDropdown(false);
 
     try {
-      const response = await fetch(buildSearchUrl(trimmedQuery));
+      const response = await clientFetch(buildSearchPath(trimmedQuery));
 
       if (response.ok) {
         const data = await response.json();
-
-        console.log("Search API Response:", data);
 
         const firstResult =
           data.characters?.[0] || data.guilds?.[0] || data.items?.[0];
@@ -161,8 +156,8 @@ export const SearchForm = () => {
           navigateToSuggestion(suggestion);
         }
       }
-    } catch (error) {
-      console.error("Error in handleSearch:", error);
+    } catch {
+      // search is best-effort — fail silently
     } finally {
       setIsSubmitting(false);
     }

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { ENDPOINTS } from "@/constants/endpoints";
+import { serverFetch } from "@/lib/api/origins";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -14,11 +14,9 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const apiUrl = new URL(`${ENDPOINTS.API}/api/osint/character/logs`);
+    const params = new URLSearchParams({ guid });
 
-    apiUrl.searchParams.set("guid", guid);
-
-    const response = await fetch(apiUrl.toString(), {
+    const response = await serverFetch(`/api/osint/character/logs?${params}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -38,9 +36,7 @@ export async function GET(request: NextRequest) {
     const data = await response.json();
 
     return NextResponse.json(data);
-  } catch (error) {
-    console.error("Error fetching character logs:", error);
-
+  } catch {
     return NextResponse.json(
       { error: "Internal server error while fetching character logs" },
       { status: 500 }

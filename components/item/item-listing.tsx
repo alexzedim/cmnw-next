@@ -15,8 +15,8 @@ import { useState } from "react";
 import useSWR from "swr";
 
 import { Link } from "@/components/custom-link";
-import { ENDPOINTS } from "@/constants";
 import { useI18n } from "@/lib/i18n/context";
+import { clientFetch } from "@/lib/api/origins";
 
 interface Auction {
   id: string;
@@ -44,7 +44,7 @@ interface ItemListingProps {
   isCommdty?: boolean;
 }
 
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
+const fetcher = (url: string) => clientFetch(url).then((r) => r.json());
 
 export const ItemListing = ({
   id,
@@ -60,7 +60,7 @@ export const ItemListing = ({
   if (isCommdty || isGold) return null;
 
   const { data, error, isLoading } = useSWR<AuctionsResponse>(
-    `${ENDPOINTS.API}/api/dma/item/feed?id=${id}`,
+    `/api/dma/item/feed?id=${id}`,
     fetcher
   );
 

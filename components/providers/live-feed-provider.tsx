@@ -13,7 +13,7 @@ import {
   useState,
 } from "react";
 
-import { getWsFeedUrl } from "@/constants/endpoints";
+import { getWsFeedUrl } from "@/lib/api/origins";
 import { getClientSessionId } from "@/lib/session/client-session";
 import { isFeedEvent } from "@/types/feed";
 
