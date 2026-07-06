@@ -5,10 +5,10 @@ import type { Dictionary, Locale } from "@/dictionaries";
 
 import * as React from "react";
 import { HeroUIProvider } from "@heroui/system";
-import { ToastViewport } from "@/lib/toast";
 import { useRouter } from "next/navigation";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 
+import { ToastViewport } from "@/lib/toast";
 import { AppMetricsProvider } from "@/components/providers/app-metrics-provider";
 import { LiveFeedProvider } from "@/components/providers/live-feed-provider";
 import { I18nProvider } from "@/lib/i18n/context";

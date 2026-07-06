@@ -146,6 +146,7 @@ export const CharacterRefresh = ({ guid }: CharacterRefreshProps) => {
       setPhase("error");
       // Surface a translated, human-readable toast (no raw status codes).
       const resolved = resolveApiError(dict.toast, error);
+
       toast(resolved);
     }
   }, [dict.toast, normalizedGuid, isRefreshing, resetEndpoints, sessionId]);
@@ -162,7 +163,11 @@ export const CharacterRefresh = ({ guid }: CharacterRefreshProps) => {
         setPhase("error");
         setStatusText(t.timeout);
         // Treat a missing server response like a server-side failure.
-        const resolved = resolveApiError(dict.toast, new ApiError("timeout", 503, t.timeout));
+        const resolved = resolveApiError(
+          dict.toast,
+          new ApiError("timeout", 503, t.timeout)
+        );
+
         toast(resolved);
       }
     }, WATCHDOG_MS);
@@ -171,7 +176,9 @@ export const CharacterRefresh = ({ guid }: CharacterRefreshProps) => {
   }, [dict.toast, phase, t.timeout]);
 
   // Cooldown: tick `now` every minute while locked so the countdown updates.
-  const cooldownStart = sessionId ? getCooldownStart(sessionId, normalizedGuid) : null;
+  const cooldownStart = sessionId
+    ? getCooldownStart(sessionId, normalizedGuid)
+    : null;
   const cooldownEnd = cooldownStart ? cooldownStart + COOLDOWN_MS : null;
   const cooldownRemaining = cooldownEnd ? cooldownEnd - now : 0;
   const inCooldown = !isRefreshing && phase !== "done" && cooldownRemaining > 0;
@@ -191,7 +198,8 @@ export const CharacterRefresh = ({ guid }: CharacterRefreshProps) => {
     if (!requestId) return;
 
     const matching = messages.filter((e) => {
-      if (!isCharacterRefreshEvent(e, { sessionId, guid: normalizedGuid })) return false;
+      if (!isCharacterRefreshEvent(e, { sessionId, guid: normalizedGuid }))
+        return false;
       const meta = e.meta as Partial<CharacterRefreshMeta> | undefined;
 
       return meta?.requestId === requestId;

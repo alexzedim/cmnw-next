@@ -1,6 +1,6 @@
 import type { ToastSeverity } from "@/lib/toast";
-
 import type { Dictionary } from "@/dictionaries";
+
 import { ApiError } from "@/lib/api";
 
 type ToastDict = Dictionary["toast"];
@@ -22,7 +22,7 @@ interface ResolvedToast {
  */
 export function resolveApiError(
   toastDict: ToastDict,
-  error: unknown,
+  error: unknown
 ): ResolvedToast {
   if (error instanceof ApiError) {
     // statusCode 0 => network failure (the client sets it when fetch throws).
@@ -43,4 +43,3 @@ export function resolveApiError(
   // Non-ApiError or unrecognized — generic.
   return { ...toastDict.generic, severity: "danger" };
 }
-
