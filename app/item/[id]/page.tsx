@@ -90,12 +90,14 @@ export default async function ItemPage({ params }: ItemPageProps) {
         container width. On mobile this is a no-op (already full width).
       */}
       <div className="relative left-[calc(-50vw+50%)] w-screen px-6 md:px-8 lg:px-12">
-        {/* Top row: Quotes 40% / Contracts 60% on lg+, equal-height, stacked below lg */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 items-stretch">
-          <div className="lg:col-span-2 flex">
+        {/* Top row: Quotes 40% / Contracts 60% on lg+, equal-height, stacked below lg.
+            Grid items default to stretch, so the col-span divs already fill
+            their track height; h-full on the Cards inside chains through. */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
+          <div className="lg:col-span-2">
             <ItemQuotes id={id} isGold={isGold} />
           </div>
-          <div className="lg:col-span-3 flex">
+          <div className="lg:col-span-3">
             <ItemContracts id={id} />
           </div>
         </div>
