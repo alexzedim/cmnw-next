@@ -3,7 +3,7 @@ import type { CharactersResponse } from "@/lib/types";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { apiClient } from "@/lib/api";
+import { serverFetch } from "@/lib/api/origins";
 import { HashAccountTitle } from "@/components/hash/hash-account-title";
 import { HashCharactersContent } from "@/components/hash/hash-characters-content";
 import { detectLocale, getDictionary } from "@/dictionaries";
@@ -14,20 +14,32 @@ interface HashPageProps {
   }>;
 }
 
+// serverFetch() targets the backend directly (Docker DNS → host hairpin
+// fallback). Do NOT use apiClient.get() here — it routes through
+// clientFetch(), which is browser-only and fails with "Failed to parse URL"
+// when handed a relative path in a Server Component.
 async function getHashData(hashQuery: string) {
   try {
-    const response = await apiClient.get<CharactersResponse>(
-      `/api/osint/character/hash/${encodeURIComponent(hashQuery)}`
+    const res = await serverFetch(
+      `/api/osint/character/hash/${encodeURIComponent(hashQuery)}`,
+      {
+        headers: { "Content-Type": "application/json" },
+        next: { revalidate: 3600 },
+      }
     );
+
+    if (!res.ok) {
+      return null;
+    }
+
+    const response = (await res.json()) as CharactersResponse;
 
     if (!response.characters || response.characters.length === 0) {
       return null;
     }
 
     return response.characters;
-  } catch (error) {
-    console.error("Error fetching hash data:", error);
-
+  } catch {
     return null;
   }
 }

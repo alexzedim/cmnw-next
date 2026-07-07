@@ -15,39 +15,44 @@ import {
   CharacterStats,
 } from "@/components/character";
 import { LogTable } from "@/components/shared/log-table";
-import { apiClient } from "@/lib/api";
+import { serverFetch } from "@/lib/api/origins";
 import { stringToFaction } from "@/lib/utils/faction-converter";
 import { detectLocale, getDictionary } from "@/dictionaries";
 
+// serverFetch() targets the backend directly (Docker DNS → host hairpin
+// fallback). Do NOT use apiClient.get() here — it routes through
+// clientFetch(), which is browser-only and fails with "Failed to parse URL"
+// when handed a relative path in a Server Component.
 async function getCharacterData(encodedGuid: string) {
   const guid = decodeURIComponent(encodedGuid);
+  const params = new URLSearchParams({ guid });
 
   try {
-    const [character, logsResponse] = await Promise.all([
-      apiClient.get<Character>("/api/osint/character", { guid }),
-      apiClient
-        .get<CharacterLogsResponse>("/api/osint/character/logs", { guid })
-        .catch(() => ({ logs: [] })),
+    const [characterRes, logsRes] = await Promise.all([
+      serverFetch(`/api/osint/character?${params}`, {
+        headers: { "Content-Type": "application/json" },
+        next: { revalidate: 3600 },
+      }),
+      serverFetch(`/api/osint/character/logs?${params}`, {
+        headers: { "Content-Type": "application/json" },
+        next: { revalidate: 3600 },
+      }).catch(() => null),
     ]);
 
-    console.log("[Character] endpoint: /api/osint/character, guid:", guid);
-    console.log("[Character] response:", JSON.stringify(character, null, 2));
-    console.log(
-      "[Character Logs] endpoint: /api/osint/character/logs, guid:",
-      guid
-    );
-    console.log(
-      "[Character Logs] response:",
-      JSON.stringify(logsResponse, null, 2)
-    );
+    if (!characterRes.ok) {
+      return null;
+    }
+
+    const character = (await characterRes.json()) as Character;
+    const logsResponse = logsRes?.ok
+      ? ((await logsRes.json()) as CharacterLogsResponse)
+      : { logs: [] };
 
     return {
       character,
       logs: logsResponse.logs || [],
     };
-  } catch (error) {
-    console.error("Error fetching character data:", error);
-
+  } catch {
     return null;
   }
 }

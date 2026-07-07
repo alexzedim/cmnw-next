@@ -11,30 +11,37 @@ import { notFound } from "next/navigation";
 import { GuildTitle } from "@/components/guild/guild-title";
 import { GuildRoster } from "@/components/guild/guild-roster";
 import { LogTable } from "@/components/shared/log-table";
-import { apiClient } from "@/lib/api";
+import { serverFetch } from "@/lib/api/origins";
 import { stringToFaction } from "@/lib/utils/faction-converter";
 
-const getGuildData = cache(async function (decodedGuid: string) {
-  const guid = decodedGuid;
+// serverFetch() targets the backend directly (Docker DNS → host hairpin
+// fallback). Do NOT use apiClient.get() here — it routes through
+// clientFetch(), which is browser-only and fails with "Failed to parse URL"
+// when handed a relative path in a Server Component.
+const getGuildData = cache(async function (encodedGuid: string) {
+  const guid = decodeURIComponent(encodedGuid);
+  const params = new URLSearchParams({ guid });
 
   try {
-    const [guildResponse, logsResponse] = await Promise.all([
-      apiClient.get<GuildResponse>("/api/osint/guild", { guid }),
-      apiClient
-        .get<GuildLogsResponse>("/api/osint/guild/logs", { guid })
-        .catch(() => ({ logs: [] })),
+    const [guildRes, logsRes] = await Promise.all([
+      serverFetch(`/api/osint/guild?${params}`, {
+        headers: { "Content-Type": "application/json" },
+        next: { revalidate: 3600 },
+      }),
+      serverFetch(`/api/osint/guild/logs?${params}`, {
+        headers: { "Content-Type": "application/json" },
+        next: { revalidate: 3600 },
+      }).catch(() => null),
     ]);
 
-    console.log("[Guild] request - endpoint: /api/osint/guild, guid:", guid);
-    console.log("[Guild] response:", JSON.stringify(guildResponse, null, 2));
-    console.log(
-      "[Guild Logs] request - endpoint: /api/osint/guild/logs, guid:",
-      guid
-    );
-    console.log(
-      "[Guild Logs] response:",
-      JSON.stringify(logsResponse, null, 2)
-    );
+    if (!guildRes.ok) {
+      return null;
+    }
+
+    const guildResponse = (await guildRes.json()) as GuildResponse;
+    const logsResponse = logsRes?.ok
+      ? ((await logsRes.json()) as GuildLogsResponse)
+      : { logs: [] };
 
     return {
       guild: guildResponse.guild,
@@ -42,9 +49,7 @@ const getGuildData = cache(async function (decodedGuid: string) {
       memberCount: guildResponse.memberCount,
       logs: logsResponse.logs || [],
     };
-  } catch (error) {
-    console.error("Error fetching guild data:", error);
-
+  } catch {
     return null;
   }
 });
