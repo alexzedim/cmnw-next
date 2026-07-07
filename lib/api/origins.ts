@@ -29,7 +29,9 @@ const isNetworkError = (error: unknown): boolean => {
   // AbortError is triggered by AbortSignal.timeout — treat as retryable too.
   if (error instanceof TypeError) return true;
   const name = (error as { name?: string })?.name;
+
   if (name === "AbortError") return true;
+
   // On Node.js (server-side), DNS failures surface as errors containing "fetch".
   return String(error).toLowerCase().includes("fetch");
 };
