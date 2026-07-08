@@ -122,7 +122,6 @@ export const CharacterRefresh = ({ guid, status }: CharacterRefreshProps) => {
   const [phase, setPhase] = useState<Phase>("idle");
   const [endpoints, setEndpoints] =
     useState<Record<RefreshEndpoint, EndpointState>>(PENDING_ENDPOINTS);
-  const [statusText, setStatusText] = useState<string>("");
 
   // Cooldown countdown — ticks every minute so the locked label stays fresh.
   const [now, setNow] = useState(() => Date.now());
@@ -150,7 +149,6 @@ export const CharacterRefresh = ({ guid, status }: CharacterRefreshProps) => {
 
   const resetEndpoints = useCallback(() => {
     setEndpoints(PENDING_ENDPOINTS);
-    setStatusText("");
     refreshedRef.current = false;
   }, []);
 
@@ -195,7 +193,6 @@ export const CharacterRefresh = ({ guid, status }: CharacterRefreshProps) => {
       if (activeRequestId.current) {
         activeRequestId.current = null;
         setPhase("error");
-        setStatusText(t.timeout);
         // Treat a missing server response like a server-side failure.
         const resolved = resolveApiError(
           dict.toast,
@@ -275,14 +272,12 @@ export const CharacterRefresh = ({ guid, status }: CharacterRefreshProps) => {
             for (const ep of STATUS_ENDPOINT_ORDER) {
               next[ep] = decoded[ep];
             }
-            setStatusText(meta.status);
           }
         }
 
         if (meta.phase === "error") {
           terminalReached = true;
           terminalStatus = event.status;
-          if (meta.error) setStatusText(meta.error);
         }
       }
 
@@ -356,12 +351,6 @@ export const CharacterRefresh = ({ guid, status }: CharacterRefreshProps) => {
 
   return (
     <div className="flex items-center gap-3">
-      {phase === "error" && statusText ? (
-        <span className="text-xs text-[var(--text-muted)] font-mono">
-          {statusText}
-        </span>
-      ) : null}
-
       {showStatus ? (
         <div className="group relative inline-flex items-center">
           <div
