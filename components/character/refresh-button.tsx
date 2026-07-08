@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button, Spinner } from "@heroui/react";
 
 import { apiClient, ApiError } from "@/lib/api";
 import { useI18n } from "@/lib/i18n/context";
@@ -10,8 +9,11 @@ import { resolveApiError } from "@/lib/notify";
 import { getClientSessionId } from "@/lib/session/client-session";
 import { toast } from "@/lib/toast";
 import { ENDPOINTS } from "@/constants";
+import { RefreshIcon } from "@/components/icons";
 import { useLiveFeed } from "@/components/providers/live-feed-provider";
+import { fontJetBrains } from "@/config/fonts";
 import {
+  CHARACTER_STATUS_CODES,
   CharacterRefreshMeta,
   EndpointState,
   FeedStatus,
@@ -23,6 +25,7 @@ import {
 
 interface CharacterRefreshProps {
   guid: string;
+  status?: string;
 }
 
 type Phase = "idle" | "refreshing" | "done" | "error";
@@ -44,6 +47,23 @@ const PENDING_ENDPOINTS: Record<RefreshEndpoint, EndpointState> = {
   MOUNTS: "pending",
   PROFESSIONS: "pending",
 };
+
+// Colorful per-state styling shared by the status strip + tooltip.
+const STATE_TEXT_COLOR: Record<EndpointState, string> = {
+  success: "text-emerald-500",
+  error: "text-red-500",
+  pending: "text-[var(--text-muted)]",
+};
+
+const STATE_DOT_COLOR: Record<EndpointState, string> = {
+  success: "bg-emerald-500",
+  error: "bg-red-500",
+  pending: "bg-[var(--text-muted)]",
+};
+
+// ASCII spinner frames cycled while refreshing (classic \ | / -).
+const SPINNER_FRAMES = ["\\", "|", "/", "-"];
+const SPINNER_INTERVAL_MS = 120;
 
 /**
  * Client-side per-(session, guid) refresh cooldown. The UI locks immediately on
@@ -80,7 +100,7 @@ const setCooldownStart = (sessionId: string, guid: string, ts: number) => {
   }
 };
 
-export const CharacterRefresh = ({ guid }: CharacterRefreshProps) => {
+export const CharacterRefresh = ({ guid, status }: CharacterRefreshProps) => {
   const router = useRouter();
   const { dict } = useI18n();
   const t = dict.character.refresh;
@@ -113,6 +133,20 @@ export const CharacterRefresh = ({ guid }: CharacterRefreshProps) => {
   const refreshedRef = useRef(false);
 
   const isRefreshing = phase === "refreshing";
+
+  // ASCII spinner (\ | / -) — cycles only while refreshing.
+  const [spinnerFrame, setSpinnerFrame] = useState(0);
+
+  useEffect(() => {
+    if (!isRefreshing) return;
+
+    const timer = window.setInterval(
+      () => setSpinnerFrame((f) => (f + 1) % SPINNER_FRAMES.length),
+      SPINNER_INTERVAL_MS
+    );
+
+    return () => window.clearInterval(timer);
+  }, [isRefreshing]);
 
   const resetEndpoints = useCallback(() => {
     setEndpoints(PENDING_ENDPOINTS);
@@ -176,9 +210,18 @@ export const CharacterRefresh = ({ guid }: CharacterRefreshProps) => {
   }, [dict.toast, phase, t.timeout]);
 
   // Cooldown: tick `now` every minute while locked so the countdown updates.
-  const cooldownStart = sessionId
-    ? getCooldownStart(sessionId, normalizedGuid)
-    : null;
+  // The cooldown timestamp lives in localStorage (browser-only), so we defer
+  // reading it until after mount. Otherwise the server renders `inCooldown`
+  // as false and the client hydrates with it true → mismatch on the button's
+  // disabled/aria-label/title attributes.
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const cooldownStart =
+    mounted && sessionId ? getCooldownStart(sessionId, normalizedGuid) : null;
   const cooldownEnd = cooldownStart ? cooldownStart + COOLDOWN_MS : null;
   const cooldownRemaining = cooldownEnd ? cooldownEnd - now : 0;
   const inCooldown = !isRefreshing && phase !== "done" && cooldownRemaining > 0;
@@ -293,75 +336,118 @@ export const CharacterRefresh = ({ guid }: CharacterRefreshProps) => {
     }
   })();
 
-  // Coloring follows the project convention (see item-contracts.tsx):
-  // HeroUI Button here has no `color` prop, so state is reflected via className.
-  const buttonClassName = (() => {
-    if (phase === "error") {
-      return "bg-[var(--danger)] text-[var(--danger-foreground)]";
-    }
-    if (phase === "done") {
-      return "bg-[var(--success)] text-[var(--success-foreground)]";
-    }
-
-    return "bg-[var(--primary)] text-[var(--primary-foreground)] hover:bg-[color-mix(in_oklab,var(--primary),transparent_90%)]";
-  })();
-
-  const showChecklist = isRefreshing || phase === "done" || phase === "error";
+  // Unified status display:
+  // - While refreshing / just finished (or errored), show the live per-endpoint
+  //   state driven by websocket events.
+  // - At idle, fall back to the persisted `character.status` string decoded
+  //   into per-endpoint states. After a successful refresh the 6s "done" hold
+  //   keeps the live states visible until `router.refresh()` lands the new
+  //   server data, avoiding a flicker back to the stale status.
+  const isLive =
+    phase === "refreshing" || phase === "done" || phase === "error";
+  const persistedEndpoints = useMemo(
+    () => (status ? decodeStatusString(status) : null),
+    [status]
+  );
+  const showStatus = isLive || Boolean(persistedEndpoints);
+  const displayState = isLive
+    ? endpoints
+    : (persistedEndpoints ?? PENDING_ENDPOINTS);
 
   return (
-    <div className="flex flex-col gap-3">
-      <div className="flex items-center gap-3">
-        <Button
-          className={buttonClassName}
-          isDisabled={isRefreshing || inCooldown}
-          size="sm"
-          variant="ghost"
-          onPress={triggerRefresh}
-        >
-          {isRefreshing ? (
-            <Spinner color="current" size="sm" />
-          ) : (
-            <span aria-hidden>↻</span>
-          )}
-          <span>{buttonLabel}</span>
-        </Button>
-        {statusText ? (
-          <span className="text-xs opacity-50 font-mono">{statusText}</span>
-        ) : null}
-      </div>
-
-      {showChecklist ? (
-        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-xs">
-          {STATUS_ENDPOINT_ORDER.map((ep) => {
-            const state = endpoints[ep];
-            const label =
-              t.endpoints[ENDPOINT_LABEL_KEY[ep] as keyof typeof t.endpoints];
-
-            return (
-              <li key={ep} className="flex items-center gap-2">
-                <span aria-hidden>
-                  {state === "success" ? (
-                    <span className="text-green-400">✓</span>
-                  ) : state === "error" ? (
-                    <span className="text-red-400">✗</span>
-                  ) : isRefreshing ? (
-                    <Spinner size="sm" />
-                  ) : (
-                    <span className="opacity-30">·</span>
-                  )}
-                </span>
-                <span
-                  className={
-                    state === "pending" && !isRefreshing ? "opacity-40" : ""
-                  }
-                >
-                  {label}
-                </span>
-              </li>
-            );
-          })}
-        </ul>
+    <div className="flex items-center gap-3">
+      {phase === "error" && statusText ? (
+        <span className="text-xs text-[var(--text-muted)] font-mono">
+          {statusText}
+        </span>
       ) : null}
+
+      {showStatus ? (
+        <div className="group relative inline-flex items-center">
+          <div
+            aria-label={dict.statusIndicator.helpText}
+            className="flex items-center gap-1 text-xs uppercase tracking-wider opacity-60"
+            role="group"
+            style={{ fontFamily: fontJetBrains.style.fontFamily }}
+          >
+            {STATUS_ENDPOINT_ORDER.map((ep) => {
+              const state = displayState[ep];
+              const letter = CHARACTER_STATUS_CODES[ep].success;
+              const pulse =
+                state === "pending" && isRefreshing ? "animate-pulse" : "";
+
+              return (
+                <span
+                  key={ep}
+                  className={`leading-none ${STATE_TEXT_COLOR[state]} ${pulse}`}
+                >
+                  {letter}
+                </span>
+              );
+            })}
+          </div>
+
+          <div className="absolute right-0 top-full z-20 mt-2 hidden w-56 group-hover:block">
+            <div className="card-surface rounded-xl p-4 shadow-lg">
+              <div className="space-y-2.5">
+                {STATUS_ENDPOINT_ORDER.map((ep) => {
+                  const state = displayState[ep];
+                  const label =
+                    t.endpoints[
+                      ENDPOINT_LABEL_KEY[ep] as keyof typeof t.endpoints
+                    ];
+                  const stateLabel = dict.statusIndicator[state];
+
+                  return (
+                    <div
+                      key={ep}
+                      className="flex items-center justify-between gap-3"
+                    >
+                      <span className="text-sm text-foreground/70">
+                        {label}
+                      </span>
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={`size-2 rounded-full ${STATE_DOT_COLOR[state]}`}
+                        />
+                        <span className="text-xs text-foreground/50">
+                          {stateLabel}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="mt-3 border-t border-[var(--border)] pt-2">
+                <p className="text-[10px] text-foreground/40">
+                  {dict.statusIndicator.helpText}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      <button
+        aria-label={buttonLabel}
+        className="inline-flex size-8 items-center justify-center rounded-lg text-foreground/70 transition-colors hover:bg-[var(--bg-elevated)] hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-40"
+        disabled={isRefreshing || inCooldown}
+        title={buttonLabel}
+        type="button"
+        onClick={triggerRefresh}
+      >
+        {isRefreshing ? (
+          <span
+            aria-hidden
+            className="font-mono text-sm leading-none text-foreground/70"
+          >
+            {SPINNER_FRAMES[spinnerFrame]}
+          </span>
+        ) : (
+          <RefreshIcon aria-hidden size={18} />
+        )}
+      </button>
     </div>
   );
 };

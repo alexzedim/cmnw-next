@@ -103,7 +103,9 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
     <main className="min-h-screen pt-16 pb-12 lg:pt-20 lg:pb-16">
       <div className="container mx-auto px-4 max-w-7xl">
         <CharacterTitle
-          actions={<CharacterRefresh guid={decodedGuid} />}
+          actions={
+            <CharacterRefresh guid={decodedGuid} status={character.status} />
+          }
           faction={factionEnum}
           guild={character.guild}
           guildId={character.guildGuid}

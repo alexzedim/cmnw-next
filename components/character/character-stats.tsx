@@ -5,7 +5,6 @@ import type { Character } from "@/lib/types";
 import NextLink from "next/link";
 
 import { CharacterProfessions } from "@/components/character/professions";
-import { CharacterStatusIndicator } from "@/components/character/status-indicator";
 import { InfoSection } from "@/components/character/info-section";
 import { useI18n } from "@/lib/i18n/context";
 
@@ -58,14 +57,6 @@ export function CharacterStats({ character }: CharacterStatsProps) {
                 day: "numeric",
               }
             ),
-          },
-        ]
-      : []),
-    ...(character.status
-      ? [
-          {
-            label: labels.status,
-            value: <CharacterStatusIndicator status={character.status} />,
           },
         ]
       : []),
