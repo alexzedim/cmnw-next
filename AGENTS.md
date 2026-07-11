@@ -2,17 +2,18 @@
 
 ## Project Overview
 
-Next.js 16 app (App Router) with React 19, TypeScript 5.6, Tailwind CSS 3, HeroUI, and Tremor.
+Next.js 16 app (App Router) with React 19, TypeScript 7, Tailwind CSS 4, HeroUI, and Tremor.
 API requests are proxied to an external backend via Next.js rewrites (`next.config.js`).
 
 ## Commands
 
-| Task   | Command                                           |
-| ------ | ------------------------------------------------- |
-| Dev    | `pnpm dev`                                        |
-| Build  | `pnpm build`                                      |
-| Lint   | `pnpm lint` — runs `eslint --fix`                 |
-| Format | `pnpm format` — runs Prettier on all source files |
+| Task      | Command                                           |
+| --------- | ------------------------------------------------- |
+| Dev       | `pnpm dev`                                        |
+| Build     | `pnpm build` — runs `next build --turbopack`      |
+| Lint      | `pnpm lint` — runs `eslint --fix`                 |
+| Typecheck | `pnpm typecheck` — runs `tsc --noEmit`            |
+| Format    | `pnpm format` — runs Prettier on all source files |
 
 **Package manager:** pnpm only (v10). Do **not** use npm or yarn.
 
@@ -22,10 +23,13 @@ Always run `pnpm lint` after making changes to verify code passes lint rules.
 
 ## TypeScript
 
+- **Dual install via npm aliases.** `typescript` is aliased to `@typescript/typescript6@^6.0.2` and is consumed by `@typescript-eslint/*` (which still requires TS 6's API). `@typescript/native` is aliased to `typescript@^7.0.2` and is consumed by `tsc` / `pnpm typecheck`. As a result `npx tsc` runs TS 7 (native) and `npx tsc6` runs TS 6. Do not consolidate these into a single install.
+- **VS Code:** install the [`TypeScriptTeam.native-preview`](https://marketplace.visualstudio.com/items?itemName=TypeScriptTeam.native-preview) extension to enable the TS 7 language server. Toggle via the "Enable/Disable TypeScript 7 Language Server" commands from the palette.
 - Strict mode enabled (`strict: true`)
 - Target: ES2022, module resolution: bundler
 - Path alias: `@/*` maps to project root — use `@/lib/...`, `@/components/...`, etc.
 - No `noEmit` restrictions for type-checking; types are project-referenced via Next.js
+- On memory-constrained CI runners, pass `--checkers 2` to `tsc` to reduce memory usage.
 
 ## Code Style
 
