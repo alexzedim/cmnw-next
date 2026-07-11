@@ -45,5 +45,8 @@ WARP.md
 # KDE Rules
 .kilo/
 
+# Kilo Code local planning cache
+.zcode/
+
 # Playwright MCP artifacts (console logs, page snapshots)
 .playwright-mcp/
