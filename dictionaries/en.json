@@ -189,7 +189,25 @@
     "metadataOgDescription": "Guild profile with {count} members",
     "membersLabel": "Members:",
     "achievementsLabel": "Achievements:",
-    "createdLabel": "Created:"
+    "createdLabel": "Created:",
+    "refresh": {
+      "button": "Refresh",
+      "refreshing": "Refreshing…",
+      "started": "Refresh started",
+      "finished": "Refresh complete",
+      "skipped": "Already up to date",
+      "error": "Refresh failed",
+      "cooldown": "Refresh · {minutes}m left",
+      "timeout": "No response from server",
+      "endpoints": {
+        "status": "Status",
+        "summary": "Summary",
+        "media": "Media",
+        "pets": "Pets",
+        "mounts": "Mounts",
+        "professions": "Professions"
+      }
+    }
   },
   "guildRoster": {
     "columnName": "Name",
