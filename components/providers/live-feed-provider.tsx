@@ -130,7 +130,6 @@ export const LiveFeedProvider = ({ children }: { children: ReactNode }) => {
       }
       socketRef.current = null;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const clear = useCallback(() => {
