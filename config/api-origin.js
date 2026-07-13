@@ -15,17 +15,24 @@ const normalizeOrigin = (origin) => (origin ?? "").replace(/\/+$/, "");
 //   is handled at runtime in lib/api/origins.ts -> clientFetch().
 // ---------------------------------------------------------------------------
 
+// Allow env override for local dev / debugging. API_URL is server-only.
+const envApiUrl = normalizeOrigin(process.env.API_URL);
+
 // Ordered list of server-side origins to try (first success wins).
-const SERVER_ORIGINS = [
-  normalizeOrigin("http://cmnw-api:8080"), // Docker DNS — fastest, preferred
-  normalizeOrigin("http://128.0.0.255:8080"), // host hairpin — fallback
-];
+// When API_URL is set (local dev), prepend it so it's tried first.
+const SERVER_ORIGINS = envApiUrl
+  ? [
+      envApiUrl, // local dev override — highest priority
+      normalizeOrigin("http://cmnw-api:8080"), // Docker DNS — production
+      normalizeOrigin("http://128.0.0.255:8080"), // host hairpin — fallback
+    ]
+  : [
+      normalizeOrigin("http://cmnw-api:8080"), // Docker DNS — fastest, preferred
+      normalizeOrigin("http://128.0.0.255:8080"), // host hairpin — fallback
+    ];
 
 // Client-side: same-origin (empty string means relative to window.location).
 const CLIENT_API_ORIGIN = "";
-
-// Allow env override for local dev / debugging. API_URL is server-only.
-const envApiUrl = normalizeOrigin(process.env.API_URL);
 
 const isServerRuntime = () => typeof window === "undefined";
 
