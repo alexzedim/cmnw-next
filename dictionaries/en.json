@@ -384,6 +384,44 @@
     "classFilter": "Class: ",
     "factionFilter": "Faction: "
   },
+  "block": {
+    "metadataDescription": "Hash block cluster with members and audit timeline",
+    "metadataOgDescription": "Block cluster for hash value",
+    "title": "Block",
+    "collisionBadge": "Collision",
+    "collisionHint": "This block exceeds the account character limit and may contain false groupings",
+    "confirmedRatio": "{confirmed} of {total} confirmed",
+    "confirmed": "Confirmed",
+    "unconfirmed": "Unconfirmed",
+    "firstSeen": "First seen",
+    "lastSeen": "Last seen",
+    "membersTitle": "Members",
+    "logsTitle": "Block History",
+    "noLogs": "No history recorded yet",
+    "hashSearchLink": "View hash search",
+    "refreshAll": "Refresh all",
+    "refreshAllLimit": "Refresh disabled (block exceeds 40 characters)",
+    "refreshCooldown": "Refresh on cooldown",
+    "refreshProgress": "{done} of {total} refreshed",
+    "refreshStarting": "Refreshing {total} characters...",
+    "refreshComplete": "All {total} characters refreshed",
+    "refreshError": "Refresh failed for some characters",
+    "plurals": {
+      "character": {
+        "one": "character",
+        "few": "characters",
+        "many": "characters"
+      }
+    },
+    "action": {
+      "GENESIS": "Block created",
+      "JOIN": "Joined block",
+      "LEAVE": "Left block",
+      "MIGRATE": "Migrated to new block",
+      "HASH_A_CHANGE": "Hash A change",
+      "HASH_B_CHANGE": "Hash B change"
+    }
+  },
   "logTable": {
     "title": "Activity Log",
     "entries": "entries",
