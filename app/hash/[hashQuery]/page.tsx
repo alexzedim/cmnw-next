@@ -1,4 +1,8 @@
-import type { CharactersResponse } from "@/lib/types";
+import type {
+  BlockResponse,
+  BlockLogsResponse,
+  CharactersResponse,
+} from "@/lib/types";
 
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -6,6 +10,7 @@ import { notFound } from "next/navigation";
 import { serverFetch } from "@/lib/api/origins";
 import { HashAccountTitle } from "@/components/hash/hash-account-title";
 import { HashCharactersContent } from "@/components/hash/hash-characters-content";
+import { HashBlockHistory } from "@/components/hash/hash-block-history";
 import { detectLocale, getDictionary } from "@/dictionaries";
 
 interface HashPageProps {
@@ -44,7 +49,11 @@ async function getHashData(hashQuery: string) {
   }
 }
 
-async function checkBlockExists(hashQuery: string): Promise<string | null> {
+async function getBlockData(hashQuery: string): Promise<{
+  hashValue: string;
+  block: BlockResponse["block"];
+  logs: BlockLogsResponse["logs"];
+} | null> {
   // The hash search query uses a discriminator prefix: 'b' for hashB, 'a' for
   // hashA. Blocks are anchored on hashB, so only hashB searches can map to a
   // block. Strip the prefix to get the raw 8-char hashValue.
@@ -57,15 +66,32 @@ async function checkBlockExists(hashQuery: string): Promise<string | null> {
   const hashValue = hashQuery.slice(1);
 
   try {
-    const blockRes = await serverFetch(
-      `/api/osint/block/${encodeURIComponent(hashValue)}`,
-      {
+    const [blockRes, logsRes] = await Promise.all([
+      serverFetch(`/api/osint/block/${encodeURIComponent(hashValue)}`, {
         headers: { "Content-Type": "application/json" },
         next: { revalidate: 3600 },
-      }
-    );
+      }),
+      serverFetch(`/api/osint/block/${encodeURIComponent(hashValue)}/logs`, {
+        headers: { "Content-Type": "application/json" },
+        next: { revalidate: 3600 },
+      }).catch(() => null),
+    ]);
 
-    return blockRes.ok ? hashValue : null;
+    if (!blockRes.ok) return null;
+
+    const blockResponse = (await blockRes.json()) as BlockResponse | null;
+
+    if (!blockResponse?.block) return null;
+
+    const logsResponse = logsRes?.ok
+      ? ((await logsRes.json()) as BlockLogsResponse | null)
+      : null;
+
+    return {
+      hashValue,
+      block: blockResponse.block,
+      logs: logsResponse?.logs ?? [],
+    };
   } catch {
     return null;
   }
@@ -97,16 +123,14 @@ export default async function HashPage({ params }: HashPageProps) {
     notFound();
   }
 
-  // Probe whether this hash value anchors a block cluster. Returns the raw
-  // hashValue (discriminator stripped) if a block exists, null otherwise.
-  const blockHashValue = await checkBlockExists(hashQuery);
+  const blockData = await getBlockData(hashQuery);
   const isHashB = hashQuery.charAt(0).toLowerCase() === "b";
 
   return (
     <main className="min-h-screen pt-20 pb-8">
       <div className="container mx-auto px-4">
         <HashAccountTitle
-          blockHashValue={blockHashValue}
+          block={blockData?.block ?? null}
           characterCount={characters.length}
           characters={characters}
           hashQuery={hashQuery}
@@ -116,6 +140,12 @@ export default async function HashPage({ params }: HashPageProps) {
           characters={characters}
           showTableOption={isHashB}
         />
+
+        {blockData && blockData.logs.length > 0 && (
+          <div className="mt-6">
+            <HashBlockHistory logs={blockData.logs} />
+          </div>
+        )}
       </div>
     </main>
   );

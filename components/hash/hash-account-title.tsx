@@ -1,8 +1,8 @@
 "use client";
 
-import type { Character } from "@/lib/types";
+import type { Block, Character } from "@/lib/types";
 
-import NextLink from "next/link";
+import dayjs from "dayjs";
 
 import { NAMING_CONSTANTS } from "@/constants";
 import { fontJetBrains } from "@/config/fonts";
@@ -13,17 +13,18 @@ interface HashAccountTitleProps {
   hashQuery: string;
   characterCount: number;
   characters?: Character[];
-  blockHashValue?: string | null;
+  block?: Block | null;
 }
 
 export const HashAccountTitle = ({
   hashQuery,
   characterCount,
   characters,
-  blockHashValue,
+  block,
 }: HashAccountTitleProps) => {
   const { dict } = useI18n();
   const h = dict.hash;
+  const b = dict.block;
 
   const guildStats = (() => {
     if (!characters || characters.length === 0) {
@@ -196,15 +197,47 @@ export const HashAccountTitle = ({
         </div>
       </div>
 
-      {blockHashValue && (
-        <div className="mt-4">
-          <NextLink
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium card-surface transition-colors hover:bg-[var(--bg-elevated)]"
-            href={`/block/${blockHashValue}`}
-          >
-            <span className="size-1.5 rounded-full bg-[var(--primary)]" />
-            {h.blockLink ?? "View block cluster"} →
-          </NextLink>
+      {block && (
+        <div className="mt-6 px-4 py-3 rounded-lg bg-foreground/5">
+          <div className="flex items-center justify-between gap-2 mb-3">
+            <div className="text-sm font-medium">
+              {b.title}: {block.hashValue.toUpperCase()}
+            </div>
+            <span
+              className={`chip text-xs ${block.isCollision ? "bg-red-500/10 text-red-500" : "bg-green-500/10 text-green-500"}`}
+            >
+              {block.isCollision ? b.collisionBadge : "Accurate"}
+            </span>
+          </div>
+
+          <div className="text-xs text-foreground/60 space-y-1">
+            <div>
+              {b.confirmedRatio
+                .replace("{confirmed}", `${block.confirmedCount}`)
+                .replace("{total}", `${block.charactersCount}`)}{" "}
+              (
+              {block.charactersCount > 0
+                ? Math.round(
+                    (block.confirmedCount / block.charactersCount) * 100
+                  )
+                : 0}
+              %)
+            </div>
+            <div className="flex flex-wrap gap-4 text-foreground/40">
+              <span>
+                {b.firstSeen}:{" "}
+                {block.firstSeenAt
+                  ? dayjs(block.firstSeenAt).format("YYYY-MM-DD HH:mm")
+                  : "—"}
+              </span>
+              <span>
+                {b.lastSeen}:{" "}
+                {block.lastSeenAt
+                  ? dayjs(block.lastSeenAt).format("YYYY-MM-DD HH:mm")
+                  : "—"}
+              </span>
+            </div>
+          </div>
         </div>
       )}
 
