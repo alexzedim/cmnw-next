@@ -9,6 +9,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { GuildTitle } from "@/components/guild/guild-title";
+import { GuildRefresh } from "@/components/guild/guild-refresh";
 import { GuildRoster } from "@/components/guild/guild-roster";
 import { LogTable } from "@/components/shared/log-table";
 import { serverFetch } from "@/lib/api/origins";
@@ -89,12 +90,14 @@ export default async function GuildPage({ params }: GuildPageProps) {
 
   const { guild, members, memberCount, logs } = data;
   const factionEnum = stringToFaction(guild.faction);
+  const decodedGuid = decodeURIComponent(guid);
 
   return (
     <main className="min-h-screen pt-20 pb-8">
       <div className="container mx-auto px-4">
         <GuildTitle
           achievement_points={guild.achievementPoints || 0}
+          actions={<GuildRefresh guid={decodedGuid} />}
           created_timestamp={guild.createdTimestamp ?? 0}
           faction={factionEnum}
           member_count={memberCount}

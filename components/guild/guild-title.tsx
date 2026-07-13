@@ -1,6 +1,7 @@
 "use client";
 
 import type { Character, Faction } from "@/lib/types";
+import type { ReactNode } from "react";
 
 import dayjs from "dayjs";
 
@@ -18,6 +19,7 @@ interface GuildTitleProps {
   achievement_points: number;
   faction?: Faction;
   members?: Character[];
+  actions?: ReactNode;
 }
 
 function getFactionBorderColor(faction?: Faction): string {
@@ -41,6 +43,7 @@ export const GuildTitle = ({
   achievement_points,
   faction,
   members,
+  actions,
 }: GuildTitleProps) => {
   const { dict } = useI18n();
   const g = dict.guild;
@@ -54,7 +57,7 @@ export const GuildTitle = ({
         borderLeftColor: borderColor,
       }}
     >
-      <div className="mb-5 flex items-center gap-3">
+      <div className="mb-5 flex items-center justify-between gap-3">
         <div
           className="inline-flex items-center gap-2 text-xs uppercase tracking-wider opacity-60"
           style={{ fontFamily: fontJetBrains.style.fontFamily }}
@@ -62,6 +65,7 @@ export const GuildTitle = ({
           <div className="size-1.5 rounded-full bg-[var(--primary)]" />
           <p>{NAMING_CONSTANTS.GUILD}</p>
         </div>
+        {actions && <div className="flex items-center gap-3">{actions}</div>}
       </div>
 
       <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight mb-3 font-sans">

@@ -153,8 +153,9 @@ export interface CharacterRefreshMeta {
 
 /**
  * True when the event is a refresh-progress notification for the given session
- * (and, if provided, the given guid). Backend refresh emits always carry
- * source = 'osint.characters.refresh' and meta.sessionId.
+ * (and, if provided, the given guid). Triggered by GET /api/osint/character with
+ * sessionId/requestId query params — the backend threads them into the queue job
+ * so the worker emits session-routed events with source = 'osint.characters.refresh'.
  */
 export const isCharacterRefreshEvent = (
   event: FeedEvent,

@@ -165,13 +165,15 @@ export const CharacterRefresh = ({ guid, status }: CharacterRefreshProps) => {
     setPhase("refreshing");
 
     try {
-      await apiClient.post(ENDPOINTS.OSINT_CHARACTER_REFRESH, {
+      await apiClient.get(ENDPOINTS.OSINT_CHARACTER, {
         guid: normalizedGuid,
         requestId,
         sessionId,
       });
-      // Progress now arrives over the websocket (see effect below).
-      // Stamp the cooldown only after the trigger was accepted.
+      // The GET response contains the character data. Progress events arrive
+      // over the websocket in parallel (see effect below) — the GET resolves
+      // when the queue job finishes (or the service returns cached data).
+      // Stamp the cooldown after the trigger was accepted.
       setCooldownStart(sessionId, normalizedGuid, Date.now());
     } catch (error) {
       activeRequestId.current = null;
