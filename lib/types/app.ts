@@ -28,3 +28,13 @@ export interface AnalyticsMetricSnapshotDto {
   createdAt: string;
   updatedAt?: string | null;
 }
+
+export interface AnalyticsMetricHistoryEntry {
+  id: string;
+  category: AnalyticsMetricCategory;
+  metricType: AnalyticsMetricType;
+  realmId: number | null;
+  value: Record<string, unknown>;
+  snapshotDate: string;
+  createdAt: string;
+}

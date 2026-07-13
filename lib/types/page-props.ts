@@ -32,8 +32,17 @@ export interface ItemPageProps {
 }
 
 /**
- * Realm response from item API
+ * Realm response shape embedded in the item API response (minimal).
+ * Kept here to avoid colliding with the full {@link RealmsResponse} list type.
  */
 export interface RealmResponse {
   realms?: string[];
+}
+
+/**
+ * Realm detail page props.
+ * `realmQuery` may be a numeric id, slug, or display name.
+ */
+export interface RealmPageProps {
+  params: Promise<{ realmQuery: string }>;
 }

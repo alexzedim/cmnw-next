@@ -86,21 +86,35 @@ export interface Guild {
 }
 
 /**
- * Realm entity
+ * Realm entity, mirroring the backend RealmsEntity.
+ *
+ * Analytics keying (important):
+ *  - characters/guilds metrics key on `id`
+ *  - market/contracts metrics key on `connectedRealmId`
+ * See REALM_METRIC_GROUPS in constants/realm-metrics.ts.
  */
 export interface Realm {
-  uuid: string;
   id: number;
-  name: string;
   slug: string;
-  region?: string;
-  locale?: string;
-  timezone?: string;
-  connectedRealmId?: number;
-  category?: string;
-  type?: string;
-  createdAt?: string | Date;
-  updatedAt?: string | Date;
+  name: string;
+  region: string;
+  localeName: string;
+  ticker: string | null;
+  status: string | null;
+  localeSlug: string | null;
+  category: string | null;
+  locale: string | null;
+  timezone: string | null;
+  populationStatus: string | null;
+  connectedRealmId: number;
+  connectedRealms: string[] | null;
+  warcraftLogsId: number | null;
+  auctionsTimestamp: number;
+  commoditiesTimestamp: number;
+  valuationsTimestamp: number;
+  goldTimestamp: number;
+  createdAt?: string | null;
+  updatedAt?: string | null;
 }
 
 /**

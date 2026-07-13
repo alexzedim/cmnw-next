@@ -15,9 +15,11 @@ export const ENDPOINTS = {
   // API paths (relative)
   METRICS_PATH: "/api/app/metrics",
   METRIC_SNAPSHOT_PATH: "/api/app/metrics/snapshot",
+  METRIC_HISTORY_PATH: "/api/app/metrics/history",
   WS_FEED_PATH: "/api/ws/feed",
   OSINT_CHARACTER: "/api/osint/character",
   OSINT_GUILD: "/api/osint/guild",
+  OSINT_REALMS: "/api/osint/realms",
 
   // Local dev reference (not used in production routing)
   LOCALHOST: "http://localhost:8081",
