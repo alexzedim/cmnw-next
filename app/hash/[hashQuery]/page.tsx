@@ -100,6 +100,7 @@ export default async function HashPage({ params }: HashPageProps) {
   // Probe whether this hash value anchors a block cluster. Returns the raw
   // hashValue (discriminator stripped) if a block exists, null otherwise.
   const blockHashValue = await checkBlockExists(hashQuery);
+  const isHashB = hashQuery.charAt(0).toLowerCase() === "b";
 
   return (
     <main className="min-h-screen pt-20 pb-8">
@@ -111,7 +112,10 @@ export default async function HashPage({ params }: HashPageProps) {
           hashQuery={hashQuery}
         />
 
-        <HashCharactersContent characters={characters} />
+        <HashCharactersContent
+          characters={characters}
+          showTableOption={isHashB}
+        />
       </div>
     </main>
   );

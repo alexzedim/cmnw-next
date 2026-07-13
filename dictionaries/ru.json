@@ -361,6 +361,17 @@
     "specLabel": "Спец.:",
     "guildLabel": "Гильдия: ",
     "rankDisplay": "ранг {rank}",
+    "viewCards": "Карточки",
+    "viewTable": "Таблица",
+    "table": {
+      "name": "Имя",
+      "realm": "Реалм",
+      "level": "Уровень",
+      "class": "Класс",
+      "spec": "Спек",
+      "itemLevel": "илвл",
+      "guild": "Гильдия"
+    },
     "plurals": {
       "character": {
         "one": "персонаж",

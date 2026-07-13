@@ -361,6 +361,17 @@
     "specLabel": "Spec:",
     "guildLabel": "Guild: ",
     "rankDisplay": "Rank {rank}",
+    "viewCards": "Cards",
+    "viewTable": "Table",
+    "table": {
+      "name": "Name",
+      "realm": "Realm",
+      "level": "Level",
+      "class": "Class",
+      "spec": "Spec",
+      "itemLevel": "iLvl",
+      "guild": "Guild"
+    },
     "plurals": {
       "character": {
         "one": "character",
