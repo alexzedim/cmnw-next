@@ -34,6 +34,7 @@ export interface Character {
   guildRank?: number;
   hashA?: string;
   hashB?: string;
+  hashBlock?: { hashValue: string; isConfirmed: boolean } | null;
   race?: string;
   class?: string;
   specialization?: string;
