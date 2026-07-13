@@ -13,14 +13,14 @@ interface HashAccountTitleProps {
   hashQuery: string;
   characterCount: number;
   characters?: Character[];
-  hasBlock?: boolean;
+  blockHashValue?: string | null;
 }
 
 export const HashAccountTitle = ({
   hashQuery,
   characterCount,
   characters,
-  hasBlock,
+  blockHashValue,
 }: HashAccountTitleProps) => {
   const { dict } = useI18n();
   const h = dict.hash;
@@ -196,11 +196,11 @@ export const HashAccountTitle = ({
         </div>
       </div>
 
-      {hasBlock && (
+      {blockHashValue && (
         <div className="mt-4">
           <NextLink
             className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium card-surface transition-colors hover:bg-[var(--bg-elevated)]"
-            href={`/block/${hashQuery}`}
+            href={`/block/${blockHashValue}`}
           >
             <span className="size-1.5 rounded-full bg-[var(--primary)]" />
             {h.blockLink ?? "View block cluster"} →

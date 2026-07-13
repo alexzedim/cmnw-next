@@ -44,19 +44,30 @@ async function getHashData(hashQuery: string) {
   }
 }
 
-async function checkBlockExists(hashQuery: string): Promise<boolean> {
+async function checkBlockExists(hashQuery: string): Promise<string | null> {
+  // The hash search query uses a discriminator prefix: 'b' for hashB, 'a' for
+  // hashA. Blocks are anchored on hashB, so only hashB searches can map to a
+  // block. Strip the prefix to get the raw 8-char hashValue.
+  if (!hashQuery || hashQuery.length < 2) return null;
+
+  const discriminator = hashQuery.charAt(0).toLowerCase();
+
+  if (discriminator !== "b") return null;
+
+  const hashValue = hashQuery.slice(1);
+
   try {
     const blockRes = await serverFetch(
-      `/api/osint/block/${encodeURIComponent(hashQuery)}`,
+      `/api/osint/block/${encodeURIComponent(hashValue)}`,
       {
         headers: { "Content-Type": "application/json" },
         next: { revalidate: 3600 },
       }
     );
 
-    return blockRes.ok;
+    return blockRes.ok ? hashValue : null;
   } catch {
-    return false;
+    return null;
   }
 }
 
@@ -86,17 +97,17 @@ export default async function HashPage({ params }: HashPageProps) {
     notFound();
   }
 
-  // Probe whether this hash value anchors a block cluster. Suppress 404 — the
-  // hash page stays a pure character search; the block badge is a link-out.
-  const hasBlock = await checkBlockExists(hashQuery);
+  // Probe whether this hash value anchors a block cluster. Returns the raw
+  // hashValue (discriminator stripped) if a block exists, null otherwise.
+  const blockHashValue = await checkBlockExists(hashQuery);
 
   return (
     <main className="min-h-screen pt-20 pb-8">
       <div className="container mx-auto px-4">
         <HashAccountTitle
+          blockHashValue={blockHashValue}
           characterCount={characters.length}
           characters={characters}
-          hasBlock={hasBlock}
           hashQuery={hashQuery}
         />
 
