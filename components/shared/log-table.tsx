@@ -48,6 +48,10 @@ const actionTint: Record<ACTION_LOG, string> = {
   [ACTION_LOG.GENDER]: "#f59e0b",
   [ACTION_LOG.FACTION]: "#f59e0b",
   [ACTION_LOG.TITLE]: "#f59e0b",
+  [ACTION_LOG.HASH_A]: "#8b5cf6",
+  [ACTION_LOG.HASH_B]: "#8b5cf6",
+  [ACTION_LOG.MOUNTS_NUMBER]: "#06b6d4",
+  [ACTION_LOG.PETS_NUMBER]: "#06b6d4",
 };
 
 const chipStyle = (action: ACTION_LOG): CSSProperties => {
