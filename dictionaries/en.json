@@ -406,7 +406,11 @@
       "TRANSFER": "Transfer",
       "RACE": "Race change",
       "GENDER": "Gender change",
-      "FACTION": "Faction change"
+      "FACTION": "Faction change",
+      "HASH_A": "Hash A change",
+      "HASH_B": "Hash B change",
+      "MOUNTS_NUMBER": "Mounts count",
+      "PETS_NUMBER": "Pets count"
     },
     "actionDescription": {
       "PROMOTE": "Character was raised to a higher guild rank.",
@@ -421,7 +425,11 @@
       "TRANSFER": "Character was moved to another realm.",
       "RACE": "Character changed their race.",
       "GENDER": "Character changed their gender.",
-      "FACTION": "Character or guild changed faction."
+      "FACTION": "Character or guild changed faction.",
+      "HASH_A": "Character's hash A fingerprint has changed.",
+      "HASH_B": "Character's hash B fingerprint has changed.",
+      "MOUNTS_NUMBER": "The number of mounts the character owns has changed.",
+      "PETS_NUMBER": "The number of battle pets the character owns has changed."
     }
   },
   "whoWeAre": {

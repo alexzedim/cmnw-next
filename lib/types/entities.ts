@@ -120,6 +120,10 @@ export enum ACTION_LOG {
   RACE = "RACE",
   GENDER = "GENDER",
   FACTION = "FACTION",
+  HASH_A = "HASH_A",
+  HASH_B = "HASH_B",
+  MOUNTS_NUMBER = "MOUNTS_NUMBER",
+  PETS_NUMBER = "PETS_NUMBER",
 }
 
 /**
