@@ -44,6 +44,22 @@ async function getHashData(hashQuery: string) {
   }
 }
 
+async function checkBlockExists(hashQuery: string): Promise<boolean> {
+  try {
+    const blockRes = await serverFetch(
+      `/api/osint/block/${encodeURIComponent(hashQuery)}`,
+      {
+        headers: { "Content-Type": "application/json" },
+        next: { revalidate: 3600 },
+      }
+    );
+
+    return blockRes.ok;
+  } catch {
+    return false;
+  }
+}
+
 export async function generateMetadata({
   params,
 }: HashPageProps): Promise<Metadata> {
@@ -70,12 +86,17 @@ export default async function HashPage({ params }: HashPageProps) {
     notFound();
   }
 
+  // Probe whether this hash value anchors a block cluster. Suppress 404 — the
+  // hash page stays a pure character search; the block badge is a link-out.
+  const hasBlock = await checkBlockExists(hashQuery);
+
   return (
     <main className="min-h-screen pt-20 pb-8">
       <div className="container mx-auto px-4">
         <HashAccountTitle
           characterCount={characters.length}
           characters={characters}
+          hasBlock={hasBlock}
           hashQuery={hashQuery}
         />
 

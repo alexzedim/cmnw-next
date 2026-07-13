@@ -341,6 +341,7 @@
     "precisionCount": "This account has {count} {noun}",
     "nonPrecisionCount": "This hash value is shared by {count} {noun} from different accounts",
     "hashBHint": "Hash B******** gives more precision match",
+    "blockLink": "View block cluster",
     "noGuildData": "No Guild Data",
     "excellent": "Excellent",
     "veryGood": "Very Good",

@@ -2,6 +2,8 @@
 
 import type { Character } from "@/lib/types";
 
+import NextLink from "next/link";
+
 import { NAMING_CONSTANTS } from "@/constants";
 import { fontJetBrains } from "@/config/fonts";
 import { useI18n } from "@/lib/i18n/context";
@@ -11,12 +13,14 @@ interface HashAccountTitleProps {
   hashQuery: string;
   characterCount: number;
   characters?: Character[];
+  hasBlock?: boolean;
 }
 
 export const HashAccountTitle = ({
   hashQuery,
   characterCount,
   characters,
+  hasBlock,
 }: HashAccountTitleProps) => {
   const { dict } = useI18n();
   const h = dict.hash;
@@ -191,6 +195,18 @@ export const HashAccountTitle = ({
           )}
         </div>
       </div>
+
+      {hasBlock && (
+        <div className="mt-4">
+          <NextLink
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium card-surface transition-colors hover:bg-[var(--bg-elevated)]"
+            href={`/block/${hashQuery}`}
+          >
+            <span className="size-1.5 rounded-full bg-[var(--primary)]" />
+            {h.blockLink ?? "View block cluster"} →
+          </NextLink>
+        </div>
+      )}
 
       {characters && characters.length > 0 && guildStats.guildCount > 0 && (
         <div className={`mt-6 px-4 py-3 rounded-lg ${guildQuality.bgColor}`}>
