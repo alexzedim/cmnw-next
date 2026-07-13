@@ -230,6 +230,16 @@
   }
 }
 
+/*
+ * Tremor LineChart stroke fix — Recharts sets stroke="" on the path element
+ * and expects the color from the parent <g> class. In Tailwind v4 the stroke-*
+ * color utilities don't reliably cascade to SVG paths, so we force the brand
+ * color onto the curve directly.
+ */
+.realm-trend-chart .recharts-line-curve {
+  stroke: var(--tremor-brand) !important;
+}
+
 /* Fix HeroUI Select/Autocomplete label positioning - override the calc */
 html
   body
