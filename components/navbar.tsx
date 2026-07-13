@@ -56,6 +56,12 @@ export const Navbar = () => {
       </NavbarContent>
 
       <NavbarContent className="basis-1/3" justify="end">
+        <NextLink
+          className="text-xs uppercase tracking-wider text-foreground/60 transition-colors hover:text-foreground"
+          href="/realm"
+        >
+          {dict.realm.indexTitle}
+        </NextLink>
         <LanguageSwitcher />
         <ThemeSwitch />
       </NavbarContent>

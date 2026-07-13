@@ -11,7 +11,7 @@ import { clientFetch } from "@/lib/api/origins";
 
 interface SearchSuggestion {
   value: string;
-  type?: "character" | "guild" | "item";
+  type?: "character" | "guild" | "item" | "realm";
   label?: string;
 }
 
@@ -85,6 +85,14 @@ export const SearchForm = () => {
             });
           });
 
+          data.realms?.forEach((realm: any) => {
+            suggestions.push({
+              value: realm.slug,
+              type: "realm",
+              label: realm.name,
+            });
+          });
+
           setSuggestions(suggestions.slice(0, 10));
           setShowDropdown(suggestions.length > 0);
         }
@@ -138,19 +146,25 @@ export const SearchForm = () => {
         const data = await response.json();
 
         const firstResult =
-          data.characters?.[0] || data.guilds?.[0] || data.items?.[0];
+          data.characters?.[0] ||
+          data.guilds?.[0] ||
+          data.items?.[0] ||
+          data.realms?.[0];
 
         if (firstResult) {
           const suggestion: SearchSuggestion = {
             value:
               firstResult.guid ||
+              firstResult.slug ||
               firstResult.name ||
               (firstResult.id ? String(firstResult.id) : ""),
             type: data.characters?.[0]
               ? "character"
               : data.guilds?.[0]
                 ? "guild"
-                : "item",
+                : data.items?.[0]
+                  ? "item"
+                  : "realm",
           };
 
           navigateToSuggestion(suggestion);
@@ -181,6 +195,9 @@ export const SearchForm = () => {
         break;
       case "item":
         router.push(`/item/${suggestion.value}`);
+        break;
+      case "realm":
+        router.push(`/realm/${suggestion.value}`);
         break;
       default:
         break;
@@ -230,6 +247,8 @@ export const SearchForm = () => {
         return "#\uFE0F";
       case "item":
         return "$";
+      case "realm":
+        return "@";
       default:
         return "!";
     }
@@ -297,6 +316,8 @@ export const SearchForm = () => {
                   </span>
                   {suggestion.type === "item" && suggestion.label ? (
                     <span className="flex-1">{suggestion.label}</span>
+                  ) : suggestion.type === "realm" && suggestion.label ? (
+                    <span className="flex-1">{suggestion.label}</span>
                   ) : (
                     <span className="flex-1">{suggestion.value}</span>
                   )}
@@ -308,7 +329,9 @@ export const SearchForm = () => {
                       ? NAMING_CONSTANTS.CHARACTER
                       : suggestion.type === "guild"
                         ? NAMING_CONSTANTS.GUILD
-                        : NAMING_CONSTANTS.ITEM}
+                        : suggestion.type === "realm"
+                          ? NAMING_CONSTANTS.REALM
+                          : NAMING_CONSTANTS.ITEM}
                   </span>
                 </button>
               ))}
