@@ -342,7 +342,6 @@
     "precisionCount": "У этого аккаунта {count} {noun}",
     "nonPrecisionCount": "Это значение хэша общее для {count} {noun} с разных аккаунтов",
     "hashBHint": "Ключ B******** даёт более точное совпадение",
-    "blockLink": "Открыть кластер блока",
     "noGuildData": "Нет данных о гильдии",
     "excellent": "Полностью аллоцирован",
     "veryGood": "Высокая аллокация",
@@ -402,34 +401,13 @@
     "factionFilter": "Фракция: "
   },
   "block": {
-    "metadataDescription": "Кластер хеш-блока с участниками и историей изменений",
-    "metadataOgDescription": "Кластер блока для хеш-значения",
     "title": "Блок",
     "collisionBadge": "Коллизия",
-    "collisionHint": "Этот блок превышает лимит персонажей на аккаунт и может содержать ложные группировки",
     "confirmedRatio": "{confirmed} из {total} подтверждено",
-    "confirmed": "Подтверждён",
-    "unconfirmed": "Не подтверждён",
     "firstSeen": "Первое появление",
     "lastSeen": "Последнее обновление",
-    "membersTitle": "Участники",
     "logsTitle": "История блока",
     "noLogs": "История пока не записана",
-    "hashSearchLink": "Поиск по хешу",
-    "refreshAll": "Обновить все",
-    "refreshAllLimit": "Обновление недоступно (блок превышает 40 персонажей)",
-    "refreshCooldown": "Обновление недоступно",
-    "refreshProgress": "{done} из {total} обновлено",
-    "refreshStarting": "Обновление {total} персонажей...",
-    "refreshComplete": "Все {total} персонажей обновлены",
-    "refreshError": "Ошибка обновления некоторых персонажей",
-    "plurals": {
-      "character": {
-        "one": "персонаж",
-        "few": "персонажа",
-        "many": "персонажей"
-      }
-    },
     "action": {
       "GENESIS": "Блок создан",
       "JOIN": "Присоединился к блоку",

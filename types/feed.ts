@@ -223,35 +223,3 @@ export const isCharacterRefreshEvent = (
 
   return true;
 };
-
-export interface BlockRefreshMeta {
-  sessionId: string;
-  requestId: string;
-  guid?: string;
-  endpoint?: RefreshEndpoint;
-  phase?: RefreshPhase;
-  durationMs?: number;
-  reason?: string;
-  status?: string;
-  error?: string;
-}
-
-/**
- * True when the event belongs to a combined block-refresh batch, identified by
- * the shared requestId. Each member is refreshed via a separate per-character
- * GET, but all share the same requestId so the block-refresh component can
- * collect them and track aggregate progress.
- */
-export const isBlockRefreshEvent = (
-  event: FeedEvent,
-  ctx: { sessionId: string; requestId: string }
-): boolean => {
-  if (event.category !== FeedEventCategory.CHARACTER) return false;
-  if (event.source !== "osint.characters.refresh") return false;
-  const meta = event.meta as Partial<BlockRefreshMeta> | undefined;
-
-  if (!meta || meta.sessionId !== ctx.sessionId) return false;
-  if (meta.requestId !== ctx.requestId) return false;
-
-  return true;
-};
