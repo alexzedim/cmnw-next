@@ -14,7 +14,6 @@ import {
   CharacterRefresh,
   CharacterStats,
 } from "@/components/character";
-import { CharacterBlockRef } from "@/components/block/character-block-ref";
 import { LogTable } from "@/components/shared/log-table";
 import { serverFetch } from "@/lib/api/origins";
 import { stringToFaction } from "@/lib/utils/faction-converter";
@@ -143,10 +142,6 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
                   </div>
                 )}
               </div>
-
-              {character.hashBlock && (
-                <CharacterBlockRef hashBlock={character.hashBlock} />
-              )}
             </div>
           </div>
 

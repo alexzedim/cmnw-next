@@ -173,6 +173,7 @@
       "createdAt": "Дата создания",
       "hashA": "Ключ A",
       "hashB": "Ключ B",
+      "block": "Блок",
       "guid": "GUID",
       "id": "ID"
     }

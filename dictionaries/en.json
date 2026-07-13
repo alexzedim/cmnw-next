@@ -173,6 +173,7 @@
       "createdAt": "Created At",
       "hashA": "Hash A",
       "hashB": "Hash B",
+      "block": "Block",
       "guid": "GUID",
       "id": "ID"
     }

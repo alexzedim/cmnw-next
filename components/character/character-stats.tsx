@@ -111,6 +111,32 @@ export function CharacterStats({ character }: CharacterStatsProps) {
           },
         ]
       : []),
+    ...(character.hashBlock
+      ? [
+          {
+            label: labels.block,
+            value: (
+              <span className="flex items-center gap-2">
+                <NextLink
+                  className="text-[var(--primary)] hover:text-[var(--accent)] transition-colors font-medium"
+                  href={`/block/${character.hashBlock.hashValue}`}
+                >
+                  {character.hashBlock.hashValue.toUpperCase()}
+                </NextLink>
+                <span
+                  className={
+                    character.hashBlock.isConfirmed
+                      ? "text-emerald-500 text-xs"
+                      : "text-foreground/40 text-xs"
+                  }
+                >
+                  {character.hashBlock.isConfirmed ? "✓" : "?"}
+                </span>
+              </span>
+            ),
+          },
+        ]
+      : []),
   ];
 
   const systemItems = [
