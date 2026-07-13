@@ -1,3 +1,5 @@
+"use client";
+
 import type { BlockLog } from "@/lib/types";
 
 import dayjs from "dayjs";
