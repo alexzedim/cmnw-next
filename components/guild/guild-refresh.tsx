@@ -13,10 +13,21 @@ import { toast } from "@/lib/toast";
 import { ENDPOINTS } from "@/constants";
 import { RefreshIcon } from "@/components/icons";
 import { useLiveFeed } from "@/components/providers/live-feed-provider";
-import { FeedEventCategory, FeedStatus } from "@/types/feed";
+import { fontJetBrains } from "@/config/fonts";
+import {
+  FeedEventCategory,
+  FeedStatus,
+  GUILD_PENDING_OPERATIONS,
+  GUILD_STATUS_CODES,
+  GUILD_STATUS_ORDER,
+  EndpointState,
+  GuildOperation,
+  decodeGuildStatusString,
+} from "@/types/feed";
 
 interface GuildRefreshProps {
   guid: string;
+  status?: string;
 }
 
 type Phase = "idle" | "refreshing" | "done" | "error";
@@ -26,6 +37,26 @@ const SPINNER_INTERVAL_MS = 120;
 
 const COOLDOWN_MS = 60 * 60 * 1000;
 const WATCHDOG_MS = 30_000;
+
+const ENDPOINT_LABEL_KEY: Record<GuildOperation, string> = {
+  SUMMARY: "summary",
+  ROSTER: "roster",
+  MEMBERS: "members",
+  LOGS: "logs",
+  MASTER: "master",
+};
+
+const STATE_TEXT_COLOR: Record<EndpointState, string> = {
+  success: "text-emerald-500",
+  error: "text-red-500",
+  pending: "text-[var(--text-muted)]",
+};
+
+const STATE_DOT_COLOR: Record<EndpointState, string> = {
+  success: "bg-emerald-500",
+  error: "bg-red-500",
+  pending: "bg-[var(--text-muted)]",
+};
 
 const cooldownKey = (sessionId: string, guid: string) =>
   `cmnw:guild-refresh:${sessionId}:${guid}`;
@@ -52,7 +83,7 @@ const setCooldownStart = (sessionId: string, guid: string, ts: number) => {
   }
 };
 
-export const GuildRefresh = ({ guid }: GuildRefreshProps) => {
+export const GuildRefresh = ({ guid, status }: GuildRefreshProps) => {
   const router = useRouter();
   const { dict } = useI18n();
   const t = dict.guild.refresh;
@@ -69,6 +100,9 @@ export const GuildRefresh = ({ guid }: GuildRefreshProps) => {
   const { messages } = useLiveFeed();
 
   const [phase, setPhase] = useState<Phase>("idle");
+  const [operations, setOperations] = useState<
+    Record<GuildOperation, EndpointState>
+  >(GUILD_PENDING_OPERATIONS);
   const [now, setNow] = useState(() => Date.now());
   const activeRequestId = useRef<string | null>(null);
 
@@ -96,6 +130,7 @@ export const GuildRefresh = ({ guid }: GuildRefreshProps) => {
         : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 
     activeRequestId.current = requestId;
+    setOperations(GUILD_PENDING_OPERATIONS);
     setPhase("refreshing");
 
     try {
@@ -178,6 +213,14 @@ export const GuildRefresh = ({ guid }: GuildRefreshProps) => {
     if (matching.length === 0) return;
 
     const terminal = matching[matching.length - 1];
+    const meta = terminal.meta as
+      | { status?: string; phase?: string }
+      | undefined;
+
+    // Decode the 5-char guild status string from the terminal event.
+    if (typeof meta?.status === "string" && meta.status.length > 0) {
+      setOperations(decodeGuildStatusString(meta.status));
+    }
 
     if (terminal.status === FeedStatus.ERROR) {
       setPhase("error");
@@ -217,8 +260,91 @@ export const GuildRefresh = ({ guid }: GuildRefreshProps) => {
     }
   })();
 
+  // Unified status display:
+  // - While refreshing / just finished (or errored), show the live per-operation
+  //   state driven by websocket events.
+  // - At idle, fall back to the persisted `guild.status` string decoded into
+  //   per-operation states.
+  const isLive =
+    phase === "refreshing" || phase === "done" || phase === "error";
+  const persistedOperations = useMemo(
+    () => (status ? decodeGuildStatusString(status) : null),
+    [status]
+  );
+  const showStatus = isLive || Boolean(persistedOperations);
+  const displayState = isLive
+    ? operations
+    : (persistedOperations ?? GUILD_PENDING_OPERATIONS);
+
   return (
-    <div className="mb-4 flex items-center justify-end gap-2">
+    <div className="flex items-center gap-3">
+      {showStatus ? (
+        <div className="group relative inline-flex items-center">
+          <div
+            aria-label={dict.statusIndicator.helpText}
+            className="flex items-center gap-1 text-xs uppercase tracking-wider opacity-60"
+            role="group"
+            style={{ fontFamily: fontJetBrains.style.fontFamily }}
+          >
+            {GUILD_STATUS_ORDER.map((op) => {
+              const state = displayState[op];
+              const letter = GUILD_STATUS_CODES[op].success;
+              const pulse =
+                state === "pending" && isRefreshing ? "animate-pulse" : "";
+
+              return (
+                <span
+                  key={op}
+                  className={`leading-none ${STATE_TEXT_COLOR[state]} ${pulse}`}
+                >
+                  {letter}
+                </span>
+              );
+            })}
+          </div>
+
+          <div className="absolute right-0 top-full z-20 mt-2 hidden w-56 group-hover:block">
+            <div className="card-surface rounded-xl p-4 shadow-lg">
+              <div className="space-y-2.5">
+                {GUILD_STATUS_ORDER.map((op) => {
+                  const state = displayState[op];
+                  const label =
+                    t.endpoints[
+                      ENDPOINT_LABEL_KEY[op] as keyof typeof t.endpoints
+                    ];
+                  const stateLabel = dict.statusIndicator[state];
+
+                  return (
+                    <div
+                      key={op}
+                      className="flex items-center justify-between gap-3"
+                    >
+                      <span className="text-sm text-foreground/70">
+                        {label}
+                      </span>
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={`size-2 rounded-full ${STATE_DOT_COLOR[state]}`}
+                        />
+                        <span className="text-xs text-foreground/50">
+                          {stateLabel}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="mt-3 border-t border-[var(--border)] pt-2">
+                <p className="text-[10px] text-foreground/40">
+                  {dict.statusIndicator.helpText}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
       <button
         aria-label={buttonLabel}
         className="inline-flex size-8 items-center justify-center rounded-lg text-foreground/70 transition-colors hover:bg-[var(--bg-elevated)] hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-40"

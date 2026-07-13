@@ -97,7 +97,7 @@ export default async function GuildPage({ params }: GuildPageProps) {
       <div className="container mx-auto px-4">
         <GuildTitle
           achievement_points={guild.achievementPoints || 0}
-          actions={<GuildRefresh guid={decodedGuid} />}
+          actions={<GuildRefresh guid={decodedGuid} status={guild.status} />}
           created_timestamp={guild.createdTimestamp ?? 0}
           faction={factionEnum}
           member_count={memberCount}

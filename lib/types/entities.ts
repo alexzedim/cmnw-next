@@ -75,6 +75,7 @@ export interface Guild {
   achievementPoints?: number;
   membersCount?: number;
   statusCode?: number;
+  status?: string;
   createdBy?: string;
   updatedBy?: string;
   createdTimestamp?: string | Date;

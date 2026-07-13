@@ -200,12 +200,11 @@
       "cooldown": "Refresh · {minutes}m left",
       "timeout": "No response from server",
       "endpoints": {
-        "status": "Status",
         "summary": "Summary",
-        "media": "Media",
-        "pets": "Pets",
-        "mounts": "Mounts",
-        "professions": "Professions"
+        "roster": "Roster",
+        "members": "Members",
+        "logs": "Logs",
+        "master": "Guild Master"
       }
     }
   },

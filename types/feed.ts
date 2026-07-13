@@ -132,6 +132,59 @@ export const decodeStatusString = (
   return result;
 };
 
+// --- Guild status (5-char string: SRMLG) -----------------------------------
+
+export const GUILD_STATUS_ORDER = [
+  "SUMMARY",
+  "ROSTER",
+  "MEMBERS",
+  "LOGS",
+  "MASTER",
+] as const;
+
+export type GuildOperation = (typeof GUILD_STATUS_ORDER)[number];
+
+export const GUILD_STATUS_CODES: Record<
+  GuildOperation,
+  { success: string; error: string; pending: string }
+> = {
+  SUMMARY: { success: "S", error: "s", pending: "-" },
+  ROSTER: { success: "R", error: "r", pending: "-" },
+  MEMBERS: { success: "M", error: "m", pending: "-" },
+  LOGS: { success: "L", error: "l", pending: "-" },
+  MASTER: { success: "G", error: "g", pending: "-" },
+};
+
+export const GUILD_PENDING_OPERATIONS: Record<GuildOperation, EndpointState> = {
+  SUMMARY: "pending",
+  ROSTER: "pending",
+  MEMBERS: "pending",
+  LOGS: "pending",
+  MASTER: "pending",
+};
+
+/**
+ * Decodes the 5-char guild status string (e.g. "SRMLG", "sRML-") into a
+ * per-operation state map, honoring GUILD_STATUS_ORDER positions.
+ */
+export const decodeGuildStatusString = (
+  status: string
+): Record<GuildOperation, EndpointState> => {
+  const result = {} as Record<GuildOperation, EndpointState>;
+
+  for (const op of GUILD_STATUS_ORDER) {
+    const index = GUILD_STATUS_ORDER.indexOf(op);
+    const char = status[index] ?? "-";
+    const codes = GUILD_STATUS_CODES[op];
+
+    if (char === codes.success) result[op] = "success";
+    else if (char === codes.error) result[op] = "error";
+    else result[op] = "pending";
+  }
+
+  return result;
+};
+
 export type RefreshPhase =
   | "started"
   | "endpoint"
