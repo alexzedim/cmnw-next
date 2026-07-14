@@ -108,12 +108,19 @@ export type RealmTrendConfig = RealmMetricRequest & {
   titleKey: string;
   dataKey: string;
   valueFormat: SnapshotValueFormat;
+  /**
+   * When true, renders day-over-day delta bars (green = growth, red = decline)
+   * instead of a flat absolute-value line. Use for metrics where the nominal
+   * value barely changes (e.g. realm population ~300k ±1k/day).
+   */
+  deltaMode?: boolean;
 };
 
 export const REALM_TRENDS: readonly RealmTrendConfig[] = [
   {
     category: AnalyticsMetricCategory.CHARACTERS,
     dataKey: "count",
+    deltaMode: true,
     metricType: AnalyticsMetricType.TOTAL,
     realmKey: "id",
     titleKey: "populationTrend" as const,
