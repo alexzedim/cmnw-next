@@ -88,11 +88,11 @@ export default async function RealmPage({ params }: RealmPageProps) {
   }
 
   return (
-    <div className="pt-16 lg:pt-20">
+    <main className="min-h-screen pt-16 pb-12 lg:pt-20 lg:pb-16">
       <div className="container mx-auto px-4 max-w-7xl">
         <RealmTitle realm={realm} />
+        <RealmContent realm={realm} />
       </div>
-      <RealmContent realm={realm} />
-    </div>
+    </main>
   );
 }
