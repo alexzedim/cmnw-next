@@ -594,12 +594,12 @@
     "connectedRealms": "Connected realms",
     "standaloneRealm": "Standalone realm — no connected group",
     "sharesAh": "Shares an auction house with {count} realm(s)",
-    "demographics": "Demographics",
+    "demographics": "ΔΣMOGRΛPHICS",
     "guildEcosystem": "Guild ecosystem",
-    "marketPulse": "Market pulse",
-    "trends": "Trends",
-    "populationTrend": "Population trend",
-    "marketVolumeTrend": "Market volume trend",
+    "marketPulse": "ΛUCTIONS",
+    "trends": "TRΣNΔS",
+    "populationTrend": "POPULΛTION",
+    "marketVolumeTrend": "AUCTIONS OPΣN INTΣRΣST",
     "allLevels": "All levels",
     "atLevelCap": "At level cap",
     "totalCharacters": "Total characters",
@@ -615,7 +615,7 @@
     "avgMembers": "Avg members",
     "connectedRealmMarket": "Connected realm market (24h)",
     "auctions24h": "Auctions",
-    "volume24h": "Volume",
+    "volume24h": "Open Interest",
     "uniqueItemsAuctions": "Unique auction items",
     "uniqueItemsCommdty": "Unique commodities",
     "updatedAgo": "Updated {time} ago",
@@ -633,6 +633,25 @@
     "indexPopulationAll": "All populations",
     "indexStatusAll": "All statuses",
     "indexConnectedRealms": "Connected realms",
-    "viewAllRealms": "View all realms"
+    "viewAllRealms": "View all realms",
+    "classNames": {
+      "Death Knight": "Death Knight",
+      "Demon Hunter": "Demon Hunter",
+      "Druid": "Druid",
+      "Evoker": "Evoker",
+      "Hunter": "Hunter",
+      "Mage": "Mage",
+      "Monk": "Monk",
+      "Paladin": "Paladin",
+      "Priest": "Priest",
+      "Rogue": "Rogue",
+      "Shaman": "Shaman",
+      "Warlock": "Warlock",
+      "Warrior": "Warrior"
+    },
+    "factionNames": {
+      "Alliance": "Alliance",
+      "Horde": "Horde"
+    }
   }
 }
