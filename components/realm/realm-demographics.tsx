@@ -14,6 +14,7 @@ import {
 } from "@/constants/analytics-metrics";
 import { classColors } from "@/constants/class-colors";
 import { buildSnapshotKey } from "@/lib/utils/snapshot-formatters";
+import { fontJetBrains } from "@/config/fonts";
 import { useI18n } from "@/lib/i18n/context";
 
 interface RealmDemographicsProps {
@@ -69,12 +70,14 @@ const FactionBar = ({
 /**
  * Horizontal bar list for class distribution, colored by class.
  */
-const ClassBars = ({
-  classCounts,
-}: {
-  classCounts: Array<[string, number]>;
-}) => {
-  const max = Math.max(...classCounts.map(([, count]) => count), 1);
+type ClassBarEntry = {
+  key: string;
+  label: string;
+  count: number;
+};
+
+const ClassBars = ({ classCounts }: { classCounts: ClassBarEntry[] }) => {
+  const max = Math.max(...classCounts.map(({ count }) => count), 1);
 
   if (classCounts.length === 0) {
     return null;
@@ -82,14 +85,14 @@ const ClassBars = ({
 
   return (
     <div className="space-y-1.5">
-      {classCounts.map(([className, count]) => {
-        const color = classColors.get(className) ?? "rgb(99, 102, 241)";
+      {classCounts.map(({ key, label, count }) => {
+        const color = classColors.get(key) ?? "rgb(99, 102, 241)";
         const pct = (count / max) * 100;
 
         return (
-          <div key={className} className="flex items-center gap-2 text-xs">
+          <div key={key} className="flex items-center gap-2 text-xs">
             <span className="w-28 shrink-0 truncate text-foreground/60">
-              {className}
+              {label}
             </span>
             <div className="h-3 flex-1 overflow-hidden rounded-sm bg-[var(--surface)]">
               <div
@@ -131,7 +134,11 @@ export const RealmDemographics = ({
 }: RealmDemographicsProps) => {
   const { dict } = useI18n();
   const r = dict.realm;
+  const classNames = r.classNames as Record<string, string>;
+  const factionNames = r.factionNames as Record<string, string>;
   const [showMaxLevel, setShowMaxLevel] = useState(false);
+
+  const localizeClassName = (name: string) => classNames[name] ?? name;
 
   const totalKey = buildSnapshotKey(
     AnalyticsMetricCategory.CHARACTERS,
@@ -147,28 +154,57 @@ export const RealmDemographics = ({
       ? AnalyticsMetricType.BY_CLASS_MAX_LEVEL
       : AnalyticsMetricType.BY_CLASS
   ) as SnapshotKey;
+  const guildTotalKey = buildSnapshotKey(
+    AnalyticsMetricCategory.GUILDS,
+    AnalyticsMetricType.TOTAL
+  ) as SnapshotKey;
+  const guildFactionKey = buildSnapshotKey(
+    AnalyticsMetricCategory.GUILDS,
+    AnalyticsMetricType.BY_FACTION
+  ) as SnapshotKey;
 
   const total = snapshots?.[totalKey] ?? null;
   const faction = snapshots?.[factionKey] ?? null;
   const classSnapshot = snapshots?.[classKey] ?? null;
+  const guildTotal = snapshots?.[guildTotalKey] ?? null;
+  const guildFaction = snapshots?.[guildFactionKey] ?? null;
 
   const totalValue = extractCountMap(total);
   const factionValue = extractCountMap(faction);
   const classValue = extractCountMap(classSnapshot);
+  const guildTotalValue = extractCountMap(guildTotal);
+  const guildFactionValue = extractCountMap(guildFaction);
 
   const alliance = factionValue.ALLIANCE ?? factionValue.Alliance ?? 0;
   const horde = factionValue.HORDE ?? factionValue.Horde ?? 0;
 
-  const classCounts = Object.entries(classValue)
+  const guildCount = guildTotalValue.count ?? 0;
+  const guildTotalMembers = guildTotalValue.totalMembers ?? 0;
+  const guildAvgMembers =
+    guildCount > 0 ? Math.round(guildTotalMembers / guildCount) : 0;
+
+  const guildAlliance =
+    guildFactionValue.ALLIANCE ?? guildFactionValue.Alliance ?? 0;
+  const guildHorde = guildFactionValue.HORDE ?? guildFactionValue.Horde ?? 0;
+
+  const classCounts: ClassBarEntry[] = Object.entries(classValue)
     .filter(([, count]) => count > 0)
-    .sort((a, b) => b[1] - a[1]);
+    .map(([key, count]) => ({
+      count,
+      key,
+      label: localizeClassName(key),
+    }))
+    .sort((a, b) => a.label.localeCompare(b.label));
 
   return (
     <div className="card-surface p-6 flex flex-col gap-4">
       <div className="flex items-center justify-between gap-3">
-        <h3 className="text-xl font-semibold text-[var(--primary)]">
-          {r.demographics}
-        </h3>
+        <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider opacity-50">
+          <div className="size-1.5 rounded-full bg-[var(--primary)]" />
+          <span style={{ fontFamily: fontJetBrains.style.fontFamily }}>
+            {r.demographics}
+          </span>
+        </div>
         <div className="inline-flex items-center gap-1 rounded-lg bg-foreground/5 p-1">
           <button
             className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
@@ -239,6 +275,38 @@ export const RealmDemographics = ({
               <ClassBars classCounts={classCounts} />
             </div>
           )}
+
+          <div className="border-t border-[var(--border)] pt-4">
+            <dl className="grid grid-cols-3 gap-3 text-sm">
+              <div className="rounded-lg border border-[var(--border)] bg-[var(--surface)] p-3">
+                <dt className="text-xs text-foreground/50">{r.totalGuilds}</dt>
+                <dd className="font-mono text-lg font-semibold">
+                  {guildCount.toLocaleString()}
+                </dd>
+              </div>
+              <div className="rounded-lg border border-[var(--border)] bg-[var(--surface)] p-3">
+                <dt className="text-xs text-foreground/50">{r.totalMembers}</dt>
+                <dd className="font-mono text-lg font-semibold">
+                  {guildTotalMembers.toLocaleString()}
+                </dd>
+              </div>
+              <div className="rounded-lg border border-[var(--border)] bg-[var(--surface)] p-3">
+                <dt className="text-xs text-foreground/50">{r.avgMembers}</dt>
+                <dd className="font-mono text-lg font-semibold">
+                  {guildAvgMembers.toLocaleString()}
+                </dd>
+              </div>
+            </dl>
+
+            {guildAlliance + guildHorde > 0 && (
+              <div className="mt-3">
+                <p className="mb-1.5 text-xs uppercase tracking-wide text-foreground/50">
+                  {r.guildFactionSplit}
+                </p>
+                <FactionBar alliance={guildAlliance} horde={guildHorde} />
+              </div>
+            )}
+          </div>
         </>
       )}
     </div>

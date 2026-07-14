@@ -9,6 +9,7 @@ import {
 } from "@/constants/analytics-metrics";
 import { GoldValue } from "@/components/home/gold-value";
 import { buildSnapshotKey } from "@/lib/utils/snapshot-formatters";
+import { fontJetBrains } from "@/config/fonts";
 import { useI18n } from "@/lib/i18n/context";
 
 interface RealmMarketPulseProps {
@@ -78,9 +79,12 @@ export const RealmMarketPulse = ({
 
   return (
     <div className="card-surface p-6 flex flex-col gap-4">
-      <h3 className="text-xl font-semibold text-[var(--primary)]">
-        {r.marketPulse}
-      </h3>
+      <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider opacity-50">
+        <div className="size-1.5 rounded-full bg-[var(--primary)]" />
+        <span style={{ fontFamily: fontJetBrains.style.fontFamily }}>
+          {r.marketPulse}
+        </span>
+      </div>
       <p className="text-xs text-foreground/50">{r.connectedRealmMarket}</p>
 
       {isLoading ? (
