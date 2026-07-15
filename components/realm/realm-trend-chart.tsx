@@ -82,7 +82,9 @@ export const RealmTrendChart = ({
     <div className="card-surface p-6 flex flex-col gap-4">
       <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider opacity-50">
         <div className="size-1.5 rounded-full bg-[var(--primary)]" />
-        <span style={{ fontFamily: fontJetBrains.style.fontFamily }}>{title}</span>
+        <span style={{ fontFamily: fontJetBrains.style.fontFamily }}>
+          {title}
+        </span>
       </div>
 
       {isLoading ? (

@@ -5,6 +5,7 @@ import type { Realm } from "@/lib/types";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
+import { useRealmsDensity } from "@/hooks/useRealmMetrics";
 import { useI18n } from "@/lib/i18n/context";
 
 interface RealmIndexTableProps {
@@ -24,11 +25,19 @@ const POPULATION_RANK: PopulationRank = {
 const populationRank = (status: string | null): number =>
   status ? (POPULATION_RANK[status.toLowerCase()] ?? 0) : 0;
 
-type SortField = "name" | "region" | "category" | "population" | "connected";
+type SortField =
+  | "name"
+  | "region"
+  | "category"
+  | "population"
+  | "connected"
+  | "hof"
+  | "raidLogs";
 
 export const RealmIndexTable = ({ realms }: RealmIndexTableProps) => {
   const { dict } = useI18n();
   const r = dict.realm;
+  const { data: density, isLoading: densityLoading } = useRealmsDensity(realms);
 
   const [search, setSearch] = useState("");
   const [region, setRegion] = useState("");
@@ -119,13 +128,40 @@ export const RealmIndexTable = ({ realms }: RealmIndexTableProps) => {
             (a.connectedRealms?.length ?? 1) - (b.connectedRealms?.length ?? 1);
 
           break;
+        case "hof":
+          cmp =
+            (density.get(a.id)?.hofGuildCount ?? 0) -
+            (density.get(b.id)?.hofGuildCount ?? 0);
+
+          break;
+        case "raidLogs": {
+          const aTotal = density.get(a.id)?.raidLogsTotal ?? 0;
+          const bTotal = density.get(b.id)?.raidLogsTotal ?? 0;
+          const aRatio =
+            aTotal > 0 ? (density.get(a.id)?.raidLogsIndexed ?? 0) / aTotal : 0;
+          const bRatio =
+            bTotal > 0 ? (density.get(b.id)?.raidLogsIndexed ?? 0) / bTotal : 0;
+
+          cmp = aRatio - bRatio;
+
+          break;
+        }
       }
 
       return sortAsc ? cmp : -cmp;
     });
 
     return result;
-  }, [realms, search, region, category, population, sortField, sortAsc]);
+  }, [
+    realms,
+    search,
+    region,
+    category,
+    population,
+    sortField,
+    sortAsc,
+    density,
+  ]);
 
   const toggleSort = (field: SortField) => {
     if (sortField === field) {
@@ -211,29 +247,68 @@ export const RealmIndexTable = ({ realms }: RealmIndexTableProps) => {
                 {r.indexConnectedRealms}
                 {sortIndicator("connected")}
               </th>
+              <th role="button" onClick={() => toggleSort("hof")}>
+                {r.indexHofGuilds}
+                {sortIndicator("hof")}
+              </th>
+              <th role="button" onClick={() => toggleSort("raidLogs")}>
+                {r.indexRaidLogs}
+                {sortIndicator("raidLogs")}
+              </th>
             </tr>
           </thead>
           <tbody>
-            {filtered.map((realm) => (
-              <tr key={realm.id}>
-                <td>
-                  <Link
-                    className="font-medium text-[var(--primary)] underline-offset-2 hover:underline"
-                    href={`/realm/${realm.slug}`}
-                  >
-                    {realm.name}
-                  </Link>
-                </td>
-                <td>{realm.region}</td>
-                <td>{realm.category ?? "—"}</td>
-                <td>{realm.populationStatus ?? "—"}</td>
-                <td>
-                  {(realm.connectedRealms?.length ?? 1) > 1
-                    ? realm.connectedRealms?.length
-                    : "—"}
-                </td>
-              </tr>
-            ))}
+            {filtered.map((realm) => {
+              const d = density.get(realm.id);
+              const hofCount = d?.hofGuildCount ?? 0;
+              const raidTotal = d?.raidLogsTotal ?? 0;
+              const raidIndexed = d?.raidLogsIndexed ?? 0;
+              const raidRatio = raidTotal > 0 ? raidIndexed / raidTotal : 0;
+              const raidPct = Math.round(raidRatio * 100);
+
+              return (
+                <tr key={realm.id}>
+                  <td>
+                    <Link
+                      className="font-medium text-[var(--primary)] underline-offset-2 hover:underline"
+                      href={`/realm/${realm.slug}`}
+                    >
+                      {realm.name}
+                    </Link>
+                  </td>
+                  <td>{realm.region}</td>
+                  <td>{realm.category ?? "—"}</td>
+                  <td>{realm.populationStatus ?? "—"}</td>
+                  <td>
+                    {(realm.connectedRealms?.length ?? 1) > 1
+                      ? realm.connectedRealms?.length
+                      : "—"}
+                  </td>
+                  <td className="font-mono text-sm">
+                    {densityLoading
+                      ? "…"
+                      : hofCount > 0
+                        ? hofCount.toLocaleString()
+                        : "—"}
+                  </td>
+                  <td>
+                    {densityLoading || raidTotal === 0 ? (
+                      "—"
+                    ) : (
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-xs">{raidPct}%</span>
+                        <div className="h-1.5 w-12 overflow-hidden rounded-full bg-foreground/10">
+                          <div
+                            className="h-full rounded-full bg-[var(--primary)]"
+                            style={{ width: `${raidPct}%` }}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

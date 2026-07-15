@@ -3,7 +3,9 @@
 import type { Realm } from "@/lib/types";
 
 import { RealmDemographics } from "./realm-demographics";
+import { RealmHallOfFame } from "./realm-hall-of-fame";
 import { RealmMarketPulse } from "./realm-market-pulse";
+import { RealmRaidLogs } from "./realm-raid-logs";
 import { RealmTrendChart } from "./realm-trend-chart";
 
 import { useRealmSnapshots } from "@/hooks/useRealmMetrics";
@@ -24,6 +26,11 @@ export const RealmContent = ({ realm }: RealmContentProps) => {
     <div>
       <div className="mt-8">
         <RealmDemographics isLoading={isLoading} snapshots={snapshots} />
+      </div>
+
+      <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-2">
+        <RealmHallOfFame isLoading={isLoading} snapshots={snapshots} />
+        <RealmRaidLogs realm={realm} />
       </div>
 
       <div className="mt-8">

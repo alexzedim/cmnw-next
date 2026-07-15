@@ -98,6 +98,17 @@ export const REALM_METRIC_GROUPS: readonly RealmMetricGroup[] = [
       },
     ] as const,
   },
+  {
+    titleKey: "hallOfFame" as const,
+    metrics: [
+      {
+        category: AnalyticsMetricCategory.HALL_OF_FAME,
+        labelKey: "hallOfFame" as const,
+        metricType: AnalyticsMetricType.TOTAL,
+        realmKey: "id",
+      },
+    ] as const,
+  },
 ];
 
 /**

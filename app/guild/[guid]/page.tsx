@@ -46,6 +46,7 @@ const getGuildData = cache(async function (encodedGuid: string) {
 
     return {
       guild: guildResponse.guild,
+      hallOfFame: guildResponse.hallOfFame ?? null,
       members: guildResponse.members,
       memberCount: guildResponse.memberCount,
       logs: logsResponse.logs || [],
@@ -88,7 +89,7 @@ export default async function GuildPage({ params }: GuildPageProps) {
     notFound();
   }
 
-  const { guild, members, memberCount, logs } = data;
+  const { guild, members, memberCount, logs, hallOfFame } = data;
   const factionEnum = stringToFaction(guild.faction);
   const decodedGuid = decodeURIComponent(guid);
 
@@ -100,6 +101,7 @@ export default async function GuildPage({ params }: GuildPageProps) {
           actions={<GuildRefresh guid={decodedGuid} status={guild.status} />}
           created_timestamp={guild.createdTimestamp ?? 0}
           faction={factionEnum}
+          hallOfFame={hallOfFame}
           member_count={memberCount}
           members={members}
           name={guild.name}

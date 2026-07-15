@@ -1,6 +1,9 @@
 export { RealmContent } from "./realm-content";
 export { RealmDemographics } from "./realm-demographics";
+export { RealmHallOfFame } from "./realm-hall-of-fame";
+export { RealmIndexSummary } from "./realm-index-summary";
 export { RealmIndexTable } from "./realm-index-table";
 export { RealmMarketPulse } from "./realm-market-pulse";
+export { RealmRaidLogs } from "./realm-raid-logs";
 export { RealmTitle } from "./realm-title";
 export { RealmTrendChart } from "./realm-trend-chart";

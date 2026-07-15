@@ -1,10 +1,11 @@
 "use client";
 
-import type { Character, Faction } from "@/lib/types";
+import type { Character, Faction, GuildHallOfFame } from "@/lib/types";
 import type { ReactNode } from "react";
 
 import dayjs from "dayjs";
 
+import { GuildHallOfFame as GuildHallOfFameMedals } from "./guild-hall-of-fame";
 import { GuildRankAllocation } from "./guild-rank-allocation";
 
 import { NAMING_CONSTANTS } from "@/constants";
@@ -18,6 +19,7 @@ interface GuildTitleProps {
   created_timestamp: number | string | Date;
   achievement_points: number;
   faction?: Faction;
+  hallOfFame?: GuildHallOfFame | null;
   members?: Character[];
   actions?: ReactNode;
 }
@@ -42,6 +44,7 @@ export const GuildTitle = ({
   created_timestamp,
   achievement_points,
   faction,
+  hallOfFame,
   members,
   actions,
 }: GuildTitleProps) => {
@@ -93,6 +96,8 @@ export const GuildTitle = ({
         <span className="text-foreground/50">@</span>
         <span className="font-medium">{realm.toLowerCase()}</span>
       </div>
+
+      <GuildHallOfFameMedals hallOfFame={hallOfFame ?? null} />
 
       {members && members.length > 0 && (
         <div className="mt-6">

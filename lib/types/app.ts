@@ -38,3 +38,14 @@ export interface AnalyticsMetricHistoryEntry {
   snapshotDate: string;
   createdAt: string;
 }
+
+/**
+ * Raid log indexing statistics for a realm (or globally when realmSlug is null).
+ * Mirrors IRaidLogsStats from @app/resources.
+ */
+export interface RaidLogsStats {
+  realmSlug: string | null;
+  total: number;
+  indexed: number;
+  notIndexed: number;
+}

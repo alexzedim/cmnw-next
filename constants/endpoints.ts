@@ -16,6 +16,7 @@ export const ENDPOINTS = {
   METRICS_PATH: "/api/app/metrics",
   METRIC_SNAPSHOT_PATH: "/api/app/metrics/snapshot",
   METRIC_HISTORY_PATH: "/api/app/metrics/history",
+  RAID_LOGS_STATS_PATH: "/api/app/raid-logs/stats",
   WS_FEED_PATH: "/api/ws/feed",
   OSINT_CHARACTER: "/api/osint/character",
   OSINT_GUILD: "/api/osint/guild",

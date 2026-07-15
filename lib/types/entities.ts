@@ -174,8 +174,31 @@ export interface CharacterProfile extends Character {
 
 export interface GuildResponse {
   guild: Guild;
+  hallOfFame: GuildHallOfFame | null;
   members: Character[];
   memberCount: number;
+}
+
+/**
+ * A single Hall of Fame clearance (mythic, first 100) earned by a guild.
+ * Mirrors the achievement object attached by GuildOsintService.resolveHallOfFame.
+ */
+export interface GuildHallOfFameAchievement {
+  raid: { slug: string; name: string };
+  rank: number;
+  faction: string;
+  completedAt: string | null;
+}
+
+/**
+ * Aggregated Hall of Fame data attached to a guild response.
+ * Null when the guild has no recorded Hall of Fame entries.
+ */
+export interface GuildHallOfFame {
+  isHallOfFame: true;
+  bestRank: number;
+  raidCount: number;
+  achievements: GuildHallOfFameAchievement[];
 }
 
 export interface CharactersResponse {

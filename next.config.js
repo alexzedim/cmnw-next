@@ -12,12 +12,24 @@ const nextConfig = {
       },
     ],
   },
-  // No rewrites() — the old /api/:path* rewrite caused a self-loop in
-  // production (Next.js proxying /api to itself). API calls now go directly:
-  //   - Server-side: serverFetch() in lib/api/origins.ts targets the backend
-  //     (cmnw-api:8080 → 128.0.0.255:8080 fallback).
-  //   - Client-side: clientFetch() uses same-origin relative URLs; nginx
-  //     proxies /api/ to the backend for all domains.
+  // Dev-only rewrite: proxy browser /api/* requests to the local backend so
+  // client-side clientFetch() calls work without nginx. Only active when
+  // API_URL is set (local dev). In production, hasSource/destination check
+  // prevents the self-loop that removing this originally fixed.
+  async rewrites() {
+    const apiUrl = (process.env.API_URL ?? "").replace(/\/+$/, "");
+
+    if (apiUrl) {
+      return [
+        {
+          destination: `${apiUrl}/api/:path*`,
+          source: "/api/:path*",
+        },
+      ];
+    }
+
+    return [];
+  },
 };
 
 module.exports = nextConfig;
