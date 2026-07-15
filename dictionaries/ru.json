@@ -534,7 +534,7 @@
     "contractsBoard": "ДОСКΛ КОНТРΛКТОВ",
     "contractsDisclaimer": "Статистика контрактов фокусируется на инструментах максимальной длительности с проверяемой ликвидностью.",
     "openInterestLeaders": "Открытый интерес в золоте",
-    "quantityConcentration": "Макс. концентрация количества",
+    "quantityConcentration": "Пиковое количество",
     "topByAuctions": "Топ по ордерам аукциона"
   },
   "upload": {

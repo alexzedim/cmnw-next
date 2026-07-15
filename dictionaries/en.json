@@ -530,7 +530,7 @@
     "contractsBoard": "CONTRΛCTS BOΛRD",
     "contractsDisclaimer": "Contract stats focus on max-duration instruments with verifiable liquidity.",
     "openInterestLeaders": "Open interest in gold value",
-    "quantityConcentration": "Max quantity concentration",
+    "quantityConcentration": "Peak quantity",
     "topByAuctions": "Top by auction orders"
   },
   "upload": {

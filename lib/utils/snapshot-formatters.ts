@@ -50,12 +50,15 @@ const rankLabel = (
  * Order reflects relevance per metric family:
  *  - guild rankings: `value` (members_count / achievement_points)
  *  - market items: `volume` (gold), then `auctions` (count)
- *  - contracts: `openInterest`, `quantity`, then `stdDev` (price volatility)
+ *  - contracts: peak `maxOpenInterest`/`maxQuantity` (intraday MAX over 24h),
+ *    then legacy `openInterest`/`quantity`, then `stdDev` (price volatility)
  */
 const rankValue = (element: Record<string, unknown>): unknown =>
   element.value ??
   element.volume ??
   element.auctions ??
+  element.maxOpenInterest ??
+  element.maxQuantity ??
   element.openInterest ??
   element.quantity ??
   element.stdDev ??
@@ -75,6 +78,8 @@ const isRankRecord = (
   ("value" in (entryValue as Record<string, unknown>) ||
     "volume" in (entryValue as Record<string, unknown>) ||
     "auctions" in (entryValue as Record<string, unknown>) ||
+    "maxOpenInterest" in (entryValue as Record<string, unknown>) ||
+    "maxQuantity" in (entryValue as Record<string, unknown>) ||
     "openInterest" in (entryValue as Record<string, unknown>) ||
     "stdDev" in (entryValue as Record<string, unknown>));
 
