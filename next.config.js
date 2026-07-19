@@ -12,24 +12,12 @@ const nextConfig = {
       },
     ],
   },
-  // Dev-only rewrite: proxy browser /api/* requests to the local backend so
-  // client-side clientFetch() calls work without nginx. Only active when
-  // API_URL is set (local dev). In production, hasSource/destination check
-  // prevents the self-loop that removing this originally fixed.
-  async rewrites() {
-    const apiUrl = (process.env.API_URL ?? "").replace(/\/+$/, "");
-
-    if (apiUrl) {
-      return [
-        {
-          destination: `${apiUrl}/api/:path*`,
-          source: "/api/:path*",
-        },
-      ];
-    }
-
-    return [];
-  },
+  // No rewrites() — client-side /api/* calls are handled by passthrough route
+  // handlers in app/api/** which forward to the backend via serverFetch().
+  //   - Server-side: serverFetch() targets the backend directly (Docker DNS →
+  //     host hairpin fallback, or API_URL in local dev).
+  //   - Client-side: clientFetch() uses same-origin relative URLs that hit
+  //     these route handlers, which re-issue via serverFetch().
 };
 
 module.exports = nextConfig;

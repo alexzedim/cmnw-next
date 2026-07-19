@@ -53,13 +53,24 @@ export async function serverFetch(
   path: string,
   init?: RequestInit
 ): Promise<Response> {
-  // Build the ordered candidate list: known-good first (if set), then the rest.
-  const origins = serverKnownGoodOrigin
+  // An explicit API_URL (local dev) always wins — even over the cached
+  // known-good origin. Without this, serverKnownGoodOrigin can latch onto a
+  // stale production-style backend (e.g. the host hairpin at 128.0.0.255:8080)
+  // that's reachable but missing newer endpoints, causing 404s in dev while
+  // the local backend (API_URL) has them.
+  const envApiUrl = (process.env.API_URL ?? "").replace(/\/+$/, "");
+
+  const origins = envApiUrl
     ? [
-        serverKnownGoodOrigin,
-        ...SERVER_ORIGINS.filter((o) => o !== serverKnownGoodOrigin),
+        envApiUrl,
+        ...SERVER_ORIGINS.filter((o) => o !== envApiUrl),
       ]
-    : SERVER_ORIGINS;
+    : serverKnownGoodOrigin
+      ? [
+          serverKnownGoodOrigin,
+          ...SERVER_ORIGINS.filter((o) => o !== serverKnownGoodOrigin),
+        ]
+      : SERVER_ORIGINS;
 
   let lastError: unknown = null;
 
