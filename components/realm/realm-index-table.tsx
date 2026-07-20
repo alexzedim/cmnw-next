@@ -227,6 +227,15 @@ export const RealmIndexTable = ({ realms }: RealmIndexTableProps) => {
 
   const t = r.tooltips;
 
+  const regionsMap = r.regions as Record<string, string>;
+  const categoriesMap = r.categories as Record<string, string>;
+  const populationStatusesMap = r.populationStatuses as Record<string, string>;
+
+  const localizeRegion = (value: string) => regionsMap[value] ?? value;
+  const localizeCategory = (value: string) => categoriesMap[value] ?? value;
+  const localizePopulationStatus = (value: string) =>
+    populationStatusesMap[value] ?? value;
+
   return (
     <div className="card-surface p-6">
       <div className="mb-4 grid grid-cols-1 gap-3 md:grid-cols-5">
@@ -245,7 +254,7 @@ export const RealmIndexTable = ({ realms }: RealmIndexTableProps) => {
           <option value="">{r.indexRegionAll}</option>
           {regions.map((reg) => (
             <option key={reg} value={reg}>
-              {reg}
+              {localizeRegion(reg)}
             </option>
           ))}
         </select>
@@ -257,7 +266,7 @@ export const RealmIndexTable = ({ realms }: RealmIndexTableProps) => {
           <option value="">{r.indexCategoryAll}</option>
           {categories.map((cat) => (
             <option key={cat} value={cat}>
-              {cat}
+              {localizeCategory(cat)}
             </option>
           ))}
         </select>
@@ -269,7 +278,7 @@ export const RealmIndexTable = ({ realms }: RealmIndexTableProps) => {
           <option value="">{r.indexCapacityAll}</option>
           {capacities.map((cap) => (
             <option key={cap} value={cap}>
-              {cap}
+              {localizePopulationStatus(cap)}
             </option>
           ))}
         </select>
@@ -321,9 +330,15 @@ export const RealmIndexTable = ({ realms }: RealmIndexTableProps) => {
                       {realm.name}
                     </Link>
                   </td>
-                  <td>{realm.region}</td>
-                  <td>{realm.category ?? "—"}</td>
-                  <td>{realm.populationStatus ?? "—"}</td>
+                  <td>{localizeRegion(realm.region)}</td>
+                  <td>
+                    {realm.category ? localizeCategory(realm.category) : "—"}
+                  </td>
+                  <td>
+                    {realm.populationStatus
+                      ? localizePopulationStatus(realm.populationStatus)
+                      : "—"}
+                  </td>
                   <td className="font-mono text-sm">
                     {densityLoading
                       ? "…"

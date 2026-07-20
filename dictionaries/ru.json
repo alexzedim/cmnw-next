@@ -589,7 +589,7 @@
     "metadataDescription": "Статистика, демография и группа связанных игровых миров",
     "title": "Игровой мир",
     "region": "Регион",
-    "category": "Категория",
+    "category": "Язык",
     "status": "Статус",
     "population": "Население",
     "capacity": "Вместимость",
@@ -640,7 +640,7 @@
     "indexTitle": "Игровые миры",
     "indexSearchPlaceholder": "Фильтр игровых миров…",
     "indexRegionAll": "Все регионы",
-    "indexCategoryAll": "Все категории",
+    "indexCategoryAll": "Все языки",
     "indexPopulationAll": "Любое население",
     "indexCapacityAll": "Любая вместимость",
     "indexStatusAll": "Любой статус",
@@ -684,6 +684,28 @@
     "factionNames": {
       "Alliance": "Альянс",
       "Horde": "Орда"
+    },
+    "regions": {
+      "Europe": "Европа"
+    },
+    "categories": {
+      "English": "Английский",
+      "French": "Французский",
+      "German": "Немецкий",
+      "Italian": "Итальянский",
+      "Russian": "Русский",
+      "Spanish": "Испанский"
+    },
+    "populationStatuses": {
+      "Full": "Полная",
+      "High": "Высокая",
+      "Medium": "Средняя",
+      "Low": "Низкая",
+      "New Players": "Подходит для новичков"
+    },
+    "realmStatuses": {
+      "Up": "Работает",
+      "Down": "Не работает"
     }
   }
 }

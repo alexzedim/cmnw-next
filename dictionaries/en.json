@@ -585,7 +585,7 @@
     "metadataDescription": "Realm statistics, demographics, and connected realm group",
     "title": "Realm",
     "region": "Region",
-    "category": "Category",
+    "category": "Language",
     "status": "Status",
     "population": "Population",
     "capacity": "Capacity",
@@ -636,7 +636,7 @@
     "indexTitle": "Realms",
     "indexSearchPlaceholder": "Filter realms…",
     "indexRegionAll": "All regions",
-    "indexCategoryAll": "All categories",
+    "indexCategoryAll": "All languages",
     "indexPopulationAll": "All populations",
     "indexCapacityAll": "All capacities",
     "indexStatusAll": "All statuses",
@@ -680,6 +680,28 @@
     "factionNames": {
       "Alliance": "Alliance",
       "Horde": "Horde"
+    },
+    "regions": {
+      "Europe": "Europe"
+    },
+    "categories": {
+      "English": "English",
+      "French": "French",
+      "German": "German",
+      "Italian": "Italian",
+      "Russian": "Russian",
+      "Spanish": "Spanish"
+    },
+    "populationStatuses": {
+      "Full": "Full",
+      "High": "High",
+      "Medium": "Medium",
+      "Low": "Low",
+      "New Players": "New Players"
+    },
+    "realmStatuses": {
+      "Up": "Up",
+      "Down": "Down"
     }
   }
 }
