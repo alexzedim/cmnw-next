@@ -142,7 +142,7 @@ export default async function RealmIndexPage() {
 
   return (
     <main className="min-h-screen pt-16 pb-12 lg:pt-20 lg:pb-16">
-      <div className="container mx-auto px-4 max-w-7xl">
+      <div className="container mx-auto px-4 max-w-screen-2xl">
         <RealmIndexSummary
           hofRealmsWithHof={hofSummary.realmsWithHof}
           hofTotalEuRealms={hofSummary.totalEuRealms}
