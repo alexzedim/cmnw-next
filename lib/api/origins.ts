@@ -61,10 +61,7 @@ export async function serverFetch(
   const envApiUrl = (process.env.API_URL ?? "").replace(/\/+$/, "");
 
   const origins = envApiUrl
-    ? [
-        envApiUrl,
-        ...SERVER_ORIGINS.filter((o) => o !== envApiUrl),
-      ]
+    ? [envApiUrl, ...SERVER_ORIGINS.filter((o) => o !== envApiUrl)]
     : serverKnownGoodOrigin
       ? [
           serverKnownGoodOrigin,
