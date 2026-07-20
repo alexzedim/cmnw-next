@@ -10,14 +10,14 @@ import type {
   MetricSnapshotRecord,
   SnapshotKey,
 } from "@/lib/types/snapshot-metrics";
-import type {
-  AnalyticsMetricCategory,
-  AnalyticsMetricType,
-} from "@/constants/analytics-metrics";
 import type { RealmMetricKey } from "@/constants/realm-metrics";
 
 import useSWR from "swr";
 
+import {
+  AnalyticsMetricCategory,
+  AnalyticsMetricType,
+} from "@/constants/analytics-metrics";
 import { ENDPOINTS } from "@/constants/endpoints";
 import { clientFetch } from "@/lib/api/origins";
 import {
@@ -97,6 +97,64 @@ export function useRealmSnapshots(realm: Realm | null) {
   );
 
   return { data, error, isLoading };
+}
+
+const REGION_COMMODITIES_REALM_ID = 1;
+
+/**
+ * Fetches the region-wide unique commodity count from the synthetic
+ * region realm (realmId = 1), where Blizzard emits all COMMDTY auction-house
+ * rows. Commodities are region-wide, so this value is shared across every
+ * realm in the region and rendered as a constant per-realm "useful hack" on
+ * the realm market pulse card.
+ *
+ * Returns `null` while loading or when the region snapshot is unavailable.
+ */
+export function useRegionCommoditiesCount() {
+  const { data, error, isLoading } = useSWR<number>(
+    "region-commodities-count",
+    async () => {
+      const url = new URL(ENDPOINTS.METRIC_SNAPSHOT_PATH, "http://localhost");
+
+      url.searchParams.set("category", AnalyticsMetricCategory.MARKET);
+      url.searchParams.set(
+        "metricType",
+        AnalyticsMetricType.BY_CONNECTED_REALM
+      );
+      url.searchParams.set("realmId", String(REGION_COMMODITIES_REALM_ID));
+
+      const pathWithQuery = `${url.pathname}${url.search}`;
+
+      try {
+        const response = await clientFetch(pathWithQuery, {
+          cache: "no-store",
+          headers: { Accept: "application/json" },
+        });
+
+        if (!response.ok) return 0;
+
+        const text = await response.text();
+
+        if (!text) return 0;
+
+        const payload = JSON.parse(text) as AnalyticsMetricSnapshotDto;
+        const snapshot = toAppHealthSnapshot(payload);
+        const value = snapshot.value as Record<string, unknown>;
+        const count = value.uniqueItemsCommdty;
+
+        return typeof count === "number" ? count : 0;
+      } catch {
+        return 0;
+      }
+    },
+    { revalidateOnFocus: false, revalidateOnReconnect: true }
+  );
+
+  return {
+    data: typeof data === "number" ? data : null,
+    error,
+    isLoading,
+  };
 }
 
 const buildHistoryPath = (

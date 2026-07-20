@@ -8,6 +8,7 @@ import {
   AnalyticsMetricType,
 } from "@/constants/analytics-metrics";
 import { GoldValue } from "@/components/home/gold-value";
+import { useRegionCommoditiesCount } from "@/hooks/useRealmMetrics";
 import { buildSnapshotKey } from "@/lib/utils/snapshot-formatters";
 import { fontJetBrains } from "@/config/fonts";
 import { useI18n } from "@/lib/i18n/context";
@@ -20,6 +21,11 @@ interface RealmMarketPulseProps {
 /**
  * Extracts numeric fields from a connected-realm market snapshot.
  * Value shape: { auctions, volume, uniqueItemsAuctions, uniqueItemsCommdty }
+ *
+ * `uniqueItemsCommdty` is intentionally not read here — commodities are
+ * region-wide (Blizzard emits all COMMDTY rows on the synthetic region realm,
+ * id = 1), so every per-realm snapshot reports 0 for it. The region-wide count
+ * is fetched separately via `useRegionCommoditiesCount()` and substituted in.
  */
 const extractMarketValue = (
   snapshot: unknown
@@ -27,13 +33,11 @@ const extractMarketValue = (
   auctions: number;
   volume: number;
   uniqueItemsAuctions: number;
-  uniqueItemsCommdty: number;
 } => {
   if (!snapshot || typeof snapshot !== "object") {
     return {
       auctions: 0,
       uniqueItemsAuctions: 0,
-      uniqueItemsCommdty: 0,
       volume: 0,
     };
   }
@@ -44,7 +48,6 @@ const extractMarketValue = (
     return {
       auctions: 0,
       uniqueItemsAuctions: 0,
-      uniqueItemsCommdty: 0,
       volume: 0,
     };
   }
@@ -55,8 +58,6 @@ const extractMarketValue = (
     auctions: typeof v.auctions === "number" ? v.auctions : 0,
     uniqueItemsAuctions:
       typeof v.uniqueItemsAuctions === "number" ? v.uniqueItemsAuctions : 0,
-    uniqueItemsCommdty:
-      typeof v.uniqueItemsCommdty === "number" ? v.uniqueItemsCommdty : 0,
     volume: typeof v.volume === "number" ? v.volume : 0,
   };
 };
@@ -74,8 +75,12 @@ export const RealmMarketPulse = ({
   ) as SnapshotKey;
 
   const market = snapshots?.[marketKey] ?? null;
-  const { auctions, volume, uniqueItemsAuctions, uniqueItemsCommdty } =
-    extractMarketValue(market);
+  const { auctions, volume, uniqueItemsAuctions } = extractMarketValue(market);
+
+  // Commodities are region-wide — substitute the region-wide count (from the
+  // synthetic region realm id = 1) for the always-zero per-realm value.
+  const { data: regionCommoditiesCount } = useRegionCommoditiesCount();
+  const uniqueItemsCommdty = regionCommoditiesCount ?? 0;
 
   return (
     <div className="card-surface p-6 flex flex-col gap-4">
