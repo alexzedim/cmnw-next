@@ -269,6 +269,22 @@ export function useRaidLogsStats(realm: Realm | null) {
 }
 
 export interface RealmDensity {
+  /**
+   * Real character population from the CHARACTERS/TOTAL snapshot, keyed on
+   * realm.id. `null` while loading or when no snapshot is available.
+   */
+  characterCount: number | null;
+  /**
+   * Unique players population (distinct hash_a values) from the
+   * CHARACTERS/UNIQUE_PLAYERS snapshot, keyed on realm.id. `null` while
+   * loading or when no snapshot is available.
+   */
+  uniquePlayersCount: number | null;
+  /**
+   * Total guild count from the GUILDS/TOTAL snapshot, keyed on realm.id.
+   * `null` while loading or when no snapshot is available.
+   */
+  guildCount: number | null;
   hofGuildCount: number;
   raidLogsIndexed: number;
   raidLogsTotal: number;
@@ -277,6 +293,9 @@ export interface RealmDensity {
 export type RealmDensityMap = Map<number, RealmDensity>;
 
 const EMPTY_DENSITY: RealmDensity = {
+  characterCount: null,
+  uniquePlayersCount: null,
+  guildCount: null,
   hofGuildCount: 0,
   raidLogsIndexed: 0,
   raidLogsTotal: 0,
@@ -312,12 +331,14 @@ const runWithConcurrency = async <T>(
 };
 
 /**
- * Fetches Hall of Fame guild count and raid-log indexing stats for every realm
- * in the list, batched at bounded concurrency. SWR-cached as one logical fetch
- * keyed on the sorted realm-id list.
+ * Fetches character population, unique account population, guild count, Hall of
+ * Fame guild count, and raid-log indexing stats for every realm in the list,
+ * batched at bounded concurrency. SWR-cached as one logical fetch keyed on the
+ * sorted realm-id list.
  *
- * Realms without a Hall of Fame snapshot (no HoF presence) resolve to
- * `{ hofGuildCount: 0 }` and the raid-log stats default to zeros on failure.
+ * Realms without a snapshot resolve `characterCount`/`uniquePlayersCount`/
+ * `guildCount` to their empty values and the raid-log stats default to zeros
+ * on failure.
  */
 export function useRealmsDensity(realms: ReadonlyArray<Realm>) {
   const key = realms
@@ -331,6 +352,52 @@ export function useRealmsDensity(realms: ReadonlyArray<Realm>) {
       const tasks = realms.map(
         (realm) => async (): Promise<[number, RealmDensity]> => {
           const realmId = realm.id;
+
+          // Character population snapshot — keyed on realm.id.
+          const populationUrl = new URL(
+            ENDPOINTS.METRIC_SNAPSHOT_PATH,
+            "http://localhost"
+          );
+
+          populationUrl.searchParams.set(
+            "category",
+            AnalyticsMetricCategory.CHARACTERS
+          );
+          populationUrl.searchParams.set(
+            "metricType",
+            AnalyticsMetricType.TOTAL
+          );
+          populationUrl.searchParams.set("realmId", String(realmId));
+
+          // Unique account population snapshot (distinct hash_a) — keyed on
+          // realm.id.
+          const uniquePopulationUrl = new URL(
+            ENDPOINTS.METRIC_SNAPSHOT_PATH,
+            "http://localhost"
+          );
+
+          uniquePopulationUrl.searchParams.set(
+            "category",
+            AnalyticsMetricCategory.CHARACTERS
+          );
+          uniquePopulationUrl.searchParams.set(
+            "metricType",
+            AnalyticsMetricType.UNIQUE_PLAYERS
+          );
+          uniquePopulationUrl.searchParams.set("realmId", String(realmId));
+
+          // Guild totals snapshot — keyed on realm.id.
+          const guildsUrl = new URL(
+            ENDPOINTS.METRIC_SNAPSHOT_PATH,
+            "http://localhost"
+          );
+
+          guildsUrl.searchParams.set(
+            "category",
+            AnalyticsMetricCategory.GUILDS
+          );
+          guildsUrl.searchParams.set("metricType", AnalyticsMetricType.TOTAL);
+          guildsUrl.searchParams.set("realmId", String(realmId));
 
           // Hall of Fame snapshot — keyed on realm.id.
           const hofUrl = new URL(
@@ -350,7 +417,28 @@ export function useRealmsDensity(realms: ReadonlyArray<Realm>) {
 
           raidUrl.searchParams.set("realmSlug", realm.slug);
 
-          const [hofRes, raidRes] = await Promise.allSettled([
+          const [
+            populationRes,
+            uniquePopulationRes,
+            guildsRes,
+            hofRes,
+            raidRes,
+          ] = await Promise.allSettled([
+            clientFetch(`${populationUrl.pathname}${populationUrl.search}`, {
+              cache: "no-store",
+              headers: { Accept: "application/json" },
+            }),
+            clientFetch(
+              `${uniquePopulationUrl.pathname}${uniquePopulationUrl.search}`,
+              {
+                cache: "no-store",
+                headers: { Accept: "application/json" },
+              }
+            ),
+            clientFetch(`${guildsUrl.pathname}${guildsUrl.search}`, {
+              cache: "no-store",
+              headers: { Accept: "application/json" },
+            }),
             clientFetch(`${hofUrl.pathname}${hofUrl.search}`, {
               cache: "no-store",
               headers: { Accept: "application/json" },
@@ -361,6 +449,51 @@ export function useRealmsDensity(realms: ReadonlyArray<Realm>) {
             }),
           ]);
 
+          let characterCount: number | null = null;
+
+          if (populationRes.status === "fulfilled" && populationRes.value.ok) {
+            const payload = (await populationRes.value
+              .json()
+              .catch(() => null)) as {
+              value?: Record<string, unknown>;
+            } | null;
+
+            const count = payload?.value?.count;
+
+            characterCount = typeof count === "number" ? count : null;
+          }
+
+          let uniquePlayersCount: number | null = null;
+
+          if (
+            uniquePopulationRes.status === "fulfilled" &&
+            uniquePopulationRes.value.ok
+          ) {
+            const payload = (await uniquePopulationRes.value
+              .json()
+              .catch(() => null)) as {
+              value?: Record<string, unknown>;
+            } | null;
+
+            const count = payload?.value?.count;
+
+            uniquePlayersCount = typeof count === "number" ? count : null;
+          }
+
+          let guildCount: number | null = null;
+
+          if (guildsRes.status === "fulfilled" && guildsRes.value.ok) {
+            const payload = (await guildsRes.value
+              .json()
+              .catch(() => null)) as {
+              value?: Record<string, unknown>;
+            } | null;
+
+            const count = payload?.value?.count;
+
+            guildCount = typeof count === "number" ? count : null;
+          }
+
           let hofGuildCount = 0;
 
           if (hofRes.status === "fulfilled" && hofRes.value.ok) {
@@ -368,9 +501,9 @@ export function useRealmsDensity(realms: ReadonlyArray<Realm>) {
               value?: Record<string, unknown>;
             } | null;
 
-            const guildCount = payload?.value?.guildCount;
+            const count = payload?.value?.guildCount;
 
-            hofGuildCount = typeof guildCount === "number" ? guildCount : 0;
+            hofGuildCount = typeof count === "number" ? count : 0;
           }
 
           let raidLogsIndexed = 0;
@@ -387,7 +520,14 @@ export function useRealmsDensity(realms: ReadonlyArray<Realm>) {
 
           return [
             realmId,
-            { hofGuildCount, raidLogsIndexed, raidLogsTotal },
+            {
+              characterCount,
+              uniquePlayersCount,
+              guildCount,
+              hofGuildCount,
+              raidLogsIndexed,
+              raidLogsTotal,
+            },
           ] as [number, RealmDensity];
         }
       );

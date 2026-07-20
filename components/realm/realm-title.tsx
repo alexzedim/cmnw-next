@@ -20,9 +20,10 @@ interface RealmTitleProps {
 }
 
 /**
- * Population status → accent color for the left border stripe.
+ * Capacity status (Blizzard realm-population tier) → accent color for the left
+ * border stripe.
  */
-const populationBorderColor = (populationStatus: string | null): string => {
+const capacityBorderColor = (populationStatus: string | null): string => {
   switch (populationStatus?.toLowerCase()) {
     case "full":
       return "rgb(220, 38, 38)";
@@ -62,7 +63,7 @@ const formatTimestamp = (
 export const RealmTitle = ({ realm }: RealmTitleProps) => {
   const { dict, locale } = useI18n();
   const r = dict.realm;
-  const borderColor = populationBorderColor(realm.populationStatus);
+  const borderColor = capacityBorderColor(realm.populationStatus);
 
   const [mounted, setMounted] = useState(false);
 
@@ -159,7 +160,7 @@ export const RealmTitle = ({ realm }: RealmTitleProps) => {
         )}
         {realm.populationStatus && (
           <div className="flex items-baseline gap-2">
-            <span className="text-foreground/40">{r.population}</span>
+            <span className="text-foreground/40">{r.capacity}</span>
             <span className="font-medium">{realm.populationStatus}</span>
           </div>
         )}
