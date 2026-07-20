@@ -117,7 +117,9 @@ export default async function GuildPage({ params }: GuildPageProps) {
           </>
         )}
 
-        {logs && logs.length > 0 && <LogTable logs={logs} />}
+        {logs && logs.length > 0 && (
+          <LogTable showCharacterColumn logs={logs} />
+        )}
       </div>
     </main>
   );

@@ -422,6 +422,7 @@
     "clear": "Clear",
     "compact": "Compact",
     "columnAction": "Event",
+    "columnCharacter": "Character",
     "columnOriginal": "From",
     "columnUpdated": "To",
     "columnTimestamp": "When",

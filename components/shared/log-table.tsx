@@ -18,11 +18,29 @@ type Log = CharacterGuildLog;
 
 interface LogTableProps {
   logs: Log[];
+  /**
+   * When true, renders a "Character" column linking each row's `characterGuid`
+   * to its character page. Used on the guild page, where each row may refer to
+   * a different character. Off by default since the character page shows logs
+   * for a single character.
+   */
+  showCharacterColumn?: boolean;
 }
 
 type SortDescriptor = {
-  column: "action" | "original" | "updated" | "createdAt";
+  column: "action" | "character" | "original" | "updated" | "createdAt";
   direction: "ascending" | "descending";
+};
+
+/**
+ * Formats a `name@realm` guid for display, showing just the character name with
+ * hyphens turned into spaces. Falls back to the raw value if the guid has no
+ * `@` delimiter. Matches the pattern used in hash-block-history.tsx.
+ */
+const formatCharacterName = (guid: string): string => {
+  const name = guid.split("@")[0];
+
+  return name ? name.replace(/-/g, " ") : guid;
 };
 
 /**
@@ -180,7 +198,10 @@ function ActionChip({
   );
 }
 
-export const LogTable = ({ logs }: LogTableProps) => {
+export const LogTable = ({
+  logs,
+  showCharacterColumn = false,
+}: LogTableProps) => {
   const [actionFilter, setActionFilter] = useState<Set<ACTION_LOG>>(
     new Set([])
   );
@@ -256,6 +277,23 @@ export const LogTable = ({ logs }: LogTableProps) => {
     );
   };
 
+  const renderCharacterCell = (log: Log) => {
+    const guid = log.characterGuid;
+
+    if (!isCharacterGuid(guid)) {
+      return <span className="text-sm text-muted">-</span>;
+    }
+
+    return (
+      <Link
+        className="text-sm font-medium underline decoration-dotted underline-offset-4 capitalize transition-colors hover:text-[var(--accent)]"
+        href={`/character/${encodeURIComponent(guid)}`}
+      >
+        {formatCharacterName(guid)}
+      </Link>
+    );
+  };
+
   const filteredLogs = useMemo(() => {
     let filtered = [...logs];
 
@@ -264,14 +302,15 @@ export const LogTable = ({ logs }: LogTableProps) => {
     }
 
     filtered.sort((a, b) => {
-      const aValue = a[sortDescriptor.column];
-      const bValue = b[sortDescriptor.column];
+      const col = sortDescriptor.column;
+      const aValue = col === "character" ? a.characterGuid : a[col];
+      const bValue = col === "character" ? b.characterGuid : b[col];
 
       if (aValue === undefined) return 1;
       if (bValue === undefined) return -1;
 
       const cmp =
-        sortDescriptor.column === "createdAt"
+        col === "createdAt"
           ? dayjs(aValue).valueOf() - dayjs(bValue).valueOf()
           : String(aValue).localeCompare(String(bValue));
 
@@ -289,6 +328,15 @@ export const LogTable = ({ logs }: LogTableProps) => {
     sortable: boolean;
   }> = [
     { key: "action", label: lt.columnAction, sortable: true },
+    ...(showCharacterColumn
+      ? [
+          {
+            key: "character" as const,
+            label: lt.columnCharacter,
+            sortable: true,
+          },
+        ]
+      : []),
     { key: "original", label: lt.columnOriginal, sortable: false },
     { key: "updated", label: lt.columnUpdated, sortable: false },
     { key: "createdAt", label: lt.columnTimestamp, sortable: true },
@@ -387,6 +435,7 @@ export const LogTable = ({ logs }: LogTableProps) => {
                     label={actionLabel(log.action)}
                   />
                 </td>
+                {showCharacterColumn && <td>{renderCharacterCell(log)}</td>}
                 <td>{displayValue(log, "original", { muted: true })}</td>
                 <td>{displayValue(log, "updated")}</td>
                 <td>
