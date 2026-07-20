@@ -191,21 +191,6 @@ export function useRealms(params?: RealmQueryParams | null) {
 }
 
 /**
- * Fetch realm population by realm ID
- * @param realmId - Realm ID
- */
-export function useRealmPopulation(realmId: string | null) {
-  return useSWR<string[]>(
-    realmId ? `/api/osint/realm/population/${realmId}` : null,
-    () => apiClient.get<string[]>(`/api/osint/realm/population/${realmId}`, {}),
-    {
-      ...defaultConfig,
-      revalidateOnMount: false,
-    }
-  );
-}
-
-/**
  * Utility Hooks
  */
 
