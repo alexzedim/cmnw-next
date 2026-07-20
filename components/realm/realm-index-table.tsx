@@ -39,6 +39,68 @@ type SortField =
   | "region"
   | "uniquePopulation";
 
+type BracketGlyph = "single" | "first" | "middle" | "last";
+
+/**
+ * Compares two realms by the active sort field. Returns a number usable
+ * directly by `Array.sort`. Density (per-realm metric counts) is needed for
+ * population/guild/hof/raidLogs fields and is closed over.
+ */
+const makeComparator =
+  (
+    field: SortField,
+    density: ReturnType<typeof useRealmsDensity>["data"]
+  ): ((a: Realm, b: Realm) => number) =>
+  (a, b) => {
+    switch (field) {
+      case "name":
+        return a.name.localeCompare(b.name);
+      case "region":
+        return a.region.localeCompare(b.region);
+      case "category":
+        return (a.category ?? "").localeCompare(b.category ?? "");
+      case "capacity":
+        return (
+          capacityRank(a.populationStatus) - capacityRank(b.populationStatus)
+        );
+      case "population":
+      case "characters":
+        return (
+          (density.get(a.id)?.characterCount ?? 0) -
+          (density.get(b.id)?.characterCount ?? 0)
+        );
+      case "uniquePopulation":
+        return (
+          (density.get(a.id)?.uniquePlayersCount ?? 0) -
+          (density.get(b.id)?.uniquePlayersCount ?? 0)
+        );
+      case "guilds":
+        return (
+          (density.get(a.id)?.guildCount ?? 0) -
+          (density.get(b.id)?.guildCount ?? 0)
+        );
+      case "connected":
+        return (
+          (a.connectedRealms?.length ?? 1) - (b.connectedRealms?.length ?? 1)
+        );
+      case "hof":
+        return (
+          (density.get(a.id)?.hofGuildCount ?? 0) -
+          (density.get(b.id)?.hofGuildCount ?? 0)
+        );
+      case "raidLogs": {
+        const aTotal = density.get(a.id)?.raidLogsTotal ?? 0;
+        const bTotal = density.get(b.id)?.raidLogsTotal ?? 0;
+        const aRatio =
+          aTotal > 0 ? (density.get(a.id)?.raidLogsIndexed ?? 0) / aTotal : 0;
+        const bRatio =
+          bTotal > 0 ? (density.get(b.id)?.raidLogsIndexed ?? 0) / bTotal : 0;
+
+        return aRatio - bRatio;
+      }
+    }
+  };
+
 export const RealmIndexTable = ({ realms }: RealmIndexTableProps) => {
   const { dict } = useI18n();
   const r = dict.realm;
@@ -50,6 +112,8 @@ export const RealmIndexTable = ({ realms }: RealmIndexTableProps) => {
   const [capacity, setCapacity] = useState("");
   const [sortField, setSortField] = useState<SortField>("population");
   const [sortAsc, setSortAsc] = useState(false);
+  const [grouped, setGrouped] = useState(true);
+  const [hoveredGroup, setHoveredGroup] = useState<number | null>(null);
 
   const regions = useMemo(
     () =>
@@ -82,7 +146,7 @@ export const RealmIndexTable = ({ realms }: RealmIndexTableProps) => {
   const filtered = useMemo(() => {
     const query = search.trim().toLowerCase();
 
-    const result = realms.filter((realm) => {
+    return realms.filter((realm) => {
       if (
         query &&
         !realm.name.toLowerCase().includes(query) &&
@@ -105,77 +169,196 @@ export const RealmIndexTable = ({ realms }: RealmIndexTableProps) => {
 
       return true;
     });
+  }, [realms, search, region, category, capacity]);
 
-    result.sort((a, b) => {
-      let cmp = 0;
+  /**
+   * Row model — the rendered table is a flat list of `Row`s. When grouping is
+   * on and an aglomeration has ≥2 visible members, a `subtotal` row carrying
+   * the group's summed metrics leads the group; `member` rows follow. Single-
+   * member groups and the ungrouped mode render one `member` row per realm.
+   */
+  type Row =
+    | { kind: "member"; realm: Realm; glyph: BracketGlyph; isPrimary: boolean }
+    | {
+        kind: "subtotal";
+        connectedRealmId: number;
+        primary: Realm;
+        members: Realm[];
+      };
 
-      switch (sortField) {
-        case "name":
-          cmp = a.name.localeCompare(b.name);
+  /**
+   * Summed metrics for an aglomeration. `uniquePlayersCount` is deliberately
+   * excluded — unique players are deduplicated across the whole group by the
+   * backend, so summing per-realm counts would double-count.
+   */
+  interface GroupSum {
+    characterCount: number;
+    guildCount: number;
+    hofGuildCount: number;
+    raidLogsIndexed: number;
+    raidLogsTotal: number;
+  }
 
-          break;
-        case "region":
-          cmp = a.region.localeCompare(b.region);
+  const sumGroup = (members: Realm[]): GroupSum => {
+    const sum: GroupSum = {
+      characterCount: 0,
+      guildCount: 0,
+      hofGuildCount: 0,
+      raidLogsIndexed: 0,
+      raidLogsTotal: 0,
+    };
 
-          break;
-        case "category":
-          cmp = (a.category ?? "").localeCompare(b.category ?? "");
+    for (const m of members) {
+      const d = density.get(m.id);
 
-          break;
-        case "capacity":
-          cmp =
-            capacityRank(a.populationStatus) - capacityRank(b.populationStatus);
+      sum.characterCount += d?.characterCount ?? 0;
+      sum.guildCount += d?.guildCount ?? 0;
+      sum.hofGuildCount += d?.hofGuildCount ?? 0;
+      sum.raidLogsIndexed += d?.raidLogsIndexed ?? 0;
+      sum.raidLogsTotal += d?.raidLogsTotal ?? 0;
+    }
 
-          break;
-        case "population":
-        case "characters":
-          cmp =
-            (density.get(a.id)?.characterCount ?? 0) -
-            (density.get(b.id)?.characterCount ?? 0);
+    return sum;
+  };
 
-          break;
-        case "uniquePopulation":
-          cmp =
-            (density.get(a.id)?.uniquePlayersCount ?? 0) -
-            (density.get(b.id)?.uniquePlayersCount ?? 0);
+  /**
+   * Primary realm per aglomeration — the member with the highest
+   * `characterCount` from the density snapshot, tie-broken by lowest `id`.
+   * Used to anchor each group when grouping is on and to sort groups.
+   */
+  const primaryByGroup = useMemo(() => {
+    const map = new Map<number, Realm>();
 
-          break;
-        case "guilds":
-          cmp =
-            (density.get(a.id)?.guildCount ?? 0) -
-            (density.get(b.id)?.guildCount ?? 0);
+    for (const realm of filtered) {
+      const current = map.get(realm.connectedRealmId);
 
-          break;
-        case "connected":
-          cmp =
-            (a.connectedRealms?.length ?? 1) - (b.connectedRealms?.length ?? 1);
+      if (!current) {
+        map.set(realm.connectedRealmId, realm);
 
-          break;
-        case "hof":
-          cmp =
-            (density.get(a.id)?.hofGuildCount ?? 0) -
-            (density.get(b.id)?.hofGuildCount ?? 0);
-
-          break;
-        case "raidLogs": {
-          const aTotal = density.get(a.id)?.raidLogsTotal ?? 0;
-          const bTotal = density.get(b.id)?.raidLogsTotal ?? 0;
-          const aRatio =
-            aTotal > 0 ? (density.get(a.id)?.raidLogsIndexed ?? 0) / aTotal : 0;
-          const bRatio =
-            bTotal > 0 ? (density.get(b.id)?.raidLogsIndexed ?? 0) / bTotal : 0;
-
-          cmp = aRatio - bRatio;
-
-          break;
-        }
+        continue;
       }
 
-      return sortAsc ? cmp : -cmp;
+      const aPop = density.get(realm.id)?.characterCount ?? 0;
+      const bPop = density.get(current.id)?.characterCount ?? 0;
+
+      if (aPop > bPop || (aPop === bPop && realm.id < current.id)) {
+        map.set(realm.connectedRealmId, realm);
+      }
+    }
+
+    return map;
+  }, [filtered, density]);
+
+  const rows: Row[] = useMemo(() => {
+    const cmpBase = makeComparator(sortField, density);
+    const cmp = (a: Realm, b: Realm) => (sortAsc ? 1 : -1) * cmpBase(a, b);
+
+    // Ungrouped: flat list, one member row per realm. Bracket glyph still
+    // reflects the realm's role within its aglomeration (as far as adjacency
+    // allows — filtering can split a group, in which case every surviving
+    // member renders ● since the subtotal row is suppressed).
+    if (!grouped) {
+      const byGroup = new Map<number, Realm[]>();
+
+      for (const realm of filtered) {
+        const arr = byGroup.get(realm.connectedRealmId) ?? [];
+
+        arr.push(realm);
+        byGroup.set(realm.connectedRealmId, arr);
+      }
+
+      return [...filtered].sort(cmp).map((realm) => {
+        const siblings = byGroup.get(realm.connectedRealmId) ?? [realm];
+        const primary =
+          primaryByGroup.get(realm.connectedRealmId) ?? siblings[0];
+
+        return {
+          kind: "member" as const,
+          realm,
+          glyph: siblings.length > 1 ? "middle" : "single",
+          isPrimary: realm.id === primary.id,
+        };
+      });
+    }
+
+    // Group realms by connectedRealmId, then sort groups by their primary
+    // realm, then sort members within each group by the active sort field.
+    const groups = new Map<number, Realm[]>();
+
+    for (const realm of filtered) {
+      const arr = groups.get(realm.connectedRealmId) ?? [];
+
+      arr.push(realm);
+      groups.set(realm.connectedRealmId, arr);
+    }
+
+    const groupList = [...groups.entries()].sort(([idA], [idB]) => {
+      const pa = primaryByGroup.get(idA);
+      const pb = primaryByGroup.get(idB);
+
+      if (!pa || !pb) return 0;
+
+      return cmp(pa, pb);
     });
 
-    return result;
-  }, [realms, search, region, category, capacity, sortField, sortAsc, density]);
+    const out: Row[] = [];
+
+    for (const [connectedRealmId, members] of groupList) {
+      const sortedMembers = [...members].sort(cmp);
+      const primary = primaryByGroup.get(connectedRealmId) ?? sortedMembers[0];
+
+      if (sortedMembers.length < 2) {
+        out.push({
+          kind: "member",
+          realm: sortedMembers[0],
+          glyph: "single",
+          isPrimary: true,
+        });
+
+        continue;
+      }
+
+      // Subtotal row leads the group; members follow. Each member's glyph is
+      // derived from its position within the visible group (mid → │, last → └).
+      out.push({
+        kind: "subtotal",
+        connectedRealmId,
+        primary,
+        members: sortedMembers,
+      });
+
+      sortedMembers.forEach((m, index) => {
+        out.push({
+          kind: "member",
+          realm: m,
+          glyph: index === sortedMembers.length - 1 ? "last" : "middle",
+          isPrimary: m.id === primary.id,
+        });
+      });
+    }
+
+    return out;
+  }, [filtered, grouped, sortField, sortAsc, density, primaryByGroup]);
+
+  /**
+   * Per-group sums, used to fill the subtotal row. Recomputed alongside the
+   * grouped row model; cheap because it only touches already-filtered realms.
+   */
+  const groupSums = useMemo(() => {
+    const map = new Map<number, GroupSum>();
+
+    for (const realm of filtered) {
+      const id = realm.connectedRealmId;
+
+      if (!map.has(id)) {
+        const members = filtered.filter((m) => m.connectedRealmId === id);
+
+        map.set(id, sumGroup(members));
+      }
+    }
+
+    return map;
+  }, [filtered, density]);
 
   const toggleSort = (field: SortField) => {
     if (sortField === field) {
@@ -225,6 +408,22 @@ export const RealmIndexTable = ({ realms }: RealmIndexTableProps) => {
       </th>
     );
 
+  const renderBracket = (glyph: BracketGlyph, isPrimary: boolean) => {
+    const accent = isPrimary ? "text-[var(--primary)]" : "text-foreground/40";
+    const muted = "text-foreground/40";
+
+    switch (glyph) {
+      case "single":
+        return <span className={accent}>●</span>;
+      case "first":
+        return <span className={accent}>┌</span>;
+      case "last":
+        return <span className="text-[var(--primary)]">└</span>;
+      case "middle":
+        return <span className={muted}>│</span>;
+    }
+  };
+
   const t = r.tooltips;
 
   const regionsMap = r.regions as Record<string, string>;
@@ -238,7 +437,7 @@ export const RealmIndexTable = ({ realms }: RealmIndexTableProps) => {
 
   return (
     <div className="card-surface p-6">
-      <div className="mb-4 grid grid-cols-1 gap-3 md:grid-cols-5">
+      <div className="mb-4 grid grid-cols-2 gap-3 md:grid-cols-6">
         <input
           className="rounded-lg border border-[var(--border)] bg-[var(--bg)] px-3 py-2 text-sm outline-none md:col-span-2"
           placeholder={r.indexSearchPlaceholder}
@@ -282,12 +481,24 @@ export const RealmIndexTable = ({ realms }: RealmIndexTableProps) => {
             </option>
           ))}
         </select>
+        <button
+          className="btn btn-sm btn-ghost justify-center gap-1.5"
+          title={r.indexGroupToggle}
+          type="button"
+          onClick={() => setGrouped((prev) => !prev)}
+        >
+          <span className="font-mono text-sm text-foreground/50">├</span>
+          <span className="text-[var(--primary)]">
+            {grouped ? r.indexGroupOn : r.indexGroupOff}
+          </span>
+        </button>
       </div>
 
       <div className="table-container">
         <table className="table">
           <thead>
             <tr>
+              <th aria-label="" className="w-10" />
               {columnHeader("name", r.title)}
               {columnHeader("region", r.region)}
               {columnHeader("category", r.category)}
@@ -309,7 +520,88 @@ export const RealmIndexTable = ({ realms }: RealmIndexTableProps) => {
             </tr>
           </thead>
           <tbody>
-            {filtered.map((realm) => {
+            {rows.map((row) => {
+              if (row.kind === "subtotal") {
+                const sum = groupSums.get(row.connectedRealmId);
+                const raidPct =
+                  sum && sum.raidLogsTotal > 0
+                    ? Math.round(
+                        (sum.raidLogsIndexed / sum.raidLogsTotal) * 100
+                      )
+                    : null;
+
+                return (
+                  <tr
+                    key={`subtotal-${row.connectedRealmId}`}
+                    className="aglo-subtotal"
+                    data-aglo={row.connectedRealmId}
+                    onMouseEnter={() => setHoveredGroup(row.connectedRealmId)}
+                    onMouseLeave={() => setHoveredGroup(null)}
+                  >
+                    <td className="w-10 text-center font-mono text-sm text-[var(--primary)]">
+                      ┌
+                    </td>
+                    <td>
+                      <Link
+                        className="font-medium text-[var(--primary)] underline-offset-2 hover:underline"
+                        href={`/realm/${row.primary.slug}`}
+                      >
+                        {row.primary.name}
+                      </Link>
+                      <span className="ml-2 text-xs text-foreground/40">
+                        {row.members.length} {r.indexGroupMembers}
+                      </span>
+                    </td>
+                    <td>{localizeRegion(row.primary.region)}</td>
+                    <td>
+                      {row.primary.category
+                        ? localizeCategory(row.primary.category)
+                        : "—"}
+                    </td>
+                    <td>
+                      {row.primary.populationStatus
+                        ? localizePopulationStatus(row.primary.populationStatus)
+                        : "—"}
+                    </td>
+                    <td className="font-mono text-sm">
+                      {densityLoading
+                        ? "…"
+                        : (sum?.characterCount ?? 0).toLocaleString()}
+                    </td>
+                    <td className="font-mono text-sm text-foreground/30">—</td>
+                    <td className="font-mono text-sm">
+                      {densityLoading
+                        ? "…"
+                        : (sum?.guildCount ?? 0).toLocaleString()}
+                    </td>
+                    <td>{row.members.length}</td>
+                    <td className="font-mono text-sm">
+                      {densityLoading
+                        ? "…"
+                        : (sum?.hofGuildCount ?? 0) > 0
+                          ? (sum?.hofGuildCount ?? 0).toLocaleString()
+                          : "—"}
+                    </td>
+                    <td>
+                      {densityLoading || raidPct === null ? (
+                        "—"
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono text-xs">{raidPct}%</span>
+                          <div className="h-1.5 w-12 overflow-hidden rounded-full bg-foreground/10">
+                            <div
+                              className="h-full rounded-full bg-[var(--primary)]"
+                              style={{ width: `${raidPct}%` }}
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                );
+              }
+
+              const realm = row.realm;
               const d = density.get(realm.id);
               const characterCount = d?.characterCount ?? null;
               const uniquePlayersCount = d?.uniquePlayersCount ?? null;
@@ -321,7 +613,21 @@ export const RealmIndexTable = ({ realms }: RealmIndexTableProps) => {
               const raidPct = Math.round(raidRatio * 100);
 
               return (
-                <tr key={realm.id}>
+                <tr
+                  key={realm.id}
+                  className={
+                    hoveredGroup !== null &&
+                    hoveredGroup === realm.connectedRealmId
+                      ? "aglo-hover"
+                      : undefined
+                  }
+                  data-aglo={realm.connectedRealmId}
+                  onMouseEnter={() => setHoveredGroup(realm.connectedRealmId)}
+                  onMouseLeave={() => setHoveredGroup(null)}
+                >
+                  <td className="w-10 text-center font-mono text-sm">
+                    {renderBracket(row.glyph, row.isPrimary)}
+                  </td>
                   <td>
                     <Link
                       className="font-medium text-[var(--primary)] underline-offset-2 hover:underline"

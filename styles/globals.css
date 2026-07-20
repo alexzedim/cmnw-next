@@ -100,6 +100,20 @@
   .table tbody tr:hover {
     background: color-mix(in oklab, var(--bg-elevated), var(--mix-toward) 2%);
   }
+  .table tbody tr.aglo-hover {
+    background: color-mix(in oklab, var(--bg-elevated), var(--mix-toward) 4%);
+  }
+  .table tbody tr.aglo-subtotal td {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    background: color-mix(in oklab, var(--bg-elevated), transparent 78%);
+    border-top: 1px solid color-mix(in oklab, var(--border), var(--mix-toward) 12%);
+    color: var(--text);
+    font-weight: 600;
+  }
+  .table tbody tr.aglo-subtotal td:first-child {
+    border-left: 2px solid var(--primary);
+  }
   .table td {
     color: var(--text-muted);
   }
