@@ -1,10 +1,5 @@
 export type BlockAction =
-  | "GENESIS"
-  | "JOIN"
-  | "LEAVE"
-  | "MIGRATE"
-  | "HASH_A_CHANGE"
-  | "HASH_B_CHANGE";
+  "GENESIS" | "JOIN" | "LEAVE" | "MIGRATE" | "HASH_A_CHANGE" | "HASH_B_CHANGE";
 
 export interface Block {
   id: string;

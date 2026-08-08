@@ -7,11 +7,7 @@ import { useState } from "react";
 import { useI18n } from "@/lib/i18n/context";
 
 export type SortOption =
-  | "name"
-  | "level"
-  | "itemLevel"
-  | "achievementPoints"
-  | "realmName";
+  "name" | "level" | "itemLevel" | "achievementPoints" | "realmName";
 
 interface HashCharactersSortProps {
   characters: Character[];

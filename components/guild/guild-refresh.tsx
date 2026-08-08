@@ -214,8 +214,7 @@ export const GuildRefresh = ({ guid, status }: GuildRefreshProps) => {
 
     const terminal = matching[matching.length - 1];
     const meta = terminal.meta as
-      | { status?: string; phase?: string }
-      | undefined;
+      { status?: string; phase?: string } | undefined;
 
     // Decode the 5-char guild status string from the terminal event.
     if (typeof meta?.status === "string" && meta.status.length > 0) {

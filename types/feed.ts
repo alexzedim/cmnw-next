@@ -22,12 +22,7 @@ export enum FeedStatus {
 }
 
 export type FeedStatusColor =
-  | "green"
-  | "yellow"
-  | "blue"
-  | "cyan"
-  | "red"
-  | "magenta";
+  "green" | "yellow" | "blue" | "cyan" | "red" | "magenta";
 
 export interface FeedStatusMeta {
   icon: string;
@@ -186,11 +181,7 @@ export const decodeGuildStatusString = (
 };
 
 export type RefreshPhase =
-  | "started"
-  | "endpoint"
-  | "finished"
-  | "skipped"
-  | "error";
+  "started" | "endpoint" | "finished" | "skipped" | "error";
 
 export interface CharacterRefreshMeta {
   sessionId: string;

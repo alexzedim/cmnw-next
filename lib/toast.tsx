@@ -6,12 +6,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
 export type ToastSeverity =
-  | "default"
-  | "primary"
-  | "secondary"
-  | "success"
-  | "warning"
-  | "danger";
+  "default" | "primary" | "secondary" | "success" | "warning" | "danger";
 
 export interface ToastItem {
   id: number;

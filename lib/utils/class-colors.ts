@@ -1,12 +1,7 @@
 import { WowClass } from "@/lib/types";
 
 type ChipColor =
-  | "default"
-  | "primary"
-  | "secondary"
-  | "success"
-  | "warning"
-  | "danger";
+  "default" | "primary" | "secondary" | "success" | "warning" | "danger";
 
 const CLASS_COLORS: Record<WowClass, ChipColor> = {
   [WowClass.DeathKnight]: "danger", // #C41E3A - red
