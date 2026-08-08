@@ -12,7 +12,8 @@
     "start": "next start",
     "lint": "eslint --fix",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "postinstall": "node scripts/shim-tsc.mjs"
   },
   "dependencies": {
     "@formatjs/intl-localematcher": "^0.8.2",
