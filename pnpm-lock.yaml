@@ -60,8 +60,8 @@ importers:
         specifier: 3.9.10
         version: 3.9.10(react@19.2.8)
       '@react-aria/visually-hidden':
-        specifier: 3.8.31
-        version: 3.8.31(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        specifier: 3.9.1
+        version: 3.9.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@tremor/react':
         specifier: 3.18.7
         version: 3.18.7(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -1290,6 +1290,12 @@ packages:
 
   '@react-aria/visually-hidden@3.8.31':
     resolution: {integrity: sha512-RTOHHa4n56a9A3criThqFHBifvZoV71+MCkSuNP2cKO662SUWjqKkd0tJt/mBRMEJPkys8K7Eirp6T8Wt5FFRA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+      react-dom: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-aria/visually-hidden@3.9.1':
+    resolution: {integrity: sha512-PWuth+NTmUiBJAIyrfk7dJ5BxOBupDt0iFGlBiYr5FElSYvwN9LAk1kgkzm6hT2qzq4FmYdQgBSPkGeaxOui6w==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
       react-dom: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
@@ -5098,7 +5104,7 @@ snapshots:
 
   '@react-aria/i18n@3.12.8(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
     dependencies:
-      '@internationalized/date': 3.8.0
+      '@internationalized/date': 3.12.3
       '@internationalized/message': 3.1.10
       '@internationalized/number': 3.6.7
       '@internationalized/string': 3.2.10
@@ -5191,7 +5197,7 @@ snapshots:
       '@react-aria/interactions': 3.25.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@react-aria/ssr': 3.9.10(react@19.2.8)
       '@react-aria/utils': 3.28.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
-      '@react-aria/visually-hidden': 3.8.31(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      '@react-aria/visually-hidden': 3.9.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@react-stately/overlays': 3.7.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@react-types/button': 3.16.0(@react-spectrum/provider@3.11.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@react-types/overlays': 3.10.0(@react-spectrum/provider@3.11.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -5209,7 +5215,7 @@ snapshots:
       '@react-aria/interactions': 3.27.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@react-aria/ssr': 3.9.10(react@19.2.8)
       '@react-aria/utils': 3.34.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
-      '@react-aria/visually-hidden': 3.8.31(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      '@react-aria/visually-hidden': 3.9.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@react-stately/flags': 3.2.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@react-stately/overlays': 3.7.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@react-types/button': 3.16.0(@react-spectrum/provider@3.11.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -5358,6 +5364,13 @@ snapshots:
       '@react-types/shared': 3.33.1(react@19.2.8)
       '@swc/helpers': 0.5.23
       react: 19.2.8
+      react-dom: 19.2.8(react@19.2.8)
+
+  '@react-aria/visually-hidden@3.9.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
+    dependencies:
+      '@swc/helpers': 0.5.23
+      react: 19.2.8
+      react-aria: 3.51.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       react-dom: 19.2.8(react@19.2.8)
 
   '@react-spectrum/button@3.18.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
@@ -5591,7 +5604,7 @@ snapshots:
 
   '@react-types/datepicker@3.12.0(@react-spectrum/provider@3.11.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
     dependencies:
-      '@internationalized/date': 3.8.0
+      '@internationalized/date': 3.12.3
       '@react-types/calendar': 3.9.0(@react-spectrum/provider@3.11.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@react-types/overlays': 3.10.0(@react-spectrum/provider@3.11.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@react-types/shared': 3.33.1(react@19.2.8)
