@@ -1,0 +1,55 @@
+version: 2
+
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+    groups:
+      next-and-react:
+        patterns:
+          - "next"
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
+      tailwind-and-postcss:
+        patterns:
+          - "tailwindcss"
+          - "@tailwindcss/postcss"
+          - "postcss"
+          - "autoprefixer"
+      heroui:
+        patterns:
+          - "@heroui/*"
+      tooling:
+        patterns:
+          - "eslint*"
+          - "prettier"
+          - "typescript"
+          - "@typescript/*"
+          - "@types/*"
+        exclude-patterns:
+          - "@types/react"
+          - "@types/react-dom"
+          - "@types/node"
+
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "docker"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "github-actions"
