@@ -121,8 +121,8 @@ importers:
         specifier: 16.2.2
         version: 16.2.2
       '@react-types/shared':
-        specifier: 3.33.1
-        version: 3.33.1(react@19.2.8)
+        specifier: 3.36.1
+        version: 3.36.1(react@19.2.8)
       '@tailwindcss/postcss':
         specifier: ^4.2.2
         version: 4.3.3
