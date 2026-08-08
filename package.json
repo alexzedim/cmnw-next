@@ -31,7 +31,7 @@
     "@heroui/system": "2.4.28",
     "@heroui/theme": "2.4.26",
     "@heroui/toast": "2.0.9",
-    "@hookform/resolvers": "5.2.2",
+    "@hookform/resolvers": "5.7.1",
     "@react-aria/ssr": "3.9.10",
     "@react-aria/visually-hidden": "3.8.31",
     "@tremor/react": "3.18.7",
