@@ -4,13 +4,16 @@ import { cookies, headers } from "next/headers";
 import { match } from "@formatjs/intl-localematcher";
 import Negotiator from "negotiator";
 
+import en from "./en.json";
+import ru from "./ru.json";
+
 export type Locale = "en" | "ru";
 export const locales: Locale[] = ["en", "ru"];
 export const defaultLocale: Locale = "en";
 
 const dictionaries = {
-  en: () => import("./en.json").then((m) => m.default),
-  ru: () => import("./ru.json").then((m) => m.default),
+  en: () => Promise.resolve(en),
+  ru: () => Promise.resolve(ru),
 };
 
 export type Dictionary = Awaited<ReturnType<typeof getDictionary>>;
