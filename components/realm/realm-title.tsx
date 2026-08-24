@@ -12,7 +12,7 @@ import Link from "next/link";
 import { NAMING_CONSTANTS } from "@/constants";
 import { fontJetBrains } from "@/config/fonts";
 import { useI18n } from "@/lib/i18n/context";
-import { romanize } from "@/lib/utils/romanize";
+import { useRomanize } from "@/hooks/use-romanize";
 
 dayjs.extend(relativeTime);
 
@@ -64,6 +64,7 @@ const formatTimestamp = (
 export const RealmTitle = ({ realm }: RealmTitleProps) => {
   const { dict, locale } = useI18n();
   const r = dict.realm;
+  const trendsTitle = useRomanize(r.trends);
   const borderColor = capacityBorderColor(realm.populationStatus);
 
   const [mounted, setMounted] = useState(false);
@@ -186,7 +187,7 @@ export const RealmTitle = ({ realm }: RealmTitleProps) => {
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         {/* Left: data freshness */}
         <div className="lg:col-span-2">
-          {sectionLabel(romanize(r.trends))}
+          {sectionLabel(trendsTitle)}
           <dl className="grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-4">
             {freshness.map(({ key, label, ts }) => (
               <div key={key}>

@@ -61,13 +61,19 @@ const STYLED = new Set([
   ...Object.values(CURRENCY_SWAPS),
 ]);
 
-interface RomanizeOptions {
+export interface RomanizeOptions {
   /** enable currency swaps (S -> $, E -> €, Y -> ¥) for market/auction vocabulary (default false) */
   market?: boolean;
   /** words shorter than this are left untouched (default 4) */
   minWordLength?: number;
   /** chance for the 1st, 2nd and rare 3rd swap within one word (default [0.92, 0.18, 0.05]) */
   swapChances?: number[];
+  /**
+   * Mixes an extra value into the seed so the same word can re-roll into a
+   * different styling per salt (e.g. a fresh random salt on each page open).
+   * Without a salt the styling is stable for a given word + options.
+   */
+  salt?: string;
 }
 
 const letterWeight = (letter: string, market: boolean): number => {
@@ -109,15 +115,24 @@ const romanizeWord = (
     market = false,
     minWordLength = 4,
     swapChances = [0.92, 0.18, 0.05],
+    salt,
   }: RomanizeOptions
 ): string => {
   if (word.length < minWordLength) {
     return word;
   }
 
+  // stylization targets ALL-CAPS titles only; mixed/lowercase tokens
+  // (e.g. the "endgame+" suffix in "CHARACTERS @ endgame+") pass through
+  if (word !== word.toUpperCase()) {
+    return word;
+  }
+
   const swaps = market ? { ...SWAPS, ...CURRENCY_SWAPS } : SWAPS;
-  // market mode re-seeds so currency words get a fresh, distinct roll
-  const rand = mulberry32(fnv1a(market ? `${word}¤` : word));
+  // market mode re-seeds so currency words get a fresh, distinct roll;
+  // a salt re-rolls the word entirely (e.g. once per page open)
+  const seedKey = `${salt ?? ""}${market ? "¤" : ""}${word}`;
+  const rand = mulberry32(fnv1a(seedKey));
   const letters = [...word];
   const swappedLetters = new Set<string>();
 
@@ -174,4 +189,32 @@ export function romanize(text: string, options?: RomanizeOptions): string {
     .split(/(\s+|\p{P}+)/u)
     .map((part) => romanizeWord(part, options ?? {}))
     .join("");
+}
+
+// dictionary title keys that belong to market/auction vocabulary
+// and therefore stylize with currency swaps
+export const MARKET_TITLE_KEYS = new Set([
+  "marketTitle",
+  "marketFlow",
+  "contractsBoard",
+  "marketVolumeTrend",
+  "marketPulse",
+]);
+
+/**
+ * Stylizes a dictionary title looked up by its key, enabling currency
+ * swaps automatically for market-related keys.
+ *
+ * @example romanizeTitle("guildsTitle", "GUILDS") // "GUILΔS"
+ * @example romanizeTitle("marketTitle", "AUCTIONS") // "AUCTION$"
+ */
+export function romanizeTitle(
+  key: string,
+  title: string,
+  salt?: string
+): string {
+  return romanize(title, {
+    market: MARKET_TITLE_KEYS.has(key),
+    salt,
+  });
 }

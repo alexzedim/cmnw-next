@@ -10,7 +10,7 @@ import {
 import { GoldValue } from "@/components/home/gold-value";
 import { useRegionCommoditiesCount } from "@/hooks/useRealmMetrics";
 import { buildSnapshotKey } from "@/lib/utils/snapshot-formatters";
-import { romanize } from "@/lib/utils/romanize";
+import { useRomanize } from "@/hooks/use-romanize";
 import { fontJetBrains } from "@/config/fonts";
 import { useI18n } from "@/lib/i18n/context";
 
@@ -68,6 +68,9 @@ export const RealmMarketPulse = ({
   isLoading,
 }: RealmMarketPulseProps) => {
   const { dict } = useI18n();
+  const marketPulseTitle = useRomanize(dict.realm.marketPulse, {
+    market: true,
+  });
   const r = dict.realm;
 
   const marketKey = buildSnapshotKey(
@@ -88,7 +91,7 @@ export const RealmMarketPulse = ({
       <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider opacity-50">
         <div className="size-1.5 rounded-full bg-[var(--primary)]" />
         <span style={{ fontFamily: fontJetBrains.style.fontFamily }}>
-          {romanize(r.marketPulse, { market: true })}
+          {marketPulseTitle}
         </span>
       </div>
       <p className="text-xs text-foreground/50">{r.connectedRealmMarket}</p>

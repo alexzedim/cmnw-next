@@ -13,7 +13,8 @@ import {
   buildSnapshotKey,
 } from "@/lib/utils/snapshot-formatters";
 import { useI18n } from "@/lib/i18n/context";
-import { romanize } from "@/lib/utils/romanize";
+import { useRandomSalt } from "@/hooks/use-romanize";
+import { romanize, romanizeTitle } from "@/lib/utils/romanize";
 import { fontJetBrains } from "@/config/fonts";
 import { GoldValue } from "@/components/home/gold-value";
 
@@ -44,6 +45,7 @@ export function LiveMetrics({
   const { dict, locale } = useI18n();
   const lm = dict.liveMetrics;
   const sm = dict.snapshotMetrics;
+  const salt = useRandomSalt();
 
   return (
     <section className="section section-tight-bottom container mx-auto px-6">
@@ -77,13 +79,17 @@ export function LiveMetrics({
             const entries = getSnapshotEntries(snapshot, 4, locale);
             const title: string =
               {
-                charactersTitle: romanize(lm.charactersTitle),
-                guildsTitle: romanize(lm.guildsTitle),
-                marketTitle: romanize(lm.marketTitle, { market: true }),
+                charactersTitle: romanize(lm.charactersTitle, { salt }),
+                guildsTitle: romanize(lm.guildsTitle, { salt }),
+                marketTitle: romanize(lm.marketTitle, { market: true, salt }),
               }[titleKey] ??
-              (dict.snapshotMetrics[
-                titleKey as keyof typeof dict.snapshotMetrics
-              ] as string);
+              romanizeTitle(
+                titleKey,
+                dict.snapshotMetrics[
+                  titleKey as keyof typeof dict.snapshotMetrics
+                ] as string,
+                salt
+              );
 
             return (
               <div

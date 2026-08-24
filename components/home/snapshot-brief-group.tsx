@@ -14,6 +14,8 @@ import {
   priceRangeRank,
 } from "@/lib/utils/snapshot-formatters";
 import { useI18n } from "@/lib/i18n/context";
+import { useRandomSalt } from "@/hooks/use-romanize";
+import { romanizeTitle } from "@/lib/utils/romanize";
 import { fontJetBrains } from "@/config/fonts";
 import { GoldValue } from "@/components/home/gold-value";
 import { SigmaValue } from "@/components/home/sigma-value";
@@ -32,8 +34,13 @@ export function SnapshotBriefGroup({
   const { dict, locale } = useI18n();
   const sb = dict.snapshotBriefs;
   const sm = dict.snapshotMetrics;
+  const salt = useRandomSalt();
 
-  const groupTitle = sm[group.titleKey as keyof typeof sm] as string;
+  const groupTitle = romanizeTitle(
+    group.titleKey,
+    sm[group.titleKey as keyof typeof sm] as string,
+    salt
+  );
 
   return (
     <article
