@@ -91,6 +91,7 @@ export const SNAPSHOT_HIGHLIGHT_GROUPS: readonly SnapshotHighlightGroup[] = [
         labelKey: "topByAge" as const,
         category: AnalyticsMetricCategory.GUILDS,
         metricType: AnalyticsMetricType.TOP_BY_AGE,
+        valueFormat: "age",
         valueLimit: 1,
       },
       {

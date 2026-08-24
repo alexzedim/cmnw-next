@@ -319,8 +319,9 @@ export const formatSnapshotDate = (
  * - "gold":   money value already denominated in gold (backend converts
  *             copper -> gold at ingestion via toGold) -> "1 334 200 g"
  * - "number": count with space grouping (1 000 000)
+ * - "age":    day count -> compact calendar duration ("21y 6m 11d")
  */
-export type SnapshotValueFormat = "number" | "gold";
+export type SnapshotValueFormat = "number" | "gold" | "age";
 
 const apostropheNumberFormatter = new Intl.NumberFormat("de-CH", {
   maximumFractionDigits: 0,
@@ -360,6 +361,38 @@ export const formatPriceVolatility = (stdDev: unknown): string => {
   return `σ ${formatGoldValue(stdDev).amount} g`;
 };
 
+const DAYS_PER_YEAR = 365.25;
+const DAYS_PER_MONTH = 30.44;
+
+/**
+ * Breaks a day count into a compact calendar duration, e.g. 7864 ->
+ * "21y 6m 11d". Zero parts are skipped (days < 31 -> "11d", < 366 -> "6m 11d").
+ */
+export const formatAgeDays = (days: number): string => {
+  if (!Number.isFinite(days) || days < 0) {
+    return "—";
+  }
+
+  const wholeDays = Math.floor(days);
+  const years = Math.floor(wholeDays / DAYS_PER_YEAR);
+  const months = Math.floor(
+    (wholeDays - years * DAYS_PER_YEAR) / DAYS_PER_MONTH
+  );
+  const restDays = Math.round(
+    wholeDays - years * DAYS_PER_YEAR - months * DAYS_PER_MONTH
+  );
+
+  return (
+    [
+      years > 0 ? `${years}y` : "",
+      months > 0 ? `${months}m` : "",
+      restDays > 0 ? `${restDays}d` : "",
+    ]
+      .filter(Boolean)
+      .join(" ") || "0d"
+  );
+};
+
 /**
  * Formats a value for display.
  * Handles null, numbers, strings, and objects.
@@ -376,6 +409,10 @@ export const formatEntryValue = (
       const { amount, suffix } = formatGoldValue(value);
 
       return `${amount} ${suffix}`;
+    }
+
+    if (valueFormat === "age") {
+      return formatAgeDays(value);
     }
 
     return formatPlainNumber(value);
