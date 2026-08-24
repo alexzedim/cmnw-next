@@ -16,7 +16,7 @@ export type SnapshotHighlightMetric = SnapshotRequest & {
   labelKey: string;
   label?: string;
   valueLimit?: number;
-  sort?: "alpha" | "priceRange";
+  sort?: "alpha" | "priceRange" | "memberRange";
   valueFormat?: SnapshotValueFormat;
   getEntryColor?: (label: string) => string | undefined;
   snapshot?: AppHealthMetricSnapshot | null;

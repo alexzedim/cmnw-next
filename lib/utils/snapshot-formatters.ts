@@ -84,12 +84,36 @@ const isRankRecord = (
     "stdDev" in (entryValue as Record<string, unknown>));
 
 /**
+ * Detects a distribution payload ({ total, ranges, stats }) where the counts
+ * live in a nested `ranges` record (membersDistribution,
+ * achievementsDistribution). `stats` (min/max/avg/percentiles) cannot render
+ * as flat rows and is dropped here.
+ */
+const isDistributionPayload = (
+  value: Record<string, unknown>
+): value is { ranges: Record<string, number> } => {
+  const ranges = value.ranges as Record<string, unknown> | undefined;
+
+  return (
+    Boolean(ranges) &&
+    typeof ranges === "object" &&
+    !Array.isArray(ranges) &&
+    Object.values(ranges).every(
+      (count) => typeof count === "number" && Number.isFinite(count)
+    )
+  );
+};
+
+/**
  * Normalizes a snapshot value to a record of label -> value pairs.
  *
- * Backend snapshots come in two shapes:
- *  - object maps (key -> number): sizeDistribution, priceRanges, totals, ...
- *  - ranked maps (key -> record): topByMembers/topByVolume/etc. where each
- *    value is a nested record such as { guid, name, realm, value }
+ * Backend snapshots come in three shapes:
+ *  - object maps (key -> number): membersDistribution (flattened from
+ *    `ranges`), priceRanges, totals, ...
+ *  - ranked maps (key -> record): topByAchievements/topByVolume/etc. where
+ *    each value is a nested record such as { guid, name, realm, value }
+ *  - distribution payloads ({ total, ranges, stats }): flattened to the
+ *    `ranges` map so they render like plain object maps
  *
  * Ranked records are projected to [label, scalar] entries so they render
  * through the same key/value rows as plain object maps.
@@ -110,7 +134,13 @@ export const normalizeSnapshotValue = (
   }
 
   if (value && typeof value === "object") {
-    return value as Record<string, unknown>;
+    const record = value as Record<string, unknown>;
+
+    if (isDistributionPayload(record)) {
+      return record.ranges;
+    }
+
+    return record;
   }
 
   return {};
@@ -134,8 +164,8 @@ export const toAppHealthSnapshot = (
  * For ranked metrics (standardized object format where each value is a nested
  * record like { guid, name, realm, value }), the record is projected to a
  * `[label, scalar]` pair so the renderer treats it like any other row.
- * Insertion order is preserved so ranked lists (topByMembers, ...) keep
- * their backend ordering.
+ * Insertion order is preserved so ranked lists keep their backend ordering
+ * (topByAchievements, ...).
  */
 export const getSnapshotEntries = (
   snapshot: AppHealthMetricSnapshot | null,
@@ -369,6 +399,33 @@ export const priceRangeRank = (key: string): number => {
   );
 
   return index === -1 ? PRICE_RANGE_ORDER.length : index;
+};
+
+/**
+ * Canonical low-to-high ordering for guild member-count buckets
+ * (membersDistribution `ranges` keys).
+ */
+export const MEMBERS_RANGE_ORDER = [
+  "1-10",
+  "11-50",
+  "51-100",
+  "101-250",
+  "251-500",
+  "501-750",
+  "751-999",
+] as const;
+
+/**
+ * Returns the rank (0-based) of a member-range bucket key within
+ * MEMBERS_RANGE_ORDER. Unknown keys sort last, preserving their relative
+ * order.
+ */
+export const membersRangeRank = (key: string): number => {
+  const index = MEMBERS_RANGE_ORDER.indexOf(
+    key as (typeof MEMBERS_RANGE_ORDER)[number]
+  );
+
+  return index === -1 ? MEMBERS_RANGE_ORDER.length : index;
 };
 
 /**

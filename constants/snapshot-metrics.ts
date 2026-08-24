@@ -58,15 +58,18 @@ export const SNAPSHOT_HIGHLIGHT_GROUPS: readonly SnapshotHighlightGroup[] = [
     disclaimerKey: "guildDisclaimer" as const,
     metrics: [
       {
-        labelKey: "sizeDistribution" as const,
+        labelKey: "membersDistribution" as const,
         category: AnalyticsMetricCategory.GUILDS,
-        metricType: AnalyticsMetricType.SIZE_DISTRIBUTION,
+        metricType: AnalyticsMetricType.MEMBERS_DISTRIBUTION,
+        valueLimit: Number.POSITIVE_INFINITY,
+        sort: "memberRange",
       },
       {
-        labelKey: "topByMembers" as const,
+        labelKey: "achievementsDistribution" as const,
         category: AnalyticsMetricCategory.GUILDS,
-        metricType: AnalyticsMetricType.TOP_BY_MEMBERS,
-        valueLimit: 1,
+        metricType: AnalyticsMetricType.ACHIEVEMENTS_DISTRIBUTION,
+        valueLimit: Number.POSITIVE_INFINITY,
+        sort: "priceRange",
       },
       {
         labelKey: "topByAchievements" as const,
