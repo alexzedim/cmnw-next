@@ -463,6 +463,31 @@ export const pointsRangeRank = (key: string): number => {
 };
 
 /**
+ * Canonical low-to-high ordering for guild age tiers (ageDistribution
+ * `ranges` keys, fixed year boundaries set by the backend).
+ */
+export const AGE_RANGE_ORDER = [
+  "under1y",
+  "1y-3y",
+  "3y-5y",
+  "5y-10y",
+  "10y-15y",
+  "over15y",
+] as const;
+
+/**
+ * Returns the rank (0-based) of an age-tier bucket key within
+ * AGE_RANGE_ORDER. Unknown keys sort last, preserving their relative order.
+ */
+export const ageRangeRank = (key: string): number => {
+  const index = AGE_RANGE_ORDER.indexOf(
+    key as (typeof AGE_RANGE_ORDER)[number]
+  );
+
+  return index === -1 ? AGE_RANGE_ORDER.length : index;
+};
+
+/**
  * Checks if a value is a PriceVolatilityData object.
  */
 export const isPriceVolatilityData = (

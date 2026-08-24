@@ -9,6 +9,7 @@ import {
   formatSnapshotDate,
   formatEntryValue,
   getSnapshotEntriesRich,
+  ageRangeRank,
   membersRangeRank,
   pointsRangeRank,
   priceRangeRank,
@@ -82,7 +83,12 @@ export function SnapshotBriefGroup({
                         (a, b) =>
                           pointsRangeRank(a.label) - pointsRangeRank(b.label)
                       )
-                    : entries;
+                    : metric.sort === "ageRange"
+                      ? [...entries].sort(
+                          (a, b) =>
+                            ageRangeRank(a.label) - ageRangeRank(b.label)
+                        )
+                      : entries;
           const snapshotDate = formatSnapshotDate(metric.snapshot ?? null);
           const metricLabel = sm[metric.labelKey as keyof typeof sm] as string;
 

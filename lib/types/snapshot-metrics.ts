@@ -16,7 +16,7 @@ export type SnapshotHighlightMetric = SnapshotRequest & {
   labelKey: string;
   label?: string;
   valueLimit?: number;
-  sort?: "alpha" | "priceRange" | "memberRange" | "pointsRange";
+  sort?: "alpha" | "priceRange" | "memberRange" | "pointsRange" | "ageRange";
   valueFormat?: SnapshotValueFormat;
   /**
    * Symbol appended to entry labels (styled like the gold "g" suffix), e.g.

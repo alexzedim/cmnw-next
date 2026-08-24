@@ -81,6 +81,19 @@ export const SNAPSHOT_HIGHLIGHT_GROUPS: readonly SnapshotHighlightGroup[] = [
         labelSuffix: "⛨",
       },
       {
+        labelKey: "ageDistribution" as const,
+        category: AnalyticsMetricCategory.GUILDS,
+        metricType: AnalyticsMetricType.AGE_DISTRIBUTION,
+        valueLimit: Number.POSITIVE_INFINITY,
+        sort: "ageRange",
+      },
+      {
+        labelKey: "topByAge" as const,
+        category: AnalyticsMetricCategory.GUILDS,
+        metricType: AnalyticsMetricType.TOP_BY_AGE,
+        valueLimit: 1,
+      },
+      {
         labelKey: "topByAchievements" as const,
         category: AnalyticsMetricCategory.GUILDS,
         metricType: AnalyticsMetricType.TOP_BY_ACHIEVEMENTS,
