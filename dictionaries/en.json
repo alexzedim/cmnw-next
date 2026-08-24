@@ -63,7 +63,10 @@
     "noSnapshot": "No snapshot reported yet.",
     "unableToRead": "Unable to read metric values.",
     "loadingValues": "Loading metric values\u2026",
-    "noPayload": "Metrics responded without value payload."
+    "noPayload": "Metrics responded without value payload.",
+    "charactersTitle": "CHΛRΛCTERS",
+    "guildsTitle": "GUILΔS",
+    "marketTitle": "ΛUCTIONS"
   },
   "liveFeed": {
     "label": "Live feed",

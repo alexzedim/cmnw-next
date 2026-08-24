@@ -77,9 +77,9 @@ export function LiveMetrics({
             const entries = getSnapshotEntries(snapshot, 4, locale);
             const title: string =
               {
-                charactersTitle: `${NAMING_CONSTANTS.CHARACTER}S`,
-                guildsTitle: `${NAMING_CONSTANTS.GUILD}S`,
-                marketTitle: "ΛUCTIONS",
+                charactersTitle: lm.charactersTitle,
+                guildsTitle: lm.guildsTitle,
+                marketTitle: lm.marketTitle,
               }[titleKey] ??
               (dict.snapshotMetrics[
                 titleKey as keyof typeof dict.snapshotMetrics

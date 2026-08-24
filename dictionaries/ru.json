@@ -63,7 +63,10 @@
     "noSnapshot": "Метрики ещё не были созданы.",
     "unableToRead": "Не удаётся прочитать значения метрик.",
     "loadingValues": "Загрузка значений метрик…",
-    "noPayload": "Данные отсутствуют"
+    "noPayload": "Данные отсутствуют",
+    "charactersTitle": "ПЕРСОНΛЖИ",
+    "guildsTitle": "ГИЛЬΔИИ",
+    "marketTitle": "ΛУКЦИОНЫ"
   },
   "liveFeed": {
     "label": "Лента событий",
