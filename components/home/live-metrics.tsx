@@ -13,7 +13,6 @@ import {
   buildSnapshotKey,
 } from "@/lib/utils/snapshot-formatters";
 import { useI18n } from "@/lib/i18n/context";
-import { NAMING_CONSTANTS } from "@/constants/naming";
 import { fontJetBrains } from "@/config/fonts";
 import { GoldValue } from "@/components/home/gold-value";
 
