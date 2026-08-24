@@ -118,10 +118,17 @@ export function SnapshotBriefGroup({
                     const entryColor = metric.getEntryColor?.(entry.label);
 
                     const labelText = (() => {
-                      if (metric.labelSuffix && !entryKey) {
+                      if (metric.labelSuffix) {
+                        // Legacy dictionary labels carry a gold " g" unit
+                        // suffix (shared with market price ranges) — strip it
+                        // before applying the metric's own unit symbol.
+                        const unitlessLabel = dictLabel.endsWith(" g")
+                          ? dictLabel.slice(0, -2)
+                          : dictLabel;
+
                         return (
                           <>
-                            {dictLabel}{" "}
+                            {unitlessLabel}{" "}
                             <span className="text-[var(--primary)]">
                               {metric.labelSuffix}
                             </span>
