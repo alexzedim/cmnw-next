@@ -530,7 +530,7 @@
       "101-250": "compact | 101 ⋯ 250",
       "251-500": "massive | 251 ⋯ 500",
       "501-750": "mega-mass- | 501 ⋯ 750",
-      "751-999": "cap- | 751 ⋯ 999",
+      "751-999": "cap-size- | 751 ⋯ 999",
       "itemId": "Item",
       "quantity": "Quantity",
       "openInterest": "Open Interest"
