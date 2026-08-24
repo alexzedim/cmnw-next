@@ -16,8 +16,13 @@ export type SnapshotHighlightMetric = SnapshotRequest & {
   labelKey: string;
   label?: string;
   valueLimit?: number;
-  sort?: "alpha" | "priceRange" | "memberRange";
+  sort?: "alpha" | "priceRange" | "memberRange" | "pointsRange";
   valueFormat?: SnapshotValueFormat;
+  /**
+   * Symbol appended to entry labels (styled like the gold "g" suffix), e.g.
+   * "⛨" for achievement-points buckets.
+   */
+  labelSuffix?: string;
   /**
    * Preferred snapshot entry field to project as the displayed value.
    * Needed when an entry contains several metric fields (contracts records

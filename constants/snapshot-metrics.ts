@@ -69,7 +69,8 @@ export const SNAPSHOT_HIGHLIGHT_GROUPS: readonly SnapshotHighlightGroup[] = [
         category: AnalyticsMetricCategory.GUILDS,
         metricType: AnalyticsMetricType.ACHIEVEMENTS_DISTRIBUTION,
         valueLimit: Number.POSITIVE_INFINITY,
-        sort: "priceRange",
+        sort: "pointsRange",
+        labelSuffix: "⛨",
       },
       {
         labelKey: "topByAchievements" as const,

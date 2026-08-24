@@ -10,6 +10,7 @@ import {
   formatEntryValue,
   getSnapshotEntriesRich,
   membersRangeRank,
+  pointsRangeRank,
   priceRangeRank,
 } from "@/lib/utils/snapshot-formatters";
 import { useI18n } from "@/lib/i18n/context";
@@ -68,7 +69,12 @@ export function SnapshotBriefGroup({
                       (a, b) =>
                         membersRangeRank(a.label) - membersRangeRank(b.label)
                     )
-                  : entries;
+                  : metric.sort === "pointsRange"
+                    ? [...entries].sort(
+                        (a, b) =>
+                          pointsRangeRank(a.label) - pointsRangeRank(b.label)
+                      )
+                    : entries;
           const snapshotDate = formatSnapshotDate(metric.snapshot ?? null);
           const metricLabel = sm[metric.labelKey as keyof typeof sm] as string;
 
@@ -111,6 +117,17 @@ export function SnapshotBriefGroup({
                     const entryColor = metric.getEntryColor?.(entry.label);
 
                     const labelText = (() => {
+                      if (metric.labelSuffix && !entryKey) {
+                        return (
+                          <>
+                            {dictLabel}{" "}
+                            <span className="text-[var(--primary)]">
+                              {metric.labelSuffix}
+                            </span>
+                          </>
+                        );
+                      }
+
                       if (dictLabel.endsWith(" g")) {
                         return (
                           <>

@@ -441,6 +441,18 @@ export const membersRangeRank = (key: string): number => {
 };
 
 /**
+ * Sorts dynamic points-range bucket labels ("0 ⋯ 709", "710 ⋯ 1418", ...)
+ * numerically by their lower bound. Legacy fixed keys (under1k, 1k-10k, ...)
+ * have no leading digit and fall back to priceRangeRank so old snapshots
+ * still render in order.
+ */
+export const pointsRangeRank = (key: string): number => {
+  const match = /^(\d+)/.exec(key);
+
+  return match ? Number(match[1]) : priceRangeRank(key) * 1_000_000;
+};
+
+/**
  * Checks if a value is a PriceVolatilityData object.
  */
 export const isPriceVolatilityData = (
