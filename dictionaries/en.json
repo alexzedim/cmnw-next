@@ -31,10 +31,22 @@
     "uptime": "Uptime",
     "latestMarketData": "Latest Market Data"
   },
-  "themeSwitch": {
-    "toDark": "Switch to dark mode",
-    "toLight": "Switch to light mode"
-  },
+
+  "palette": {
+    "triggerAriaLabel": "Color theme",
+    "openAriaLabel": "Color themes",
+    "names": {
+      "violet": "Violet",
+      "blue": "Blue",
+      "green": "Green",
+      "peach": "Peach",
+      "teal": "Teal",
+      "dark-blue": "Dark blue",
+      "black": "Black",
+      "light": "Light"
+    }
+  }
+,
   "home": {
     "heroTitle": "CMNW",
     "snapshotBriefsLabel": "Snapshot briefs",

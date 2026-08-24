@@ -51,6 +51,7 @@
 }
 
 .dark {
+  color-scheme: dark;
   --bg: #020202;
   --bg-elevated: #101010;
   --surface: #101010;
@@ -92,7 +93,160 @@
   --heatmap-bg: #0a0a0a;
 }
 
-.light {
+/*
+ * Color palettes (zvuk.com-style). Every dark-styled palette keeps the `dark`
+ * class on <html> (light text on tinted surfaces) and one `palette-*` class
+ * re-tints the token set; rules must stay after `.dark` so they win at equal
+ * specificity. The white `palette-light` (the default) drops `dark` entirely
+ * (see lib/palette.ts). `palette-black` keeps the `.dark` tokens as-is, so it
+ * has no rule of its own.
+ */
+
+/* Light-toned palettes: white surfaces would kill text contrast, so
+   elevated surfaces are darkened tints of the base hue instead. */
+.palette-violet {
+  --palette-base: #aaaee3;
+  --palette-ink: #232352;
+  --bg: var(--palette-base);
+  --bg-elevated: color-mix(in oklab, var(--palette-base), black 18%);
+  --surface: color-mix(in oklab, var(--palette-base), black 18%);
+  --border: color-mix(in oklab, var(--palette-base), black 34%);
+  --text-muted: rgba(255, 255, 255, 0.78);
+  --primary: #ffffff;
+  --primary-foreground: var(--palette-ink);
+  --accent: #ffffff;
+  --accent-foreground: var(--palette-ink);
+  --gradient-start: #ffffff;
+  --gradient-end: color-mix(in oklab, var(--palette-base) 22%, white);
+  --surface-light: color-mix(in oklab, var(--palette-base), black 18%);
+  --surface-light-border: color-mix(in oklab, var(--palette-base), black 34%);
+  --border-accent: rgba(255, 255, 255, 0.75);
+
+  --tremor-bg-muted: var(--bg);
+  --tremor-bg-subtle: var(--bg-elevated);
+  --tremor-bg: var(--surface);
+  --tremor-border: var(--border);
+  --heatmap-empty: rgba(255, 255, 255, 0.14);
+  --heatmap-bg: var(--surface);
+}
+
+.palette-blue {
+  --palette-base: #80a7ce;
+  --palette-ink: #14283e;
+  --bg: var(--palette-base);
+  --bg-elevated: color-mix(in oklab, var(--palette-base), black 18%);
+  --surface: color-mix(in oklab, var(--palette-base), black 18%);
+  --border: color-mix(in oklab, var(--palette-base), black 34%);
+  --text-muted: rgba(255, 255, 255, 0.78);
+  --primary: #ffffff;
+  --primary-foreground: var(--palette-ink);
+  --accent: #ffffff;
+  --accent-foreground: var(--palette-ink);
+  --gradient-start: #ffffff;
+  --gradient-end: color-mix(in oklab, var(--palette-base) 22%, white);
+  --surface-light: color-mix(in oklab, var(--palette-base), black 18%);
+  --surface-light-border: color-mix(in oklab, var(--palette-base), black 34%);
+  --border-accent: rgba(255, 255, 255, 0.75);
+
+  --tremor-bg-muted: var(--bg);
+  --tremor-bg-subtle: var(--bg-elevated);
+  --tremor-bg: var(--surface);
+  --tremor-border: var(--border);
+  --heatmap-empty: rgba(255, 255, 255, 0.14);
+  --heatmap-bg: var(--surface);
+}
+
+.palette-green {
+  --palette-base: #a8b567;
+  --palette-ink: #212a10;
+  --bg: var(--palette-base);
+  --bg-elevated: color-mix(in oklab, var(--palette-base), black 18%);
+  --surface: color-mix(in oklab, var(--palette-base), black 18%);
+  --border: color-mix(in oklab, var(--palette-base), black 34%);
+  --text-muted: rgba(255, 255, 255, 0.78);
+  --primary: #ffffff;
+  --primary-foreground: var(--palette-ink);
+  --accent: #ffffff;
+  --accent-foreground: var(--palette-ink);
+  --gradient-start: #ffffff;
+  --gradient-end: color-mix(in oklab, var(--palette-base) 22%, white);
+  --surface-light: color-mix(in oklab, var(--palette-base), black 18%);
+  --surface-light-border: color-mix(in oklab, var(--palette-base), black 34%);
+  --border-accent: rgba(255, 255, 255, 0.75);
+
+  --tremor-bg-muted: var(--bg);
+  --tremor-bg-subtle: var(--bg-elevated);
+  --tremor-bg: var(--surface);
+  --tremor-border: var(--border);
+  --heatmap-empty: rgba(255, 255, 255, 0.14);
+  --heatmap-bg: var(--surface);
+}
+
+.palette-peach {
+  --palette-base: #c17d67;
+  --palette-ink: #38190e;
+  --bg: var(--palette-base);
+  --bg-elevated: color-mix(in oklab, var(--palette-base), black 18%);
+  --surface: color-mix(in oklab, var(--palette-base), black 18%);
+  --border: color-mix(in oklab, var(--palette-base), black 34%);
+  --text-muted: rgba(255, 255, 255, 0.78);
+  --primary: #ffffff;
+  --primary-foreground: var(--palette-ink);
+  --accent: #ffffff;
+  --accent-foreground: var(--palette-ink);
+  --gradient-start: #ffffff;
+  --gradient-end: color-mix(in oklab, var(--palette-base) 22%, white);
+  --surface-light: color-mix(in oklab, var(--palette-base), black 18%);
+  --surface-light-border: color-mix(in oklab, var(--palette-base), black 34%);
+  --border-accent: rgba(255, 255, 255, 0.75);
+
+  --tremor-bg-muted: var(--bg);
+  --tremor-bg-subtle: var(--bg-elevated);
+  --tremor-bg: var(--surface);
+  --tremor-border: var(--border);
+  --heatmap-empty: rgba(255, 255, 255, 0.14);
+  --heatmap-bg: var(--surface);
+}
+
+/* Dark-toned palettes: surfaces are lightened tints, orange brand stays. */
+.palette-teal {
+  --palette-base: #133242;
+  --bg: var(--palette-base);
+  --bg-elevated: color-mix(in oklab, var(--palette-base), white 12%);
+  --surface: color-mix(in oklab, var(--palette-base), white 12%);
+  --border: color-mix(in oklab, var(--palette-base), white 30%);
+  --surface-light: color-mix(in oklab, var(--palette-base), white 12%);
+  --surface-light-border: color-mix(in oklab, var(--palette-base), white 30%);
+
+  --tremor-bg-muted: var(--bg);
+  --tremor-bg-subtle: var(--bg-elevated);
+  --tremor-bg: var(--surface);
+  --tremor-border: var(--border);
+  --heatmap-empty: rgba(255, 255, 255, 0.1);
+  --heatmap-bg: var(--surface);
+}
+
+.palette-dark-blue {
+  --palette-base: #0d2655;
+  --bg: var(--palette-base);
+  --bg-elevated: color-mix(in oklab, var(--palette-base), white 12%);
+  --surface: color-mix(in oklab, var(--palette-base), white 12%);
+  --border: color-mix(in oklab, var(--palette-base), white 28%);
+  --surface-light: color-mix(in oklab, var(--palette-base), white 12%);
+  --surface-light-border: color-mix(in oklab, var(--palette-base), white 28%);
+
+  --tremor-bg-muted: var(--bg);
+  --tremor-bg-subtle: var(--bg-elevated);
+  --tremor-bg: var(--surface);
+  --tremor-border: var(--border);
+  --heatmap-empty: rgba(255, 255, 255, 0.1);
+  --heatmap-bg: var(--surface);
+}
+
+/* The pre-palette light theme: white surfaces with golden accents. It is the
+   only palette that drops the `dark` class (see lib/palette.ts), so dark:
+   variants and HeroUI dark styles step aside for it. */
+.palette-light {
   --bg: #f5f5f4;
   --bg-elevated: #e7e5e4;
   --surface: #ffffff;
@@ -111,7 +265,7 @@
   --surface-light-border: #d6d3d1;
   --accent-warm: #a8a394;
   --accent-cool: #acbcbf;
-  --border-accent: #ee6018;
+  --border-accent: #ddb277;
 
   --tremor-brand-faint: #ddb27733;
   --tremor-brand-muted: #ddb27780;

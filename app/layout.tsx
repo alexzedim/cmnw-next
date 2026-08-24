@@ -35,6 +35,10 @@ export const viewport: Viewport = {
   ],
 };
 
+// Applies the stored color palette before first paint (zvuk.com-style);
+// keeps its list in sync with PALETTE_IDS in lib/palette.ts.
+const PALETTE_INIT_SCRIPT = `try{var p=localStorage.getItem("cmnw-palette");if(/^(violet|blue|green|peach|teal|dark-blue|black|light)$/.test(p||"")){var l=document.documentElement.classList;l.remove("palette-violet","palette-blue","palette-green","palette-peach","palette-teal","palette-dark-blue","palette-black","palette-light");l.add("palette-"+p);if(p==="light"){l.remove("dark")}else{l.add("dark")}}}catch(_e){}`;
+
 export default async function RootLayout({
   children,
 }: {
@@ -44,8 +48,10 @@ export default async function RootLayout({
   const dict = await getDictionary(locale);
 
   return (
-    <html suppressHydrationWarning lang={locale}>
-      <head />
+    <html suppressHydrationWarning className="palette-light" lang={locale}>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: PALETTE_INIT_SCRIPT }} />
+      </head>
       <body
         className={clsx(
           "min-h-screen bg-background font-sans antialiased",
@@ -53,11 +59,7 @@ export default async function RootLayout({
           fontMono.variable
         )}
       >
-        <Providers
-          dict={dict}
-          locale={locale}
-          themeProps={{ attribute: "class", defaultTheme: "dark" }}
-        >
+        <Providers dict={dict} locale={locale}>
           <div className="relative flex flex-col min-h-screen">
             <Navbar />
             <main className="container mx-auto max-w-screen-2xl pt-16 px-6 flex-grow">

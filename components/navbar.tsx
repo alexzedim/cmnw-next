@@ -10,7 +10,7 @@ import { Kbd } from "@heroui/kbd";
 import { Input } from "@heroui/input";
 import NextLink from "next/link";
 
-import { ThemeSwitch } from "@/components/theme-switch";
+import { PalettePicker } from "@/components/palette-picker";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { SearchIcon, Logo } from "@/components/icons";
 import { useI18n } from "@/lib/i18n/context";
@@ -45,9 +45,11 @@ export const Navbar = () => {
       maxWidth="xl"
       position="sticky"
     >
-      <NavbarContent className="basis-1/3" justify="start" />
+      <NavbarContent className="basis-1/3 justify-start" justify="start">
+        <PalettePicker />
+      </NavbarContent>
 
-      <NavbarContent className="basis-1/3" justify="center">
+      <NavbarContent className="basis-1/3 justify-center" justify="center">
         <NavbarBrand as="li" className="gap-3 max-w-fit">
           <NextLink className="flex justify-center items-center gap-1" href="/">
             <Logo />
@@ -55,7 +57,7 @@ export const Navbar = () => {
         </NavbarBrand>
       </NavbarContent>
 
-      <NavbarContent className="basis-1/3" justify="end">
+      <NavbarContent className="basis-1/3 justify-end" justify="end">
         <NextLink
           className="text-xs uppercase tracking-wider text-foreground/60 transition-colors hover:text-foreground"
           href="/realm"
@@ -63,7 +65,6 @@ export const Navbar = () => {
           {dict.realm.indexTitle}
         </NextLink>
         <LanguageSwitcher />
-        <ThemeSwitch />
       </NavbarContent>
 
       <NavbarMenu>{searchInput}</NavbarMenu>

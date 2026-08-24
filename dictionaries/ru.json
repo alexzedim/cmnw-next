@@ -31,10 +31,22 @@
     "uptime": "Аптайм",
     "latestMarketData": "Последние данные рынка"
   },
-  "themeSwitch": {
-    "toDark": "Переключить на тёмную тему",
-    "toLight": "Переключить на светлую тему"
-  },
+
+  "palette": {
+    "triggerAriaLabel": "Цветовая тема",
+    "openAriaLabel": "Цветовые темы",
+    "names": {
+      "violet": "Фиолетовая",
+      "blue": "Голубая",
+      "green": "Зелёная",
+      "peach": "Персиковая",
+      "teal": "Бирюзовая",
+      "dark-blue": "Тёмно-синяя",
+      "black": "Чёрная",
+      "light": "Светлая"
+    }
+  }
+,
   "home": {
     "heroTitle": "CMNW",
     "snapshotBriefsLabel": "Аналитика",

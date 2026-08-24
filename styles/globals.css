@@ -48,6 +48,21 @@
 }
 
 @layer components {
+  /* Palette picker (zvuk.com-style) */
+  @keyframes palette-pop-in {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  .palette-pop {
+    animation: palette-pop-in 0.12s ease-out both;
+  }
+
   .chip {
     background-color: var(--bg-elevated);
     border: 1px solid var(--border);
