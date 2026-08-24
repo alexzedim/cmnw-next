@@ -16,6 +16,7 @@ import {
 import { useI18n } from "@/lib/i18n/context";
 import { fontJetBrains } from "@/config/fonts";
 import { GoldValue } from "@/components/home/gold-value";
+import { SigmaValue } from "@/components/home/sigma-value";
 
 interface SnapshotBriefGroupProps {
   group: SnapshotHighlightGroup;
@@ -164,6 +165,9 @@ export function SnapshotBriefGroup({
                           {metric.valueFormat === "gold" &&
                           typeof entry.value === "number" ? (
                             <GoldValue value={entry.value} />
+                          ) : typeof entry.value === "string" &&
+                            entry.value.startsWith("σ") ? (
+                            <SigmaValue text={entry.value} />
                           ) : (
                             formatEntryValue(entry.value, metric.valueFormat)
                           )}

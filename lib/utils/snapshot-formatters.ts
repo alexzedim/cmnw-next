@@ -276,6 +276,16 @@ export const getSnapshotEntriesRich = (
       if (isRankRecord(entryValue)) {
         const el = entryValue as Record<string, unknown>;
 
+        // Volatility records ({ itemId, stdDev, avgPrice }) arrive as a
+        // keyed map after API enrichment, so preformat them here as well.
+        if (typeof el.itemId === "number" && typeof el.stdDev === "number") {
+          return {
+            label: rankLabel(el, locale),
+            value: formatPriceVolatility(el.stdDev),
+            href: buildEntryHref(el),
+          };
+        }
+
         return {
           label: rankLabel(el, locale),
           value: rankValue(el, preferredValueKey),
