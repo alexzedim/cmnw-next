@@ -142,7 +142,14 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
 
     const { data, error, isLoading } = useSWR<HeatmapResponse>(
       `/api/dma/item/chart?id=${id}`,
-      (url: string) => clientFetch(url).then((r) => r.json())
+      (url: string) =>
+        clientFetch(url).then((r) => {
+          // Reject non-2xx responses so SWR surfaces them as errors instead
+          // of parsing the error body as chart data.
+          if (!r.ok) return Promise.reject(new Error(`HTTP ${r.status}`));
+
+          return r.json() as Promise<HeatmapResponse>;
+        })
     );
 
     useEffect(() => {
@@ -156,7 +163,7 @@ export const MarketHeatmap: FC<MarketHeatmapProps> = memo(
 
     if (isLoading) return <MarketHeatmapLoading />;
 
-    if (!data || !data.dataset.length) return null;
+    if (!data?.dataset?.length) return null;
 
     // Normalize cell colors against the 95th-percentile value (not the raw
     // max), so a single outlier cell doesn't crush the rest of the heatmap
