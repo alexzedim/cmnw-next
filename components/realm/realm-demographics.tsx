@@ -14,6 +14,7 @@ import {
 } from "@/constants/analytics-metrics";
 import { classColors } from "@/constants/class-colors";
 import { buildSnapshotKey } from "@/lib/utils/snapshot-formatters";
+import { romanize } from "@/lib/utils/romanize";
 import { fontJetBrains } from "@/config/fonts";
 import { useI18n } from "@/lib/i18n/context";
 
@@ -202,7 +203,7 @@ export const RealmDemographics = ({
         <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider opacity-50">
           <div className="size-1.5 rounded-full bg-[var(--primary)]" />
           <span style={{ fontFamily: fontJetBrains.style.fontFamily }}>
-            {r.demographics}
+            {romanize(r.demographics)}
           </span>
         </div>
         <div className="inline-flex items-center gap-1 rounded-lg bg-foreground/5 p-1">

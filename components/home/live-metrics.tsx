@@ -13,6 +13,7 @@ import {
   buildSnapshotKey,
 } from "@/lib/utils/snapshot-formatters";
 import { useI18n } from "@/lib/i18n/context";
+import { romanize } from "@/lib/utils/romanize";
 import { fontJetBrains } from "@/config/fonts";
 import { GoldValue } from "@/components/home/gold-value";
 
@@ -76,9 +77,9 @@ export function LiveMetrics({
             const entries = getSnapshotEntries(snapshot, 4, locale);
             const title: string =
               {
-                charactersTitle: lm.charactersTitle,
-                guildsTitle: lm.guildsTitle,
-                marketTitle: lm.marketTitle,
+                charactersTitle: romanize(lm.charactersTitle),
+                guildsTitle: romanize(lm.guildsTitle),
+                marketTitle: romanize(lm.marketTitle, { market: true }),
               }[titleKey] ??
               (dict.snapshotMetrics[
                 titleKey as keyof typeof dict.snapshotMetrics

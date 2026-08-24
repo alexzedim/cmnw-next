@@ -1,11 +1,14 @@
+import { romanize } from "@/lib/utils/romanize";
+
 export const NAMING_CONSTANTS = {
-  // Original: Greek Capital Lambda Λ (U+039B) - appears larger
-  CHARACTER: "CHΛRΛCTER",
-  MARKET: "MΛRKET",
-  CHARACTER_ACCOUNT_DETECTIVE: "CHΛRΛCTER ΛCCOUNT ΔETECTIVE",
-  GUILD: "GUILΔ",
-  ITEM: "IT$M",
-  MARKET_VOLUME_ALLOCATION: "MARKET VOLUME ΛLLOCATION",
-  BLOCK: "BΛOCK",
-  REALM: "RΣΛLM",
+  CHARACTER: romanize("CHARACTER"),
+  MARKET: romanize("MARKET", { market: true }),
+  CHARACTER_ACCOUNT_DETECTIVE: romanize("CHARACTER ACCOUNT DETECTIVE"),
+  GUILD: romanize("GUILD"),
+  ITEM: romanize("ITEM"),
+  MARKET_VOLUME_ALLOCATION: romanize("MARKET VOLUME ALLOCATION", {
+    market: true,
+  }),
+  BLOCK: romanize("BLOCK"),
+  REALM: romanize("REALM"),
 };

@@ -12,6 +12,7 @@ import Link from "next/link";
 import { NAMING_CONSTANTS } from "@/constants";
 import { fontJetBrains } from "@/config/fonts";
 import { useI18n } from "@/lib/i18n/context";
+import { romanize } from "@/lib/utils/romanize";
 
 dayjs.extend(relativeTime);
 
@@ -185,7 +186,7 @@ export const RealmTitle = ({ realm }: RealmTitleProps) => {
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         {/* Left: data freshness */}
         <div className="lg:col-span-2">
-          {sectionLabel(r.trends)}
+          {sectionLabel(romanize(r.trends))}
           <dl className="grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-4">
             {freshness.map(({ key, label, ts }) => (
               <div key={key}>
