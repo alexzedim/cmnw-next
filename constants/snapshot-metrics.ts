@@ -112,12 +112,14 @@ export const SNAPSHOT_HIGHLIGHT_GROUPS: readonly SnapshotHighlightGroup[] = [
         category: AnalyticsMetricCategory.CONTRACTS,
         metricType: AnalyticsMetricType.TOP_BY_OPEN_INTEREST,
         valueFormat: "gold",
+        valueKey: "maxOpenInterest",
         valueLimit: 1,
       },
       {
         labelKey: "quantityConcentration" as const,
         category: AnalyticsMetricCategory.CONTRACTS,
         metricType: AnalyticsMetricType.TOP_BY_QUANTITY,
+        valueKey: "maxQuantity",
         valueLimit: 1,
       },
       {

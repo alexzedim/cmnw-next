@@ -18,6 +18,13 @@ export type SnapshotHighlightMetric = SnapshotRequest & {
   valueLimit?: number;
   sort?: "alpha" | "priceRange" | "memberRange";
   valueFormat?: SnapshotValueFormat;
+  /**
+   * Preferred snapshot entry field to project as the displayed value.
+   * Needed when an entry contains several metric fields (contracts records
+   * carry both maxOpenInterest and maxQuantity) — the generic rankValue
+   * cascade would otherwise pick the wrong one.
+   */
+  valueKey?: string;
   getEntryColor?: (label: string) => string | undefined;
   snapshot?: AppHealthMetricSnapshot | null;
 };

@@ -47,22 +47,38 @@ const rankLabel = (
 
 /**
  * Picks the primary metric value from a ranked-list element.
- * Order reflects relevance per metric family:
- *  - guild rankings: `value` (members_count / achievement_points)
+ * A metric-defined `preferredKey` (e.g. "maxQuantity" for topByQuantity)
+ * wins when present, since contracts records carry several metric fields
+ * (maxOpenInterest AND maxQuantity) and the generic order below cannot
+ * distinguish which metric the card is rendering.
+ * Fallback order reflects relevance per metric family:
+ *  - guild rankings: `value` (achievement_points)
  *  - market items: `volume` (gold), then `auctions` (count)
  *  - contracts: peak `maxOpenInterest`/`maxQuantity` (intraday MAX over 24h),
  *    then legacy `openInterest`/`quantity`, then `stdDev` (price volatility)
  */
-const rankValue = (element: Record<string, unknown>): unknown =>
-  element.value ??
-  element.volume ??
-  element.auctions ??
-  element.maxOpenInterest ??
-  element.maxQuantity ??
-  element.openInterest ??
-  element.quantity ??
-  element.stdDev ??
-  null;
+const rankValue = (
+  element: Record<string, unknown>,
+  preferredKey?: string
+): unknown => {
+  const preferred =
+    preferredKey != null && element[preferredKey] != null
+      ? element[preferredKey]
+      : undefined;
+
+  return (
+    preferred ??
+    element.value ??
+    element.volume ??
+    element.auctions ??
+    element.maxOpenInterest ??
+    element.maxQuantity ??
+    element.openInterest ??
+    element.quantity ??
+    element.stdDev ??
+    null
+  );
+};
 
 /**
  * Detects whether a snapshot entry value is a ranked record (the standardized
@@ -209,7 +225,8 @@ const buildEntryHref = (
 export const getSnapshotEntriesRich = (
   snapshot: AppHealthMetricSnapshot | null,
   limit = 4,
-  locale: Locale = "en"
+  locale: Locale = "en",
+  preferredValueKey?: string
 ): SnapshotEntry[] => {
   if (!snapshot?.value || typeof snapshot.value !== "object") {
     return [];
@@ -248,7 +265,7 @@ export const getSnapshotEntriesRich = (
     return [
       {
         label: rankLabel(el, locale),
-        value: rankValue(el),
+        value: rankValue(el, preferredValueKey),
         href: buildEntryHref(el),
       },
     ];
@@ -262,7 +279,7 @@ export const getSnapshotEntriesRich = (
 
         return {
           label: rankLabel(el, locale),
-          value: rankValue(el),
+          value: rankValue(el, preferredValueKey),
           href: buildEntryHref(el),
         };
       }
