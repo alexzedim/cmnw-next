@@ -51,6 +51,14 @@ export const SNAPSHOT_HIGHLIGHT_GROUPS: readonly SnapshotHighlightGroup[] = [
         category: AnalyticsMetricCategory.CHARACTERS,
         metricType: AnalyticsMetricType.BY_LEVEL_MAX_LEVEL,
       },
+      {
+        labelKey: "achievementsDistribution" as const,
+        category: AnalyticsMetricCategory.CHARACTERS,
+        metricType: AnalyticsMetricType.ACHIEVEMENTS_DISTRIBUTION,
+        valueLimit: Number.POSITIVE_INFINITY,
+        sort: "pointsRange",
+        labelSuffix: "⛨",
+      },
     ] as const,
   },
   {
