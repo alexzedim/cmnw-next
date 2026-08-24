@@ -235,8 +235,8 @@ export const getSnapshotEntriesRich = (
   const snapshotValue = snapshot.value as Record<string, unknown>;
 
   // Price volatility payloads ({ itemId, stdDev, avgPrice }) are preformatted
-  // to a single string showing both σ and avg in gold, since neither figure is
-  // meaningful as a bare count.
+  // to a single string showing σ in gold, since the figure is not meaningful
+  // as a bare count.
   if (
     typeof snapshotValue.itemId === "number" &&
     typeof snapshotValue.stdDev === "number"
@@ -249,7 +249,6 @@ export const getSnapshotEntriesRich = (
       },
     ];
   }
-
   // If the snapshot value itself is a single rank record (has itemId/guid at top
   // level rather than being a map of records), treat it as a single entry.
   // Property checks come first: isRankRecord asserts the same type snapshotValue
@@ -307,7 +306,8 @@ export const formatSnapshotDate = (
 
 /**
  * How a metric value should be rendered.
- * - "gold":   WoW copper -> gold with apostrophe grouping (1'334'200 g)
+ * - "gold":   money value already denominated in gold (backend converts
+ *             copper -> gold at ingestion via toGold) -> "1 334 200 g"
  * - "number": count with space grouping (1 000 000)
  */
 export type SnapshotValueFormat = "number" | "gold";
@@ -316,10 +316,18 @@ const apostropheNumberFormatter = new Intl.NumberFormat("de-CH", {
   maximumFractionDigits: 0,
 });
 
+const goldFractionFormatter = new Intl.NumberFormat("de-CH", {
+  maximumFractionDigits: 2,
+});
+
 export type GoldFormatted = { amount: string; suffix: "g" };
 
-export const formatGoldValue = (copper: number): GoldFormatted => ({
-  amount: apostropheNumberFormatter.format(Math.round(copper / 10_000)),
+/**
+ * Formats a gold-denominated value with a "g" suffix. Values arrive from the
+ * backend already in gold (never copper) — no division is applied.
+ */
+export const formatGoldValue = (value: number): GoldFormatted => ({
+  amount: goldFractionFormatter.format(value).replace(/'/g, " "),
   suffix: "g",
 });
 
@@ -331,28 +339,15 @@ const formatPlainNumber = (value: number): string =>
   apostropheNumberFormatter.format(value).replace(/'/g, " ");
 
 /**
- * Formats a price-volatility stdDev (in copper) as a gold/silver/copper
- * breakdown prefixed with sigma, e.g. 2549 -> "σ 0 g 25 s 49 c".
- * Returns "—" if stdDev is missing or non-finite.
+ * Formats a price-volatility stdDev (in gold) with a sigma prefix, e.g.
+ * 893.99 -> "σ 893.99 g". Returns "—" if stdDev is missing or non-finite.
  */
 export const formatPriceVolatility = (stdDev: unknown): string => {
   if (typeof stdDev !== "number" || !Number.isFinite(stdDev)) {
     return "—";
   }
 
-  return `σ ${formatCopperBreakdown(stdDev)}`;
-};
-
-/**
- * Breaks a copper amount into gold/silver/copper and renders the non-zero
- * components, e.g. 2550 -> "0 g 25 s 50 c", 10000 -> "1 g", 50 -> "50 c".
- */
-const formatCopperBreakdown = (copper: number): string => {
-  const g = Math.floor(copper / 10000);
-  const s = Math.floor((copper % 10000) / 100);
-  const c = Math.floor(copper % 100);
-
-  return `${g} g ${s} s ${c} c`;
+  return `σ ${formatGoldValue(stdDev).amount} g`;
 };
 
 /**

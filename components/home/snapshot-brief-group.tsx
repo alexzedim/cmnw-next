@@ -146,7 +146,7 @@ export function SnapshotBriefGroup({
                         <dd className="font-mono text-right">
                           {metric.valueFormat === "gold" &&
                           typeof entry.value === "number" ? (
-                            <GoldValue copper={entry.value} />
+                            <GoldValue value={entry.value} />
                           ) : (
                             formatEntryValue(entry.value, metric.valueFormat)
                           )}

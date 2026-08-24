@@ -122,7 +122,7 @@ export function LiveMetrics({
                           <dd className="font-mono text-foreground text-right">
                             {GOLD_ENTRY_KEYS.has(entryKey) &&
                             typeof entryValue === "number" ? (
-                              <GoldValue copper={entryValue} />
+                              <GoldValue value={entryValue} />
                             ) : (
                               formatEntryValue(entryValue)
                             )}

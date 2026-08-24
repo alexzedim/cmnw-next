@@ -107,7 +107,7 @@ export const RealmMarketPulse = ({
           <div className="rounded-lg border border-[var(--border)] bg-[var(--surface)] p-3">
             <dt className="text-xs text-foreground/50">{r.volume24h}</dt>
             <dd className="font-mono text-lg font-semibold">
-              <GoldValue copper={volume} />
+              <GoldValue value={volume} />
             </dd>
           </div>
           <div className="rounded-lg border border-[var(--border)] bg-[var(--surface)] p-3">
