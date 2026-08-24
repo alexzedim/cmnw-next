@@ -59,6 +59,14 @@ export const SNAPSHOT_HIGHLIGHT_GROUPS: readonly SnapshotHighlightGroup[] = [
         sort: "pointsRange",
         labelSuffix: "⛨",
       },
+      {
+        labelKey: "oldestCharacters" as const,
+        category: AnalyticsMetricCategory.CHARACTERS,
+        metricType: AnalyticsMetricType.TOP_BY_AGE,
+        valueFormat: "age",
+        valueLimit: 1,
+        entryHrefBase: "/character",
+      },
     ] as const,
   },
   {

@@ -24,6 +24,11 @@ export type SnapshotHighlightMetric = SnapshotRequest & {
    */
   labelSuffix?: string;
   /**
+   * Route base for ranked-entry links ("/guild" by default; character
+   * metrics use "/character").
+   */
+  entryHrefBase?: string;
+  /**
    * Preferred snapshot entry field to project as the displayed value.
    * Needed when an entry contains several metric fields (contracts records
    * carry both maxOpenInterest and maxQuantity) — the generic rankValue

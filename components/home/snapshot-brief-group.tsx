@@ -64,7 +64,8 @@ export function SnapshotBriefGroup({
             metric.snapshot ?? null,
             metric.valueLimit,
             locale,
-            metric.valueKey
+            metric.valueKey,
+            metric.entryHrefBase
           );
           const displayEntries =
             metric.sort === "alpha"

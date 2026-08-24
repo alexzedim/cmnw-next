@@ -553,6 +553,7 @@
     "guildDisclaimer": "Roster slices only include guilds with verified activity in the past 48 hours.",
       "membersDistribution": "Members distribution",
       "achievementsDistribution": "Achievements distribution",
+      "oldestCharacters": "Oldest characters",
       "ageDistribution": "Age distribution",
       "topByAge": "Oldest guilds",
       "topByAchievements": "Top by achievements",

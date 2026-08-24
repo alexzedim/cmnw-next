@@ -208,12 +208,13 @@ export type SnapshotEntry = {
 };
 
 const buildEntryHref = (
-  element: Record<string, unknown>
+  element: Record<string, unknown>,
+  hrefBase = "/guild"
 ): string | undefined => {
   if (typeof element.guid === "string" && element.guid.length > 0) {
     const [name, realm] = element.guid.split("@");
 
-    if (name && realm) return `/guild/${element.guid}`;
+    if (name && realm) return `${hrefBase}/${element.guid}`;
   }
   if (typeof element.itemId === "number") {
     return `/item/${element.itemId}`;
@@ -226,7 +227,8 @@ export const getSnapshotEntriesRich = (
   snapshot: AppHealthMetricSnapshot | null,
   limit = 4,
   locale: Locale = "en",
-  preferredValueKey?: string
+  preferredValueKey?: string,
+  hrefBase?: string
 ): SnapshotEntry[] => {
   if (!snapshot?.value || typeof snapshot.value !== "object") {
     return [];
@@ -265,7 +267,7 @@ export const getSnapshotEntriesRich = (
       {
         label: rankLabel(el, locale),
         value: rankValue(el, preferredValueKey),
-        href: buildEntryHref(el),
+        href: buildEntryHref(el, hrefBase),
       },
     ];
   }
@@ -282,14 +284,14 @@ export const getSnapshotEntriesRich = (
           return {
             label: rankLabel(el, locale),
             value: formatPriceVolatility(el.stdDev),
-            href: buildEntryHref(el),
+            href: buildEntryHref(el, hrefBase),
           };
         }
 
         return {
           label: rankLabel(el, locale),
           value: rankValue(el, preferredValueKey),
-          href: buildEntryHref(el),
+          href: buildEntryHref(el, hrefBase),
         };
       }
 
