@@ -75,8 +75,8 @@ importers:
         specifier: 12.38.0
         version: 12.38.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       geist:
-        specifier: 1.7.0
-        version: 1.7.0(next@16.3.0(@babel/core@7.29.7)(@types/node@25.5.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))
+        specifier: 1.7.2
+        version: 1.7.2(next@16.3.0(@babel/core@7.29.7)(@types/node@25.5.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))
       negotiator:
         specifier: 1.0.0
         version: 1.0.0
@@ -2650,8 +2650,8 @@ packages:
   functions-have-names@1.2.3:
     resolution: {integrity: sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==}
 
-  geist@1.7.0:
-    resolution: {integrity: sha512-ZaoiZwkSf0DwwB1ncdLKp+ggAldqxl5L1+SXaNIBGkPAqcu+xjVJLxlf3/S8vLt9UHx1xu5fz3lbzKCj5iOVdQ==}
+  geist@1.7.2:
+    resolution: {integrity: sha512-Gu5lDFa3pLRyoBlBPf0QIFHVdWAnpco7fS1bJm41jyLPFoguBgiubseUN2oLXMgqZ7uxAxDoXcHMhCY/fOTTgg==}
     peerDependencies:
       next: '>=13.2.0'
 
@@ -6679,7 +6679,7 @@ snapshots:
 
   functions-have-names@1.2.3: {}
 
-  geist@1.7.0(next@16.3.0(@babel/core@7.29.7)(@types/node@25.5.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)):
+  geist@1.7.2(next@16.3.0(@babel/core@7.29.7)(@types/node@25.5.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)):
     dependencies:
       next: 16.3.0(@babel/core@7.29.7)(@types/node@25.5.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
 
