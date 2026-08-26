@@ -9,7 +9,7 @@ importers:
   .:
     dependencies:
       '@formatjs/intl-localematcher':
-        specifier: ^0.8.13
+        specifier: 0.8.13
         version: 0.8.13
       '@heroui/button':
         specifier: 2.2.32
@@ -33,13 +33,13 @@ importers:
         specifier: 2.2.30
         version: 2.2.30(@heroui/system@2.4.28(@heroui/theme@2.4.26(tailwindcss@4.3.3))(@react-spectrum/provider@3.11.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(framer-motion@12.38.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@heroui/theme@2.4.26(tailwindcss@4.3.3))(@react-spectrum/provider@3.11.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(framer-motion@12.38.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@heroui/react':
-        specifier: ^3.2.4
+        specifier: 3.2.4
         version: 3.2.4(@react-aria/i18n@3.13.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@react-aria/ssr@3.10.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@react-aria/utils@3.34.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@react-spectrum/provider@3.11.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(react-aria-components@1.20.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-aria@3.51.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(tailwindcss@4.3.3)
       '@heroui/snippet':
         specifier: 2.2.33
         version: 2.2.33(@heroui/system@2.4.28(@heroui/theme@2.4.26(tailwindcss@4.3.3))(@react-spectrum/provider@3.11.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(framer-motion@12.38.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@heroui/theme@2.4.26(tailwindcss@4.3.3))(@react-spectrum/provider@3.11.1(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(framer-motion@12.38.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@heroui/styles':
-        specifier: ^3.2.4
+        specifier: 3.2.4
         version: 3.2.4(tailwind-merge@3.4.0)(tailwindcss@4.3.3)
       '@heroui/switch':
         specifier: 2.2.27
@@ -96,7 +96,7 @@ importers:
         specifier: 10.1.0
         version: 10.1.0(@types/react@19.2.18)(react@19.2.8)
       recharts:
-        specifier: ^2.15.4
+        specifier: 2.15.4
         version: 2.15.4(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       swr:
         specifier: 2.5.1
@@ -121,7 +121,7 @@ importers:
         specifier: 3.36.1
         version: 3.36.1(react@19.2.8)
       '@tailwindcss/postcss':
-        specifier: ^4.3.3
+        specifier: 4.3.3
         version: 4.3.3
       '@types/node':
         specifier: 25.5.2
@@ -139,13 +139,13 @@ importers:
         specifier: 8.68.0
         version: 8.68.0(@typescript/typescript6@6.0.2)(eslint@10.9.1(jiti@2.7.0))
       '@typescript/native':
-        specifier: npm:typescript@^7.0.2
+        specifier: npm:typescript@7.0.2
         version: typescript@7.0.2
       autoprefixer:
         specifier: 10.5.4
         version: 10.5.4(postcss@8.5.26)
       baseline-browser-mapping:
-        specifier: ^2.11.19
+        specifier: 2.11.19
         version: 2.11.19
       eslint:
         specifier: 10.9.1
@@ -193,7 +193,7 @@ importers:
         specifier: 4.3.3
         version: 4.3.3
       typescript:
-        specifier: npm:@typescript/typescript6@^6.0.2
+        specifier: npm:@typescript/typescript6@6.0.2
         version: '@typescript/typescript6@6.0.2'
 
 packages:
