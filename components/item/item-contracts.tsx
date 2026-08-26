@@ -427,12 +427,11 @@ const DailyComboChart = ({ rows }: DailyChartProps) => {
             yAxisId="volume"
           />
           <Tooltip
-            formatter={(value: number, name: string) =>
-              name === ic.columnVolume
-                ? [formatNumber(value), name]
-                : [formatNumber(value), name]
-            }
-            labelFormatter={(label: string) => `${ic.columnDay}: ${label}`}
+            formatter={(value, name) => [
+              formatNumber(Number(value)),
+              String(name),
+            ]}
+            labelFormatter={(label) => `${ic.columnDay}: ${label}`}
           />
           <Legend height={36} iconType="line" verticalAlign="bottom" />
           <Bar
