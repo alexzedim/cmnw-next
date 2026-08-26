@@ -7,8 +7,8 @@ WORKDIR /app
 COPY pnpm-lock.yaml package.json pnpm-workspace.yaml ./
 COPY scripts ./scripts
 
-# Install dependencies
-RUN corepack enable pnpm && pnpm install --frozen-lockfile
+# Install dependencies (corepack is not distributed with Node 25+)
+RUN npm install --global pnpm@11.20.0 && pnpm install --frozen-lockfile
 
 # Copy source code
 COPY . .
