@@ -4,6 +4,7 @@ import type { Character } from "@/lib/types";
 
 import NextLink from "next/link";
 
+import { EmployeeBadge } from "@/components/character/employee-badge";
 import { classColors } from "@/constants/class-colors";
 import { getPastelColor, getFactionBorderColor } from "@/lib/utils/color";
 import { getGuildRankDisplay } from "@/lib/utils/guild-rank";
@@ -60,6 +61,13 @@ export function HashCharactersGrid({ characters }: HashCharactersGridProps) {
               <div className="h-px bg-[var(--border)]" />
 
               <div className="flex flex-wrap gap-2">
+                <EmployeeBadge
+                  blizzardEmployeeEvidence={character.blizzardEmployeeEvidence}
+                  blizzardEmployeePets={character.blizzardEmployeePets}
+                  hiredApprox={character.hiredApprox}
+                  isBlizzardEmployee={character.isBlizzardEmployee}
+                  withTooltip={false}
+                />
                 {character.level && (
                   <span className="chip">
                     {h.level.replace("{level}", `${character.level}`)}

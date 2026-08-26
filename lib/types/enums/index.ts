@@ -5,3 +5,9 @@ export { ItemQuality } from "./item-quality";
 export { FlagTypes } from "./flag-types";
 export { ValuationTypes } from "./valuation-types";
 export { WowClass } from "./wow-class";
+export {
+  BlizzardEmployeeEvidence,
+  LevelBoostEvidence,
+  isEmployeeVerdictVisible,
+} from "./character-verdicts";
+export type { CharacterEmployeeVerdict } from "./character-verdicts";

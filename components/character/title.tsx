@@ -4,7 +4,8 @@ import type { ReactNode } from "react";
 
 import { Link } from "@/components/custom-link";
 import { GuildRank } from "@/components/character/guild-rank";
-import { Faction } from "@/lib/types";
+import { EmployeeBadge } from "@/components/character/employee-badge";
+import { Faction, type BlizzardEmployeeEvidence } from "@/lib/types";
 import { NAMING_CONSTANTS } from "@/constants";
 import { fontJetBrains } from "@/config/fonts";
 
@@ -16,6 +17,10 @@ interface CharacterTitleProps {
   guildRank?: number;
   faction?: Faction;
   actions?: ReactNode;
+  isBlizzardEmployee?: boolean | null;
+  blizzardEmployeeEvidence?: BlizzardEmployeeEvidence | string | null;
+  blizzardEmployeePets?: string[] | null;
+  hiredApprox?: string | Date | null;
 }
 
 function getFactionBorderColor(faction?: Faction): string {
@@ -39,6 +44,10 @@ export const CharacterTitle = ({
   guildRank,
   faction,
   actions,
+  isBlizzardEmployee,
+  blizzardEmployeeEvidence,
+  blizzardEmployeePets,
+  hiredApprox,
 }: CharacterTitleProps) => {
   const borderColor = getFactionBorderColor(faction);
 
@@ -63,7 +72,15 @@ export const CharacterTitle = ({
 
       {/* Character Name - Using Geist Sans */}
       <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight mb-3">
-        {name}
+        <span className="inline-flex flex-wrap items-center gap-3">
+          {name}
+          <EmployeeBadge
+            blizzardEmployeeEvidence={blizzardEmployeeEvidence}
+            blizzardEmployeePets={blizzardEmployeePets}
+            hiredApprox={hiredApprox}
+            isBlizzardEmployee={isBlizzardEmployee}
+          />
+        </span>
       </h1>
 
       {/* Guild Info */}

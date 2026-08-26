@@ -174,6 +174,7 @@
     "battlePets": "Боевые питомцы",
     "system": "Система",
     "metadata": "Метаданные",
+    "detection": "Детекция",
     "labels": {
       "level": "Уровень",
       "unknown": "Неизвестно",
@@ -186,11 +187,35 @@
       "status": "Статус",
       "createdBy": "Создан",
       "createdAt": "Дата создания",
+      "createdApprox": "Создан (примерно)",
       "hashA": "Ключ A",
       "hashB": "Ключ B",
       "block": "Блок",
       "guid": "GUID",
       "id": "ID"
+    },
+    "verdicts": {
+      "levelBoost": "Буст уровня",
+      "boosted": "Буст",
+      "blizzardEmployee": "Сотрудник Blizzard",
+      "employeeSuspect": "Возможный сотрудник",
+      "hiredApprox": "Найм (примерно)",
+      "cePets": "Питомцы коллекционных изданий",
+      "onOrBefore": "не позднее",
+      "boostEvidence": {
+        "DIRECT_ACHIEVEMENT": "Выполнено достижение прямого буста уровня",
+        "TIMESTAMP_CLUSTER": "Цепочка уровневых достижений выдана одним моментом",
+        "ORIGINAL_CHAIN_ABSENT": "Отсутствует оригинальная цепочка уровней",
+        "ORIGINAL_LEVEL_10_PRESENT": "Естественная прокачка подтверждена",
+        "INDETERMINATE": "Недостаточно данных"
+      },
+      "employeeEvidence": {
+        "CE_FOS_SAME_DAY": "Коллекционные издания двух и более дополнений получены в один день",
+        "CE_TIMELINE_ORGANIC": "Органичный таймлайн коллекционера",
+        "MULTI_CE_PETS_UNVERIFIED": "Четыре и более питомца коллекционных изданий без подтверждения по датам",
+        "NO_CE_PETS": "Нет питомцев коллекционных изданий",
+        "INDETERMINATE": "Недостаточно данных"
+      }
     }
   },
   "statusIndicator": {

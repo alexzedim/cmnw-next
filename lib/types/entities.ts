@@ -3,6 +3,8 @@
  * Source: cmnw/libs/pg/src/entity/
  */
 
+import type { BlizzardEmployeeEvidence, LevelBoostEvidence } from "./enums";
+
 /**
  * Percentile data for character statistics
  */
@@ -57,6 +59,15 @@ export interface Character {
   createdBy?: string;
   updatedBy: string;
   lastModified?: string | Date;
+  createdApprox?: string | Date | null;
+  isLevelBoosted?: boolean | null;
+  levelBoostEvidence?: LevelBoostEvidence | null;
+  levelBoostType?: string | null;
+  levelBoostedAt?: string | Date | null;
+  isBlizzardEmployee?: boolean | null;
+  blizzardEmployeeEvidence?: BlizzardEmployeeEvidence | null;
+  blizzardEmployeePets?: string[] | null;
+  hiredApprox?: string | Date | null;
   createdAt?: string | Date;
   updatedAt?: string | Date;
 }

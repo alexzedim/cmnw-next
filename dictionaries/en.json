@@ -174,6 +174,7 @@
     "battlePets": "Battle Pets",
     "system": "System",
     "metadata": "Metadata",
+    "detection": "Detection",
     "labels": {
       "level": "Level",
       "unknown": "Unknown",
@@ -186,11 +187,35 @@
       "status": "Status",
       "createdBy": "Created By",
       "createdAt": "Created At",
+      "createdApprox": "Created (approx)",
       "hashA": "Hash A",
       "hashB": "Hash B",
       "block": "Block",
       "guid": "GUID",
       "id": "ID"
+    },
+    "verdicts": {
+      "levelBoost": "Level Boost",
+      "boosted": "Boosted",
+      "blizzardEmployee": "Blizzard Employee",
+      "employeeSuspect": "Suspected Employee",
+      "hiredApprox": "Hired (approx)",
+      "cePets": "Collector's Edition pets",
+      "onOrBefore": "on or before",
+      "boostEvidence": {
+        "DIRECT_ACHIEVEMENT": "Direct level boost achievement completed",
+        "TIMESTAMP_CLUSTER": "Leveling achievements batch-stamped at one moment",
+        "ORIGINAL_CHAIN_ABSENT": "Original leveling ladder missing",
+        "ORIGINAL_LEVEL_10_PRESENT": "Natural leveling proven",
+        "INDETERMINATE": "Not enough data"
+      },
+      "employeeEvidence": {
+        "CE_FOS_SAME_DAY": "Collector's editions of two or more expansions granted on the same day",
+        "CE_TIMELINE_ORGANIC": "Organic collector timeline",
+        "MULTI_CE_PETS_UNVERIFIED": "Four or more collector's edition pets without timestamp proof",
+        "NO_CE_PETS": "No collector's edition pets",
+        "INDETERMINATE": "Not enough data"
+      }
     }
   },
   "statusIndicator": {

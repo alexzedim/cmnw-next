@@ -4,8 +4,11 @@ import type { Character } from "@/lib/types";
 
 import NextLink from "next/link";
 
+import { isEmployeeVerdictVisible } from "@/lib/types";
 import { CharacterProfessions } from "@/components/character/professions";
+import { EmployeeBadge } from "@/components/character/employee-badge";
 import { InfoSection } from "@/components/character/info-section";
+import { getExpansionByBackendCode } from "@/constants";
 import { useI18n } from "@/lib/i18n/context";
 
 interface CharacterStatsProps {
@@ -16,6 +19,14 @@ export function CharacterStats({ character }: CharacterStatsProps) {
   const { dict } = useI18n();
   const cs = dict.characterStats;
   const labels = cs.labels;
+  const verdicts = cs.verdicts;
+
+  const formatVerdictDate = (value: string | Date) =>
+    new Date(value).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
 
   const itemLevelPercent = character.percentiles?.global?.averageItemLevel ?? 0;
   const achievementPercent =
@@ -44,6 +55,14 @@ export function CharacterStats({ character }: CharacterStatsProps) {
       : []),
     ...(character.gender
       ? [{ label: labels.gender, value: character.gender }]
+      : []),
+    ...(character.createdApprox
+      ? [
+          {
+            label: labels.createdApprox,
+            value: `${verdicts.onOrBefore} ${formatVerdictDate(character.createdApprox)}`,
+          },
+        ]
       : []),
     ...(character.lastModified
       ? [
@@ -146,6 +165,71 @@ export function CharacterStats({ character }: CharacterStatsProps) {
       : []),
   ];
 
+  const boostExpansion = character.levelBoostType
+    ? getExpansionByBackendCode(character.levelBoostType)
+    : undefined;
+
+  const detectionItems = [
+    ...(character.isLevelBoosted === true
+      ? [
+          {
+            label: verdicts.levelBoost,
+            value: (
+              <span
+                className="flex items-center gap-2"
+                title={
+                  character.levelBoostEvidence
+                    ? verdicts.boostEvidence[
+                        character.levelBoostEvidence as keyof typeof verdicts.boostEvidence
+                      ]
+                    : undefined
+                }
+              >
+                <span className="chip text-xs whitespace-nowrap">
+                  {verdicts.boosted}
+                </span>
+                {boostExpansion && (
+                  <span
+                    className="text-xs font-medium"
+                    style={{ color: boostExpansion.color }}
+                  >
+                    {boostExpansion.label}
+                  </span>
+                )}
+                {character.levelBoostedAt && (
+                  <span className="text-xs text-foreground/50">
+                    {formatVerdictDate(character.levelBoostedAt)}
+                  </span>
+                )}
+              </span>
+            ),
+          },
+        ]
+      : []),
+    ...(isEmployeeVerdictVisible(character)
+      ? [
+          {
+            label: verdicts.blizzardEmployee,
+            value: (
+              <span className="flex items-center gap-2">
+                <EmployeeBadge
+                  blizzardEmployeeEvidence={character.blizzardEmployeeEvidence}
+                  blizzardEmployeePets={character.blizzardEmployeePets}
+                  hiredApprox={character.hiredApprox}
+                  isBlizzardEmployee={character.isBlizzardEmployee}
+                />
+                {character.hiredApprox && (
+                  <span className="text-xs text-foreground/50">
+                    {formatVerdictDate(character.hiredApprox)}
+                  </span>
+                )}
+              </span>
+            ),
+          },
+        ]
+      : []),
+  ];
+
   const combinedMetadataSystemItems = [
     ...additionalProfileItems,
     ...systemItems,
@@ -169,6 +253,14 @@ export function CharacterStats({ character }: CharacterStatsProps) {
           badge={cs.verification}
           items={hashItems}
           title={cs.characterHashes}
+        />
+      )}
+
+      {detectionItems.length > 0 && (
+        <InfoSection
+          badge={cs.detection}
+          items={detectionItems}
+          title={cs.detection}
         />
       )}
 

@@ -4,6 +4,7 @@ import type { Character } from "@/lib/types";
 
 import NextLink from "next/link";
 
+import { EmployeeBadge } from "@/components/character/employee-badge";
 import { classColors } from "@/constants/class-colors";
 import { getFactionBorderColor, getPastelColor } from "@/lib/utils/color";
 import { getGuildRankDisplay } from "@/lib/utils/guild-rank";
@@ -49,13 +50,24 @@ export function HashCharactersTable({ characters }: HashCharactersTableProps) {
                   }}
                 >
                   <td>
-                    <NextLink
-                      className="font-medium transition-colors hover:text-[var(--primary)]"
-                      href={`/character/${encodeURIComponent(character.guid)}`}
-                      style={{ color: classColor ?? "inherit" }}
-                    >
-                      {character.name}
-                    </NextLink>
+                    <span className="inline-flex items-center gap-2">
+                      <NextLink
+                        className="font-medium transition-colors hover:text-[var(--primary)]"
+                        href={`/character/${encodeURIComponent(character.guid)}`}
+                        style={{ color: classColor ?? "inherit" }}
+                      >
+                        {character.name}
+                      </NextLink>
+                      <EmployeeBadge
+                        blizzardEmployeeEvidence={
+                          character.blizzardEmployeeEvidence
+                        }
+                        blizzardEmployeePets={character.blizzardEmployeePets}
+                        hiredApprox={character.hiredApprox}
+                        isBlizzardEmployee={character.isBlizzardEmployee}
+                        withTooltip={false}
+                      />
+                    </span>
                   </td>
                   <td>
                     <span className="text-sm text-foreground/60">

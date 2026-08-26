@@ -106,10 +106,14 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
           actions={
             <CharacterRefresh guid={decodedGuid} status={character.status} />
           }
+          blizzardEmployeeEvidence={character.blizzardEmployeeEvidence}
+          blizzardEmployeePets={character.blizzardEmployeePets}
           faction={factionEnum}
           guild={character.guild}
           guildId={character.guildGuid}
           guildRank={character.guildRank}
+          hiredApprox={character.hiredApprox}
+          isBlizzardEmployee={character.isBlizzardEmployee}
           name={character.name}
           realm={character.realm}
         />

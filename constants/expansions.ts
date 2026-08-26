@@ -122,3 +122,29 @@ export const getExpansionOrderIndex = (value: string): number => {
 
   return index === -1 ? Infinity : index;
 };
+
+/**
+ * Backend EXPANSIONS codes (cmnw/libs/resources/src/constants/osint.constants.ts)
+ * mapped to the frontend expansion values above. Kept in sync manually.
+ */
+export const BACKEND_EXPANSION_CODE_TO_VALUE: Record<string, string> = {
+  CSLC: "clsc",
+  TBC: "tbc",
+  WOTLK: "wotlk",
+  CATA: "cata",
+  MOP: "mop",
+  WOD: "wod",
+  LGN: "legion",
+  BFA: "bfa",
+  SHDW: "shdw",
+  DRGF: "df",
+  TWWN: "tww",
+};
+
+export const getExpansionByBackendCode = (
+  code: string
+): Expansion | undefined => {
+  const value = BACKEND_EXPANSION_CODE_TO_VALUE[code.toUpperCase()];
+
+  return EXPANSIONS.find((exp) => exp.value === value);
+};
