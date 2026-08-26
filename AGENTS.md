@@ -23,7 +23,7 @@ Always run `pnpm lint` after making changes to verify code passes lint rules.
 
 ## TypeScript
 
-- **Dual install via npm aliases.** `typescript` is aliased to `@typescript/typescript6@^6.0.2` and is consumed by `@typescript-eslint/*` (which still requires TS 6's API). `@typescript/native` is aliased to `typescript@^7.0.2` and is consumed by `tsc` / `pnpm typecheck`. As a result `npx tsc` runs TS 7 (native) and `npx tsc6` runs TS 6. Do not consolidate these into a single install.
+- **Dual install via npm aliases.** `typescript` is aliased to `@typescript/typescript6@6.0.2` and is consumed by `@typescript-eslint/*` (which still requires TS 6's API). `@typescript/native` is aliased to `typescript@7.0.2` and is consumed by `tsc` / `pnpm typecheck`. As a result `npx tsc` runs TS 7 (native) and `npx tsc6` runs TS 6. Do not consolidate these into a single install.
 - **VS Code:** install the [`TypeScriptTeam.native-preview`](https://marketplace.visualstudio.com/items?itemName=TypeScriptTeam.native-preview) extension to enable the TS 7 language server. Toggle via the "Enable/Disable TypeScript 7 Language Server" commands from the palette.
 - Strict mode enabled (`strict: true`)
 - Target: ES2022, module resolution: bundler
