@@ -1,426 +1,184 @@
 <div align="center">
-  <a href="https://cmnw.me/" target="_blank">
+  <a href="https://cmnw.me/" target="blank">
     <img src="https://user-images.githubusercontent.com/907696/221422670-61897db8-4bbc-4436-969f-bdc5cf194275.svg" width="200" alt="CMNW Logo" />
   </a>
 
-  <h1>🌐 CMNW Next</h1>
-  <p><em>Intelligence Always Wins - Frontend</em></p>
+  <h1>CMNW Next | Frontend</h1>
 
-  <p>
-    <a href="https://cmnw.me/"><img src="https://img.shields.io/badge/🌐_Website-cmnw.me-blue?style=for-the-badge" alt="Website"></a>
-    <a href="https://github.com/alexzedim/cmnw-next/blob/master/LICENSE"><img src="https://img.shields.io/badge/📄_License-MIT-green?style=for-the-badge" alt="License"></a>
-    <a href="https://github.com/alexzedim/cmnw-next/releases"><img src="https://img.shields.io/badge/🚀_Version-3.1.0-orange?style=for-the-badge" alt="Version"></a>
-  </p>
-
-  <p>
-    <img src="https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=nextdotjs&logoColor=white" alt="Next.js">
-    <img src="https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=black" alt="React">
-    <img src="https://img.shields.io/badge/TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript">
-    <img src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind CSS">
-    <img src="https://img.shields.io/badge/HeroUI-E0234E?style=flat-square&logo=react&logoColor=white" alt="HeroUI">
-  </p>
+  <p>Next.js App Router interface for the CMNW intelligence platform — character and guild OSINT, auction-house analytics, hash investigations and a live activity feed, served in English and Russian at <a href="https://cmnw.me">cmnw.me</a> | <a href="https://cmnw.ru">cmnw.ru</a>.</p>
 </div>
 
 ---
 
-## 📖 About
+## ✨ Features
 
-**CMNW Next** is the modern frontend interface for the CMNW Intelligence Platform, providing an intuitive and responsive user experience for World of Warcraft intelligence gathering, market analysis, and guild management. Built with Next.js 16 and React 19, it delivers blazing-fast performance with server-side rendering and real-time data visualization.
+- 🕵️ **Character intelligence** — full profiles with stats, professions, raid logs, guild history, plus boost and Blizzard-employee verdicts
+- 🏰 **Guild analytics** — roster, rank allocation, hall of fame and membership change logs
+- 💰 **Market analysis** — item pricing, quotes across realms, contracts charts, market heatmap
+- #️⃣ **Hash investigations** — account-hash blocks linking alts across characters, with history and filters
+- 🌍 **Realm pages** — demographics, hall of fame, raid-log stats, market pulse per realm
+- 🔍 **Universal search** — one box for characters, guilds, items and realms with animated placeholders
+- 📡 **Live feed** — WebSocket stream of character/guild/auction/queue events in real time
+- ⬆️ **Addon upload** — rune-gated page accepting the CMNW-OSINT SavedVariables file, parsed client-side
+- 🌐 **EN / RU i18n** — cookie-based locale with Accept-Language negotiation
+- 🎨 **8 color palettes** — custom theming system with pre-paint flash prevention
 
-### 🎯 Key Features
+## 📄 Pages
 
-- 🕵️ **Character Intelligence**: Comprehensive character profiles with stats, gear, and progression tracking
-- 🏰 **Guild Analytics**: Guild roster management, member tracking, and activity monitoring
-- 💰 **Market Analysis**: Real-time auction house data with interactive price charts and heatmaps
-- 🎮 **LFG System**: Looking for Guild matching with advanced filtering
-- 📊 **Data Visualization**: Interactive charts powered by Tremor with beautiful data insights
-- 🎨 **Modern UI**: Beautiful, responsive design with dark/light theme support
-- ⚡ **Performance**: Next.js 16 with Turbopack for lightning-fast development and production builds
-- 🔍 **Smart Search**: Universal search for characters, guilds, items, and hash queries
+| Route | What it shows |
+|-------|---------------|
+| `/` | Hero, live feed, live metrics, snapshot briefs |
+| `/character/[guid]` | Character OSINT profile + change logs |
+| `/guild/[guid]` | Guild overview, roster, rank allocation, hall of fame |
+| `/item/[id]` | Item market data: listing, quotes, contracts, heatmap |
+| `/hash/[hashQuery]` | Account-hash block: linked characters, history, filters |
+| `/realm`, `/realm/[realmQuery]` | Realm index and per-realm analytics |
+| `/upload` | Rune-locked SavedVariables upload (CMNW-OSINT addon) |
+| `/who-we-are` | Contributors |
 
----
+## ⚡ Tech Stack
 
-## 🏗️ Architecture
+<div align="center">
 
-### 📁 Project Structure
+#### 🚀 Framework & Runtime
+
+</div>
+<div align="center">
+<table align="center">
+<tr align="center">
+    <td valign="bottom"><img src="./icons/nextdotjs.svg" alt="Next.js logo" width="48"/><br/>Next.js</td>
+    <td valign="bottom"><img src="./icons/react.svg" alt="React logo" width="48"/><br/>React</td>
+    <td valign="bottom"><img src="./icons/typescript.svg" alt="TypeScript logo" width="48"/><br/>TypeScript</td>
+    <td valign="bottom"><img src="./icons/nodedotjs.svg" alt="Node.js logo" width="48"/><br/>Node.js</td>
+</tr>
+</table>
+</div>
+
+<div align="center">
+
+#### 🎨 UI & Styling
+
+</div>
+<div align="center">
+<table align="center">
+<tr align="center">
+    <td valign="bottom"><img src="./icons/tailwindcss.svg" alt="Tailwind CSS logo" width="48"/><br/>Tailwind CSS</td>
+    <td valign="bottom"><img src="./icons/framer.svg" alt="Framer Motion logo" width="48"/><br/>Framer Motion</td>
+</tr>
+</table>
+</div>
+
+<div align="center">
+
+#### 📊 Data & Forms
+
+</div>
+<div align="center">
+<table align="center">
+<tr align="center">
+    <td valign="bottom"><img src="./icons/swr.svg" alt="SWR logo" width="48"/><br/>SWR</td>
+    <td valign="bottom"><img src="./icons/reacthookform.svg" alt="React Hook Form logo" width="48"/><br/>React Hook Form</td>
+</tr>
+</table>
+</div>
+
+<div align="center">
+
+#### 🔧 Tooling & CI/CD
+
+</div>
+<div align="center">
+<table align="center">
+<tr align="center">
+    <td valign="bottom"><img src="./icons/pnpm.svg" alt="pnpm logo" width="48"/><br/>pnpm</td>
+    <td valign="bottom"><img src="./icons/eslint.svg" alt="ESLint logo" width="48"/><br/>ESLint</td>
+    <td valign="bottom"><img src="./icons/prettier.svg" alt="Prettier logo" width="48"/><br/>Prettier</td>
+    <td valign="bottom"><img src="./icons/docker.svg" alt="Docker logo" width="48"/><br/>Docker</td>
+    <td valign="bottom"><img src="./icons/githubactions.svg" alt="GitHub Actions logo" width="48"/><br/>GitHub Actions</td>
+</tr>
+</table>
+</div>
+
+Additional key dependencies: HeroUI (component system), Tremor + Recharts (charts), Day.js, Yup, Negotiator (locale detection), PT Mono / JetBrains Mono / Noto Sans Runic (typography).
+
+## 🧩 Architecture
 
 ```
 cmnw-next/
-├── app/                      # Next.js App Router
-│   ├── character/[id]/       # Character profile pages
-│   ├── guild/[id]/          # Guild detail pages
-│   ├── item/[id]/           # Item analysis pages
-│   ├── hash/[id]/           # Hash-based searches
-│   ├── blog/                # Blog and articles
-│   └── about/               # About and documentation
-├── components/              # React components
-│   ├── character/           # Character-specific components
-│   ├── guild/               # Guild-specific components
-│   ├── search-form/         # Universal search interface
-│   └── ...                  # Shared UI components
-├── lib/                     # Core utilities
-│   ├── api/                 # API client and hooks
-│   │   ├── client.ts        # Centralized API client
-│   │   ├── hooks.ts         # SWR-based data fetching hooks
-│   │   └── utils.ts         # GUID encoding/decoding utilities
-│   ├── types/               # TypeScript type definitions
-│   ├── utils/               # Helper functions
-│   └── constants/           # Application constants
-├── content/                 # Markdown content for blog
-├── styles/                  # Global styles
-└── public/                  # Static assets
+├── app/
+│   ├── api/               # 16 passthrough route handlers (app/dma/osint) → serverFetch()
+│   ├── character/[guid]/  # Server components + error/loading boundaries
+│   ├── guild/[guid]/
+│   ├── item/[id]/
+│   ├── hash/[hashQuery]/
+│   ├── realm/, realm/[realmQuery]/
+│   ├── upload/            # Rune-locked SavedVariables upload
+│   └── who-we-are/
+├── components/            # character/ guild/ hash/ item/ realm/ home/ upload/ …
+├── dictionaries/          # en.json, ru.json + locale detection
+├── hooks/                 # use-animated-placeholder, use-romanize, metrics hooks
+├── lib/
+│   ├── api/               # ApiClient, SWR hooks, origin fallback logic
+│   ├── i18n/              # React context i18n provider
+│   ├── palette.ts         # 8-palette theming system
+│   └── types/             # entities, enums, component/data/validation types
+├── config/                # site config, fonts, API origin resolution
+├── constants/             # endpoints, search placeholders, contributors
+├── styles/                # Tailwind layers + design tokens (tokens.css)
+├── scripts/               # tsc shim, rune-key generator
+└── icons/                 # README icon assets
 ```
 
-### 🔗 Backend Integration
+**API layer** — server components call the backend through `serverFetch()`, which tries known origins (`cmnw-api:8080`, host hairpin) with a cached known-good winner. Client components use same-origin relative URLs first (`/api/*` passthrough handlers), falling back across `cmnw.me` | `cmnw.ru` on hard failures with a sticky sessionStorage origin and periodic health re-checks. ISR revalidation defaults to 1 hour.
 
-This frontend connects to the [CMNW Backend API](https://github.com/alexzedim/cmnw), a sophisticated microservices architecture built with NestJS that provides:
+**TypeScript** — strict mode with a dual install: TypeScript 7 (native) powers `tsc` / `pnpm typecheck`, while a TS 6 alias feeds `@typescript-eslint`. Do not consolidate them.
 
-- 🕵️ **OSINT Module**: Character and guild intelligence gathering
-- 📊 **DMA Module**: Data Market Analysis and auction house monitoring
-- 💰 **Valuations Engine**: XVA-based financial modeling
-- 🔒 **OAuth Integration**: Battle.net authentication
+**Theming** — 8 palettes (`light`, `violet`, `blue`, `green`, `peach`, `teal`, `dark-blue`, `black`) persisted in `localStorage` and applied pre-paint by an inline script; non-light palettes also enable `.dark` styles. No `next-themes`.
 
----
+## ⬆️ Addon Upload Flow
 
-## 🛠️ Technology Stack
+`/upload` is gated by a six-rune lock (SHA-256 key check, session-scoped). Behind it:
 
-### ⚛️ Frontend Framework
-- **[Next.js 16](https://nextjs.org)** - React framework with App Router and Turbopack
-- **[React 19](https://react.dev)** - Latest React with enhanced features
-- **[TypeScript](https://www.typescriptlang.org)** - Type-safe development
+1. Drop or select the CMNW-OSINT SavedVariables `cmnw-osint.lua` file
+2. The file is validated and parsed **client-side** (Lua header check + entry parser)
+3. Parsed entries are previewed in a table, deduplicated by `name@realm`
+4. Submitting POSTs to `/api/osint/upload` — the backend returns processed characters, guilds and the S3 archive key
 
-### 🎨 UI & Styling
-- **[HeroUI v2](https://heroui.com)** - Modern React component library
-- **[Tailwind CSS](https://tailwindcss.com)** - Utility-first CSS framework
-- **[Tailwind Variants](https://tailwind-variants.org)** - Component variant handling
-- **[Framer Motion](https://www.framer.com/motion)** - Animation library
-
-### 📊 Data & State
-- **[SWR](https://swr.vercel.app)** - React Hooks for data fetching with caching
-- **[React Hook Form](https://react-hook-form.com)** - Performant form validation
-- **[Yup](https://github.com/jquense/yup)** - Schema validation
-
-### 📈 Data Visualization
-- **[Tremor](https://tremor.so)** - React library for dashboards and charts
-- **[Day.js](https://day.js.org)** - Date manipulation library
-
-### 🧰 Development Tools
-- **[ESLint](https://eslint.org)** - Linting with Next.js and TypeScript configs
-- **[Prettier](https://prettier.io)** - Code formatting
-- **[pnpm](https://pnpm.io)** - Fast, disk space efficient package manager
-
----
-
-## 🚀 Quick Start
-
-### Prerequisites
-
-- **Node.js** 18+ 
-- **pnpm** 9+ (recommended) or npm/yarn
-- Access to the CMNW Backend API (the frontend now targets https://cmnw.me by default)
-
-### 🔧 Installation
+## 🚀 Getting Started
 
 ```bash
-# Clone the repository
 git clone https://github.com/alexzedim/cmnw-next.git
 cd cmnw-next
-
-# Install dependencies
 pnpm install
-
-# Set up environment variables (optional)
-cp .env.example .env.local
-# Edit .env.local to adjust caching settings (optional)
+pnpm dev            # http://localhost:3000 (Turbopack)
 ```
 
-### 🏃 Development
+| Script | Command |
+|--------|---------|
+| `pnpm dev` | `next dev --turbopack` |
+| `pnpm build` | `next build --turbopack` |
+| `pnpm lint` | `eslint --fix` |
+| `pnpm typecheck` | `tsc --noEmit` (TypeScript 7 native) |
+| `pnpm format` | Prettier |
 
-```bash
-# Start development server with Turbopack
-pnpm dev
+**Requirements:** Node ≥ 24, pnpm ≥ 11. No test framework is configured.
 
-# Access the application at http://localhost:3000
-```
+## 🐳 Deployment
 
-### 🏗️ Build
+- **Docker** — two-stage build on `node:26-alpine`, non-root runtime, published to `ghcr.io/alexzedim/cmnw-next` on `v*` tags (multi-arch via Buildx)
+- **CI** — every PR runs lint + typecheck + build; Dependabot groups weekly dependency bumps (next+react, tailwind, HeroUI, tooling)
+- **Production** — runs behind the [core](https://github.com/alexzedim/core) Nginx edge on `cmnw.me` | `cmnw.ru`, container port mapped to 8081
 
-```bash
-# Create production build
-pnpm build
+## 🌐 Ecosystem
 
-# Start production server
-pnpm start
-```
-
-### 🧹 Code Quality
-
-```bash
-# Run ESLint
-pnpm lint
-
-# Format code with Prettier
-pnpm format
-```
+| Project | Role |
+|---------|------|
+| [cmnw](https://github.com/alexzedim/cmnw) | NestJS microservices backend — the data platform |
+| **cmnw-next** | This frontend — [cmnw.me](https://cmnw.me) \| [cmnw.ru](https://cmnw.ru) |
+| [cmnw-osint](https://github.com/alexzedim/cmnw-osint) | WoW addon — feeds data via the upload page |
+| [cmnw-oraculum](https://github.com/alexzedim/cmnw-oraculum) | Discord bot integration |
+| [core](https://github.com/alexzedim/core) | Self-hosted infrastructure running it all |
 
 ---
 
-## 📱 Key Features & Pages
-
-### 🏠 Home Page
-- Universal search interface for characters, guilds, items, and hash queries
-- Quick navigation to all platform sections
-
-### 👤 Character Pages (`/character/[id]`)
-- **Character Profile**: Avatar, class, faction, guild information
-- **Statistics**: Detailed character stats and attributes
-- **Looking for Guild**: Browse characters searching for guilds with filters
-
-### 🏰 Guild Pages (`/guild/[id]`)
-- **Guild Overview**: Guild name, faction, realm, member count
-- **Guild Roster**: Sortable table of all guild members with class/level info
-- **Activity Timeline**: Guild membership changes and events
-
-### 💎 Item Pages (`/item/[id]`)
-- **Item Details**: Comprehensive item information with quality tiers
-- **Market Valuations**: Price history and market analysis
-- **Quotations**: Real-time pricing across realms
-- **Market Heatmap**: Visual representation of price distribution
-
-### 🔍 Hash Search (`/hash/[id]`)
-- Advanced search capabilities using encoded query parameters
-- Character and guild search results
-
-### 📚 Content Pages
-- **Blog** (`/blog`): Articles and updates with markdown support
-- **About** (`/about`): Platform information and documentation
-- **Docs** (`/docs`): API and feature documentation
-
----
-
-## 🎨 Theming & Customization
-
-### Theme Support
-CMNW Next includes built-in dark/light theme support powered by `next-themes`:
-
-```tsx
-// Theme toggle available in navbar
-import { ThemeSwitch } from "@/components/theme-switch";
-```
-
-### Faction Colors
-Dynamic theming based on World of Warcraft factions:
-- **Alliance**: Blue color scheme
-- **Horde**: Red color scheme
-- **Neutral**: Purple/gray scheme
-
-### Class Colors
-Character pages display WoW class-specific colors:
-- Death Knight, Demon Hunter, Druid, Hunter, Mage, Monk, Paladin, Priest, Rogue, Shaman, Warlock, Warrior, Evoker
-
----
-
-## 🔌 API Integration
-
-### API Client
-
-The application uses a centralized API client (`lib/api/client.ts`) for all backend communication:
-
-```typescript
-import { apiClient } from '@/lib/api';
-
-// Example: Fetch character data
-const character = await apiClient.get('/api/osint/character', {
-  name: 'PlayerName',
-  realm: 'RealmName'
-});
-```
-
-### SWR Hooks
-
-Client components use SWR hooks for automatic caching and revalidation:
-
-```tsx
-'use client';
-import { useCharacter } from '@/lib/api/hooks';
-
-function CharacterComponent({ guid }: { guid: string }) {
-  const { data, error, isLoading } = useCharacter({ guid });
-  
-  if (isLoading) return <Spinner />;
-  if (error) return <ErrorMessage />;
-  
-  return <CharacterProfile character={data} />;
-}
-```
-
-### GUID Encoding
-
-Characters and guilds use encoded GUIDs for URLs:
-
-```typescript
-import { encodeGuid, decodeGuid } from '@/lib/api';
-
-// Encode: Player@RealmName -> Player%40RealmName
-const encoded = encodeGuid('Player@RealmName');
-
-// Decode: Player%40RealmName -> Player@RealmName
-const decoded = decodeGuid('Player%40RealmName');
-```
-
----
-
-## 📊 Data Visualization
-
-### Market Heatmaps
-Interactive heatmaps showing price distribution across realms:
-
-```tsx
-import { MarketHeatmap } from '@/components/market-heatmap';
-
-<MarketHeatmap data={valuationData} />
-```
-
-### Price Charts
-Time-series charts for historical pricing:
-
-```tsx
-import { LineChart } from '@tremor/react';
-
-<LineChart
-  data={priceHistory}
-  index="date"
-  categories={["price"]}
-  colors={["blue"]}
-/>
-```
-
----
-
-## 🔒 Environment Variables
-
-```bash
-# .env.local
-
-# Backend API cache revalidation (default: 3600 seconds)
-NEXT_PUBLIC_API_REVALIDATION=3600
-
-# Optional: Analytics, monitoring, etc.
-# NEXT_PUBLIC_GA_ID=your-google-analytics-id
-```
-
----
-
-## 🚢 Deployment
-
-### Vercel (Recommended)
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/alexzedim/cmnw-next)
-
-```bash
-# Install Vercel CLI
-pnpm i -g vercel
-
-# Deploy to production
-vercel --prod
-```
-
-### Docker
-
-```dockerfile
-# Build image
-docker build -t cmnw-next .
-
-# Run container
-docker run -p 3000:3000 cmnw-next
-```
-
-> **Note:** The frontend always targets https://cmnw.me for API calls. Override the hardcoded origin in [`config/api-origin.js`](config/api-origin.js) if you deploy the API elsewhere.
-
-### Static Export
-
-```bash
-# Build static site
-pnpm build
-
-# Output in ./out directory
-```
-
----
-
-## 🧪 Testing & Quality
-
-### Code Quality Tools
-
-- **ESLint**: Configured with Next.js, TypeScript, React, and Prettier rules
-- **Prettier**: Enforces consistent code formatting with LF line endings
-- **TypeScript**: Strict mode enabled for type safety
-
-### Browser Support
-
-- Chrome (latest)
-- Firefox (latest)
-- Safari (latest)
-- Edge (latest)
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! This frontend works in tandem with the [CMNW Backend](https://github.com/alexzedim/cmnw).
-
-### 📋 How to Contribute
-
-1. **Fork** the repository
-2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
-3. **Follow** code style (run `pnpm lint` and `pnpm format`)
-4. **Commit** with conventional commits (`git commit -m 'feat: add amazing feature'`)
-5. **Push** to the branch (`git push origin feature/amazing-feature`)
-6. **Open** a Pull Request
-
-### 🎯 Areas for Contribution
-
-- 🎨 **UI/UX Improvements**: Enhance component design and user experience
-- 📊 **Data Visualization**: Add new charts and analytics views
-- ♿ **Accessibility**: Improve ARIA labels and keyboard navigation
-- 🌍 **Internationalization**: Add support for multiple languages
-- 📱 **Mobile Experience**: Optimize for mobile devices
-- 🧪 **Testing**: Add unit and integration tests
-
----
-
-## 📄 License
-
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 🔗 Related Projects
-
-- **[CMNW Backend](https://github.com/alexzedim/cmnw)** - Microservices API backend
-- **[CMNW OSINT Addon](https://github.com/alexzedim/cmnw-osint)** - World of Warcraft addon for data collection
-- **[CMNW Oraculum](https://github.com/alexzedim/cmnw-oraculum)** - Discord bot integration
-
----
-
-## 🙏 Acknowledgments
-
-- Built with [Next.js](https://nextjs.org) by Vercel
-- UI components from [HeroUI](https://heroui.com)
-- Charts powered by [Tremor](https://tremor.so)
-- Icons from [React Icons](https://react-icons.github.io/react-icons)
-
----
-
-<div align="center">
-  <h3>🌟 Built with ❤️ by <a href="https://github.com/alexzedim">@alexzedim</a></h3>
-  
-  <p>
-    <a href="https://cmnw.me/">🌐 Website</a> •
-    <a href="https://github.com/alexzedim/cmnw-next/issues">🐛 Issues</a> •
-    <a href="https://github.com/alexzedim/cmnw-next/discussions">💬 Discussions</a> •
-    <a href="https://twitter.com/alexzedim">🐦 Twitter</a>
-  </p>
-  
-  <p><em>"Intelligence Always Wins" 🎯</em></p>
-</div>
+**Maintained by:** [alexzedim](https://github.com/alexzedim) · MIT · development conventions in [AGENTS.md](./AGENTS.md)
