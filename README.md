@@ -135,15 +135,6 @@ cmnw-next/
 
 **Theming** — eight palettes (`light`, `violet`, `blue`, `green`, `peach`, `teal`, `dark-blue`, `black`) remembered per visitor, with dark styling riding along on every non-light palette.
 
-## ⬆️ Addon Upload Flow
-
-`/upload` is gated by a six-rune lock (SHA-256 key check, session-scoped). Behind it:
-
-1. Drop or select the CMNW-OSINT SavedVariables `cmnw-osint.lua` file
-2. The file is validated and parsed **client-side** (Lua header check + entry parser)
-3. Parsed entries are previewed in a table, deduplicated by `name@realm`
-4. Submitting POSTs to `/api/osint/upload` — the backend returns processed characters, guilds and the S3 archive key
-
 ## 🌐 Ecosystem
 
 | Project | Role |
