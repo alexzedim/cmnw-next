@@ -129,11 +129,11 @@ cmnw-next/
 └── icons/                 # README icon assets
 ```
 
-**API layer** — server components call the backend through `serverFetch()`, which tries known origins (`cmnw-api:8080`, host hairpin) with a cached known-good winner. Client components use same-origin relative URLs first (`/api/*` passthrough handlers), falling back across `cmnw.me` | `cmnw.ru` on hard failures with a sticky sessionStorage origin and periodic health re-checks. ISR revalidation defaults to 1 hour.
+**API layer** — server components read the backend directly, client components go same-origin through lightweight passthrough routes, with automatic failover across `cmnw.me` | `cmnw.ru` and incremental static caching for fast cold loads.
 
-**TypeScript** — strict mode with a dual install: TypeScript 7 (native) powers `tsc` / `pnpm typecheck`, while a TS 6 alias feeds `@typescript-eslint`. Do not consolidate them.
+**i18n** — English and Russian out of the box: cookie-persisted locale with Accept-Language negotiation on first visit.
 
-**Theming** — 8 palettes (`light`, `violet`, `blue`, `green`, `peach`, `teal`, `dark-blue`, `black`) persisted in `localStorage` and applied pre-paint by an inline script; non-light palettes also enable `.dark` styles. No `next-themes`.
+**Theming** — eight palettes (`light`, `violet`, `blue`, `green`, `peach`, `teal`, `dark-blue`, `black`) remembered per visitor, with dark styling riding along on every non-light palette.
 
 ## ⬆️ Addon Upload Flow
 
@@ -143,31 +143,6 @@ cmnw-next/
 2. The file is validated and parsed **client-side** (Lua header check + entry parser)
 3. Parsed entries are previewed in a table, deduplicated by `name@realm`
 4. Submitting POSTs to `/api/osint/upload` — the backend returns processed characters, guilds and the S3 archive key
-
-## 🚀 Getting Started
-
-```bash
-git clone https://github.com/alexzedim/cmnw-next.git
-cd cmnw-next
-pnpm install
-pnpm dev            # http://localhost:3000 (Turbopack)
-```
-
-| Script | Command |
-|--------|---------|
-| `pnpm dev` | `next dev --turbopack` |
-| `pnpm build` | `next build --turbopack` |
-| `pnpm lint` | `eslint --fix` |
-| `pnpm typecheck` | `tsc --noEmit` (TypeScript 7 native) |
-| `pnpm format` | Prettier |
-
-**Requirements:** Node ≥ 24, pnpm ≥ 11. No test framework is configured.
-
-## 🐳 Deployment
-
-- **Docker** — two-stage build on `node:26-alpine`, non-root runtime, published to `ghcr.io/alexzedim/cmnw-next` on `v*` tags (multi-arch via Buildx)
-- **CI** — every PR runs lint + typecheck + build; Dependabot groups weekly dependency bumps (next+react, tailwind, HeroUI, tooling)
-- **Production** — runs behind the [core](https://github.com/alexzedim/core) Nginx edge on `cmnw.me` | `cmnw.ru`, container port mapped to 8081
 
 ## 🌐 Ecosystem
 
