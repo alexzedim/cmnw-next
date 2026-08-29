@@ -217,6 +217,15 @@
         "NO_CE_PETS": "No collector's edition pets",
         "INDETERMINATE": "Not enough data"
       }
+    },
+    "blizzardEmployeeBlock": {
+      "author": "Blizzard Entertainment",
+      "role": "Employee signature detected",
+      "chip": "Employee",
+      "lead": "{name} matches the Collector's Edition signature attributed to Blizzard employee accounts.",
+      "evidence": "Evidence",
+      "disclaimerTitle": "Always an approximation",
+      "disclaimer": "This verdict is a statistical pattern, not proof of employment. Community research suggests Blizzard employees receive every Collector's Edition on their hire date, so all CE grants landing on one calendar day is read as an approximate hire date — yet a player who redeems several physical editions in a single day leaves the same fingerprint. The signature also belongs to the whole Battle.net account, not to this character alone."
     }
   },
   "statusIndicator": {

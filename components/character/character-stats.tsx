@@ -4,7 +4,7 @@ import type { Character } from "@/lib/types";
 
 import NextLink from "next/link";
 
-import { isEmployeeVerdictVisible } from "@/lib/types";
+import { isEmployeeSuspect } from "@/lib/types";
 import { CharacterProfessions } from "@/components/character/professions";
 import { EmployeeBadge } from "@/components/character/employee-badge";
 import { InfoSection } from "@/components/character/info-section";
@@ -206,7 +206,7 @@ export function CharacterStats({ character }: CharacterStatsProps) {
           },
         ]
       : []),
-    ...(isEmployeeVerdictVisible(character)
+    ...(isEmployeeSuspect(character)
       ? [
           {
             label: verdicts.blizzardEmployee,

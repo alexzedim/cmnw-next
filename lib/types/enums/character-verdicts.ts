@@ -34,3 +34,14 @@ export const isEmployeeVerdictVisible = (
   (character.isBlizzardEmployee == null &&
     character.blizzardEmployeeEvidence ===
       BlizzardEmployeeEvidence.MultiCePetsUnverified);
+
+/**
+ * Unverified suspects keep the compact detection row; confirmed employees
+ * get the dedicated blue-post block on the character page instead.
+ */
+export const isEmployeeSuspect = (
+  character: CharacterEmployeeVerdict
+): boolean =>
+  character.isBlizzardEmployee == null &&
+  character.blizzardEmployeeEvidence ===
+    BlizzardEmployeeEvidence.MultiCePetsUnverified;

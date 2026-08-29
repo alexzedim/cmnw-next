@@ -1,3 +1,4 @@
+export { BlizzardEmployeeBlock } from "./blizzard-employee-block";
 export { CharacterButtons } from "./buttons";
 export { CharacterProfessions } from "./professions";
 export { CharacterRefresh } from "./refresh-button";

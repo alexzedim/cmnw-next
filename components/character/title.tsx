@@ -74,12 +74,17 @@ export const CharacterTitle = ({
       <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight mb-3">
         <span className="inline-flex flex-wrap items-center gap-3">
           {name}
-          <EmployeeBadge
-            blizzardEmployeeEvidence={blizzardEmployeeEvidence}
-            blizzardEmployeePets={blizzardEmployeePets}
-            hiredApprox={hiredApprox}
-            isBlizzardEmployee={isBlizzardEmployee}
-          />
+          {/* Employee chip raised like a superscript (math pow); the text-xs
+           * reset keeps the HeroUI tooltip trigger from inheriting the h1's
+           * 60px line box, which would drop the chip onto its baseline. */}
+          <span className="inline-flex self-start mt-1 lg:mt-2 text-xs leading-none">
+            <EmployeeBadge
+              blizzardEmployeeEvidence={blizzardEmployeeEvidence}
+              blizzardEmployeePets={blizzardEmployeePets}
+              hiredApprox={hiredApprox}
+              isBlizzardEmployee={isBlizzardEmployee}
+            />
+          </span>
         </span>
       </h1>
 

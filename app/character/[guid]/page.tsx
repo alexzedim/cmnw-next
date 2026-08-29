@@ -9,6 +9,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 
 import {
+  BlizzardEmployeeBlock,
   CharacterTitle,
   CharacterButtons,
   CharacterRefresh,
@@ -152,7 +153,11 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
           <div className="lg:col-span-8">
             <CharacterButtons name={character.name} realm={character.realm} />
 
-            <CharacterStats character={character} />
+            <div className="space-y-4 lg:space-y-5">
+              <BlizzardEmployeeBlock character={character} />
+
+              <CharacterStats character={character} />
+            </div>
           </div>
         </div>
 

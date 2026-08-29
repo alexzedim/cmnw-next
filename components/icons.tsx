@@ -147,6 +147,31 @@ export const RefreshIcon = ({
   </svg>
 );
 
+/**
+ * Stylized six-point blizzard mark used for the blue-post employee block.
+ * Deliberately not the trademarked Blizzard Entertainment logo.
+ */
+export const BlizzardMark: React.FC<IconSvgProps> = ({
+  size = 24,
+  width,
+  height,
+  ...props
+}) => (
+  <svg
+    fill="none"
+    height={size || height}
+    viewBox="0 0 24 24"
+    width={size || width}
+    {...props}
+  >
+    <g fill="currentColor">
+      <path d="M12 2l2 7.5-2 2.5-2-2.5z" />
+      <path d="M12 2l2 7.5-2 2.5-2-2.5z" transform="rotate(60 12 12)" />
+      <path d="M12 2l2 7.5-2 2.5-2-2.5z" transform="rotate(120 12 12)" />
+    </g>
+  </svg>
+);
+
 export const SearchIcon = (props: IconSvgProps) => (
   <svg
     aria-hidden="true"

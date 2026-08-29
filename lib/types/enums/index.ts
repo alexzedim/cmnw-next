@@ -8,6 +8,7 @@ export { WowClass } from "./wow-class";
 export {
   BlizzardEmployeeEvidence,
   LevelBoostEvidence,
+  isEmployeeSuspect,
   isEmployeeVerdictVisible,
 } from "./character-verdicts";
 export type { CharacterEmployeeVerdict } from "./character-verdicts";
