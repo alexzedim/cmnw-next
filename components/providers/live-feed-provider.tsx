@@ -78,6 +78,11 @@ export const LiveFeedProvider = ({ children }: { children: ReactNode }) => {
 
         if (!isFeedEvent(parsed)) return;
         setMessages((prev) => {
+          // the backend may redeliver an event after a reconnect replay
+          if (prev.some((message) => message.id === parsed.id)) {
+            return prev;
+          }
+
           const next = [parsed, ...prev];
 
           return next.length > MAX_MESSAGES
