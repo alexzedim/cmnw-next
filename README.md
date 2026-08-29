@@ -6,6 +6,13 @@
   <h1>CMNW | Next</h1>
 
   <p>CMNW | Next — character and guild OSINT, auction-house analytics, hash investigations and a live activity feed, served in English and Russian at <a href="https://cmnw.me">cmnw.me</a> | <a href="https://cmnw.ru">cmnw.ru</a>.</p>
+
+  <p><strong>5 years</strong> · <strong>774 commits</strong> · <strong>39 releases</strong> · <strong>EN · RU</strong></p>
+</div>
+
+<div align="center">
+  <img src="./images/hero.png" width="100%" alt="cmnw.me — universal OSINT search"/>
+  <p><em>universal OSINT search, live at cmnw.me | cmnw.ru</em></p>
 </div>
 
 ---
