@@ -1,18 +1,15 @@
-export const SEARCH_PLACEHOLDERS = [
+export type SearchPlaceholderType = "guild" | "character";
+
+export interface SearchPlaceholder {
+  name: string;
+  realm: string;
+  type: SearchPlaceholderType;
+}
+
+// Curated `name@realm` entries; the array an entry lives in decides its type.
+const GUILD_ENTRIES = [
   "гнев-анархии@ревущий-фьорд",
-  "инициатива@gordunni",
-  "блюрателла@gordunni",
   "рак-гейминг@свежеватель-душ",
-  "депортация@gordunni",
-  "форжспирит@gordunni",
-  "сакросантус@gordunni",
-  "рейннон@gordunni",
-  "sasukegodx@twisting-nether",
-  "вандерплз@gordunni",
-  "йондадх@gordunni",
-  "докторйозя@gordunni",
-  "акулов@howling-fjord",
-  "редизтрибут@howling-fjord",
   "echo@tarren-mill",
   "method@twisting-nether",
   "fatsharkyes@kazzak",
@@ -115,6 +112,35 @@ export const SEARCH_PLACEHOLDERS = [
   "echoes@laughing-skull",
 ];
 
-export function formatSearchPlaceholder(name: string): string {
-  return `cmnw search "${name}"`;
-}
+const CHARACTER_ENTRIES = [
+  "инициатива@gordunni",
+  "блюрателла@gordunni",
+  "депортация@gordunni",
+  "форжспирит@gordunni",
+  "сакросантус@gordunni",
+  "рейннон@gordunni",
+  "sasukegodx@twisting-nether",
+  "вандерплз@gordunni",
+  "йондадх@gordunni",
+  "докторйозя@gordunni",
+  "акулов@howling-fjord",
+  "редизтрибут@howling-fjord",
+];
+
+const toPlaceholders = (
+  entries: string[],
+  type: SearchPlaceholderType
+): SearchPlaceholder[] =>
+  entries.map((entry) => {
+    const [name, realm] = entry.split("@");
+
+    return { name, realm, type };
+  });
+
+export const SEARCH_PLACEHOLDERS: SearchPlaceholder[] = [
+  ...toPlaceholders(GUILD_ENTRIES, "guild"),
+  ...toPlaceholders(CHARACTER_ENTRIES, "character"),
+];
+
+export const formatSearchQuery = ({ name, realm }: SearchPlaceholder) =>
+  `${name}@${realm}`;

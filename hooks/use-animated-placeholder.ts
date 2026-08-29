@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import {
-  formatSearchPlaceholder,
+  formatSearchQuery,
   SEARCH_PLACEHOLDERS,
 } from "@/constants/search-placeholders";
 
@@ -22,7 +22,7 @@ function pickRandomNames(count: number): string[] {
   for (let i = 0; i < count; i++) {
     const index = Math.floor(Math.random() * pool.length);
 
-    result.push(pool[index]);
+    result.push(formatSearchQuery(pool[index]));
     pool.splice(index, 1);
   }
 
@@ -33,9 +33,7 @@ export function useAnimatedPlaceholder(
   isActive: boolean,
   isHovered: boolean
 ): { placeholder: string; currentName: string } {
-  const [placeholder, setPlaceholder] = useState(() =>
-    formatSearchPlaceholder("Thunderfury")
-  );
+  const [placeholder, setPlaceholder] = useState("Thunderfury");
   const [currentName, setCurrentName] = useState("Thunderfury");
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const namesRef = useRef<string[]>([]);
@@ -59,7 +57,7 @@ export function useAnimatedPlaceholder(
     isPausedRef.current = false;
 
     setCurrentName(namesRef.current[0]);
-    setPlaceholder(formatSearchPlaceholder(namesRef.current[0]));
+    setPlaceholder(namesRef.current[0]);
   }, []);
 
   const scheduleNext = useCallback(() => {
@@ -92,7 +90,7 @@ export function useAnimatedPlaceholder(
       const name = namesRef.current[indexRef.current];
 
       setCurrentName(name);
-      setPlaceholder(formatSearchPlaceholder(name));
+      setPlaceholder(name);
       scheduleNext();
     }, delay);
   }, [clearTimer, isActive, startCycle]);
