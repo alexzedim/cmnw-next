@@ -10,11 +10,6 @@
   <p><strong>5 years</strong> · <strong>774 commits</strong> · <strong>39 releases</strong> · <strong>EN · RU</strong></p>
 </div>
 
-<div align="center">
-  <img src="./images/hero.png" width="100%" alt="cmnw.me — universal OSINT search"/>
-  <p><em>universal OSINT search, live at cmnw.me | cmnw.ru</em></p>
-</div>
-
 ---
 
 ## ⚡ Tech Stack
