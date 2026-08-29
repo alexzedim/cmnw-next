@@ -37,6 +37,7 @@ const ENDPOINT_LABEL_KEY: Record<RefreshEndpoint, string> = {
   PETS: "pets",
   MOUNTS: "mounts",
   PROFESSIONS: "professions",
+  ACHIEVEMENTS: "achievements",
 };
 
 const PENDING_ENDPOINTS: Record<RefreshEndpoint, EndpointState> = {
@@ -46,6 +47,7 @@ const PENDING_ENDPOINTS: Record<RefreshEndpoint, EndpointState> = {
   PETS: "pending",
   MOUNTS: "pending",
   PROFESSIONS: "pending",
+  ACHIEVEMENTS: "pending",
 };
 
 // Colorful per-state styling shared by the status strip + tooltip.
@@ -266,8 +268,8 @@ export const CharacterRefresh = ({ guid, status }: CharacterRefreshProps) => {
         if (meta.phase === "finished" || meta.phase === "skipped") {
           terminalReached = true;
           terminalStatus = event.status;
-          // Authoritative final state: decode the 6-char status string
-          // (e.g. "SUVPMR", "s--PM-") into per-endpoint success/error/pending.
+          // Authoritative final state: decode the 7-char status string
+          // (e.g. "SUVPMRA", "s--PM-A") into per-endpoint success/error/pending.
           if (typeof meta.status === "string" && meta.status.length > 0) {
             const decoded = decodeStatusString(meta.status);
 

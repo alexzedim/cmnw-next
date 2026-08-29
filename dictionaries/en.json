@@ -152,7 +152,8 @@
         "media": "Media",
         "pets": "Pets",
         "mounts": "Mounts",
-        "professions": "Professions"
+        "professions": "Professions",
+        "achievements": "Achievements"
       }
     }
   },

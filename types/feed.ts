@@ -77,7 +77,7 @@ export const isFeedEvent = (value: unknown): value is FeedEvent => {
 // --- Client-driven character refresh (session-routed events) ---------------
 
 // Mirrors cmnw/libs/resources/src/constants/status.constants.ts
-// Order is significant: STATUS_ENDPOINT_ORDER positions in the 6-char status string.
+// Order is significant: STATUS_ENDPOINT_ORDER positions in the 7-char status string.
 export const STATUS_ENDPOINT_ORDER = [
   "STATUS",
   "SUMMARY",
@@ -85,6 +85,7 @@ export const STATUS_ENDPOINT_ORDER = [
   "PETS",
   "MOUNTS",
   "PROFESSIONS",
+  "ACHIEVEMENTS",
 ] as const;
 
 export type RefreshEndpoint = (typeof STATUS_ENDPOINT_ORDER)[number];
@@ -101,12 +102,13 @@ export const CHARACTER_STATUS_CODES: Record<
   PETS: { success: "P", error: "p", pending: "-" },
   MOUNTS: { success: "M", error: "m", pending: "-" },
   PROFESSIONS: { success: "R", error: "r", pending: "-" },
+  ACHIEVEMENTS: { success: "A", error: "a", pending: "-" },
 };
 
 export type EndpointState = "pending" | "success" | "error";
 
 /**
- * Decodes the 6-char status string (e.g. "SUVPMR", "s--PM-") into a per-endpoint
+ * Decodes the 7-char status string (e.g. "SUVPMRA", "s--PM-A") into a per-endpoint
  * state map, honoring STATUS_ENDPOINT_ORDER positions and CHARACTER_STATUS_CODES.
  */
 export const decodeStatusString = (
