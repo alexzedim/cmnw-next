@@ -5,7 +5,7 @@
 
   <h1>CMNW | Next</h1>
 
-  <p>Next.js App Router interface for the CMNW intelligence platform — character and guild OSINT, auction-house analytics, hash investigations and a live activity feed, served in English and Russian at <a href="https://cmnw.me">cmnw.me</a> | <a href="https://cmnw.ru">cmnw.ru</a>.</p>
+  <p>CMNW | Next — character and guild OSINT, auction-house analytics, hash investigations and a live activity feed, served in English and Russian at <a href="https://cmnw.me">cmnw.me</a> | <a href="https://cmnw.ru">cmnw.ru</a>.</p>
 </div>
 
 ---
