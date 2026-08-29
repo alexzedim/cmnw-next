@@ -138,7 +138,7 @@ export function CharacterStats({ character }: CharacterStatsProps) {
               <span className="flex items-center gap-2">
                 <NextLink
                   className="text-[var(--primary)] hover:text-[var(--accent)] transition-colors font-medium"
-                  href={`/block/${character.hashBlock.hashValue}`}
+                  href={`/hash/b${character.hashBlock.hashValue}`}
                 >
                   {character.hashBlock.hashValue.toUpperCase()}
                 </NextLink>
