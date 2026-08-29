@@ -35,6 +35,12 @@ export type SnapshotHighlightMetric = SnapshotRequest & {
    * cascade would otherwise pick the wrong one.
    */
   valueKey?: string;
+  /**
+   * Renders each entry as "{value} | {percentage}" where the percentage is
+   * the entry's share of the snapshot total (sum of all entry values).
+   * Used by cohort/bucket distributions (faction split, member ranges, ...).
+   */
+  valueShare?: boolean;
   getEntryColor?: (label: string) => string | undefined;
   snapshot?: AppHealthMetricSnapshot | null;
 };

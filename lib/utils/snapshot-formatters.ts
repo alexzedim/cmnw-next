@@ -300,6 +300,31 @@ export const getSnapshotEntriesRich = (
 };
 
 /**
+ * Sums all numeric entry values of a snapshot — plain number maps directly,
+ * ranked records via their projected rankValue. Used as the denominator for
+ * per-entry share percentages on distribution metrics; the backend payload's
+ * own `total` is dropped when distributions are flattened to `ranges`.
+ */
+export const getSnapshotValueTotal = (
+  snapshot: AppHealthMetricSnapshot | null,
+  preferredValueKey?: string
+): number => {
+  if (!snapshot?.value || typeof snapshot.value !== "object") {
+    return 0;
+  }
+
+  return Object.values(snapshot.value).reduce<number>((total, entryValue) => {
+    const numeric = isRankRecord(entryValue)
+      ? rankValue(entryValue, preferredValueKey)
+      : entryValue;
+
+    return typeof numeric === "number" && Number.isFinite(numeric)
+      ? total + numeric
+      : total;
+  }, 0);
+};
+
+/**
  * Formats a snapshot date to a localized string.
  * Returns null if the snapshot has no date.
  */
@@ -333,6 +358,11 @@ const goldFractionFormatter = new Intl.NumberFormat("de-CH", {
   maximumFractionDigits: 2,
 });
 
+const percentFormatter = new Intl.NumberFormat("en-US", {
+  style: "percent",
+  maximumFractionDigits: 1,
+});
+
 export type GoldFormatted = { amount: string; suffix: "g" };
 
 /**
@@ -350,6 +380,13 @@ export const formatGoldValue = (value: number): GoldFormatted => ({
  */
 const formatPlainNumber = (value: number): string =>
   apostropheNumberFormatter.format(value).replace(/'/g, " ");
+
+/**
+ * Formats a 0..1 share as a percentage ("34.1%"), used for the
+ * "{value} | {percentage}" suffix on distribution entries.
+ */
+export const formatSharePercent = (share: number): string =>
+  percentFormatter.format(share);
 
 /**
  * Formats a price-volatility stdDev (in gold) with a sigma prefix, e.g.

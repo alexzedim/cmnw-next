@@ -8,7 +8,9 @@ import {
   buildSnapshotKey,
   formatSnapshotDate,
   formatEntryValue,
+  formatSharePercent,
   getSnapshotEntriesRich,
+  getSnapshotValueTotal,
   ageRangeRank,
   membersRangeRank,
   pointsRangeRank,
@@ -67,6 +69,9 @@ export function SnapshotBriefGroup({
             metric.valueKey,
             metric.entryHrefBase
           );
+          const shareTotal = metric.valueShare
+            ? getSnapshotValueTotal(metric.snapshot ?? null, metric.valueKey)
+            : 0;
           const displayEntries =
             metric.sort === "alpha"
               ? [...entries].sort((a, b) => a.label.localeCompare(b.label))
@@ -90,6 +95,28 @@ export function SnapshotBriefGroup({
                             ageRangeRank(a.label) - ageRangeRank(b.label)
                         )
                       : entries;
+          // Column widths (in monospace ch) that keep the "|" separators of a
+          // distribution list on one vertical line: values right-align toward
+          // the pipe, percentages right-align to the row edge.
+          const useShareColumns = metric.valueShare && shareTotal > 0;
+          const percentStrings = useShareColumns
+            ? displayEntries.map((entry) =>
+                typeof entry.value === "number"
+                  ? formatSharePercent(entry.value / shareTotal)
+                  : ""
+              )
+            : [];
+          const valueColumnCh = Math.max(
+            0,
+            ...displayEntries.map(
+              (entry) =>
+                formatEntryValue(entry.value, metric.valueFormat).length
+            )
+          );
+          const percentColumnCh = Math.max(
+            0,
+            ...percentStrings.map((percent) => percent.length)
+          );
           const snapshotDate = formatSnapshotDate(metric.snapshot ?? null);
           const metricLabel = sm[metric.labelKey as keyof typeof sm] as string;
 
@@ -118,7 +145,7 @@ export function SnapshotBriefGroup({
               </div>
               {displayEntries.length ? (
                 <dl className="mt-2 space-y-1 text-sm">
-                  {displayEntries.map((entry) => {
+                  {displayEntries.map((entry, index) => {
                     const entryKey = sm.metricEntries?.[
                       entry.label as keyof typeof sm.metricEntries
                     ]
@@ -130,6 +157,19 @@ export function SnapshotBriefGroup({
                         ] as string) ?? entry.label)
                       : entry.label;
                     const entryColor = metric.getEntryColor?.(entry.label);
+                    const sharePercent = useShareColumns
+                      ? percentStrings[index] || null
+                      : null;
+                    const valueContent =
+                      metric.valueFormat === "gold" &&
+                      typeof entry.value === "number" ? (
+                        <GoldValue value={entry.value} />
+                      ) : typeof entry.value === "string" &&
+                        entry.value.startsWith("σ") ? (
+                        <SigmaValue text={entry.value} />
+                      ) : (
+                        formatEntryValue(entry.value, metric.valueFormat)
+                      );
 
                     const labelText = (() => {
                       if (metric.labelSuffix) {
@@ -183,15 +223,29 @@ export function SnapshotBriefGroup({
                           )}
                         </dt>
                         <dd className="font-mono text-right">
-                          {metric.valueFormat === "gold" &&
-                          typeof entry.value === "number" ? (
-                            <GoldValue value={entry.value} />
-                          ) : typeof entry.value === "string" &&
-                            entry.value.startsWith("σ") ? (
-                            <SigmaValue text={entry.value} />
+                          {useShareColumns ? (
+                            <span
+                              className="inline-block text-right"
+                              style={{ minWidth: `${valueColumnCh}ch` }}
+                            >
+                              {valueContent}
+                            </span>
                           ) : (
-                            formatEntryValue(entry.value, metric.valueFormat)
+                            valueContent
                           )}
+                          {sharePercent ? (
+                            <>
+                              <span className="inline-block px-1 text-foreground/50">
+                                |
+                              </span>
+                              <span
+                                className="inline-block text-right text-foreground/50"
+                                style={{ minWidth: `${percentColumnCh}ch` }}
+                              >
+                                {sharePercent}
+                              </span>
+                            </>
+                          ) : null}
                         </dd>
                       </div>
                     );

@@ -36,6 +36,7 @@ export const SNAPSHOT_HIGHLIGHT_GROUPS: readonly SnapshotHighlightGroup[] = [
         labelKey: "factionSplit" as const,
         category: AnalyticsMetricCategory.CHARACTERS,
         metricType: AnalyticsMetricType.BY_FACTION_MAX_LEVEL,
+        valueShare: true,
       },
       {
         labelKey: "classMix" as const,
@@ -43,6 +44,7 @@ export const SNAPSHOT_HIGHLIGHT_GROUPS: readonly SnapshotHighlightGroup[] = [
         metricType: AnalyticsMetricType.BY_CLASS_MAX_LEVEL,
         valueLimit: Number.POSITIVE_INFINITY,
         sort: "alpha",
+        valueShare: true,
         getEntryColor: (className: string) =>
           classColors.get(className) ?? undefined,
       },
@@ -50,6 +52,7 @@ export const SNAPSHOT_HIGHLIGHT_GROUPS: readonly SnapshotHighlightGroup[] = [
         labelKey: "levelBracket" as const,
         category: AnalyticsMetricCategory.CHARACTERS,
         metricType: AnalyticsMetricType.BY_LEVEL_MAX_LEVEL,
+        valueShare: true,
       },
       {
         labelKey: "achievementsDistribution" as const,
@@ -58,6 +61,7 @@ export const SNAPSHOT_HIGHLIGHT_GROUPS: readonly SnapshotHighlightGroup[] = [
         valueLimit: Number.POSITIVE_INFINITY,
         sort: "pointsRange",
         labelSuffix: "⛨",
+        valueShare: true,
       },
       {
         labelKey: "oldestCharacters" as const,
@@ -79,6 +83,7 @@ export const SNAPSHOT_HIGHLIGHT_GROUPS: readonly SnapshotHighlightGroup[] = [
         metricType: AnalyticsMetricType.MEMBERS_DISTRIBUTION,
         valueLimit: Number.POSITIVE_INFINITY,
         sort: "memberRange",
+        valueShare: true,
       },
       {
         labelKey: "achievementsDistribution" as const,
@@ -87,6 +92,7 @@ export const SNAPSHOT_HIGHLIGHT_GROUPS: readonly SnapshotHighlightGroup[] = [
         valueLimit: Number.POSITIVE_INFINITY,
         sort: "pointsRange",
         labelSuffix: "⛨",
+        valueShare: true,
       },
       {
         labelKey: "ageDistribution" as const,
@@ -94,6 +100,7 @@ export const SNAPSHOT_HIGHLIGHT_GROUPS: readonly SnapshotHighlightGroup[] = [
         metricType: AnalyticsMetricType.AGE_DISTRIBUTION,
         valueLimit: Number.POSITIVE_INFINITY,
         sort: "ageRange",
+        valueShare: true,
       },
       {
         labelKey: "topByAge" as const,
@@ -120,6 +127,7 @@ export const SNAPSHOT_HIGHLIGHT_GROUPS: readonly SnapshotHighlightGroup[] = [
         metricType: AnalyticsMetricType.PRICE_RANGES,
         valueLimit: Number.POSITIVE_INFINITY,
         sort: "priceRange",
+        valueShare: true,
       },
       {
         labelKey: "topByVolume" as const,
