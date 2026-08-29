@@ -10,19 +10,6 @@
 
 ---
 
-## ✨ Features
-
-- 🕵️ **Character intelligence** — full profiles with stats, professions, raid logs, guild history, plus boost and Blizzard-employee verdicts
-- 🏰 **Guild analytics** — roster, rank allocation, hall of fame and membership change logs
-- 💰 **Market analysis** — item pricing, quotes across realms, contracts charts, market heatmap
-- #️⃣ **Hash investigations** — account-hash blocks linking alts across characters, with history and filters
-- 🌍 **Realm pages** — demographics, hall of fame, raid-log stats, market pulse per realm
-- 🔍 **Universal search** — one box for characters, guilds, items and realms with animated placeholders
-- 📡 **Live feed** — WebSocket stream of character/guild/auction/queue events in real time
-- ⬆️ **Addon upload** — rune-gated page accepting the CMNW-OSINT SavedVariables file, parsed client-side
-- 🌐 **EN / RU i18n** — cookie-based locale with Accept-Language negotiation
-- 🎨 **8 color palettes** — custom theming system with pre-paint flash prevention
-
 ## ⚡ Tech Stack
 
 <div align="center">
