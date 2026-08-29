@@ -248,19 +248,11 @@ export function CharacterStats({ character }: CharacterStatsProps) {
         />
       )}
 
-      {hashItems.length > 0 && (
+      {(hashItems.length > 0 || detectionItems.length > 0) && (
         <InfoSection
           badge={cs.verification}
-          items={hashItems}
+          items={[...hashItems, ...detectionItems]}
           title={cs.characterHashes}
-        />
-      )}
-
-      {detectionItems.length > 0 && (
-        <InfoSection
-          badge={cs.detection}
-          items={detectionItems}
-          title={cs.detection}
         />
       )}
 
