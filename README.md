@@ -23,19 +23,6 @@
 - 🌐 **EN / RU i18n** — cookie-based locale with Accept-Language negotiation
 - 🎨 **8 color palettes** — custom theming system with pre-paint flash prevention
 
-## 📄 Pages
-
-| Route | What it shows |
-|-------|---------------|
-| `/` | Hero, live feed, live metrics, snapshot briefs |
-| `/character/[guid]` | Character OSINT profile + change logs |
-| `/guild/[guid]` | Guild overview, roster, rank allocation, hall of fame |
-| `/item/[id]` | Item market data: listing, quotes, contracts, heatmap |
-| `/hash/[hashQuery]` | Account-hash block: linked characters, history, filters |
-| `/realm`, `/realm/[realmQuery]` | Realm index and per-realm analytics |
-| `/upload` | Rune-locked SavedVariables upload (CMNW-OSINT addon) |
-| `/who-we-are` | Contributors |
-
 ## ⚡ Tech Stack
 
 <div align="center">
