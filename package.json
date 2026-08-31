@@ -1,6 +1,6 @@
 {
   "name": "cmnw-next",
-  "version": "3.2.31",
+  "version": "3.2.32",
   "private": true,
   "engines": {
     "node": ">=24.0.0",
