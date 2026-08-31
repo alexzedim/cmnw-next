@@ -9,6 +9,7 @@ import { classColors } from "@/constants/class-colors";
 import { getFactionBorderColor, getPastelColor } from "@/lib/utils/color";
 import { getGuildRankDisplay } from "@/lib/utils/guild-rank";
 import { useI18n } from "@/lib/i18n/context";
+import { getGameDataLocalizer } from "@/lib/i18n/game-data";
 
 interface HashCharactersTableProps {
   characters: Character[];
@@ -18,6 +19,7 @@ export function HashCharactersTable({ characters }: HashCharactersTableProps) {
   const { dict } = useI18n();
   const h = dict.hash;
   const t = h.table;
+  const game = getGameDataLocalizer(dict);
 
   return (
     <div className="card-surface p-6 rounded-xl">
@@ -87,7 +89,7 @@ export function HashCharactersTable({ characters }: HashCharactersTableProps) {
                           color: "#000",
                         }}
                       >
-                        {character.class}
+                        {character.class ? game.class(character.class) : null}
                       </span>
                     ) : (
                       <span className="text-sm text-foreground/40">—</span>
@@ -95,7 +97,9 @@ export function HashCharactersTable({ characters }: HashCharactersTableProps) {
                   </td>
                   <td>
                     <span className="text-sm text-foreground/70">
-                      {character.specialization ?? "—"}
+                      {character.specialization
+                        ? game.specialization(character.specialization)
+                        : "—"}
                     </span>
                   </td>
                   <td>

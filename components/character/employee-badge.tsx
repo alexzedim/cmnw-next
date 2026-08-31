@@ -8,6 +8,7 @@ import {
   isEmployeeVerdictVisible,
 } from "@/lib/types/enums";
 import { useI18n } from "@/lib/i18n/context";
+import { formatGameDate } from "@/lib/i18n/game-data";
 
 interface EmployeeBadgeProps {
   isBlizzardEmployee?: boolean | null;
@@ -16,20 +17,13 @@ interface EmployeeBadgeProps {
   withTooltip?: boolean;
 }
 
-const formatVerdictDate = (value: string | Date): string =>
-  new Date(value).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-
 export const EmployeeBadge = ({
   isBlizzardEmployee,
   blizzardEmployeeEvidence,
   hiredApprox,
   withTooltip = true,
 }: EmployeeBadgeProps) => {
-  const { dict } = useI18n();
+  const { locale, dict } = useI18n();
   const v = dict.characterStats.verdicts;
 
   if (
@@ -76,7 +70,7 @@ export const EmployeeBadge = ({
           <p>{tooltipText}</p>
           {hiredApprox && (
             <p>
-              {v.hiredApprox}: {formatVerdictDate(hiredApprox)}
+              {v.hiredApprox}: {formatGameDate(hiredApprox, locale)}
             </p>
           )}
         </div>

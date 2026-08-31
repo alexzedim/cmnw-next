@@ -4,6 +4,7 @@ import type { Character } from "@/lib/types";
 
 import { BlizzardWordmark } from "@/components/character/blizzard-wordmark";
 import { useI18n } from "@/lib/i18n/context";
+import { formatGameDate } from "@/lib/i18n/game-data";
 
 interface BlizzardEmployeeBlockProps {
   character: Character;
@@ -27,13 +28,6 @@ export function BlizzardEmployeeBlock({
   if (character.isBlizzardEmployee !== true) {
     return null;
   }
-
-  const formatVerdictDate = (value: string | Date) =>
-    new Date(value).toLocaleDateString(locale, {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
 
   return (
     <section
@@ -71,7 +65,7 @@ export function BlizzardEmployeeBlock({
             <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
               <span className="text-foreground/60">{verdicts.hiredApprox}</span>
               <span className="font-medium text-foreground">
-                {formatVerdictDate(character.hiredApprox)}
+                {formatGameDate(character.hiredApprox, locale)}
               </span>
             </div>
           )}

@@ -15,6 +15,7 @@ import {
 import { Link } from "@/components/custom-link";
 import { classColors } from "@/constants/class-colors";
 import { useI18n } from "@/lib/i18n/context";
+import { getGameDataLocalizer } from "@/lib/i18n/game-data";
 
 interface GuildRosterProps {
   members: Character[];
@@ -50,6 +51,7 @@ export function GuildRoster({ members }: GuildRosterProps) {
   const [page, setPage] = useState(1);
   const { dict } = useI18n();
   const gr = dict.guildRoster;
+  const game = getGameDataLocalizer(dict);
 
   const availableClasses = useMemo(() => {
     const classes = new Set(members.map((m) => m.class).filter(Boolean));
@@ -160,7 +162,7 @@ export function GuildRoster({ members }: GuildRosterProps) {
                   id={className}
                   textValue={className}
                 >
-                  {className}
+                  {game.class(className)}
                 </ListBox.Item>
               ))}
             </ListBox>
@@ -252,9 +254,10 @@ export function GuildRoster({ members }: GuildRosterProps) {
                             color: "#000",
                           }}
                         >
-                          {member.specialization && member.class
-                            ? `${member.specialization} ${member.class}`
-                            : member.class}
+                          {member.class &&
+                            (member.specialization
+                              ? `${game.specialization(member.specialization)} ${game.class(member.class)}`
+                              : game.class(member.class))}
                         </Chip>
                       ) : (
                         "-"

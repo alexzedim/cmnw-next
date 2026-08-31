@@ -5,6 +5,7 @@ import type { Character } from "@/lib/types";
 import { useState, useEffect } from "react";
 
 import { useI18n } from "@/lib/i18n/context";
+import { getGameDataLocalizer } from "@/lib/i18n/game-data";
 
 interface HashCharactersFilterProps {
   characters: Character[];
@@ -20,6 +21,7 @@ export function HashCharactersFilter({
   const [selectedFaction, setSelectedFaction] = useState("");
   const { dict } = useI18n();
   const hf = dict.hashFilter;
+  const game = getGameDataLocalizer(dict);
 
   const uniqueClasses = Array.from(
     new Set(characters.map((c) => c.class).filter(Boolean))
@@ -69,7 +71,7 @@ export function HashCharactersFilter({
           <option value="">{hf.allClasses}</option>
           {uniqueClasses.map((cls) => (
             <option key={cls} value={cls}>
-              {cls}
+              {game.class(cls)}
             </option>
           ))}
         </select>
@@ -82,7 +84,7 @@ export function HashCharactersFilter({
           <option value="">{hf.allFactions}</option>
           {uniqueFactions.map((faction) => (
             <option key={faction} value={faction}>
-              {faction}
+              {game.faction(faction)}
             </option>
           ))}
         </select>
@@ -99,13 +101,15 @@ export function HashCharactersFilter({
           {selectedClass && (
             <span className="chip">
               {hf.classFilter}
-              <span className="font-semibold">{selectedClass}</span>
+              <span className="font-semibold">{game.class(selectedClass)}</span>
             </span>
           )}
           {selectedFaction && (
             <span className="chip">
               {hf.factionFilter}
-              <span className="font-semibold">{selectedFaction}</span>
+              <span className="font-semibold">
+                {game.faction(selectedFaction)}
+              </span>
             </span>
           )}
         </div>

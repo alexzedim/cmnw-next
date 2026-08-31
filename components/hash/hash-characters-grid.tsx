@@ -9,6 +9,7 @@ import { classColors } from "@/constants/class-colors";
 import { getPastelColor, getFactionBorderColor } from "@/lib/utils/color";
 import { getGuildRankDisplay } from "@/lib/utils/guild-rank";
 import { useI18n } from "@/lib/i18n/context";
+import { getGameDataLocalizer } from "@/lib/i18n/game-data";
 
 interface HashCharactersGridProps {
   characters: Character[];
@@ -17,6 +18,7 @@ interface HashCharactersGridProps {
 export function HashCharactersGrid({ characters }: HashCharactersGridProps) {
   const { dict } = useI18n();
   const h = dict.hash;
+  const game = getGameDataLocalizer(dict);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -82,7 +84,7 @@ export function HashCharactersGrid({ characters }: HashCharactersGridProps) {
                       color: "#000",
                     }}
                   >
-                    {character.class}
+                    {game.class(character.class)}
                   </span>
                 )}
                 {character.faction && (
@@ -93,7 +95,7 @@ export function HashCharactersGrid({ characters }: HashCharactersGridProps) {
                       borderWidth: "1px",
                     }}
                   >
-                    {character.faction}
+                    {game.faction(character.faction)}
                   </span>
                 )}
               </div>
@@ -110,13 +112,13 @@ export function HashCharactersGrid({ characters }: HashCharactersGridProps) {
                 {character.race && (
                   <div className="flex justify-between">
                     <span className="text-muted">{h.raceLabel}</span>
-                    <span>{character.race}</span>
+                    <span>{game.race(character.race)}</span>
                   </div>
                 )}
                 {character.specialization && (
                   <div className="flex justify-between">
                     <span className="text-muted">{h.specLabel}</span>
-                    <span>{character.specialization}</span>
+                    <span>{game.specialization(character.specialization)}</span>
                   </div>
                 )}
               </div>

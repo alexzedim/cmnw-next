@@ -10,23 +10,21 @@ import { EmployeeBadge } from "@/components/character/employee-badge";
 import { InfoSection } from "@/components/character/info-section";
 import { getExpansionByBackendCode } from "@/constants";
 import { useI18n } from "@/lib/i18n/context";
+import { formatGameDate, getGameDataLocalizer } from "@/lib/i18n/game-data";
 
 interface CharacterStatsProps {
   character: Character;
 }
 
 export function CharacterStats({ character }: CharacterStatsProps) {
-  const { dict } = useI18n();
+  const { locale, dict } = useI18n();
   const cs = dict.characterStats;
   const labels = cs.labels;
   const verdicts = cs.verdicts;
+  const game = getGameDataLocalizer(dict);
 
   const formatVerdictDate = (value: string | Date) =>
-    new Date(value).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
+    formatGameDate(value, locale);
 
   const itemLevelPercent = character.percentiles?.global?.averageItemLevel ?? 0;
   const achievementPercent =
@@ -44,17 +42,24 @@ export function CharacterStats({ character }: CharacterStatsProps) {
       value: character.level ?? labels.unknown,
     },
     ...(character.class
-      ? [{ label: labels.class, value: character.class }]
+      ? [{ label: labels.class, value: game.class(character.class) }]
       : []),
     ...(character.specialization
-      ? [{ label: labels.specialization, value: character.specialization }]
+      ? [
+          {
+            label: labels.specialization,
+            value: game.specialization(character.specialization),
+          },
+        ]
       : []),
-    ...(character.race ? [{ label: labels.race, value: character.race }] : []),
+    ...(character.race
+      ? [{ label: labels.race, value: game.race(character.race) }]
+      : []),
     ...(character.faction
-      ? [{ label: labels.faction, value: character.faction }]
+      ? [{ label: labels.faction, value: game.faction(character.faction) }]
       : []),
     ...(character.gender
-      ? [{ label: labels.gender, value: character.gender }]
+      ? [{ label: labels.gender, value: game.gender(character.gender) }]
       : []),
     ...(character.createdApprox
       ? [
@@ -68,14 +73,7 @@ export function CharacterStats({ character }: CharacterStatsProps) {
       ? [
           {
             label: labels.lastTimeActive,
-            value: new Date(character.lastModified).toLocaleDateString(
-              "en-US",
-              {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-              }
-            ),
+            value: formatGameDate(character.lastModified, locale),
           },
         ]
       : []),
@@ -89,11 +87,7 @@ export function CharacterStats({ character }: CharacterStatsProps) {
       ? [
           {
             label: labels.createdAt,
-            value: new Date(character.createdAt).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "short",
-              day: "numeric",
-            }),
+            value: formatGameDate(character.createdAt, locale),
           },
         ]
       : []),
