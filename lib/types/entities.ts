@@ -154,11 +154,14 @@ export enum ACTION_LOG {
 
 /**
  * Character/Guild log entry.
- * Mirrors CharactersGuildsLogsEntity from @app/pg.
+ * Mirrors CharactersGuildsLogsEntity from @app/pg, plus the character
+ * name/realm enrichment added to /osint/guild/logs.
  */
 export interface CharacterGuildLog {
   uuid: string;
   characterGuid?: string;
+  characterName?: string | null;
+  characterRealm?: string | null;
   guildGuid?: string;
   original?: string;
   updated?: string;

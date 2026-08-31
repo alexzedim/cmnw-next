@@ -100,10 +100,11 @@ const isTransferAction = (action: ACTION_LOG) =>
   action === ACTION_LOG.TRANSFER;
 
 /**
- * Matches the canonical character guid format `name@realm` (alphanumerics,
- * hyphens, underscores on both sides). Case-insensitive.
+ * Matches the canonical character guid format `name@realm` (letters in any
+ * script, digits, hyphens, underscores on both sides). Case-insensitive.
+ * Must stay Unicode-aware: character names on RU realms are Cyrillic.
  */
-const GUID_RE = /^[a-z0-9_-]+@[a-z0-9_-]+$/i;
+const GUID_RE = /^[\p{L}\p{N}_-]+@[\p{L}\p{N}_-]+$/u;
 
 const isCharacterGuid = (value: unknown): value is string =>
   typeof value === "string" && GUID_RE.test(value);
@@ -278,18 +279,29 @@ export const LogTable = ({
   };
 
   const renderCharacterCell = (log: Log) => {
-    const guid = log.characterGuid;
+    const linkableGuid = isCharacterGuid(log.characterGuid)
+      ? log.characterGuid
+      : null;
+    const nameSource = log.characterName ?? linkableGuid;
 
-    if (!isCharacterGuid(guid)) {
+    if (!nameSource) {
       return <span className="text-sm text-muted">-</span>;
+    }
+
+    const displayName = formatCharacterName(nameSource);
+
+    if (!linkableGuid) {
+      return (
+        <span className="text-sm font-medium capitalize">{displayName}</span>
+      );
     }
 
     return (
       <Link
         className="text-sm font-medium underline decoration-dotted underline-offset-4 capitalize transition-colors hover:text-[var(--accent)]"
-        href={`/character/${encodeURIComponent(guid)}`}
+        href={`/character/${encodeURIComponent(linkableGuid)}`}
       >
-        {formatCharacterName(guid)}
+        {displayName}
       </Link>
     );
   };
