@@ -108,7 +108,6 @@ export default async function CharacterPage({ params }: CharacterPageProps) {
             <CharacterRefresh guid={decodedGuid} status={character.status} />
           }
           blizzardEmployeeEvidence={character.blizzardEmployeeEvidence}
-          blizzardEmployeePets={character.blizzardEmployeePets}
           faction={factionEnum}
           guild={character.guild}
           guildId={character.guildGuid}

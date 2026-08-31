@@ -19,7 +19,6 @@ interface CharacterTitleProps {
   actions?: ReactNode;
   isBlizzardEmployee?: boolean | null;
   blizzardEmployeeEvidence?: BlizzardEmployeeEvidence | string | null;
-  blizzardEmployeePets?: string[] | null;
   hiredApprox?: string | Date | null;
 }
 
@@ -46,7 +45,6 @@ export const CharacterTitle = ({
   actions,
   isBlizzardEmployee,
   blizzardEmployeeEvidence,
-  blizzardEmployeePets,
   hiredApprox,
 }: CharacterTitleProps) => {
   const borderColor = getFactionBorderColor(faction);
@@ -80,7 +78,6 @@ export const CharacterTitle = ({
           <span className="inline-flex self-start mt-1 lg:mt-2 text-xs leading-none">
             <EmployeeBadge
               blizzardEmployeeEvidence={blizzardEmployeeEvidence}
-              blizzardEmployeePets={blizzardEmployeePets}
               hiredApprox={hiredApprox}
               isBlizzardEmployee={isBlizzardEmployee}
             />

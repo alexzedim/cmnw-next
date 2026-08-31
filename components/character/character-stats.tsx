@@ -214,7 +214,6 @@ export function CharacterStats({ character }: CharacterStatsProps) {
               <span className="flex items-center gap-2">
                 <EmployeeBadge
                   blizzardEmployeeEvidence={character.blizzardEmployeeEvidence}
-                  blizzardEmployeePets={character.blizzardEmployeePets}
                   hiredApprox={character.hiredApprox}
                   isBlizzardEmployee={character.isBlizzardEmployee}
                 />

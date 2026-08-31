@@ -2,6 +2,7 @@
 
 import { Tooltip } from "@heroui/react";
 
+import { BlizzardWordmark } from "@/components/character/blizzard-wordmark";
 import {
   type BlizzardEmployeeEvidence,
   isEmployeeVerdictVisible,
@@ -11,7 +12,6 @@ import { useI18n } from "@/lib/i18n/context";
 interface EmployeeBadgeProps {
   isBlizzardEmployee?: boolean | null;
   blizzardEmployeeEvidence?: BlizzardEmployeeEvidence | string | null;
-  blizzardEmployeePets?: string[] | null;
   hiredApprox?: string | Date | null;
   withTooltip?: boolean;
 }
@@ -26,7 +26,6 @@ const formatVerdictDate = (value: string | Date): string =>
 export const EmployeeBadge = ({
   isBlizzardEmployee,
   blizzardEmployeeEvidence,
-  blizzardEmployeePets,
   hiredApprox,
   withTooltip = true,
 }: EmployeeBadgeProps) => {
@@ -43,13 +42,13 @@ export const EmployeeBadge = ({
 
   const chip = (
     <span
-      className={`chip text-xs whitespace-nowrap ${
-        isConfirmed
-          ? "bg-[#00aeff]/10 text-[#00aeff]"
-          : "bg-amber-500/10 text-amber-500"
+      aria-label={isConfirmed ? v.blizzardEmployee : v.employeeSuspect}
+      className={`inline-flex items-center rounded-md bg-[var(--bg-elevated)] px-1.5 py-0.5 ${
+        isConfirmed ? "" : "opacity-70 saturate-50"
       }`}
+      role="img"
     >
-      {isConfirmed ? v.blizzardEmployee : v.employeeSuspect}
+      <BlizzardWordmark height={14} />
     </span>
   );
 
@@ -57,35 +56,28 @@ export const EmployeeBadge = ({
     return chip;
   }
 
-  const evidenceDescription =
-    (blizzardEmployeeEvidence &&
-      v.employeeEvidence[
-        blizzardEmployeeEvidence as keyof typeof v.employeeEvidence
-      ]) ||
-    v.employeeEvidence.INDETERMINATE;
+  // Confirmed employees get the generic wording; the detailed evidence
+  // descriptions stay reserved for non-employee statuses.
+  const evidenceLookup =
+    blizzardEmployeeEvidence &&
+    v.employeeEvidence[
+      blizzardEmployeeEvidence as keyof typeof v.employeeEvidence
+    ];
+
+  const tooltipText = isConfirmed
+    ? dict.characterStats.blizzardEmployeeBlock.verdict
+    : evidenceLookup || v.employeeEvidence.INDETERMINATE;
 
   return (
     <Tooltip>
       <Tooltip.Trigger>{chip}</Tooltip.Trigger>
       <Tooltip.Content className="max-w-xs text-xs">
         <div className="space-y-2">
-          <p>{evidenceDescription}</p>
+          <p>{tooltipText}</p>
           {hiredApprox && (
             <p>
               {v.hiredApprox}: {formatVerdictDate(hiredApprox)}
             </p>
-          )}
-          {blizzardEmployeePets && blizzardEmployeePets.length > 0 && (
-            <div className="space-y-1">
-              <p className="opacity-60">{v.cePets}:</p>
-              <div className="flex flex-wrap gap-1">
-                {blizzardEmployeePets.map((pet) => (
-                  <span key={pet} className="code-chip">
-                    {pet}
-                  </span>
-                ))}
-              </div>
-            </div>
           )}
         </div>
       </Tooltip.Content>

@@ -63,7 +63,6 @@ export function HashCharactersGrid({ characters }: HashCharactersGridProps) {
               <div className="flex flex-wrap gap-2">
                 <EmployeeBadge
                   blizzardEmployeeEvidence={character.blizzardEmployeeEvidence}
-                  blizzardEmployeePets={character.blizzardEmployeePets}
                   hiredApprox={character.hiredApprox}
                   isBlizzardEmployee={character.isBlizzardEmployee}
                   withTooltip={false}

@@ -62,7 +62,6 @@ export function HashCharactersTable({ characters }: HashCharactersTableProps) {
                         blizzardEmployeeEvidence={
                           character.blizzardEmployeeEvidence
                         }
-                        blizzardEmployeePets={character.blizzardEmployeePets}
                         hiredApprox={character.hiredApprox}
                         isBlizzardEmployee={character.isBlizzardEmployee}
                         withTooltip={false}
