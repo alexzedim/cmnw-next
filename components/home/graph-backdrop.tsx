@@ -783,36 +783,42 @@ export function GraphBackdrop() {
     // ---- palette awareness: colors resolve against the active theme ------
 
     let lightMode = false;
+    let bgRgb = "2,2,2";
+    let fillRgb = "16,16,16";
 
-    const isLightColor = (value: string) => {
-      const match = value.trim().match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);
+    // A detached probe resolves palette values (including color-mix()) into
+    // concrete rgb channels the canvas can use.
+    const colorProbe = document.createElement("span");
 
-      if (!match) {
-        return false;
-      }
+    colorProbe.style.display = "none";
+    document.body.appendChild(colorProbe);
 
-      let hex = match[1];
+    const resolveRgb = (value: string) => {
+      colorProbe.style.color = "";
+      colorProbe.style.color = value.trim();
 
-      if (hex.length === 3) {
-        hex = hex
-          .split("")
-          .map((c) => c + c)
-          .join("");
-      }
+      const computed = getComputedStyle(colorProbe).color;
+      const match = computed.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)/);
 
-      const r = parseInt(hex.slice(0, 2), 16);
-      const g = parseInt(hex.slice(2, 4), 16);
-      const b = parseInt(hex.slice(4, 6), 16);
-
-      return 0.2126 * r + 0.7152 * g + 0.0722 * b > 128;
+      return match ? `${match[1]},${match[2]},${match[3]}` : null;
     };
 
     const syncTheme = () => {
-      const bg = getComputedStyle(document.documentElement).getPropertyValue(
-        "--bg"
-      );
+      const style = getComputedStyle(document.documentElement);
+      const bg = resolveRgb(style.getPropertyValue("--bg"));
 
-      lightMode = isLightColor(bg);
+      if (!bg) {
+        return;
+      }
+
+      bgRgb = bg;
+
+      const [r, g, b] = bg.split(",").map((c) => parseInt(c, 10));
+
+      lightMode = 0.2126 * r + 0.7152 * g + 0.0722 * b > 128;
+      fillRgb = lightMode
+        ? "255,255,255"
+        : (resolveRgb(style.getPropertyValue("--bg-elevated")) ?? "16,16,16");
     };
 
     const kindColor = (k: StageKind) =>
@@ -1394,7 +1400,7 @@ export function GraphBackdrop() {
       const h = micro ? 14 : 18;
 
       ctx.globalAlpha = alpha;
-      ctx.fillStyle = lightMode ? "rgba(255,255,255,0.92)" : "rgba(4,4,4,0.92)";
+      ctx.fillStyle = `rgba(${lightMode ? "255,255,255" : fillRgb},0.92)`;
       shapePathRound(x - w / 2, y - h / 2, w, h, h / 2);
       ctx.fill();
       ctx.strokeStyle = color + "aa";
@@ -1461,7 +1467,9 @@ export function GraphBackdrop() {
       const color = kindColor(ent.k);
 
       ctx.globalAlpha = alpha;
-      ctx.fillStyle = lightMode ? "rgba(255,255,255,0.68)" : "rgba(6,6,6,0.74)";
+      ctx.fillStyle = `rgba(${lightMode ? "255,255,255" : fillRgb},${
+        lightMode ? 0.68 : 0.74
+      })`;
       shapePath(ent.shape, x, y, w, h);
       ctx.fill();
       ctx.strokeStyle = color + (b.pulse > 0.05 ? "" : "59");
@@ -1735,6 +1743,8 @@ export function GraphBackdrop() {
         drawFlight(flights[i], dt);
       }
 
+      // hero dim built from the palette's own background: keeps the title
+      // zone clean on every palette without a black/white blotch
       const dim = ctx.createRadialGradient(
         W / 2,
         H * 0.38,
@@ -1744,15 +1754,9 @@ export function GraphBackdrop() {
         Math.max(W, H) * 0.52
       );
 
-      if (lightMode) {
-        dim.addColorStop(0, "rgba(245,245,244,0.92)");
-        dim.addColorStop(0.42, "rgba(245,245,244,0.6)");
-        dim.addColorStop(1, "rgba(245,245,244,0)");
-      } else {
-        dim.addColorStop(0, "rgba(2,2,2,0.9)");
-        dim.addColorStop(0.42, "rgba(2,2,2,0.6)");
-        dim.addColorStop(1, "rgba(2,2,2,0)");
-      }
+      dim.addColorStop(0, `rgba(${bgRgb},0.92)`);
+      dim.addColorStop(0.42, `rgba(${bgRgb},0.6)`);
+      dim.addColorStop(1, `rgba(${bgRgb},0)`);
       ctx.fillStyle = dim;
       ctx.fillRect(0, 0, W, H);
 
@@ -1824,6 +1828,7 @@ export function GraphBackdrop() {
       }
 
       timers.forEach((t) => clearTimeout(t));
+      colorProbe.remove();
     };
   }, []);
 
