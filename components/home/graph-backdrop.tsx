@@ -989,12 +989,20 @@ export function GraphBackdrop() {
     const edgePoint = (b: Block, toward: Point | null): Point => {
       const cx = b.x + b.w / 2;
       const cy = b.y + b.h / 2;
-      const ang = Math.atan2((toward?.y ?? cy) - cy, (toward?.x ?? cx) - cx);
+      const dx = (toward?.x ?? cx) - cx;
+      const dy = (toward?.y ?? cy) - cy;
 
-      return {
-        x: cx + Math.cos(ang) * (b.w / 2 + 5),
-        y: cy + Math.sin(ang) * (b.h / 2 + 5),
-      };
+      if (dx === 0 && dy === 0) {
+        return { x: cx, y: cy };
+      }
+
+      // exact intersection of the ray with the padded block border — the
+      // anchor always sits on the side that actually faces the target
+      const sx = dx === 0 ? Infinity : (b.w / 2 + 5) / Math.abs(dx);
+      const sy = dy === 0 ? Infinity : (b.h / 2 + 5) / Math.abs(dy);
+      const s = Math.min(sx, sy);
+
+      return { x: cx + dx * s, y: cy + dy * s };
     };
 
     const connectorPath = (f: Flight): Point[] | null => {
@@ -1170,21 +1178,54 @@ export function GraphBackdrop() {
       return area / Math.max(1, minArea);
     };
 
-    /** Candidate lane for a flow kind; `shrink` squeezes it when crowded. */
-    const makeLaneFor = (deep: boolean, vertical: boolean, shrink: number) => {
+    /**
+     * Readable lane geometry per flow definition: level gaps must exceed the
+     * tallest block plus breathing room, and the across axis must fit the
+     * widest level. Shrinking below these is what produced crammed schemas
+     * with stubby mis-angled arrows.
+     */
+    const layoutMinimums = (def: FlowDef, vertical: boolean) => {
+      const levels = def.levels.length;
+      const maxPerLevel = Math.max(...def.levels.map((lv) => lv.length));
+      const pad = 52; // lane padding, both sides
+      const gap = 46; // min level gap ≈ block height + air
+      const across = 150; // min per-slot width ≈ block width + air
+
+      if (vertical) {
+        return {
+          wMin: Math.min(W - 20, Math.max(280, maxPerLevel * across + pad)),
+          hMin: (levels - 1) * gap + 94 + pad,
+        };
+      }
+
+      return {
+        wMin: (levels - 1) * 128 + 180 + pad,
+        hMin: Math.max(190, maxPerLevel * 44 + pad),
+      };
+    };
+
+    /** Candidate lane for a flow; `shrink` squeezes it when crowded, but
+     *  never below the layout minimum. */
+    const makeLaneFor = (
+      def: FlowDef,
+      deep: boolean,
+      vertical: boolean,
+      shrink: number
+    ) => {
+      const { wMin, hMin } = layoutMinimums(def, vertical);
       let w: number;
       let h: number;
 
       if (vertical) {
-        w = deep ? ri(300, 560) : ri(260, 520);
-        h = deep ? ri(430, 660) : ri(270, 620);
+        w = deep ? ri(320, 560) : ri(Math.max(280, wMin), 520);
+        h = deep ? ri(Math.max(430, hMin), 660) : ri(Math.max(280, hMin), 620);
       } else {
-        w = ri(620, Math.min(W - 40, 1300));
-        h = ri(170, 300);
+        w = ri(wMin, Math.min(W - 40, Math.max(wMin + 240, 1300)));
+        h = ri(Math.max(170, hMin), 300);
       }
 
-      w = Math.max(220, Math.round(w * shrink));
-      h = Math.max(deep ? 380 : 200, Math.round(h * shrink));
+      w = Math.max(wMin, Math.round(w * shrink));
+      h = Math.max(hMin, Math.round(h * shrink));
       w = Math.min(w, W - 20);
       h = Math.min(h, H - 110);
       const x = 10 + Math.random() * Math.max(1, W - 20 - w);
@@ -1210,8 +1251,14 @@ export function GraphBackdrop() {
           shrink *= 0.78;
         }
 
-        const vertical = deep ? true : Math.random() < 0.55;
-        const lane = makeLaneFor(deep, vertical, shrink);
+        let vertical = deep ? true : Math.random() < 0.55;
+
+        // too narrow for a horizontal run? fall back to vertical
+        if (!vertical && layoutMinimums(def, false).wMin > W - 40) {
+          vertical = true;
+        }
+
+        const lane = makeLaneFor(def, deep, vertical, shrink);
         const clash = instances.some(
           (inst) =>
             inst.phase !== "dissolve" &&
