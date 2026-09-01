@@ -19,12 +19,8 @@ import { isFeedEvent } from "@/types/feed";
 
 const MAX_MESSAGES = 50;
 
-export type LiveFeedStatus = "connecting" | "open" | "closed";
-
 type LiveFeedContextValue = {
   messages: FeedEvent[];
-  status: LiveFeedStatus;
-  clear: () => void;
 };
 
 const LiveFeedContext = createContext<LiveFeedContextValue | undefined>(
@@ -36,7 +32,6 @@ const RECONNECT_MAX_MS = 30000;
 
 export const LiveFeedProvider = ({ children }: { children: ReactNode }) => {
   const [messages, setMessages] = useState<FeedEvent[]>([]);
-  const [status, setStatus] = useState<LiveFeedStatus>("closed");
 
   const socketRef = useRef<WebSocket | null>(null);
   const reconnectAttemptRef = useRef(0);
@@ -65,11 +60,9 @@ export const LiveFeedProvider = ({ children }: { children: ReactNode }) => {
     }
 
     socketRef.current = socket;
-    setStatus("connecting");
 
     socket.onopen = () => {
       reconnectAttemptRef.current = 0;
-      setStatus("open");
     };
 
     socket.onmessage = (event) => {
@@ -95,7 +88,6 @@ export const LiveFeedProvider = ({ children }: { children: ReactNode }) => {
     };
 
     socket.onclose = () => {
-      setStatus("closed");
       socketRef.current = null;
       if (!manualCloseRef.current) {
         scheduleReconnect();
@@ -137,14 +129,7 @@ export const LiveFeedProvider = ({ children }: { children: ReactNode }) => {
     };
   }, []);
 
-  const clear = useCallback(() => {
-    setMessages([]);
-  }, []);
-
-  const value = useMemo(
-    () => ({ messages, status, clear }),
-    [clear, messages, status]
-  );
+  const value = useMemo(() => ({ messages }), [messages]);
 
   return (
     <LiveFeedContext.Provider value={value}>

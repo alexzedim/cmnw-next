@@ -2,7 +2,6 @@
 
 import { useAppMetrics } from "@/components/providers/app-metrics-provider";
 import { HeroSection } from "@/components/home/hero-section";
-import { LiveFeed } from "@/components/home/live-feed";
 import { LiveMetrics } from "@/components/home/live-metrics";
 import { SnapshotBriefGroup } from "@/components/home/snapshot-brief-group";
 import { ErrorBoundary } from "@/components/error-boundary";
@@ -49,7 +48,6 @@ export default function Home() {
   return (
     <ErrorBoundary>
       <HeroSection />
-      <LiveFeed />
       <LiveMetrics
         metricCardHasError={metricCardHasError}
         metricSnapshotLoading={metricSnapshotLoading}

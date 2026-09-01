@@ -21,36 +21,6 @@ export enum FeedStatus {
   ERROR = "error",
 }
 
-export type FeedStatusColor =
-  "green" | "yellow" | "blue" | "cyan" | "red" | "magenta";
-
-export interface FeedStatusMeta {
-  icon: string;
-  color: FeedStatusColor;
-  statusText: string;
-}
-
-export const FEED_STATUS_META: Record<FeedStatus, FeedStatusMeta> = {
-  [FeedStatus.SUCCESS]: { icon: "✓", color: "green", statusText: "200" },
-  [FeedStatus.PARTIAL]: { icon: "⚠", color: "yellow", statusText: "partial" },
-  [FeedStatus.WARNING]: { icon: "⚠", color: "yellow", statusText: "warn" },
-  [FeedStatus.INFO]: { icon: "ℹ", color: "cyan", statusText: "info" },
-  [FeedStatus.NOT_MODIFIED]: { icon: "ℹ", color: "blue", statusText: "304" },
-  [FeedStatus.NOT_FOUND]: { icon: "ℹ", color: "blue", statusText: "404" },
-  [FeedStatus.RATE_LIMITED]: { icon: "⚠", color: "yellow", statusText: "429" },
-  [FeedStatus.SKIPPED]: { icon: "⊘", color: "yellow", statusText: "skip" },
-  [FeedStatus.ERROR]: { icon: "✗", color: "red", statusText: "fail" },
-};
-
-export const FEED_STATUS_TEXT_COLOR: Record<FeedStatusColor, string> = {
-  green: "text-green-400",
-  yellow: "text-yellow-400",
-  blue: "text-blue-400",
-  cyan: "text-cyan-400",
-  red: "text-red-400",
-  magenta: "text-magenta-400",
-};
-
 export interface FeedEvent {
   id: string;
   timestamp: string;
