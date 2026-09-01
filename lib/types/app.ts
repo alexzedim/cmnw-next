@@ -49,3 +49,19 @@ export interface RaidLogsStats {
   indexed: number;
   notIndexed: number;
 }
+
+/**
+ * One recently-updated entity rendered as a payload chip by the home
+ * backdrop flow schemas. Mirrors IBackdropFlowPayload from @app/resources.
+ */
+export interface BackdropFlowPayload {
+  guid: string;
+  label: string;
+}
+
+/** Payload pools for the home backdrop, sampled by entity recency. */
+export interface BackdropFlows {
+  characters: BackdropFlowPayload[];
+  guilds: BackdropFlowPayload[];
+  orders: BackdropFlowPayload[];
+}
