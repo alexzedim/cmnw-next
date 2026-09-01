@@ -4,7 +4,7 @@ import { BankTable } from "./bank-table";
 import { FullRaiderAxes } from "./full-raider-axes";
 import { MixedShield } from "./mixed-shield";
 import { RaiderAxes } from "./raider-axes";
-import { TwinkPier } from "./twink-pier";
+import { TwinkScene } from "./twink-scene";
 import { UnknownMark } from "./unknown-mark";
 import { GUILD_TYPES } from "./constants";
 
@@ -19,7 +19,7 @@ export const GuildBanner = ({ guildType }: GuildBannerProps) => {
     case GUILD_TYPES.BANK.statusKey:
       return <BankTable />;
     case GUILD_TYPES.TWINK.statusKey:
-      return <TwinkPier />;
+      return <TwinkScene />;
     case GUILD_TYPES.RAIDING_FULL.statusKey:
       return <FullRaiderAxes />;
     case GUILD_TYPES.MIXED.statusKey:
