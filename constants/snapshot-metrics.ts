@@ -64,6 +64,14 @@ export const SNAPSHOT_HIGHLIGHT_GROUPS: readonly SnapshotHighlightGroup[] = [
         valueShare: true,
       },
       {
+        labelKey: "ageDistribution" as const,
+        category: AnalyticsMetricCategory.CHARACTERS,
+        metricType: AnalyticsMetricType.AGE_DISTRIBUTION,
+        valueLimit: Number.POSITIVE_INFINITY,
+        sort: "ageRange",
+        valueShare: true,
+      },
+      {
         labelKey: "oldestCharacters" as const,
         category: AnalyticsMetricCategory.CHARACTERS,
         metricType: AnalyticsMetricType.TOP_BY_AGE,
