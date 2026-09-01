@@ -60,6 +60,7 @@ interface StageEntity {
   color: string;
   shape: StageShape;
   lines: string[];
+  tier: ScaleTier;
   cx: number;
   cy: number;
 }
@@ -90,6 +91,7 @@ interface Flight {
   fade: number;
   arrived: boolean;
   color: string;
+  tier: ScaleTier;
   onArrive: (p: Point) => void;
   payloadLabel: string | null;
   edgeLabel: string | null;
@@ -113,6 +115,8 @@ interface Instance {
   level: number;
   phase: "build" | "hold" | "dissolve" | "done";
   wait: number;
+  /** Per-tree pace multiplier: lifetimes desynchronize organically. */
+  pace: number;
   payload: string;
   dissolveAt: number;
 }
@@ -160,18 +164,6 @@ const ri = (min: number, max: number) =>
 
 const rnd = <T,>(items: T[]): T =>
   items[Math.floor(Math.random() * items.length)];
-
-const shuffle = <T,>(items: T[]): T[] => {
-  const copy = [...items];
-
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-
-  return copy;
-};
 
 const FLOWS: FlowDef[] = [
   {
@@ -771,21 +763,18 @@ export function GraphBackdrop() {
     let W = 0;
     let H = 0;
     const DPR = Math.min(window.devicePixelRatio || 1, 2);
-    let scaleTier: ScaleTier = "compact";
 
     const MONO = "ui-monospace, Menlo, Consolas, monospace";
 
     const active = new Map<StageEntity, Block>();
     const flights: Flight[] = [];
     const timers = new Set<ReturnType<typeof setTimeout>>();
-    let gen: { flows: Instance[] } | null = null;
-    let nextGenAt = 0.7;
 
     // ---- measurement & shapes --------------------------------------------
 
     const measure = (ent: StageEntity) => {
       const T =
-        scaleTier === "micro"
+        ent.tier === "micro"
           ? {
               f0: "600 8px ",
               f1: "7.5px ",
@@ -1011,15 +1000,21 @@ export function GraphBackdrop() {
         fade: 1,
         arrived: false,
         color: toEnt.color,
+        tier: toEnt.tier,
         onArrive,
         payloadLabel,
         edgeLabel,
       });
     };
 
-    // ---- flow instances & generation --------------------------------------
+    // ---- flow instances: chaotic lanes ------------------------------------
 
-    const layoutInstance = (inst: Instance, lane: Lane, reverse: boolean) => {
+    const layoutInstance = (
+      inst: Instance,
+      lane: Lane,
+      vertical: boolean,
+      reverse: boolean
+    ) => {
       const L = inst.def.levels.length;
       const pad = 26;
       const x0 = lane.x0 + pad;
@@ -1034,19 +1029,44 @@ export function GraphBackdrop() {
           const across = (j + 0.5) / lv.length;
           const a = reverse ? 1 - along : along;
 
-          inst.ents[gi].cx = x0 + across * (x1 - x0);
-          inst.ents[gi].cy = y0 + a * (y1 - y0);
+          if (vertical) {
+            inst.ents[gi].cx = x0 + across * (x1 - x0);
+            inst.ents[gi].cy = y0 + a * (y1 - y0);
+          } else {
+            inst.ents[gi].cx = x0 + a * (x1 - x0);
+            inst.ents[gi].cy = y0 + across * (y1 - y0);
+          }
           gi++;
         });
       });
     };
 
-    const makeInstance = (
-      def: FlowDef,
-      lane: Lane,
-      reverse: boolean,
-      delayMs: number
-    ) => {
+    const makeInstance = (def: FlowDef, delayMs: number) => {
+      const deep = DEEP_INDICES.includes(FLOWS.indexOf(def));
+      // deep pipelines need tall vertical lanes; short flows mix orientations
+      const vertical = deep ? true : Math.random() < 0.55;
+      const reverse = Math.random() < 0.5;
+
+      // chaotic placement: a random box anywhere on screen, any size that
+      // still fits the tree — lanes freely overlap other trees
+      let w: number;
+      let h: number;
+
+      if (vertical) {
+        w = deep ? ri(300, 560) : ri(260, 520);
+        h = deep ? ri(430, 660) : ri(270, 620);
+      } else {
+        w = ri(620, Math.min(W - 40, 1300));
+        h = ri(170, 300);
+      }
+
+      w = Math.min(w, W - 20);
+      h = Math.min(h, H - 110);
+      const x = 10 + Math.random() * Math.max(1, W - 20 - w);
+      const y = 56 + Math.random() * Math.max(1, H - 86 - h);
+      const lane: Lane = { x0: x, x1: x + w, y0: y, y1: y + h };
+      const tier: ScaleTier = h < 240 || w < 300 ? "micro" : "compact";
+
       const ents: StageEntity[] = [];
 
       def.levels.forEach((lv) =>
@@ -1055,6 +1075,7 @@ export function GraphBackdrop() {
             color: KIND_COLORS[n.k],
             shape: n.sh,
             lines: n.l.slice(0, 2),
+            tier,
             cx: 0,
             cy: 0,
           });
@@ -1067,11 +1088,12 @@ export function GraphBackdrop() {
         level: 0,
         phase: "build",
         wait: delayMs / 1000,
+        pace: 0.75 + Math.random() * 0.7,
         payload: def.payload(poolsRef.current),
         dissolveAt: 0,
       };
 
-      layoutInstance(inst, lane, reverse);
+      layoutInstance(inst, lane, vertical, reverse);
 
       return inst;
     };
@@ -1105,7 +1127,7 @@ export function GraphBackdrop() {
             materialize(e, e.cx - m.w / 2, e.cy - m.h / 2);
           });
           inst.level = 1;
-          inst.wait = 0.55 / SPEED;
+          inst.wait = (0.55 / SPEED) * inst.pace;
 
           return;
         }
@@ -1145,10 +1167,10 @@ export function GraphBackdrop() {
             });
           });
           inst.level += 1;
-          inst.wait = 2.15 / SPEED;
+          inst.wait = (2.15 / SPEED) * inst.pace;
         } else {
           inst.phase = "hold";
-          inst.wait = (2.4 + Math.random() * 1.1) / SPEED;
+          inst.wait = ((2.4 + Math.random() * 1.1) / SPEED) * inst.pace;
         }
 
         return;
@@ -1187,61 +1209,45 @@ export function GraphBackdrop() {
       }
     };
 
-    const startGeneration = () => {
-      // 5-15 concurrent flow trees as a grid of cells; every cell holds one
-      // vertical tree (uniformly top→bottom or bottom→top)
-      const n = ri(5, 15);
-      const cols = n <= 6 ? 3 : n <= 12 ? 4 : 5;
-      const rows = Math.ceil(n / cols);
-      const reverse = Math.random() < 0.5;
+    // ---- continuous pool: births and deaths interleave, screen never empties
 
-      scaleTier = rows >= 3 ? "micro" : "compact";
+    const instances: Instance[] = [];
+    let desiredCount = ri(5, 15);
+    let rerollAt = 7 + Math.random() * 6;
+    let spawnCooldown = 0;
+    let elapsed = 0;
 
-      const pool =
-        rows <= 2
-          ? shuffle([...DEEP_INDICES, ...SHORT_INDICES])
-          : shuffle(SHORT_INDICES);
-      const picks = Array.from({ length: n }, (_v, i) => pool[i % pool.length]);
-      const cellW = W / cols;
-      const cellH = (H - 62 - 30) / rows;
+    const spawnInstance = (delayMs: number) => {
+      const pool = Math.random() < 0.45 ? DEEP_INDICES : SHORT_INDICES;
 
-      gen = {
-        flows: picks.map((pi, i) => {
-          const col = i % cols;
-          const row = Math.floor(i / cols);
-          const delay = (150 + Math.random() * 4500) / SPEED;
-
-          return makeInstance(
-            FLOWS[pi],
-            {
-              x0: col * cellW,
-              x1: (col + 1) * cellW,
-              y0: 62 + row * cellH,
-              y1: 62 + (row + 1) * cellH,
-            },
-            reverse,
-            delay
-          );
-        }),
-      };
+      instances.push(makeInstance(FLOWS[rnd(pool)], delayMs));
     };
 
-    const stepGeneration = (dt: number, now: number) => {
-      if (!gen) {
-        nextGenAt -= dt;
+    const stepPool = (dt: number, now: number) => {
+      elapsed += dt;
 
-        if (nextGenAt <= 0) {
-          startGeneration();
-        }
-
-        return;
+      if (elapsed > rerollAt) {
+        desiredCount = ri(5, 15);
+        rerollAt = elapsed + 7 + Math.random() * 6;
       }
 
-      gen.flows.forEach((inst) => stepInstance(inst, dt, now));
+      spawnCooldown -= dt;
 
-      if (gen.flows.every((inst) => inst.phase === "done")) {
-        gen = null;
-        nextGenAt = (0.9 + Math.random()) / SPEED;
+      if (instances.length < desiredCount && spawnCooldown <= 0) {
+        spawnInstance((100 + Math.random() * 500) / SPEED);
+        spawnCooldown = (0.3 + Math.random() * 1.0) / SPEED;
+      }
+
+      instances.forEach((inst) => stepInstance(inst, dt, now));
+
+      for (let i = instances.length - 1; i >= 0; i--) {
+        if (instances[i].phase !== "done") {
+          continue;
+        }
+
+        instances.splice(i, 1);
+        // a finished tree immediately makes room for the next one
+        spawnCooldown = Math.min(spawnCooldown, 0.15);
       }
     };
 
@@ -1252,9 +1258,10 @@ export function GraphBackdrop() {
       y: number,
       text: string,
       color: string,
-      alpha: number
+      alpha: number,
+      tier: ScaleTier
     ) => {
-      const micro = scaleTier === "micro";
+      const micro = tier === "micro";
       const fs = micro ? 7.5 : 9.5;
 
       ctx.font = fs + "px " + MONO;
@@ -1351,7 +1358,7 @@ export function GraphBackdrop() {
 
       if (scale > 0.85) {
         const T =
-          scaleTier === "micro"
+          ent.tier === "micro"
             ? {
                 f0: "600 8px ",
                 f1: "7.5px ",
@@ -1542,9 +1549,9 @@ export function GraphBackdrop() {
         if (f.edgeLabel) {
           const mid = pts[Math.floor(N * 0.5)];
 
-          pill(mid.x, mid.y - 16, f.edgeLabel, f.color, chipAlpha);
+          pill(mid.x, mid.y - 16, f.edgeLabel, f.color, chipAlpha, f.tier);
         } else if (f.payloadLabel) {
-          pill(cur.x, cur.y - 20, f.payloadLabel, f.color, chipAlpha);
+          pill(cur.x, cur.y - 20, f.payloadLabel, f.color, chipAlpha, f.tier);
         }
       }
     };
@@ -1572,8 +1579,8 @@ export function GraphBackdrop() {
         ctx.stroke();
       }
 
-      if (gen) {
-        const names = gen.flows.map((i) => i.def.name);
+      {
+        const names = instances.map((i) => i.def.name);
         const label =
           names.length <= 2
             ? names.join(" + ")
@@ -1611,7 +1618,7 @@ export function GraphBackdrop() {
       ctx.fillStyle = dim;
       ctx.fillRect(0, 0, W, H);
 
-      stepGeneration(dt, now);
+      stepPool(dt, now);
       raf = requestAnimationFrame(frame);
     };
 
@@ -1625,8 +1632,8 @@ export function GraphBackdrop() {
       ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
       active.clear();
       flights.length = 0;
-      gen = null;
-      nextGenAt = 0.4;
+      instances.length = 0;
+      spawnCooldown = 0;
     };
 
     let resizeTimer: ReturnType<typeof setTimeout> | null = null;
@@ -1655,6 +1662,13 @@ export function GraphBackdrop() {
     };
 
     resize();
+
+    // seed the pool quickly so the screen fills fast, then let the pool's
+    // own cooldown maintain a steady churn of births and deaths
+    for (let i = 0; i < 4; i++) {
+      spawnInstance((i * 280 + Math.random() * 240) / SPEED);
+    }
+
     raf = requestAnimationFrame(frame);
     window.addEventListener("resize", onResize);
     document.addEventListener("visibilitychange", onVisibility);
