@@ -12,7 +12,7 @@ import {
   getRankLabel,
   getRosterLabel,
 } from "./constants";
-import { RaiderAxes } from "./raider-axes";
+import { GuildBanner } from "./guild-banner";
 
 import { GuildRank } from "@/components/character/guild-rank";
 import { useI18n } from "@/lib/i18n/context";
@@ -279,7 +279,7 @@ export const GuildRankAllocation = ({ members }: GuildRankAllocationProps) => {
           : undefined
       }
     >
-      <RaiderAxes />
+      <GuildBanner guildType={guildType} />
       <div className="relative z-10">
         <div className={`text-sm font-medium ${guildType.color}`}>
           {gra.guildType.replace("{status}", guildTypeStatus as string)}
