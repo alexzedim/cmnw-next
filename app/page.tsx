@@ -49,33 +49,35 @@ export default function Home() {
   return (
     <>
       <GraphBackdrop />
-      <ErrorBoundary>
-        <HeroSection />
-        <LiveMetrics
-          metricCardHasError={metricCardHasError}
-          metricSnapshotLoading={metricSnapshotLoading}
-          metricSnapshots={metricSnapshots}
-          metricsError={metricsError}
-          metricsStatus={metricsStatus}
-        />
-        <section className="section section-tight-top container mx-auto px-6">
-          <div className="mb-8">
-            <p className="text-xs uppercase tracking-[0.3em] text-foreground/40">
-              {dict.home.snapshotBriefsLabel}
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {snapshotHighlightGroups.map((group) => (
-              <SnapshotBriefGroup
-                key={group.titleKey}
-                group={group}
-                metricCardHasError={metricCardHasError}
-                metricSnapshotLoading={metricSnapshotLoading}
-              />
-            ))}
-          </div>
-        </section>
-      </ErrorBoundary>
+      <div className="relative z-10">
+        <ErrorBoundary>
+          <HeroSection />
+          <LiveMetrics
+            metricCardHasError={metricCardHasError}
+            metricSnapshotLoading={metricSnapshotLoading}
+            metricSnapshots={metricSnapshots}
+            metricsError={metricsError}
+            metricsStatus={metricsStatus}
+          />
+          <section className="section section-tight-top container mx-auto px-6">
+            <div className="mb-8">
+              <p className="text-xs uppercase tracking-[0.3em] text-foreground/40">
+                {dict.home.snapshotBriefsLabel}
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {snapshotHighlightGroups.map((group) => (
+                <SnapshotBriefGroup
+                  key={group.titleKey}
+                  group={group}
+                  metricCardHasError={metricCardHasError}
+                  metricSnapshotLoading={metricSnapshotLoading}
+                />
+              ))}
+            </div>
+          </section>
+        </ErrorBoundary>
+      </div>
     </>
   );
 }
