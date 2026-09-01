@@ -111,6 +111,7 @@ interface Lane {
 interface Instance {
   def: FlowDef;
   ents: StageEntity[];
+  lane: Lane;
   level: number;
   phase: "build" | "hold" | "dissolve" | "done";
   wait: number;
@@ -1098,30 +1099,15 @@ export function GraphBackdrop() {
       });
     };
 
-    const makeInstance = (def: FlowDef, delayMs: number) => {
-      const deep = DEEP_INDICES.includes(FLOWS.indexOf(def));
-      // deep pipelines need tall vertical lanes; short flows mix orientations
-      const vertical = deep ? true : Math.random() < 0.55;
+    const makeInstance = (
+      def: FlowDef,
+      delayMs: number,
+      lane: Lane,
+      vertical: boolean
+    ) => {
       const reverse = Math.random() < 0.5;
-
-      // chaotic placement: a random box anywhere on screen, any size that
-      // still fits the tree — lanes freely overlap other trees
-      let w: number;
-      let h: number;
-
-      if (vertical) {
-        w = deep ? ri(300, 560) : ri(260, 520);
-        h = deep ? ri(430, 660) : ri(270, 620);
-      } else {
-        w = ri(620, Math.min(W - 40, 1300));
-        h = ri(170, 300);
-      }
-
-      w = Math.min(w, W - 20);
-      h = Math.min(h, H - 110);
-      const x = 10 + Math.random() * Math.max(1, W - 20 - w);
-      const y = 56 + Math.random() * Math.max(1, H - 86 - h);
-      const lane: Lane = { x0: x, x1: x + w, y0: y, y1: y + h };
+      const w = lane.x1 - lane.x0;
+      const h = lane.y1 - lane.y0;
       const tier: ScaleTier = h < 240 || w < 300 ? "micro" : "compact";
 
       const ents: StageEntity[] = [];
@@ -1142,6 +1128,7 @@ export function GraphBackdrop() {
       const inst: Instance = {
         def,
         ents,
+        lane,
         level: 0,
         phase: "build",
         wait: delayMs / 1000,
@@ -1153,6 +1140,74 @@ export function GraphBackdrop() {
       layoutInstance(inst, lane, vertical, reverse);
 
       return inst;
+    };
+
+    // ---- spawn collision: chaotic, but lanes never intersect live trees ----
+
+    const MARGIN = 20;
+
+    const lanesIntersect = (a: Lane, b: Lane) =>
+      a.x0 - MARGIN < b.x1 &&
+      a.x1 + MARGIN > b.x0 &&
+      a.y0 - MARGIN < b.y1 &&
+      a.y1 + MARGIN > b.y0;
+
+    /** Candidate lane for a flow kind; `shrink` squeezes it when crowded. */
+    const makeLaneFor = (deep: boolean, vertical: boolean, shrink: number) => {
+      let w: number;
+      let h: number;
+
+      if (vertical) {
+        w = deep ? ri(300, 560) : ri(260, 520);
+        h = deep ? ri(430, 660) : ri(270, 620);
+      } else {
+        w = ri(620, Math.min(W - 40, 1300));
+        h = ri(170, 300);
+      }
+
+      w = Math.max(220, Math.round(w * shrink));
+      h = Math.max(deep ? 380 : 200, Math.round(h * shrink));
+      w = Math.min(w, W - 20);
+      h = Math.min(h, H - 110);
+      const x = 10 + Math.random() * Math.max(1, W - 20 - w);
+      const y = 56 + Math.random() * Math.max(1, H - 86 - h);
+
+      return { x0: x, x1: x + w, y0: y, y1: y + h } as Lane;
+    };
+
+    /**
+     * Tries to place a new tree in a lane that does not intersect any live
+     * (non-dissolving) tree. When the screen is crowded, the lane shrinks
+     * progressively; failing everything, the spawn is retried next cooldown.
+     */
+    const trySpawnInstance = (delayMs: number) => {
+      const def =
+        FLOWS[rnd(Math.random() < 0.45 ? DEEP_INDICES : SHORT_INDICES)];
+      const deep = DEEP_INDICES.includes(FLOWS.indexOf(def));
+      let shrink = 1;
+
+      for (let attempt = 0; attempt < 60; attempt++) {
+        if (attempt > 0 && attempt % 12 === 0) {
+          shrink *= 0.78;
+        }
+
+        const vertical = deep ? true : Math.random() < 0.55;
+        const lane = makeLaneFor(deep, vertical, shrink);
+        const clash = instances.some(
+          (inst) =>
+            inst.phase !== "dissolve" &&
+            inst.phase !== "done" &&
+            lanesIntersect(lane, inst.lane)
+        );
+
+        if (!clash) {
+          instances.push(makeInstance(def, delayMs, lane, vertical));
+
+          return true;
+        }
+      }
+
+      return false;
     };
 
     const levelIndices = (def: FlowDef, li: number) => {
@@ -1274,12 +1329,6 @@ export function GraphBackdrop() {
     let spawnCooldown = 0;
     let elapsed = 0;
 
-    const spawnInstance = (delayMs: number) => {
-      const pool = Math.random() < 0.45 ? DEEP_INDICES : SHORT_INDICES;
-
-      instances.push(makeInstance(FLOWS[rnd(pool)], delayMs));
-    };
-
     const stepPool = (dt: number, now: number) => {
       elapsed += dt;
 
@@ -1291,8 +1340,13 @@ export function GraphBackdrop() {
       spawnCooldown -= dt;
 
       if (instances.length < desiredCount && spawnCooldown <= 0) {
-        spawnInstance((100 + Math.random() * 500) / SPEED);
-        spawnCooldown = (0.3 + Math.random() * 1.0) / SPEED;
+        const placed = trySpawnInstance((100 + Math.random() * 500) / SPEED);
+
+        // no free lane right now — retry soon; a dissolving tree will free
+        // its box within a couple of seconds
+        spawnCooldown = placed
+          ? (0.3 + Math.random() * 1.0) / SPEED
+          : (0.4 + Math.random() * 0.5) / SPEED;
       }
 
       instances.forEach((inst) => stepInstance(inst, dt, now));
@@ -1738,7 +1792,7 @@ export function GraphBackdrop() {
     // seed the pool quickly so the screen fills fast, then let the pool's
     // own cooldown maintain a steady churn of births and deaths
     for (let i = 0; i < 4; i++) {
-      spawnInstance((i * 280 + Math.random() * 240) / SPEED);
+      trySpawnInstance((i * 280 + Math.random() * 240) / SPEED);
     }
 
     raf = requestAnimationFrame(frame);
