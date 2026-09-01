@@ -57,7 +57,7 @@ interface PayloadPools {
 }
 
 interface StageEntity {
-  color: string;
+  k: StageKind;
   shape: StageShape;
   lines: string[];
   tier: ScaleTier;
@@ -90,7 +90,6 @@ interface Flight {
   hold: number;
   fade: number;
   arrived: boolean;
-  color: string;
   tier: ScaleTier;
   onArrive: (p: Point) => void;
   payloadLabel: string | null;
@@ -121,7 +120,8 @@ interface Instance {
   dissolveAt: number;
 }
 
-const KIND_COLORS: Record<StageKind, string> = {
+/** Dark-theme stage colors (bright pastels on near-black). */
+const KIND_COLORS_DARK: Record<StageKind, string> = {
   frontend: "#6cc3f5",
   next: "#38bdf8",
   api: "#ef6f2e",
@@ -131,6 +131,19 @@ const KIND_COLORS: Record<StageKind, string> = {
   db: "#34d399",
   cache: "#a3e635",
   ws: "#fb7185",
+};
+
+/** Light-theme stage colors: darker counterparts that hold contrast on white. */
+const KIND_COLORS_LIGHT: Record<StageKind, string> = {
+  frontend: "#1c6fb8",
+  next: "#0369a1",
+  api: "#c2410c",
+  queue: "#a16207",
+  worker: "#6d28d9",
+  blizzard: "#1d4ed8",
+  db: "#047857",
+  cache: "#4d7c0f",
+  ws: "#be123c",
 };
 
 /** Global pace: durations /= SPEED, velocities *= SPEED. */
@@ -766,6 +779,51 @@ export function GraphBackdrop() {
 
     const MONO = "ui-monospace, Menlo, Consolas, monospace";
 
+    // ---- palette awareness: colors resolve against the active theme ------
+
+    let lightMode = false;
+
+    const isLightColor = (value: string) => {
+      const match = value.trim().match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);
+
+      if (!match) {
+        return false;
+      }
+
+      let hex = match[1];
+
+      if (hex.length === 3) {
+        hex = hex
+          .split("")
+          .map((c) => c + c)
+          .join("");
+      }
+
+      const r = parseInt(hex.slice(0, 2), 16);
+      const g = parseInt(hex.slice(2, 4), 16);
+      const b = parseInt(hex.slice(4, 6), 16);
+
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b > 128;
+    };
+
+    const syncTheme = () => {
+      const bg = getComputedStyle(document.documentElement).getPropertyValue(
+        "--bg"
+      );
+
+      lightMode = isLightColor(bg);
+    };
+
+    const kindColor = (k: StageKind) =>
+      lightMode ? KIND_COLORS_LIGHT[k] : KIND_COLORS_DARK[k];
+
+    const paletteObserver = new MutationObserver(syncTheme);
+
+    paletteObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class", "style"],
+    });
+
     const active = new Map<StageEntity, Block>();
     const flights: Flight[] = [];
     const timers = new Set<ReturnType<typeof setTimeout>>();
@@ -999,7 +1057,6 @@ export function GraphBackdrop() {
         hold: 0,
         fade: 1,
         arrived: false,
-        color: toEnt.color,
         tier: toEnt.tier,
         onArrive,
         payloadLabel,
@@ -1072,7 +1129,7 @@ export function GraphBackdrop() {
       def.levels.forEach((lv) =>
         lv.forEach((n) => {
           ents.push({
-            color: KIND_COLORS[n.k],
+            k: n.k,
             shape: n.sh,
             lines: n.l.slice(0, 2),
             tier,
@@ -1270,7 +1327,7 @@ export function GraphBackdrop() {
       const h = micro ? 14 : 18;
 
       ctx.globalAlpha = alpha;
-      ctx.fillStyle = "rgba(4,4,4,0.92)";
+      ctx.fillStyle = lightMode ? "rgba(255,255,255,0.92)" : "rgba(4,4,4,0.92)";
       shapePathRound(x - w / 2, y - h / 2, w, h, h / 2);
       ctx.fill();
       ctx.strokeStyle = color + "aa";
@@ -1334,23 +1391,24 @@ export function GraphBackdrop() {
       const h = b.h * scale;
       const x = b.x + (b.w - w) / 2;
       const y = b.y + (b.h - h) / 2 + bob + sink;
+      const color = kindColor(ent.k);
 
       ctx.globalAlpha = alpha;
-      ctx.fillStyle = "rgba(6,6,6,0.74)";
+      ctx.fillStyle = lightMode ? "rgba(255,255,255,0.68)" : "rgba(6,6,6,0.74)";
       shapePath(ent.shape, x, y, w, h);
       ctx.fill();
-      ctx.strokeStyle = ent.color + (b.pulse > 0.05 ? "" : "59");
+      ctx.strokeStyle = color + (b.pulse > 0.05 ? "" : "59");
       ctx.lineWidth = b.pulse > 0.05 ? 1 + b.pulse : 1;
 
       if (b.pulse > 0.05) {
-        ctx.shadowColor = ent.color;
+        ctx.shadowColor = color;
         ctx.shadowBlur = 16 * b.pulse;
       }
 
       shapePath(ent.shape, x, y, w, h);
       ctx.stroke();
       ctx.shadowBlur = 0;
-      ctx.fillStyle = ent.color;
+      ctx.fillStyle = color;
 
       if (ent.shape === "proc") {
         ctx.fillRect(x, y + 4 * scale, 2.5, h - 8 * scale);
@@ -1382,7 +1440,7 @@ export function GraphBackdrop() {
 
         if (ent.shape === "decision") {
           ctx.textAlign = "center";
-          ctx.fillStyle = ent.color;
+          ctx.fillStyle = color;
           ctx.font = T.fd + MONO;
 
           const yTop = y + h / 2 - ((ent.lines.length - 1) * T.lh) / 2 + T.off;
@@ -1394,10 +1452,12 @@ export function GraphBackdrop() {
         } else {
           const pad = ent.shape === "io" ? T.ioPad : T.pad;
 
-          ctx.fillStyle = ent.color;
+          ctx.fillStyle = color;
           ctx.font = T.f0 + MONO;
           ctx.fillText(ent.lines[0], x + pad, y + T.y0 * scale);
-          ctx.fillStyle = "rgba(238,238,238,0.5)";
+          ctx.fillStyle = lightMode
+            ? "rgba(0,0,0,0.55)"
+            : "rgba(238,238,238,0.5)";
           ctx.font = T.f1 + MONO;
           ent.lines
             .slice(1)
@@ -1410,7 +1470,7 @@ export function GraphBackdrop() {
       ctx.globalAlpha = 1;
 
       if (b.appear < 1) {
-        ctx.strokeStyle = ent.color;
+        ctx.strokeStyle = color;
         ctx.globalAlpha = 1 - b.appear;
         ctx.lineWidth = 1.4;
         ctx.beginPath();
@@ -1494,6 +1554,7 @@ export function GraphBackdrop() {
       };
       const ahead = pts[Math.min(N - 1, idx + 2)];
       const ang = Math.atan2(ahead.y - cur.y, ahead.x - cur.x);
+      const color = kindColor(f.toEnt.k);
       const alpha =
         f.phase === "fade"
           ? Math.max(0, f.fade) * 0.7
@@ -1502,7 +1563,7 @@ export function GraphBackdrop() {
             : 0.55;
 
       ctx.globalAlpha = alpha;
-      ctx.strokeStyle = f.color;
+      ctx.strokeStyle = color;
       ctx.lineWidth = 1.5;
       ctx.lineCap = "round";
       ctx.beginPath();
@@ -1520,7 +1581,7 @@ export function GraphBackdrop() {
       ctx.save();
       ctx.translate(pts[0].x, pts[0].y);
       ctx.rotate(a0);
-      ctx.fillStyle = f.color;
+      ctx.fillStyle = color;
       ctx.beginPath();
       ctx.moveTo(4, 0);
       ctx.lineTo(-2, -3);
@@ -1532,7 +1593,7 @@ export function GraphBackdrop() {
       ctx.save();
       ctx.translate(cur.x, cur.y);
       ctx.rotate(ang);
-      ctx.fillStyle = f.color;
+      ctx.fillStyle = color;
       ctx.beginPath();
       ctx.moveTo(9, 0);
       ctx.lineTo(-4.5, -5);
@@ -1549,9 +1610,9 @@ export function GraphBackdrop() {
         if (f.edgeLabel) {
           const mid = pts[Math.floor(N * 0.5)];
 
-          pill(mid.x, mid.y - 16, f.edgeLabel, f.color, chipAlpha, f.tier);
+          pill(mid.x, mid.y - 16, f.edgeLabel, color, chipAlpha, f.tier);
         } else if (f.payloadLabel) {
-          pill(cur.x, cur.y - 20, f.payloadLabel, f.color, chipAlpha, f.tier);
+          pill(cur.x, cur.y - 20, f.payloadLabel, color, chipAlpha, f.tier);
         }
       }
     };
@@ -1562,7 +1623,9 @@ export function GraphBackdrop() {
       last = now;
       ctx.clearRect(0, 0, W, H);
 
-      ctx.strokeStyle = "rgba(255,255,255,0.028)";
+      ctx.strokeStyle = lightMode
+        ? "rgba(0,0,0,0.045)"
+        : "rgba(255,255,255,0.028)";
       ctx.lineWidth = 1;
 
       for (let x = 0; x < W; x += 64) {
@@ -1587,7 +1650,9 @@ export function GraphBackdrop() {
             : `${names[0]} + ${names.length - 1} more`;
 
         ctx.font = "600 10px " + MONO;
-        ctx.fillStyle = "rgba(238,238,238,0.22)";
+        ctx.fillStyle = lightMode
+          ? "rgba(0,0,0,0.28)"
+          : "rgba(238,238,238,0.22)";
         ctx.textAlign = "right";
         ctx.fillText(
           `flows · ${names.length} concurrent · ${label}`,
@@ -1612,9 +1677,15 @@ export function GraphBackdrop() {
         Math.max(W, H) * 0.52
       );
 
-      dim.addColorStop(0, "rgba(2,2,2,0.9)");
-      dim.addColorStop(0.42, "rgba(2,2,2,0.6)");
-      dim.addColorStop(1, "rgba(2,2,2,0)");
+      if (lightMode) {
+        dim.addColorStop(0, "rgba(245,245,244,0.92)");
+        dim.addColorStop(0.42, "rgba(245,245,244,0.6)");
+        dim.addColorStop(1, "rgba(245,245,244,0)");
+      } else {
+        dim.addColorStop(0, "rgba(2,2,2,0.9)");
+        dim.addColorStop(0.42, "rgba(2,2,2,0.6)");
+        dim.addColorStop(1, "rgba(2,2,2,0)");
+      }
       ctx.fillStyle = dim;
       ctx.fillRect(0, 0, W, H);
 
@@ -1661,6 +1732,7 @@ export function GraphBackdrop() {
       }
     };
 
+    syncTheme();
     resize();
 
     // seed the pool quickly so the screen fills fast, then let the pool's
@@ -1676,6 +1748,7 @@ export function GraphBackdrop() {
     return () => {
       running = false;
       cancelAnimationFrame(raf);
+      paletteObserver.disconnect();
       window.removeEventListener("resize", onResize);
       document.removeEventListener("visibilitychange", onVisibility);
 
