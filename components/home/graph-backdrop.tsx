@@ -1142,15 +1142,27 @@ export function GraphBackdrop() {
       return inst;
     };
 
-    // ---- spawn collision: chaotic, but lanes never intersect live trees ----
+    // ---- spawn collision: chaotic lanes that may overlap, but just a bit --
 
-    const MARGIN = 20;
+    /** Max share of the smaller lane's area two trees may share. */
+    const MAX_OVERLAP = 0.12;
 
-    const lanesIntersect = (a: Lane, b: Lane) =>
-      a.x0 - MARGIN < b.x1 &&
-      a.x1 + MARGIN > b.x0 &&
-      a.y0 - MARGIN < b.y1 &&
-      a.y1 + MARGIN > b.y0;
+    const overlapFraction = (a: Lane, b: Lane) => {
+      const w = Math.min(a.x1, b.x1) - Math.max(a.x0, b.x0);
+      const h = Math.min(a.y1, b.y1) - Math.max(a.y0, b.y0);
+
+      if (w <= 0 || h <= 0) {
+        return 0;
+      }
+
+      const area = w * h;
+      const minArea = Math.min(
+        (a.x1 - a.x0) * (a.y1 - a.y0),
+        (b.x1 - b.x0) * (b.y1 - b.y0)
+      );
+
+      return area / Math.max(1, minArea);
+    };
 
     /** Candidate lane for a flow kind; `shrink` squeezes it when crowded. */
     const makeLaneFor = (deep: boolean, vertical: boolean, shrink: number) => {
@@ -1176,9 +1188,10 @@ export function GraphBackdrop() {
     };
 
     /**
-     * Tries to place a new tree in a lane that does not intersect any live
-     * (non-dissolving) tree. When the screen is crowded, the lane shrinks
-     * progressively; failing everything, the spawn is retried next cooldown.
+     * Tries to place a new tree in a lane that overlaps any live
+     * (non-dissolving) tree by at most MAX_OVERLAP of the smaller lane's
+     * area. When the screen is crowded, the lane shrinks progressively;
+     * failing everything, the spawn is retried next cooldown.
      */
     const trySpawnInstance = (delayMs: number) => {
       const def =
@@ -1197,7 +1210,7 @@ export function GraphBackdrop() {
           (inst) =>
             inst.phase !== "dissolve" &&
             inst.phase !== "done" &&
-            lanesIntersect(lane, inst.lane)
+            overlapFraction(lane, inst.lane) > MAX_OVERLAP
         );
 
         if (!clash) {
