@@ -38,7 +38,7 @@ export function getGuildRankDisplay(
       };
     case 4:
       return {
-        symbol: "\uFE3F",
+        symbol: "\u25C6",
         text: gr.rank.replace("{rank}", "4"),
         isBold: true,
       };
