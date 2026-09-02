@@ -16,7 +16,7 @@ export const GuildRank = ({ guildRank }: GuildRankProps) => {
   const isBelowRank1 = guildRank !== undefined && guildRank > 1;
 
   return (
-    <span className="text-foreground/60 text-xs">
+    <span className="text-foreground/60 text-xs whitespace-nowrap">
       <span
         className={`${
           rankDisplay.isBold ? "font-bold" : ""
