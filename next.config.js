@@ -9,6 +9,11 @@ const nextConfig = {
   // CLI mode bypasses that check by spawning `tsc` directly.
   experimental: {
     useTypeScriptCli: true,
+    // Keep the Data Cache in the in-memory LRU only (cacheMaxMemorySize,
+    // 50 MB). With disk flushing, every `revalidate` fetch writes one file
+    // under .next/cache/fetch-cache that is never evicted (14M files hit the
+    // ext4 per-directory limit).
+    isrFlushToDisk: false,
   },
   typescript: {
     ignoreBuildErrors: true,
